@@ -1,0 +1,12 @@
+{
+	"example":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Journalist"
+				],
+			"warnings":"2,60",
+			"other":{}
+		}
+}

@@ -1,8 +1,8 @@
 <?php
 class error
 {
-	public	$core,
-			$error		=		Array();
+	public	$core,								//Ядро
+			$error		=		Array();		//Массив ошибок
 	
 	public function __construct($core)
 	{
@@ -13,23 +13,26 @@ class error
 		//register_shutdown_function(array($this, 'fatal_error_php'));
 	}
 	
+	//Добавление ошибки
 	public function error($err_mod,$err_no)
 	{
 		$err = $this->error_make($err_mod,$err_no);
 		if($err)$this->error[] = $err;
 	}
 	
+	//Добавление ошибки PHP
 	public function error_php($code,$msg,$file,$line)
 	{
 		if(!$this->core->conf->debug)$this->error[] = $this->error_make('engine','003');
-		else $this->error[] = array("$code,$msg,$file,$line",'01003');
+		else $this->error[] = array("[$code][$file:$line]$msg",'01003');
 		if($this->core->conf->send_mail_report)$this->core->mail->add_waiting_list($this->core->conf->admin_mail, '001', array($code,$msg,$file,$line));
 	}
 	
-	public function fatal_error_php($code,$msg,$file,$line)
+	//Отлов завершения работы скрипта
+	public function fatal_error_php()
 	{
 		$error = error_get_last();
-		if (isset($error))
+		if (isset($error))//Если фатальная ошибка, то обработка этой ошибки
 			if($error['type'] == E_ERROR
 			|| $error['type'] == E_PARSE
 			|| $error['type'] == E_COMPILE_ERROR
@@ -39,23 +42,27 @@ class error
 				if(!$this->core->conf->debug)echo 'Unfortunately, there is an error there. But our team is working on elimination of this problem.';
 				else echo "[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n";
 				header('HTTP/1.0 500');
-				if($this->core->conf->send_mail_report)$this->core->mail->add_waiting_list($this->core->conf->admin_mail, '000', $error);
+				if($this->core->conf->send_mail_report)$this->core->mail->add_waiting_list($this->core->conf->admin_mail, '000', $this->core->sanString($error));
 			}
 		ob_end_flush();
 	}
 	
+	//Создание ошибки
 	public function error_make($err_mod,$err_no)
 	{
+		//Модули и их код
 		$mod = array(
 					'server'=>'00',
 					'engine'=>'01',
 					'signup'=>'02',
 					'login'=>'03',
-					'users'=>'04',
-					'articles'=>'05',
+					'user'=>'04',
+					'article'=>'05',
 					'profile'=>'06',
 					'wall'=>'07',
 					'msg'=>'08',
+					'api'=>'09',
+					'mysql'=>'10',
 		);
 		
 		if(isset($mod[$err_mod]))
@@ -63,7 +70,7 @@ class error
 			$res1 = $mod[$err_mod];
 		}
 		
-		if(empty($res1))
+		if(empty($res1))//Если передан неизвестный модуль, то выдать ошибку
 		{
 			$this->error('engine','001');
 			return false;
@@ -85,6 +92,10 @@ class error
 					'003'=>'PHP error',
 		);
 		
+		$num['mysql'] = array(
+					'000'=>'non-object',
+		);
+		
 		$num['signup'] = array(
 					
 		);
@@ -98,11 +109,11 @@ class error
 					'005'=>'Вы не подтвердили свой аккаунт по e-mail. Ключ был выслан повторно. [url=/login/enter_code/]Подтвердить аккаунт[/url]',
 		);
 		
-		$num['users'] = array(
-					
+		$num['user'] = array(
+					'000'=>'Пользователь не найден',
 		);
 		
-		$num['articles'] = array(
+		$num['article'] = array(
 					'000'=>'Неправильный формат даты',
 					'001'=>'Ошибка при занесении в БД',
 					'002'=>'Слишком длинная статья или заголовок',
@@ -117,6 +128,13 @@ class error
 					'004'=>'Фамилия слишком длинная',
 					'005'=>'Ник слишком короткий',
 					'006'=>'Ник слишком длинный',
+					'007'=>'Такой ник уже используется',
+					'008'=>'Пароль слишком короткий',
+					'009'=>'Пароль слишком длинный',
+					'010'=>'Пароли не совпадают',
+					'011'=>'Пароль не должен совпадать с логином',
+					'012'=>'Пароль содержится в базе брутфорсера',
+					'013'=>'Вы ввели неправильно старый пароль',
 		);
 		
 		$num['wall'] = array(
@@ -127,12 +145,19 @@ class error
 					
 		);
 		
+		$num['api'] = array(
+					'000'=>'Unexpected module',
+					'001'=>'Unexpected function',
+					'002'=>'Not implemented yet',
+					
+		);
+		
 		if(isset($num[$err_mod][$err_no]))
 		{
 			$res2 = $num[$err_mod][$err_no];
 		}
 		
-		if(empty($res2))
+		if(empty($res2))//Если передан неизвестный код ошибки, выдать ошибку
 		{
 			$this->error('engine','002');
 			return false;
