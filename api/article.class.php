@@ -19,13 +19,12 @@ class api_article extends api
 		
 		$this->core->plugin('rank');
 		$rank = new rank($this->core);
-		$r = $rank->init($_SESSION['id'], 'publish_art');
+		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
-		if($r)
 		if($r)
 		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles"));
 		else
-		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles WHERE time<='$time' and checked='1'"));
+		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles WHERE time<='$time' and status='1'"));
 		$num = $num[0];
 		$pages = ceil($num/$limit);
 		if($pages<1)$pages=1;
@@ -40,26 +39,28 @@ class api_article extends api
 		if($r)
 		$result = $this->core->mysql->query("SELECT * FROM articles ORDER BY time DESC LIMIT $from_post,$limit");
 		else
-		$result = $this->core->mysql->query("SELECT * FROM articles WHERE time<='$time' and checked='1' ORDER BY time DESC LIMIT $from_post,$limit");
+		$result = $this->core->mysql->query("SELECT * FROM articles WHERE time<='$time' and status='1' ORDER BY time DESC LIMIT $from_post,$limit");
 		$rows = $this->core->mysql->rows($result);
+		
+		$posts = array();
 		for($i=0; $i<$rows; ++$i)
 		{
 			$results = $this->core->mysql->fetch($result);
 			
-			$num_msg = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM wall_art WHERE id='$results[id]' and status='0'"));
-			$results['num_msg'] = $num_msg[0];
+			//$num_msg = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM wall_art WHERE id='$results[id]' and status='0'"));
+			//$results['num_msg'] = $num_msg[0];
 			
-			$user = new user();
+			$this->core->plugin('user');
+			$user = new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
 			$results['user'] = $user->login;
-			//$results['time'] = date('d ', $results['time']) . month_name_rus(date('m', $results['time']), 'р') . date(' Y в H:i', $results['time']);
 			
-			$rank = new rank();
-			$results['edited'] = $rank->init($_SESSION['id'], 'edit_art')? 1:0;
-			$results['deleted'] = $rank->init($_SESSION['id'], 'delete_art')? 1:0;
 			
-			$status = $this->art_status($results['checked']);
+			$results['edited'] = $rank->init($_SESSION['id'], 'article_edit')? 1:0;
+			$results['deleted'] = $rank->init($_SESSION['id'], 'article_delete')? 1:0;
+			
+			$status = $this->art_status($results['status']);
 			
 			$posts[] = array(
 						'author_id'		=>	$results['userid'],
@@ -72,9 +73,11 @@ class api_article extends api
 						'title'			=>	$results['title'],
 						'article'		=>	$results['article'],
 						'status'		=>	$status,
+						'tags'			=>	explode(',',$results['tags']),
 			);
 		}
-            
+        
+		if(sizeof($posts)==0)$pages = 0;
 		$returned = array('posts'=> $posts, 'pages'=>$pages);
 		
 		return $this->json($returned);
@@ -82,14 +85,15 @@ class api_article extends api
         
 	protected function post()
 	{
-		$id = (int)SanString($this->data['post_id']);
-		$userid = (int)SanString($this->data['user_id']);
-		$res = queryMysql("SELECT * FROM articles WHERE id='$id' and user='$userid'");
-		if(mysql_num_rows($res))
+		$id = (int)$this->core->SanString($this->data['post_id']);
+		$userid = (int)$this->core->SanString($this->data['user_id']);
+		$res = $this->core->mysql->query("SELECT * FROM articles WHERE id='$id' and user='$userid'");
+		if($this->core->mysql->rows($res))
 		{
-			$results = mysql_fetch_array($res);
+			$results = $this->core->mysql->fetch($res);
 
-			$user = new user();
+			$this->core->plugin('user');
+			$user = new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
 			$results['user'] = $user->login;
@@ -98,14 +102,15 @@ class api_article extends api
 
 			if(!isset($_SESSION['tmp']['art'][$id]['times']))
 			{
-					queryMysql("UPDATE articles SET times = $results[times]+1 WHERE id='$id' and user='$userid'");
+					$this->core->mysql->query("UPDATE articles SET times = $results[times]+1 WHERE id='$id' and user='$userid'");
 					$_SESSION['tmp']['art'][$id]['times'] = time();
 					$results['times']++;
 			}
 			
-			$status = $this->art_status($results['checked']);
+			$status = $this->art_status($results['status']);
 
-			$rank = new rank();
+			$this->core->plugin('rank');
+			$rank = new rank($this->core);
 			$results['edited'] = $rank->init($_SESSION['id'], 'edit_art')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'delete_art')? 1:0;
 
@@ -121,6 +126,7 @@ class api_article extends api
 									'title'			=>	$results['title'],
 									'article'		=>	$results['article'],
 									'status'		=>	$status,
+									'tags'			=>	explode(',',$results['tags']),
 			);
 			else
 			$post = array(
@@ -131,7 +137,7 @@ class api_article extends api
 		}
 		else
 		{
-				$this->error('server','404');
+				$this->core->error->error('server','404');
 		}
 		
 		return $this->json($post);
@@ -141,16 +147,18 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank();
-			if($rank->init($_SESSION['id'], 'write_new_art'))
+			$this->core->plugin('rank');
+			$rank = new rank($this->core);
+			if($rank->init($_SESSION['id'], 'article_write_new'))
 			{
-				if((isset($this->data['title']) AND isset($this->data['body'])) AND (!empty($this->data['title']) AND !empty($this->data['body'])))
+				if((isset($this->data['title']) AND isset($this->data['article'])) AND (!empty($this->data['title']) AND !empty($this->data['article'])))
 				{
-					$title = sanString($this->data['title']);
-					$body = sanString($this->data['body']);
+					$title = $this->core->SanString($this->data['title']);
+					$body = $this->core->SanString($this->data['article']);
+					$tags = $this->core->SanString($this->data['tags']);
 					$user = $_SESSION['id'];
 					$time = time();
-					$date = sanString($this->data['date']);
+					$date = $this->core->SanString($this->data['date']);
 					if(!empty($date))
 					{
 						$d = $this->art_date($date);
@@ -160,41 +168,58 @@ class api_article extends api
 						}
 						else
 						{
-							$this->error('articles','000');
+							$this->core->error->error('article','000');
 							return;
 						}
 					}
 					
-					if(strlen($title)<=64 OR strlen($body)<=5000)
+					if(mb_strlen($title, 'UTF-8')<=64 OR mb_strlen($body, 'UTF-8')<=5000)
 					{
-						queryMysql("INSERT INTO articles(user, title, article, time) VALUES('$user', '$title', '$body', '$time')");
+						$tags = explode(',', $tags);
+						//$tags = explode(';', $tags);
+						for($i=0;$i<sizeof($tags);$i++)$tags[$i] = trim($tags[$i]);
+						$tags = implode(',', $tags);
 						
-						$r = mysql_num_rows(queryMysql("SELECT * FROM articles WHERE user='$user' and title='$title' and time='$time'"));
-						if($r!=1)$this->error('articles','001');
+						$this->core->mysql->query("INSERT INTO articles_new(user, title, article, time, tags) VALUES('$user', '$title', '$body', '$time', '$tags')");
+						
+						$r = $this->core->mysql->query("SELECT * FROM articles_new WHERE user='$user' and title='$title' and time='$time'");
+						if($this->core->mysql->rows($r)!=1)
+						{
+							$this->core->error->error('article','001');
+							
+						}
+						
+						$r = $this->core->mysql->fetch($r);
+						$post = array(
+									'author_id'		=>	$r['user'],
+									'post_id'		=>	$r['id'],
+									'post_time'		=>	$r['time'],
+									'title'			=>	$r['title'],
+									'article'		=>	$r['article'],
+									'tags'			=>	explode(',',$r['tags']),
+						);
+						return $this->json($post);
 					}
 					else
 					{
-						$this->error('articles','002');
+						$this->core->error->error('article','002');
 					}
 				}
 				else
 				{
-					$this->error('articles','003');
+					$this->core->error->error('article','003');
 				}
 			}
 			else
 			{
-				$this->error('server','403');
+				$this->core->error->error('server','403');
 			}
 		}
 		else
 		{
-			$this->error('server','403');
+			$this->core->error->error('server','403');
 		}
-		
-		$post = array(
-		);
-		return $this->json($post);
+		return $this->json();
 	}
 	
 	protected function edit_post()

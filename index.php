@@ -15,11 +15,12 @@ session_start();
 //$core->mail->add_waiting_list('alex-kachalov@mail.ru','004',array('alex-kachalov@mail.ru','test'));
 //$core->mail->send('alex-kachalov@mail.ru','004',array('alex-kachalov@mail.ru','test'));
 
-//$core->plugin('user');
+$core->plugin('user');
 //print_r($core);
-//$u = new user($core);
+$u = new user($core);
 //echo $u->change_user('1',array('pass','qwerty'),'password')?'true':'false';
-//print_r($u->password_md5('qw', true, $u->time_reg, $u->salt));
+//$u->get_user(1);
+//print_r($u->password_md5('pass', false, $u->time_reg, $u->salt));
 //print_r($core->conf->ranks);
 //echo $u->get_user('1','id')?'Y':'N';
 /*$t =$core->runtime();

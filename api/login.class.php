@@ -12,102 +12,87 @@ class api_login extends api
 	
 	protected function login()
 	{
-		$email = SanString($this->data['email']);
+		$email = $this->core->SanString($this->data['email']);
 		$email = mb_convert_case($email, MB_CASE_LOWER, 'UTF-8');
-		$password = SanString($this->data['password']);
+		$password = $this->core->SanString($this->data['password']);
 		
-		$user = new user();
+		$this->core->plugin('user');
+		$user = new user($this->core);
 		$u = $user->get_user($email, 'email');
 		if(!$_SESSION['loggedin'])
 		if($u)
 		{
-			if($email!='' AND $password!='')
+			if($email!=null AND $password!=null)
 			{
-				if(preg_match($GLOBALS['_CONF']['server']['preg_match']['email'], $email) AND 
-				strlen($password)<=$GLOBALS['_CONF']['server']['string_length']['password']['site']['max'] AND
-				strlen($password)>=$GLOBALS['_CONF']['server']['string_length']['password']['site']['min'])
+				if(preg_match($this->core->preg('mail'), $email) AND 
+				strlen($password)<=$this->core->conf->length['password']['max'] AND
+				strlen($password)>=$this->core->conf->length['password']['min'])
 				{
-					$res = queryMysql("SELECT id, email, login FROM signup WHERE email='$email'");
-					if(mysql_num_rows($res)==0)
+					$time = $user->time_reg;
+					$salt = $user->salt;
+					$password_md5 = $user->password_md5($password, false, $time, $salt);
+					if($password_md5 == $user->pass)
 					{
-						$time = $user->time_reg;
-						$salt = $user->salt1;
-						$password_md5 = $user->password_md5('site', 'no', $password, $time, $salt);
-						if($password_md5 == $user->pass)
+						$this->core->plugin('rank');
+						$rank = new rank($this->core);
+						$rank->get_rank($user->id);
+						
+						if($rank->warnings!=100)
 						{
-							$rank = new rank();
-							$rank->get_rank($user->id);
+							$time_now = time();
+							$this->core->mysql->query("UPDATE login SET time_login='$time_now' WHERE id='$res[id]'");
 							
-							if($rank->warnings<$GLOBALS['_CONF']['server']['max_warnings_per_service'])
-							{
-								if($rank->checked==3)
-								{
-									$time_now = time();
-									queryMysql("UPDATE login SET time_login='$time_now' WHERE id='$res[id]'");
-									
-									$browser = new Browser();
-									$bro = $browser->getBrowser() . " " . $browser->getVersion();
-									$platform = $browser->getPlatform();
-									$id = $user->id;
-									queryMysql("INSERT INTO login_ok(id, browser, ip, platform, time) 
-									VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
-									$user->set_user($user->id, 'id');
-
-									$time_end = time() + 60*60*24*7;
-									setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
-
-									//return true;
-								}
-								else
-								{
-									$this->error('login','004');
-								}
-							}
-							else
-							{
-								$this->error('login','003');
-							}
-						}
-						else
-						{
-							$this->error('login','000');
-							
+							$this->core->plugin('browser');
 							$browser = new Browser();
 							$bro = $browser->getBrowser() . " " . $browser->getVersion();
 							$platform = $browser->getPlatform();
 							$id = $user->id;
-							$time_now = time();
-							queryMysql("INSERT INTO login_fail(id, browser, ip, platform, time) 
+							$this->core->mysql->query("INSERT INTO login_ok(id, browser, ip, platform, time) 
 							VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
+							$user->set_user($user->id, 'id');
+
+							$time_end = time() + 60*60*24*7;
+							setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
+
+							//return true;
+						}
+						else
+						{
+							$this->core->error->error('login','003');
 						}
 					}
 					else
 					{
-						$res = mysql_fetch_array($res);
-						$user->email($res['email'], 'activate', array($res['login'], $res['id']));
-						$this->error('login','005');
+						$this->core->error->error('login','000');
+						
+						$this->core->plugin('browser');
+						$browser = new Browser();
+						$bro = $browser->getBrowser() . " " . $browser->getVersion();
+						$platform = $browser->getPlatform();
+						$id = $user->id;
+						$time_now = time();
+						$this->core->mysql->query("INSERT INTO login_fail(id, browser, ip, platform, time) 
+						VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
 					}
 				}
 				else
 				{
-					$this->error('login','002');
+					$this->core->error->error('login','002');
 				}
 			}
 			else
 			{
-				$this->error('login','001');
+				$this->core->error->error('login','001');
 			}
 		}
 		else
 		{
-			$this->error('login','000');
+			$this->core->error->error('login','000');
 		}
 		else
-		$this->error('server','403');
+		$this->core->error->error('server','403');
 		
-		$returned = array();
-		
-		return $this->json($returned);
+		return $this->json();
 	}
 	
 	protected function logout()

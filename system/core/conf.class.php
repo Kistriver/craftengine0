@@ -25,6 +25,7 @@ class conf
 		$this->ranks = $conf['ranks'];
 		$this->ranks_name = $conf['ranks_name'];
 		$this->length = $conf['length'];
+		$this->preg = $conf['preg'];
 		/*		
 		$this->db = array(//array('example','127.0.0.1','test','root','pass'),
 						  array('site','127.0.0.1','site','root','pass'),

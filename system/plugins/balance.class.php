@@ -1,14 +1,4 @@
 <?php
-/**************************************************************/
-/*                                                            */
-/*                 CREATED BY ALEXEY KACHALOV                 */
-/*                                                            */
-/*                KACHALOVCRAFT NET ©  PROJECT                */
-/*                                                            */
-/*                      balance.class.php                     */
-/*                                                            */
-/**************************************************************/
-include_once(dirname(__FILE__)."/functions.php");//Подключаем функции и конфиги
 class balance
 {
 	public $error;

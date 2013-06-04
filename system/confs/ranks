@@ -8,5 +8,48 @@
 				],
 			"warnings":"2,60",
 			"other":{}
+		},
+	"article_show_unpublished":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Administrator",
+					"Moderator"
+				],
+			"warnings":"100",
+			"other":{}
+		},
+	"article_edit":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Administrator",
+					"Journalist"
+				],
+			"warnings":"100",
+			"other":{}
+		},
+	"article_delete":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Administrator",
+					"Journalist"
+				],
+			"warnings":"100",
+			"other":{}
+		},
+	"article_write_new":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Journalist"
+				],
+			"warnings":"100",
+			"other":{}
 		}
 }

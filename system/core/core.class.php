@@ -29,9 +29,17 @@ class core
 		
 		//Авторизирован ли пользователь
 		if(isset($_SESSION['id']) AND isset($_SESSION['login']))
-		$_SESSION['loggedin'] = true;
+		{
+			if($_SESSION['id']!='' AND $_SESSION['login']!='')
+			$_SESSION['loggedin'] = true;
+		}
 		else
 		$_SESSION['loggedin'] = false;
+		
+		if(!$_SESSION['loggedin'])
+		{
+			$_SESSION['id'] = '';
+		}
 		
 		//Подключение БД
 		//$this->mysql->connect_all();
@@ -105,6 +113,18 @@ class core
 		$str1 = json_encode($str);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
+	}
+	
+	public function preg($type)
+	{
+		switch($type)
+		{
+			case 'mail':
+				$mails = implode('|',$this->conf->preg['mail']);
+				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'/';
+				break;
+		}
+		return $pattern;
 	}
 }
 ?>

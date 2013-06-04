@@ -62,7 +62,7 @@ class mysql
 	{
 		if(empty($result))$result = $this->result;
 		if(empty($result))return false;
-		return $result->fetch_assoc();
+		return $result->fetch_array(MYSQLI_BOTH);
 	}
 	
 	//Возвращает число строк в последнем запросе

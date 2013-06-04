@@ -90,6 +90,7 @@ class error
 					'001'=>'Ошибка при создании ошибки',
 					'002'=>'Ошибка при создании ошибки',
 					'003'=>'PHP error',
+					'004'=>'Hack attempt',
 		);
 		
 		$num['mysql'] = array(
@@ -149,6 +150,7 @@ class error
 					'000'=>'Unexpected module',
 					'001'=>'Unexpected function',
 					'002'=>'Not implemented yet',
+					'003'=>'Sid not get',
 					
 		);
 		

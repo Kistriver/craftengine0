@@ -15,9 +15,12 @@ class rank
 		
 	}
 	
+	//Имеет ли пользователь с id $id доступ к $subj
 	public function init($id, $subj)
 	{
-		$this->get_rank($id);//Получение данных
+		if(empty($id))$id=0;
+		$is = $this->get_rank($id);//Получение данных
+		if(!$is)return false;
 		for($i=0;$i<sizeof($this->rank);$i++)
 		{
 			$this->rank_name_get($this->rank[$i]);//Получение ранка
@@ -32,17 +35,21 @@ class rank
 		return false;
 	}
 	
+	//Получение основной информации
 	public function get_rank($id)
 	{
 		$id = $this->core->sanString($id);
 		$this->core->plugin('user');
 		$u = new user($this->core);
-		$u->get_user($id, 'id');
+		$is = $u->get_user($id, 'id');
+		if(!$is)return false;
 		$this->rank = $u->rank;
 		$this->rank_main = $u->rank_main;
 		$this->warnings = $u->warnings;
+		return true;
 	}
 	
+	//Получение наименования ранка
 	public function rank_name_get($rank)
 	{
 		$this->rank_name = $this->core->conf->ranks_name[$rank][0];
@@ -53,9 +60,9 @@ class rank
 	{	
 		$conf = $this->core->file->get_all_file('ranks');
 		$conf = json_decode($conf, true);
+		$keys = array_keys($conf);
 		for($i=0;$i<sizeof($conf);$i++)
 		{
-			$keys = array_keys($conf);
 			$key = $keys[$i];
 			if($key==$subj)
 			{
@@ -132,29 +139,30 @@ class rank
 		}
 	}
 	
-	public function user_perms($subject='', $target)
+	//Пользовательские настройки доступа
+	public function user_perms($subject, $target)
 	{
-		$result = queryMysql("SELECT * FROM permissions WHERE id='$target'");
-		$num = mysql_num_rows($result);
-		$result = mysql_fetch_array($result);
+		$result = $this->core->mysql->query("SELECT * FROM permissions WHERE id='$target'");
+		$num = $this->core->mysql->rows($result);
+		$result = $this->core->mysql->fetch($result);
 		
 		//Друзья
-		$user = new user();
+		$this->core->plugin('user');
+		$user = new user($this->core);
 		$friend = $user->friends($subject, $target);
 		
 		//Я
 		if($subject == $target)$self = true;
 		else $self = false;
 		
-		//Плохой порльзователь
-		$rank = new rank();
-		$rank->get_rank($subject);
-		if($rank->warnings>=10)$bad = true;
+		//Плохой пользователь
+		$this->get_rank($subject);
+		if($rank->warnings>=50)$bad = true;
 		else $bad = false;
 		if($num == 0)$bad = true;
 		
 		//Забаненый пользователь
-		if($rank->warnings==20)$ban = true;
+		if($rank->warnings==100)$ban = true;
 		else $ban = false;
 		if($num == 0)$ban = true;
 		
