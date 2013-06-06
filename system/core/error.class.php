@@ -24,8 +24,18 @@ class error
 	public function error_php($code,$msg,$file,$line)
 	{
 		if(!$this->core->conf->debug)$this->error[] = $this->error_make('engine','003');
-		else $this->error[] = array("[$code][$file:$line]$msg",'01003');
-		if($this->core->conf->send_mail_report)$this->core->mail->add_waiting_list($this->core->conf->admin_mail, '001', array($code,$msg,$file,$line));
+		else $this->error[] = array('01003',"[$code][$file:$line]$msg");
+		if($this->core->conf->send_mail_report)
+		$this->core->mail->add_waiting_list(
+		$this->core->conf->admin_mail, 
+		'001', 
+		array(
+			'code'=>$code,
+			'msg'=>$msg,
+			'file'=>$file,
+			'line'=>$line
+			)
+		);
 	}
 	
 	//Отлов завершения работы скрипта
@@ -42,7 +52,17 @@ class error
 				if(!$this->core->conf->debug)echo 'Unfortunately, there is an error there. But our team is working on elimination of this problem.';
 				else echo "[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n";
 				header('HTTP/1.0 500');
-				if($this->core->conf->send_mail_report)$this->core->mail->add_waiting_list($this->core->conf->admin_mail, '000', $this->core->sanString($error));
+				if($this->core->conf->send_mail_report)
+				$this->core->mail->add_waiting_list(
+				$this->core->conf->admin_mail, 
+				'000', 
+				array(
+					'code'=>$error['type'],
+					'msg'=>$error['message'],
+					'file'=>$error['file'],
+					'line'=>$error['line']
+					)
+				);
 			}
 		ob_end_flush();
 	}

@@ -3,11 +3,15 @@ class tpl
 {
 	public	$root,
 			$content,
+			$type,
 			$vars;
 	
-	public function __construct()
+	public function __construct($type='pc')
 	{
-		$this->root = dirname(__FILE__).'/../php/tpl/';
+		if($type=='pc'or $type=='computer')$this->type = 'pc';
+		if($type=='m' or $type=='mobile')$this->type = 'm';
+		$add = $this->type . '/';
+		$this->root = dirname(__FILE__).'/../php/tpl/'.$add;
 	}
 	
 	public function tpl($tpl)
@@ -41,9 +45,26 @@ class tpl
 	
 	public function render()
 	{
+		$root = '/new/www/';
+		$this->assign('MAIN.ROOT_HTTP', $root);
+		$this->assign('MAIN.ROOT', $root.'client/php/');
+		$this->assign('MAIN.V', $this->type);
+		
 		$this->foreachvar($this->vars);
 		
-		//if(substr($this->content, 0, 6))
+		$this->content = preg_replace('/<!--\/*(.*?)\*\/-->/is', '', $this->content);
+		
+		if(substr($this->content, 0, 6)=='{HTML}')
+		{
+			//$this->content = substr($this->content, 6);
+			$params = preg_replace('/{HTML}.(.*?).{\/HTML}(.*?)/isU', '$1', $this->content);
+			$params = explode("\n",$params);
+			$this->content = preg_replace('/{HTML}(.*?){\/HTML}/is', '', $this->content);
+			$content = $this->content;
+			$this->tpl($params[0]);
+			$this->assign('MAIN.CONTENT',$content);
+			return $this->render();
+		}
 		
 		return $this->content;
 	}

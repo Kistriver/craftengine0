@@ -76,7 +76,7 @@ class core
 	}
 	
 	//Подготовка переменных к занесению в БД
-	public function sanString($var)
+	public function sanString($var, $san='all')
 	{
 		if(is_array($var))
 		{
@@ -84,14 +84,14 @@ class core
 			return $var;
 		}
 
-		$var_before = Array("<", ">");
-		$var_after = Array("&lt;", "&gt;");
-		$var = str_replace($var_before, $var_after, $var);
-		$var = strip_tags($var);
-		$var = htmlentities($var, ENT_COMPAT, 'utf-8');
+		if($san!='mysql')$var_before = Array("<", ">");
+		if($san!='mysql')$var_after = Array("&lt;", "&gt;");
+		if($san!='mysql')$var = str_replace($var_before, $var_after, $var);
+		if($san!='mysql')$var = strip_tags($var);
+		if($san!='mysql')$var = htmlentities($var, ENT_COMPAT, 'utf-8');
 		//$var = stripslashes($var);
-		$var = $this->mysql->db[$this->conf->db[0][0]]->real_escape_string($var);
-		$var = str_replace("&amp;", "&", $var);
+		if($san!='html')$var = $this->mysql->db[$this->conf->db[0][0]]->real_escape_string($var);
+		if($san!='mysql')$var = str_replace("&amp;", "&", $var);
 		return $var;
 	}
 	

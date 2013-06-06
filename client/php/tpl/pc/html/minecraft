@@ -19,5 +19,11 @@
 
 {$MAIN.CONTENT}
 
+<div style="width: 100%; height: 180px;">
+</div>
+<div style="position: fixed; bottom: 0px; left: 0px; background: #DDD; width: 100%; height: 180px; overflow: auto;">
+<center>Errors:</center>
+{$MAIN.ERRORS}
+</div>
 </body>
 </html>

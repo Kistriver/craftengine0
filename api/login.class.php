@@ -10,6 +10,7 @@ class api_login extends api
 		$this->functions['restore']='restore';
 	}
 	
+	//Авторизация пользователя
 	protected function login()
 	{
 		$email = $this->core->SanString($this->data['email']);
@@ -40,19 +41,19 @@ class api_login extends api
 						if($rank->warnings!=100)
 						{
 							$time_now = time();
-							$this->core->mysql->query("UPDATE login SET time_login='$time_now' WHERE id='$res[id]'");
+							//$this->core->mysql->query("UPDATE login SET time_login='$time_now' WHERE id='$user->id'");
 							
 							$this->core->plugin('browser');
 							$browser = new Browser();
 							$bro = $browser->getBrowser() . " " . $browser->getVersion();
 							$platform = $browser->getPlatform();
 							$id = $user->id;
-							$this->core->mysql->query("INSERT INTO login_ok(id, browser, ip, platform, time) 
+							$this->core->mysql->query("INSERT INTO login_ok(user, browser, ip, platform, time) 
 							VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
 							$user->set_user($user->id, 'id');
 
 							$time_end = time() + 60*60*24*7;
-							setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
+							//setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
 
 							//return true;
 						}
@@ -95,23 +96,26 @@ class api_login extends api
 		return $this->json();
 	}
 	
+	//Деавторизация пользователя
 	protected function logout()
 	{
 		if($_SESSION['loggedin'])
-		logout();
+		session_destroy();
 		else
-		$this->error('server','403');
+		$this->core->error->error('server','403');
 		
 		$returned = array();
 		
 		return $this->json($returned);
 	}
 	
+	//Активация аккаунта с помощью email
 	protected function activate()
 	{
 		$this->wip();
 	}
 	
+	//Восстановление аккаунта
 	protected function restore()
 	{
 		$this->wip();

@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{$MAIN.KEYWORDS}" />
+<meta name="description" content="{$MAIN.DESC}" />
+<meta name="author" lang="ru" content="Алексей Качалов" />
+<meta name="document-state" content="Dynamic" />
+<!--/* INCLUDED CSS */-->
+<link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/main.css" rel="stylesheet" type="text/css" />
+<link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/buttons.css" rel="stylesheet" type="text/css" />
+
+<!--/* INCLUDED JS */-->
+
+<link rel="shortcut icon" href="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/favicon.ico"/>
+<title>
+{$MAIN.TITLE}
+</title>
+</head>
+<body>
+<table class="main_table" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+<tbody valign="top">
+<tr>
+<td colspan="3" class="hat">
+<div class="hat_div" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/slashes-grey.png') grey;">
+<!--/* ШАПКА */-->
+<!--/* BACKGROUND */-->
+<!--/* SEARCH */-->
+<div class="panel_search" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+<form method="post" action="search">
+<input class="textfield" style="width: 240px;" type="text" name="search" placeholder="Поиск" />
+<input type="submit" value="Go" class="btn success button_panel_search" />
+</form>
+</div>
+<!--/* SEARCH */-->
+<!--/* LOGIN */-->
+{$MOD.LOGIN}
+<!--/* LOGIN */-->
+<div class="groups" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+<center>
+<a href="https://www.facebook.com/groups/kachalovcraft/" target="_blank"><img alt="facebook" src="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/facebook.png" /></a>
+<a href="https://twitter.com/KachalovCRAFT" target="_blank"><img alt="twitter" src="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/twitter.png" /></a>
+<a href="http://vk.com/kachalovcraft" target="_blank"><img alt="vkontakte" src="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/vkontakte.png" /></a>
+</center>
+</div>
+<!--/* BACKGROUND */-->
+<!--/* LOGOTYPE */-->
+<span class="logo">
+<img alt="logotype" style="width: 100%;" src="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/logo.png" />
+</span>
+<div class="slogan" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+Large company for large people
+</div>
+<!--/* LOGOTYPE */-->
+<!--/* ШАПКА */-->
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="3" class="branches">
+<!--/* РАЗДЕЛЫ */-->
+РАЗДЕЛЫ
+<!--/* РАЗДЕЛЫ */-->
+</td>
+</tr>
+<tr>
+<td class="menu">
+<!--/* МЕНЮ */-->
+МЕНЮ
+<!--/* МЕНЮ */-->
+</td>
+<td class="content">
+<div class="header">
+<h1>
+<!--/* ЗАГОЛОВОК */-->
+{$MAIN.HEADER}
+<!--/* ЗАГОЛОВОК */-->
+</h1>
+</div>
+<div>
+{$MAIN.CONTENT}
+</div>
+</td>
+<td class="ads">
+<!--/* РЕКЛАМА */-->
+РЕКЛАМА
+<!--/* РЕКЛАМА */-->
+</td>
+</tr>
+<tr>
+<td colspan="3" class="footer" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/slashes-grey.png') grey;">
+<!--/* ПОДВАЛ */-->
+<center>
+<div class="copyright" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+Условия пользовательского соглашения<br />
+Правила серверов KachalovCRAFT NET<br />
+<br />
+Powered by KachalovCRAFT<br />
+KachalovCRAFT NET © 2012 - 2013<br />
+v1.0 closed alpha<br />
+</div>
+</center>
+<!--/* ПОДВАЛ */-->
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

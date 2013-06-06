@@ -39,8 +39,13 @@ $u->signup(
 echo $core->runtime()-$t;*/
 $core->plugin('rank');
 $r = new rank($core);
+$core->mail->get_waiting_list();
 //echo $r->init(1, 'example')?'y':'n';
 //print_r($r);
+/*echo $v = '<div style="">\'\'{"json":true}[]LAL$&nbsp;</div>';echo "\r\n";
+echo $core->sanString($v);echo "\r\n";
+echo $core->sanString($v, 'mysql');echo "\r\n";
+echo $core->sanString($v, 'html');echo "\r\n";*/
 
 echo 'errors: '; print_r($core->error->error)."\r\n";
 echo 'runtime: '.$core->runtime()."\r\n";

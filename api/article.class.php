@@ -7,10 +7,12 @@ class api_article extends api
 		$this->functions['posts']='posts';
 		$this->functions['post']='post';
 		$this->functions['new_post']='new';
+		$this->functions['confirm_new_post']='confirm_new';
 		$this->functions['edit_post']='edit';
 		$this->functions['status']='status';
 	}
 	
+	//Получение 1-ой страницы статей
 	protected function posts()
 	{
 		$page=(int)$this->core->SanString($this->data['page']);
@@ -82,7 +84,8 @@ class api_article extends api
 		
 		return $this->json($returned);
 	}
-        
+	
+	//Получение одной статьи, установка просмотра++
 	protected function post()
 	{
 		$id = (int)$this->core->SanString($this->data['post_id']);
@@ -137,12 +140,13 @@ class api_article extends api
 		}
 		else
 		{
-				$this->core->error->error('server','404');
+			$this->core->error->error('server','404');
 		}
 		
 		return $this->json($post);
 	}
 	
+	//Добавление новой статьи во временную таблицу
 	protected function new_post()
 	{
 		if($_SESSION['loggedin'])
@@ -180,7 +184,7 @@ class api_article extends api
 						for($i=0;$i<sizeof($tags);$i++)$tags[$i] = trim($tags[$i]);
 						$tags = implode(',', $tags);
 						
-						$this->core->mysql->query("INSERT INTO articles_new(user, title, article, time, tags) VALUES('$user', '$title', '$body', '$time', '$tags')");
+						$this->core->mysql->query("INSERT INTO articles_new(user, title, article, time, tags, status) VALUES('$user', '$title', '$body', '$time', '$tags', '1')");
 						
 						$r = $this->core->mysql->query("SELECT * FROM articles_new WHERE user='$user' and title='$title' and time='$time'");
 						if($this->core->mysql->rows($r)!=1)
@@ -189,9 +193,16 @@ class api_article extends api
 							
 						}
 						
+						$this->core->plugin('user');
+						$user = new user($this->core);
+						$user->get_user($r['user']);
+						$r['userid'] = $r['user'];
+						$r['user'] = $user->login;
+						
 						$r = $this->core->mysql->fetch($r);
 						$post = array(
-									'author_id'		=>	$r['user'],
+									'author_login'	=>	$r['user'],
+									'author_id'		=>	$r['userid'],
 									'post_id'		=>	$r['id'],
 									'post_time'		=>	$r['time'],
 									'title'			=>	$r['title'],
@@ -222,6 +233,69 @@ class api_article extends api
 		return $this->json();
 	}
 	
+	//Подтверждение или удаление статьи во временной таблице
+	protected function confirm_new_post()
+	{
+		if($_SESSION['loggedin'])
+		{
+			$this->core->plugin('rank');
+			$rank = new rank($this->core);
+			if($rank->init($_SESSION['id'], 'article_confirm_new'))
+			{
+				$userid = $_SESSION['id'];
+				$art_id = $this->core->SanString($this->data['id']);
+				$confirm = $this->core->SanString($this->data['confirm']);
+				$time = time();
+				
+				$res = $this->core->mysql->query("SELECT * FROM articles_new WHERE id='$art_id'");
+				if($this->core->mysql->rows($res)==1)
+				{
+					$art = $this->core->mysql->fetch($res);
+					if($art['status']==1)
+					{
+						if($confirm)
+						{
+							$type = 1;//Adding into main article table
+							
+							$this->core->mysql->query("INSERT INTO articles(user, title, article, time, tags, times, status) VALUES('$art[user]', '$art[title]', '$art[article]', '$art[time]', '$art[tags]', '0', '1')");
+							$this->core->mysql->query("UPDATE articles_new SET status='2' WHERE id='$art_id'");
+							$this->core->mysql->query("SELECT * FROM articles WHERE time='$art[time]' and user='$art[user]' and title='$art[title]'");
+							$art_new = $this->core->mysql->fetch();
+							$this->core->mysql->query("INSERT INTO articles_history(editor, time, type, article) VALUES('$userid', '$time', '$type', '$art_new[id]')");
+							return $this->json(array('status'=>'added','id'=>$art_new['id']));
+						}
+						else
+						{
+							$type = 2;//Delete article
+							
+							$this->core->mysql->query("UPDATE articles_new SET status='0' WHERE id='$art_id'");
+							$this->core->mysql->query("INSERT INTO articles_history(editor, time, type, article) VALUES('$userid', '$time', '$type', '$art_id')");
+							return $this->json(array('status'=>'deleted'));
+						}
+					}
+					else
+					{
+						$this->core->error->error('server','404');
+					}
+				}
+				else
+				{
+					$this->core->error->error('server','404');
+				}
+			}
+			else
+			{
+				$this->core->error->error('server','403');
+			}
+		}
+		else
+		{
+			$this->core->error->error('server','403');
+		}
+		return $this->json();
+	}
+	
+	//Редактирование статьи в основной таблице
 	protected function edit_post()
 	{
 		if($_SESSION['loggedin'])
@@ -283,6 +357,7 @@ class api_article extends api
 		return $this->json($post);
 	}
 	
+	//Изменение статуса статьи в основной таблице
 	protected function status()
 	{
 		if($_SESSION['loggedin'])
@@ -341,7 +416,8 @@ class api_article extends api
 		);
 		return $this->json($status);
 	}
-
+	
+	//Получение статуса статьи(для методов)
 	protected function art_status($state)
 	{
 		switch($state)
@@ -360,6 +436,7 @@ class api_article extends api
 		return $status;
 	}
 	
+	//Преобразование даты(для методов)
 	protected function art_date($date)
 	{
 		if(!preg_match('(\d{2}).(\d{2}).(\d{2}) (\d{2}):(\d{2}).(\d{2})',$date))

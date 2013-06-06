@@ -8,7 +8,7 @@ class api
 	
 	//Массив разрешённых функций
 	public $functions = array(
-				   #'funct'=>'act',//НАДО НАОБОРОТ!!!
+				   #'funct'=>'act',
 	);
 	
 	public function __construct()
