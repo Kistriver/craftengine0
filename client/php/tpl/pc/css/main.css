@@ -3,13 +3,19 @@ body
 	margin: 0px;
 	background: url('http://static.tumblr.com/qfn3sex/ezom7y7iq/bg_main.png');
 	font-family: Tahoma;
+	height: 100%;
+}
+
+html
+{
+	height: 100%;
 }
 
 .main_table
 {
 	width: 1100px; 
 	margin: 0px auto;
-	height: 1200px;
+	height: 100%;
 	border-collapse: collapse;
 }
 

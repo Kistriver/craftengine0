@@ -12,7 +12,7 @@ class api_article extends api
 		$this->functions['status']='status';
 	}
 	
-	//Получение 1-ой страницы статей
+	//Получение одной страницы статей
 	protected function posts()
 	{
 		$page=(int)$this->core->SanString($this->data['page']);
@@ -190,7 +190,7 @@ class api_article extends api
 						if($this->core->mysql->rows($r)!=1)
 						{
 							$this->core->error->error('article','001');
-							
+							return $this->json();
 						}
 						
 						$this->core->plugin('user');
@@ -300,16 +300,21 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank();
-			if($rank->init($_SESSION['id'], 'edit_art'))
+			$this->core->plugin('rank');
+			$rank = new rank($this->core);
+			
+			$user = $_SESSION['id'];
+			$post_id = (int)$this->core->SanString($this->data['id']);
+			$art_own = $this->core->mysql->fetch($this->core->mysql->query("SELECT * FROM articles WHERE id='$post_id'"));
+			if($rank->init($_SESSION['id'], 'article_edit') or $art_own['user']==$user)
 			{
-				if((isset($this->data['title']) AND isset($this->data['body'])) AND (!empty($this->data['title']) AND !empty($this->data['body'])))
+				if((isset($this->data['title']) AND isset($this->data['article'])) AND (!empty($this->data['title']) AND !empty($this->data['article'])))
 				{
-					$title = sanString($this->data['title']);
-					$body = sanString($this->data['body']);
-					$user = $_SESSION['id'];
+					$title = $this->core->SanString($this->data['title']);
+					$body = $this->core->SanString($this->data['article']);
+					$tags = $this->core->SanString($this->data['tags']);
 					$time = time();
-					$date = sanString($this->data['date']);
+					$date = $this->core->SanString($this->data['date']);
 					if(!empty($date))
 					{
 						$d = $this->art_date($date);
@@ -319,37 +324,74 @@ class api_article extends api
 						}
 						else
 						{
-							$this->error('articles','000');
+							$this->core->error->error('article','000');
 							return;
 						}
 					}
 					
-					if(strlen($title)<=64 OR strlen($body)<=5000)
+					if(mb_strlen($title, 'UTF-8')<=64 OR mb_strlen($body, 'UTF-8')<=5000)
 					{
-						$post_id = (int)sanString($this->data['art']);
-						queryMysql("UPDATE articles SET user_edit='$user', title='$title', article='$body', time='$time' WHERE id='$post_id'");
+						$art_is = $this->core->mysql->query("SELECT * FROM articles WHERE id='$post_id'");
+						if($this->core->mysql->rows($art_is)!=1)
+						{
+							$this->core->error->error('server','403');
+							return $this->json();
+						}
 						
-						$r = mysql_num_rows(queryMysql("SELECT * FROM articles WHERE title='$title' and time='$time' and id='$post_id'"));
-						if($r!=1)$this->error('articles','001');
+						$this->core->mysql->query("UPDATE articles SET title='$title', article='$body', time='$time', tags='$tags' WHERE id='$post_id'");
+						
+						$r = $this->core->mysql->query("SELECT * FROM articles WHERE user='$user' and title='$title' and time='$time'");
+						if($this->core->mysql->rows($r)!=1)
+						{
+							$this->core->error->error('article','001');
+							return $this->json();
+						}
+						
+						$type = 3;
+						$art_is = $this->core->mysql->fetch($art_is);
+						$art = json_encode(array('title'=>$art_is['title'],'art'=>$art_is['article'],'time'=>$art_is['time'],'tags'=>$art_is['tags']));
+						$art = $this->core->SanString($art, 'mysql');
+						
+						$time_now = time();
+						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$userid', '$art', '$time_now', '$type', '$post_id')");
+						
+						$r = $this->core->mysql->fetch($r);
+						$this->core->plugin('user');
+						$user = new user($this->core);
+						$user->get_user($r['user']);
+						$r['userid'] = $r['user'];
+						$r['user'] = $user->login;
+						
+						//$r = $this->core->mysql->fetch($r);
+						$post = array(
+									'author_login'	=>	$r['user'],
+									'author_id'		=>	$r['userid'],
+									'post_id'		=>	$r['id'],
+									'post_time'		=>	$r['time'],
+									'title'			=>	$r['title'],
+									'article'		=>	$r['article'],
+									'tags'			=>	explode(',',$r['tags']),
+						);
+						return $this->json($post);
 					}
 					else
 					{
-						$this->error('articles','002');
+						$this->core->error->error('article','002');
 					}
 				}
 				else
 				{
-					$this->error('articles','003');
+					$this->core->error->error('article','003');
 				}
 			}
 			else
 			{
-				$this->error('server','403');
+				$this->core->error->error('server','403');
 			}
 		}
 		else
 		{
-			$this->error('server','403');
+			$this->core->error->error('server','403');
 		}
 		
 		$post = array(

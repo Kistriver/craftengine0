@@ -72,7 +72,9 @@ class api
 			echo $this->json();
 			die();
 		}
-		
+	
+		if(isset($_GET['module']))
+		{
 		//Разрешена ли функция
 		$func = array_search($this->data['act'],$this->functions);
 		if(empty($func) or is_array($this->data['act']))
@@ -86,6 +88,12 @@ class api
 		}
 		
 		return true;
+		}
+	}
+	
+	public function method($m)
+	{
+		return $this->$m();
 	}
 	
 	//Создание ответа

@@ -50,14 +50,46 @@ class tpl
 		$this->assign('MAIN.ROOT', $root.'client/php/');
 		$this->assign('MAIN.V', $this->type);
 		
-		$this->foreachvar($this->vars);
-		
 		$this->content = preg_replace('/<!--\/*(.*?)\*\/-->/is', '', $this->content);
+		
+		$r1 = '([^{].*)';
+		$r2 = '(.*)';
+		$r = '/{if '.$r1.'}'.$r2.'{\/if}/isU';
+		if(preg_match($r, $this->content))
+		{
+			$if = preg_replace($r, '$1', $this->content);
+			foreach(explode("\r\n",$if) as $if)
+			if(!empty($if))
+			{
+				$true = false;
+				$eq1 = preg_match_all('/([=]{1})/', $if, $m);
+				$eq2 = preg_match_all('/([=]{2})/', $if, $m);
+				
+				$eq3 = preg_match('/;/', $if);
+				$eq4 = preg_match('/phpinfo\(\)/i', $if);
+				$eq5 = preg_match('/exec\(\)/i', $if);
+				if($eq3 or $eq1/2!=$eq2 or $eq4 or $eq5)die("Template hack attempt");
+				eval("if($if)\$true = true;");
+				//echo "if($if)\$true = true;\r\n";
+				
+				$if = str_replace(
+				array('/','$','[',']','{','}'),
+				array('\/','\$','\[','\]','\{','\}'),$if);
+				
+				if($true)
+				$this->content = preg_replace('/{if '.$if.'}(.*?){\/if}/is', '$1', $this->content);
+				else
+				$this->content = preg_replace('/{if '.$if.'}(.*?){\/if}/is', '', $this->content);
+			}
+		}
+		
+		
+		$this->foreachvar($this->vars);
 		
 		if(substr($this->content, 0, 6)=='{HTML}')
 		{
 			//$this->content = substr($this->content, 6);
-			$params = preg_replace('/{HTML}.(.*?).{\/HTML}(.*?)/isU', '$1', $this->content);
+			$params = preg_replace('/{HTML}.(.*?).{\/HTML}(.*?)/is', '$1', $this->content);
 			$params = explode("\n",$params);
 			$this->content = preg_replace('/{HTML}(.*?){\/HTML}/is', '', $this->content);
 			$content = $this->content;

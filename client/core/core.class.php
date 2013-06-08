@@ -13,9 +13,10 @@ class core
 		$this->tpl = new tpl(/*Mobile(m) or PC(pc)*/);
 	}
 	
-	public function get($module, $act, $data)
+	//public function get($module, $act, $data)
+	public function get($method, $data)
 	{
-		$post['act'] = $act;
+		//$post['act'] = $act;
 		$keys = array_keys($data);
 		for($i=0;$i<sizeof($data);$i++)
 		{
@@ -24,11 +25,13 @@ class core
 		}
 		
 		$post = json_encode($post);
-		$this->url = $this->root . '?module=' . $module . '&data=' . $post;
+		//$this->url = $this->root . '?module=' . $module . '&data=' . $post;
+		$this->url = $this->root . '?method=' . $method . '&data=' . $post;
 		$this->answer = @file_get_contents($this->url);
 		if(!$this->answer)
 		{
 			header('HTTP/1.0 500');
+			die('It looks like there is an error there. We have just noticed about it and we\'ll do everything what we can.');
 			die('Service unavaliable');
 		}
 		$this->answer_decode = json_decode($this->answer, true);

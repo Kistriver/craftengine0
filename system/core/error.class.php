@@ -171,6 +171,7 @@ class error
 					'001'=>'Unexpected function',
 					'002'=>'Not implemented yet',
 					'003'=>'Sid not get',
+					'004'=>'Unexpected method',
 					
 		);
 		

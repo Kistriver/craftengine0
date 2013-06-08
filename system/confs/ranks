@@ -62,5 +62,15 @@
 				],
 			"warnings":"100",
 			"other":{}
+		},
+	"article_edit":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Administrator"
+				],
+			"warnings":"100",
+			"other":{}
 		}
 }

@@ -1,3 +1,6 @@
+{if !$_SESSION['loggedin']}
+<!--/*{if true==true)echo phpinfo(); die();//}*/-->
+<!--/*{if !$_SESSION['rank_main']=phpinfo()}*/-->
 <div class="panel_login" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
 <form method="post" action="login">
 <input class="textfield button_panel_mail_pass" type="text" name="email" placeholder="E-mail" />
@@ -15,3 +18,11 @@
 </button>
 </form>
 </div>
+{/if}
+{if $_SESSION['loggedin']}
+<div class="panel_login" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+{$SESSION.login}<br />
+Ранг: {$SESSION.rank_main}<br />
+<img style="width: 64px;" alt="{$SESSION.login}" src="/files/uploads/avatars/{$SESSION.login}.png">
+</div>
+{/if}

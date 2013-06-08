@@ -121,7 +121,7 @@ class core
 		{
 			case 'mail':
 				$mails = implode('|',$this->conf->preg['mail']);
-				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'/';
+				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'$/';
 				break;
 		}
 		return $pattern;
