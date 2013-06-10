@@ -11,6 +11,8 @@ if(isset($_GET['method']))
 				'article',
 				'login',
 				'profile',
+				'system',
+				'signup',
 	);
 	
 	$modules = in_array($m_f[0],$mod);

@@ -1,0 +1,5 @@
+<a href="{$MAIN.ROOT_HTTP}{$HREF}">
+<div class="a">
+{$TEXT}
+</div>
+</a>

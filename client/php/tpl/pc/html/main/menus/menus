@@ -1,0 +1,6 @@
+<div class="menu_header">
+{$MENU.HEADER}
+</div>
+<div class="menu_content">
+{$MENU.CONTENT}
+</div>

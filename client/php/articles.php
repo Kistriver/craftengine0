@@ -1,12 +1,14 @@
 <?php
 include_once(dirname(__FILE__).'/../core/include.php');
 
-$core->get('article.posts',array('page'=>'1','sid'=>session_id().'php'));
+$core->get('article.posts',array('page'=>'1','sid'=>$_SESSION['sid']));
 $data = $core->answer_decode;
 
 $content = '';
 $tags = array();
 $desc = '';
+
+if(sizeof($data['errors'])==0)
 for($i=0;$i<sizeof($data['data']['posts']);$i++)
 {
 	$core->tpl->tpl('articles/instance');
@@ -23,19 +25,17 @@ for($i=0;$i<sizeof($data['data']['posts']);$i++)
 	$content .= $core->tpl->render();
 }
 
-$errors = array();
-foreach($data['errors'] as $er)
-{
-	if(is_array($er))
-	$errors[] = "[$er[0]] $er[1]";
-	else
-	$errors[] = $er;
-}
 $main['TITLE'] = 'Новости | '.$main['NAME'];
 $main['KEYWORDS'] = $main['NAME'].', news, articles, '.implode(', ', $tags);
 $main['DESC'] = $desc;
 $main['HEADER'] = 'Новости';
-$main['ERRORS'] = $errors;
+
+foreach ($core->errors as $er)
+{
+	if(is_array($er))$main['ERRORS'] .= "[$er[0]] $er[1]<br />\r\n";
+	else $main['ERRORS'] .= "$er<br />\r\n";
+}
+//$main['ERRORS'] = implode("<br />\r\n", $core->errors);
 
 $core->tpl->tpl('html/main/main');
 $main['CONTENT'] = $content;
@@ -106,27 +106,26 @@ foreach($data['errors'] as $er)
 	$errors[] = $er;
 }
 
-$mod = array(
+/*$mod = array(
 );
 $core->tpl->tpl('/html/main/login');
 $core->tpl->assign('SESSION',$_SESSION);
 $mod['LOGIN'] = $core->tpl->render();
 
 $core->tpl->tpl('/html/main/menu');
-$mod['MENU'] = $core->tpl->render();
-
+$mod['MENU'] = $core->tpl->render();*/
+/*
 $main = array(
 	'TITLE'=>'Новости | KachalovCRAFT NET',
 	'KEYWORDS'=>'KachalovCRAFT NET',
 	'DESC'=>'KachalovCRAFT NET',
 	'HEADER'=>'Новости',
 	'ERRORS'=>implode('<br />',$errors),
-);
+);*/
 $core->tpl->tpl('html/main/main');
 $main['CONTENT'] = $content;
 $core->tpl->assign('MAIN',$main);
 
 $core->tpl->assign('MOD',$mod);
 echo $core->tpl->render();
-die;
 ?>

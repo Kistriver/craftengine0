@@ -4,11 +4,26 @@ body
 	background: url('http://static.tumblr.com/qfn3sex/ezom7y7iq/bg_main.png');
 	font-family: Tahoma;
 	height: 100%;
+	font: 14px Helvetica, Arial, sans-serif;
+}
+
+a
+{
+	text-decoration: underline;
+	color: #21759B;
 }
 
 html
 {
 	height: 100%;
+}
+
+
+textarea
+{
+	border: solid 1px #E5E5E5;
+	resize: vertical;
+	background-image: url('/themes/dirt/images/background/slashes1.png');
 }
 
 .main_table
@@ -70,6 +85,7 @@ html
 	padding: 5px; 
 	margin: 5px; 
 	border-radius: 5px;
+	background-image: url('/themes/dirt/images/background/lite1.png');
 }
 
 .slogan

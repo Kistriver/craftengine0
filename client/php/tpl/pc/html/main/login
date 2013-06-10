@@ -2,7 +2,7 @@
 <!--/*{if true==true)echo phpinfo(); die();//}*/-->
 <!--/*{if !$_SESSION['rank_main']=phpinfo()}*/-->
 <div class="panel_login" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
-<form method="post" action="login">
+<form method="post" action="{$MAIN.ROOT_HTTP}login">
 <input class="textfield button_panel_mail_pass" type="text" name="email" placeholder="E-mail" />
 <input class="textfield button_panel_mail_pass" type="password" name="password" placeholder="Пароль" />
 <input type="submit" value="Вход" class="btn success button_panel_login" />

@@ -349,7 +349,7 @@ class api_article extends api
 						
 						$type = 3;
 						$art_is = $this->core->mysql->fetch($art_is);
-						$art = json_encode(array('title'=>$art_is['title'],'art'=>$art_is['article'],'time'=>$art_is['time'],'tags'=>$art_is['tags']));
+						$art = $this->core->json_encode_ru(array('title'=>$art_is['title'],'art'=>$art_is['article'],'time'=>$art_is['time'],'tags'=>$art_is['tags']));
 						$art = $this->core->SanString($art, 'mysql');
 						
 						$time_now = time();

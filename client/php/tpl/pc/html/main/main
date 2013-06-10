@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -6,11 +6,13 @@
 <meta name="description" content="{$MAIN.DESC}" />
 <meta name="author" lang="ru" content="Алексей Качалов" />
 <meta name="document-state" content="Dynamic" />
-<meta property="og:image" content="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/logo.png" />
+<!--/*<meta property="og:image" content="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/logo.png" />*/-->
 <link rel="image_src" href="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/logo.png" />
 <!--/* INCLUDED CSS */-->
 <link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/main.css" rel="stylesheet" type="text/css" />
 <link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/buttons.css" rel="stylesheet" type="text/css" />
+<link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/menu.css" rel="stylesheet" type="text/css" />
+<link href="{$MAIN.ROOT}tpl/{$MAIN.V}/css/signup.css" rel="stylesheet" type="text/css" />
 
 <!--/* INCLUDED JS */-->
 
@@ -59,7 +61,9 @@ New Engine<img src="http://www.iconsearch.ru/uploads/icons/humano2/16x16/emblem-
 <!--/* BACKGROUND */-->
 <!--/* LOGOTYPE */-->
 <span class="logo">
+<a href="{$MAIN.ROOT_HTTP}main">
 <img alt="logotype" style="width: 100%;" src="{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/logo.png" />
+</a>
 </span>
 <div class="slogan" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
 Large company for large people
@@ -69,13 +73,12 @@ Large company for large people
 </div>
 </td>
 </tr>
+<!--/*
 <tr>
 <td colspan="3" class="branches">
-<!--/* РАЗДЕЛЫ */-->
 РАЗДЕЛЫ
-<!--/* РАЗДЕЛЫ */-->
 </td>
-</tr>
+</tr>*/-->
 <tr>
 <td class="menu">
 <!--/* МЕНЮ */-->
@@ -104,15 +107,17 @@ Large company for large people
 <td colspan="3" class="footer" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/slashes-grey.png') grey;">
 <!--/* ПОДВАЛ */-->
 <center>
-<div class="copyright" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
-Условия пользовательского соглашения<br />
-Правила серверов KachalovCRAFT NET<br />
-<br />
-Powered by KachalovCRAFT<br />
+<div class="copyright">
+<!--/*Условия пользовательского соглашения<br />
+<br />*/-->
+Powered by <a href="http://vk.com/kachalovcraft">KachalovCRAFT</a><br />
 KachalovCRAFT NET © 2012 - 2013<br />
 v1.0 closed alpha<br />
 </div>
 </center>
+<div style="position: absolute; background: #ddd;width: 100%; left: 0px;">
+{$MAIN.ERRORS}
+</div>
 <!--/* ПОДВАЛ */-->
 </td>
 </tr>

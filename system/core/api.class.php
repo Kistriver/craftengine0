@@ -35,7 +35,7 @@ class api
 			session_start();
 			session_regenerate_id();
 			$this->data['sid'] = session_id();
-			$sid_err = 2;
+			$sid_err = 1;
 			
 			/*session_start();
 			$this->data['sid'] = session_id();*/

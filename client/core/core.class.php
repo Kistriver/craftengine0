@@ -5,6 +5,7 @@ class core
 			$url,
 			$answer,
 			$answer_decode,
+			$errors = array(),
 			$tpl;
 	
 	public function __construct()
@@ -31,14 +32,20 @@ class core
 		if(!$this->answer)
 		{
 			header('HTTP/1.0 500');
-			die('It looks like there is an error there. We have just noticed about it and we\'ll do everything what we can.');
-			die('Service unavaliable');
+			//die('It looks like there is an error there. We have just noticed about it and we\'ll do everything what we can.');
+			die('Service unavaliable('. $method .')');
 		}
 		$this->answer_decode = json_decode($this->answer, true);
 		if(!$this->answer_decode)
 		{
 			header('HTTP/1.0 500');
-			die('Unavaliable data format');
+			die('Unavaliable data format('. $method .')');
+		}
+		
+		if(sizeof($this->answer_decode['errors'])!=0)
+		foreach ($this->answer_decode['errors'] as $er)
+		{
+			$this->errors[] = $er;
 		}
 		return $this->answer_decode;
 	}
