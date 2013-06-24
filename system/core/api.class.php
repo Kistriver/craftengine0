@@ -9,6 +9,7 @@ class api
 	//Массив разрешённых функций
 	public $functions = array(
 				   #'funct'=>'act',
+	   #'act'=>'func',
 	);
 	
 	public function __construct()
@@ -76,14 +77,16 @@ class api
 		if(isset($_GET['module']))
 		{
 		//Разрешена ли функция
-		$func = array_search($this->data['act'],$this->functions);
-		if(empty($func) or is_array($this->data['act']))
+		//$func = array_search($this->data['act'],$this->functions);
+		//if(empty($func) or is_array($this->data['act']))
+		if(isset($this->functions[$this->data['act']]))
 		{
 			$this->core->error->error('api','001');
 			return false;
 		}
 		else
 		{
+			$func = $this->functions[$this->data['act']];
 			$this->$func();
 		}
 		
@@ -108,6 +111,21 @@ class api
 		
 		$this->returned = $this->core->json_encode_ru($r_a);
 		return $this->returned;
+	}
+	
+	protected function input()
+	{
+		$args = func_get_args();
+		foreach($args as $arg)
+		{
+			if(!isset($this->data[$arg]))
+			{
+				$this->core->error->error('api','005');
+				echo $this->json($args);
+				die;
+				//return false;
+			}
+		}
 	}
 	
 	//Затычка для ещё неосуществлённого функционала

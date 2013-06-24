@@ -1,6 +1,6 @@
 <?php
 		header('Access-Control-Allow-Origin: *');
-		//header('Content-type: application/json');
+		header('Content-type: application/json; charset=utf-8');
 if(isset($_GET['method']))
 {
 	$m_f = $_GET['method'];
@@ -31,14 +31,16 @@ if(isset($_GET['method']))
 		$class = new $cl_n();
 		$class->init();
 		
-		$func = array_search($m_f[1],$class->functions);
-		if(empty($func))
+		//$func = array_search($m_f[1],$class->functions);
+		//if(empty($func))
+		if(!isset($class->functions[$m_f[1]]))
 		{
 			$class->core->error->error('api','001');
 			echo $class->json();
 		}
 		else
 		{
+			$func = $class->functions[$m_f[1]];
 			$class->method($func);
 			echo $class->returned;
 		}
@@ -72,7 +74,7 @@ if(isset($_GET['module']))
 		$class = new $cl_n();
 		
 		header('Access-Control-Allow-Origin: *');
-		//header('Content-type: application/json');
+		header('Content-type: application/json; charset=utf-8');
 		
 		echo $class->returned;
 	}

@@ -64,3 +64,8 @@ $mod['ADS'] = $core->tpl->render();
 
 $core->tpl->tpl('/html/main/search');
 $mod['SEARCH'] = $core->tpl->render();
+///////////////////////////////
+include_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
+Twig_Autoloader::register(true);
+$loader = new Twig_Loader_Filesystem('tpl');
+$twig = new Twig_Environment($loader,array('charset'=>' utf-8','cache'=>'/../../tmp','auto_reload'=>true));

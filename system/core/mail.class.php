@@ -70,7 +70,6 @@ class mail
 					);
 					
 					
-		print_r($params);
 		$time = time();
 		$time_loop = 60;
 		$time_left = $time - $time_loop;

@@ -94,6 +94,7 @@ Large company for large people
 </h1>
 </div>
 <div>
+{$MAIN.ERRORS}
 {$MAIN.CONTENT}
 </div>
 </td>
@@ -115,9 +116,9 @@ KachalovCRAFT NET © 2012 - 2013<br />
 v1.0 closed alpha<br />
 </div>
 </center>
-<div style="position: absolute; background: #ddd;width: 100%; left: 0px;">
+<!--/*<div style="position: absolute; background: #ddd;width: 100%; left: 0px;">
 {$MAIN.ERRORS}
-</div>
+</div>*/-->
 <!--/* ПОДВАЛ */-->
 </td>
 </tr>

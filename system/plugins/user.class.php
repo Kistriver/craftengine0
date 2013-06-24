@@ -145,7 +145,8 @@ class user
 	$day,
 	$month,
 	$year,
-	$invite=null
+	$invite=null,
+	$about=null
 	)
 	{
 		$name = trim($this->core->sanString($name));
@@ -158,6 +159,7 @@ class user
 		$month = trim($this->core->sanString($month));
 		$year = trim($this->core->sanString($year));
 		$invite = trim($this->core->sanString($invite));
+		$about = trim($this->core->sanString($about));
 		
 		if(!empty($invite))
 		{
@@ -170,8 +172,8 @@ class user
 		$time = time();
 		
 		$this->core->mysql->query("INSERT INTO signup
-		(name, surname, email, password, login, sex, day, month, year, time, invite) VALUES
-		('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite')");
+		(name, surname, email, password, login, sex, day, month, year, time, invite, about) VALUES
+		('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about')");
 		
 		$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
 		$id = $this->core->mysql->fetch();
@@ -194,7 +196,8 @@ class user
 	$nickname = null,
 	$rank = null,
 	$invite = null,
-	$time_reg = null
+	$time_reg = null,
+	$about = nul
 	)
 	{
 		$name = trim($this->core->sanString($name));
@@ -209,6 +212,7 @@ class user
 		$nickname = trim($this->core->sanString($nickname));
 		$rank = trim($this->core->sanString($rank));
 		$invite = trim($this->core->sanString($invite));
+		$about = trim($this->core->sanString($about));
 		if(empty($rank))$rank = $this->core->conf->ranks['user'];
 		if(empty($nickname))$nickname = $login;
 		if(empty($time_reg))$time_reg = time();
@@ -231,13 +235,13 @@ class user
 													  login, birthday, rank, 
 													  password, salt, email,
 													  sex, totaltime, invite,
-													  time_reg
+													  time_reg, about
 													) 
 		VALUES( '$name', '$surname', '$nickname', 
 				'$login', '$birthday', '$rank', 
 				'$pass_md5', '$salt', '$email'
 				'$sex', '0', '$invite',
-				'$time_reg'
+				'$time_reg', '$about'
 			  )
 		");
 		
@@ -395,7 +399,7 @@ class user
 			
 			$f=$this->core->file->get_line_array('blacklist/password');	
 			$pass_base = 0;		
-			print_r(sizeof($f));			
+			//print_r(sizeof($f));			
 			for($i=0;$i<sizeof($f);++$i)
 			{
 				if($f[$i]==$after[0])

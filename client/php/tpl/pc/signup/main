@@ -7,7 +7,7 @@
 <input type="text" style="width: 90%;" class="textfield" name="invite" maxlength="30" placeholder="Логин пригласившего" />
 </td>
 <td>
-(От 4 до 30 символов в диапазоне: a-z, A-Z, _)
+(От 4 до 30 символов в диапазоне: a-z, A-Z, 0-9, _)
 </td>
 </tr>
 
@@ -43,7 +43,7 @@
 <font class="obligatory_star">*</font>
 </td>
 <td>
-(От 4 до 30 символов в диапазоне: a-z, A-Z, _)
+(От 4 до 30 символов в диапазоне: a-z, A-Z, 0-9, _)
 </td>
 </tr>
 
@@ -80,7 +80,7 @@
 
 <tr>
 <td>
-<input type="password" style="width: 90%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
+<input type="text" style="width: 90%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -89,7 +89,7 @@
 
 <tr>
 <td>
-<input type="password" style="width: 90%;" class="textfield" name="email_r" maxlength="100" placeholder="Повторите адрес e-mail" />
+<input type="text" style="width: 90%;" class="textfield" name="email_r" maxlength="100" placeholder="Повторите адрес e-mail" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -106,8 +106,8 @@
 <td>
 <select name="sex" style="width: 93%;" class="textfield">
 <option selected disabled>Пол</option>
-<option value="1">Мужской</option>
-<option value="0">Женский</option>
+<option value="male">Мужской</option>
+<option value="female">Женский</option>
 <option disabled>Кафельный</option>
 </select>
 <font class="obligatory_star">*</font>

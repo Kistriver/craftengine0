@@ -110,7 +110,7 @@ class core
 		'Ё', 'ё', 'Ж','ж','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н','О','о',
 		'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
 		'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
-		$str1 = json_encode($str);
+		$str1 = json_encode($str, JSON_PRETTY_PRINT);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}
@@ -122,6 +122,19 @@ class core
 			case 'mail':
 				$mails = implode('|',$this->conf->preg['mail']);
 				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'$/';
+				break;
+			
+			case 'login':
+				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->length['nickname']['min'] .','. $this->conf->length['nickname']['max'] .'}$/';
+				break;
+			case 'password':
+				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->length['password']['min'] .','. $this->conf->length['password']['max'] .'}$/';
+				break;
+			case 'name':
+				$pattern = '/^[\w]{'. $this->conf->length['name']['min'] .','. $this->conf->length['name']['max'] .'}$/';
+				break;
+			case 'surname':
+				$pattern = '/^[\w]{'. $this->conf->length['surname']['min'] .','. $this->conf->length['surname']['max'] .'}$/';
 				break;
 		}
 		return $pattern;
