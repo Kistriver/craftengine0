@@ -1,4 +1,4 @@
-<div class="panel_search" style="background: url('{$MAIN.ROOT}tpl/{$MAIN.V}/img/main/white.png') #f9f9f9;">
+<div class="panel_search" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
 <form method="post" action="search">
 <input class="textfield" style="width: 240px;" type="text" name="search" placeholder="Поиск" />
 <input type="submit" value="Go" class="btn success button_panel_search" />

@@ -1,26 +1,12 @@
-<!--/*{HTML}
-html/main
-{/HTML}*/-->
-<!--/*<div>
-<h1>{$post.title}</h1>
-<div>{$post.article}</div>
-<br />
-<div>Author: {$post.author_login}</div>
-<div>Tags: {$post.tags}</div>
-<div>Views: {$post.post_views}</div>
-<div>Date: {$post.post_time}</div>
-<hr />
-</div>*/-->
-
 <div>
-<h1>{$post.title}</h1>
-<div style='word-wrap: break-word; max-width: 860px;'>{$post.article}</div>
-<font color='#AAA' style='float: left;'>{$post.post_time}&nbsp;&nbsp;&nbsp;&nbsp;
-Просмотров: {$post.post_views}&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="{$MAIN.ROOT_HTTP}article{$post.author_id}_{$post.post_id}">Подробнее<a/>
+<h1>{{post.title}}</h1>
+<div style='word-wrap: break-word; max-width: 860px;'>{{post.article}}</div>
+<font color='#AAA' style='float: left;'>{{post.post_time}}&nbsp;&nbsp;&nbsp;&nbsp;
+Просмотров: {{post.post_views}}&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="{{MAIN.ROOT_HTTP}}article{{post.author_id}}_{{post.post_id}}">Подробнее<a/>
 </font>
-<font style='float: right;font-family: Flamme-LET;font-size: 16px;'><a href='/users/{$post.author_login}'>
-<img alt='{$post.author_login}' src='/files/uploads/avatars/{$post.author_login}.png' style='border-radius: 2px; margin-bottom: -3px' width='16px' height='16px' />
-{$post.author_login}</a></font><br />
+<font style='float: right;font-family: Flamme-LET;font-size: 16px;'><a href='/users/{{post.author_login}}'>
+<img alt='{{post.author_login}}' src='/files/uploads/avatars/{{post.author_login}}.png' style='border-radius: 2px; margin-bottom: -3px' width='16px' height='16px' />
+{{post.author_login}}</a></font><br />
 <hr size='1' style="color: #DDD" />
 </div>

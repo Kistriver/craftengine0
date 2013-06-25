@@ -1,0 +1,40 @@
+{%extends "html/main"%}
+
+{%block title%}Вход{{parent()}}{%endblock%}
+
+{%block header%}Вход{%endblock%}
+
+{%block content%}
+<form method="post">
+<table width="100%">
+<tbody>
+
+<tr>
+<td>
+<input type="text" style="width: 40%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
+<font class="obligatory_star">*</font>
+</td>
+<td>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<input type="password" style="width: 40%;" class="textfield" name="password" maxlength="100" placeholder="Пароль" />
+<font class="obligatory_star">*</font>
+</td>
+<td>
+</td>
+</tr>
+
+<tr>
+<td colspan="2">
+<input type="submit" style="width: 41%;" class="btn success" value="Есть контакт!" />
+</td>
+</tr>
+
+</tbody>
+</table>
+</form>
+{%endblock%}

@@ -13,6 +13,8 @@ class api_login extends api
 	//Авторизация пользователя
 	protected function login()
 	{
+		$this->input('password','email');
+		
 		$email = $this->core->SanString($this->data['email']);
 		$email = mb_convert_case($email, MB_CASE_LOWER, 'UTF-8');
 		$password = $this->core->SanString($this->data['password']);

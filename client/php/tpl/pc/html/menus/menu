@@ -1,0 +1,13 @@
+{%extends "/html/menus/menus"%}
+
+{%block header%}Меню{%endblock%}
+
+{%block content%}
+{%for menu in MAIN.MENU.MAIN%}
+<a href="{{MAIN.ROOT_HTTP}}{{menu['1']}}">
+<div class="a">
+{{menu['0']}}
+</div>
+</a>
+{%endfor%}
+{%endblock%}

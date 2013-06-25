@@ -1,3 +1,10 @@
+{%extends "html/main"%}
+
+{%block title%}Регистрация{{parent()}}{%endblock%}
+
+{%block header%}Регистрация{%endblock%}
+
+{%block content%}
 <form method="post">
 <table width="100%">
 <tbody>
@@ -154,3 +161,4 @@
 </tbody>
 </table>
 </form>
+{%endblock%}

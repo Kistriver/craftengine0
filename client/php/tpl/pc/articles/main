@@ -1,0 +1,11 @@
+{%extends "html/main"%}
+
+{%block title%}Новости {{parent()}}{%endblock%}
+{%block header%}Новости{%endblock%}
+
+{%block content%}
+{%for post in posts%}
+{%include "articles/instance"%}
+{%endfor%}
+
+{%endblock%}

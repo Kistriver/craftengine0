@@ -1,0 +1,6 @@
+<div class="menu_header">
+{%block header%}Заголовок{%endblock%}
+</div>
+<div class="menu_content">
+{%block content%}{%endblock%}
+</div>

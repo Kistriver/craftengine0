@@ -6,12 +6,28 @@ class core
 			$answer,
 			$answer_decode,
 			$errors = array(),
+			$render = array(),
 			$tpl;
 	
 	public function __construct()
 	{
 		include_once(dirname(__FILE__)."/tpl.class.php");
 		$this->tpl = new tpl(/*Mobile(m) or PC(pc)*/);
+		
+		$name = 'KachalovCRAFT NET';
+		$this->render = array(
+			'MAIN'=> array(
+				'NAME'=>$name,
+				'TITLE'=>$name,
+				'KEYWORDS'=>$name,
+				'DESC'=>$name,
+				'HEADER'=>$name,
+				'ROOT'=>'/new/www/client/php/',
+				'ROOT_HTTP'=>'/new/www/',
+				'V'=>'pc',
+				'ERRORS'=>$this->error(),
+			),
+		);
 	}
 	
 	//public function get($module, $act, $data)
@@ -48,6 +64,24 @@ class core
 			$this->errors[] = $er;
 		}
 		return $this->answer_decode;
+	}
+	
+	public function error($value=null)
+	{
+		if(!empty($value))
+		{
+			$this->error[] = array('00',$value);
+		}
+		else
+		{
+			return $this->errors;
+		}
+	}
+	
+	public function render()
+	{
+		$this->render['MAIN']['ERRORS'] = $this->error();
+		return $this->render;
 	}
 }
 ?>

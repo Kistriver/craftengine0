@@ -1,0 +1,25 @@
+{%if SYS.LOGIN!=true%}
+<div class="panel_login" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
+<form method="post" action="{{MAIN.ROOT_HTTP}}login">
+<input class="textfield button_panel_mail_pass" type="text" name="email" placeholder="E-mail" />
+<input class="textfield button_panel_mail_pass" type="password" name="password" placeholder="Пароль" />
+<input type="submit" value="Вход" class="btn success button_panel_login" />
+</form>
+<form action="{{MAIN.ROOT_HTTP}}signup">
+<button class="btn info button_panel_reg">
+Регистрация
+</button>
+</form>
+<form action="{{MAIN.ROOT_HTTP}}login/restore">
+<button class="btn warning button_panel_reg button_panel_restore">
+Забыл пароль
+</button>
+</form>
+</div>
+{%else%}
+<div class="panel_login" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
+{{SYS.LOGIN}}<br />
+Ранг: {{SYS.RANK_MAIN}}<br />
+<img style="width: 64px;" alt="{{SYS.LOGIN}}" src="/files/uploads/avatars/{{SYS.LOGIN}}.png">
+</div>
+{%endif%}
