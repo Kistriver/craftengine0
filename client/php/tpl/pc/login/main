@@ -12,7 +12,6 @@
 <tr>
 <td>
 <input type="text" style="width: 40%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
-<font class="obligatory_star">*</font>
 </td>
 <td>
 </td>
@@ -22,7 +21,6 @@
 <tr>
 <td>
 <input type="password" style="width: 40%;" class="textfield" name="password" maxlength="100" placeholder="Пароль" />
-<font class="obligatory_star">*</font>
 </td>
 <td>
 </td>

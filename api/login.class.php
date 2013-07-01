@@ -54,7 +54,7 @@ class api_login extends api
 							VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
 							$user->set_user($user->id, 'id');
 
-							$time_end = time() + 60*60*24*7;
+							//$time_end = time() + 60*60*24*7;
 							//setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
 
 							//return true;
@@ -74,7 +74,7 @@ class api_login extends api
 						$platform = $browser->getPlatform();
 						$id = $user->id;
 						$time_now = time();
-						$this->core->mysql->query("INSERT INTO login_fail(id, browser, ip, platform, time) 
+						$this->core->mysql->query("INSERT INTO login_fail(user, browser, ip, platform, time) 
 						VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
 					}
 				}

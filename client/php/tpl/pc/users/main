@@ -1,0 +1,9 @@
+{%extends "html/main"%}
+
+{%block header%}Пользователи{%endblock%}
+
+{%block title%}Пользователи{{parent()}}{%endblock%}
+
+{%block content%}
+
+{%endblock%}

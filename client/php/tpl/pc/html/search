@@ -3,4 +3,11 @@
 <input class="textfield" style="width: 240px;" type="text" name="search" placeholder="Поиск" />
 <input type="submit" value="Go" class="btn success button_panel_search" />
 </form>
+{%if true==false%}
+<div style="position: absolute; margin: 1px 0; padding: 6px 6px 7px; border: solid 1px #C60000; color: #EE3355; background: #FFB7B7;width: 300px; left: 420px; top: 5px; overflow: hidden;">
+<center>
+37 символов(API ver: 0.0.2_alpha)
+</center>
+</div>
+{%endif%}
 </div>

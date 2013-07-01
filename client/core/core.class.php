@@ -44,7 +44,21 @@ class core
 		$post = json_encode($post);
 		//$this->url = $this->root . '?module=' . $module . '&data=' . $post;
 		$this->url = $this->root . '?method=' . $method . '&data=' . $post;
-		$this->answer = @file_get_contents($this->url);
+		
+		
+		
+		
+		//$data = http_build_query(array('data'=>$_GET['data'],));
+		$context = stream_context_create(array(
+			'http' => array(
+			'method' => 'GET',
+			'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL . 
+			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,
+			//'content' => $data,
+		),));
+		$this->answer = @file_get_contents($this->url,false,$context);
+		
+		//$this->answer = @file_get_contents($this->url);
 		if(!$this->answer)
 		{
 			header('HTTP/1.0 500');

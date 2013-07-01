@@ -27,6 +27,7 @@ $menu = array();
 $menu[] = array('Главная','');
 $menu[] = array('Пользователи','users');
 if(!$_SESSION['loggedin'])$menu[] = array('Регистрация','signup');
+if($_SESSION['loggedin'])$menu[] = array('Настройки','profile');
 if(!$_SESSION['loggedin'])$menu[] = array('Вход','login');
 if($_SESSION['loggedin'])$menu[] = array('Выход','logout');
 $core->render['MAIN']['MENU']['MAIN'] = $menu;
