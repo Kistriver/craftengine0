@@ -3,7 +3,7 @@ class api_system extends api
 {
 	public function init()
 	{
-		#$this->functions['function']='act';
+		#$this->functions['act']='function';
 		//$this->functions['loggedin']='loggedin';
 		$this->functions['loggedin']='loggedin';
 	}

@@ -26,27 +26,8 @@ class conf
 		$this->ranks_name = $conf['ranks_name'];
 		$this->length = $conf['length'];
 		$this->preg = $conf['preg'];
-		/*		
-		$this->db = array(//array('example','127.0.0.1','test','root','pass'),
-						  array('site','127.0.0.1','site','root','pass'),
-						  array('social','127.0.0.1','social','root','pass'),
-						  array('test','127.0.0.1','test','root','pass'),
-		);
-		$this->admin_mail = 'alex-kachalov@mail.ru';
-		$this->version = '0.0.1_alpha';
-		$this->debug = true;
-		$this->send_mail_report = false;
-		$this->includes['plugins'] = array(	'fdgf',			//
-										);
 		
-		json_encode(array(
-			'version'=>$this->version,
-			'admin_mail'=>$this->admin_mail,
-			'debug'=>$this->debug,
-			'send_mail_report'=>$this->send_mail_report,
-			'db'=>$this->db,
-			'includes'=>array('plugins'=>$this->includes['plugins']),
-		));*/
+		//if($_SERVER['REMOTE_ADDR']!='192.168.1.1')$this->debug = false;
 	}
 	
 	

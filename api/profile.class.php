@@ -3,7 +3,7 @@ class api_profile extends api
 {
 	public function init()
 	{
-	   #$this->functions['function']='act';
+	   #$this->functions['act']='function';
 		//$this->functions['change_name']='change';
 		$this->functions['change']='change_name';
 	}

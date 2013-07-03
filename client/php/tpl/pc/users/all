@@ -1,0 +1,14 @@
+{%extends "html/main"%}
+
+{%block header%}Пользователи{%endblock%}
+
+{%block title%}Пользователи{{parent()}}{%endblock%}
+
+{%block content%}
+{%for user in users%}
+<div>
+<a href="{{MAIN.ROOT_HTTP}}users/{{user.login}}">{{user.nickname}}</a><sup>({{user.login}})</sup> - {%if user.sex==1%}Мужчина{%else%}Женщина{%endif%} - 
+{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}
+</div>
+{%endfor%}
+{%endblock%}

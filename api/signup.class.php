@@ -3,7 +3,7 @@ class api_signup extends api
 {
 	public function init()
 	{
-		#$this->functions['function']='act';
+		#$this->functions['act']='function';
 		//$this->functions['check_j']='check';
 		//$this->functions['signup']='signup';
 		$this->functions['check']='check_j';
@@ -13,6 +13,7 @@ class api_signup extends api
 	//Проверка полей для API
 	protected function check_j()
 	{
+		$this->input('type', 'value');
 		$type = $this->core->sanString($this->data['type']);
 		$value = $this->core->sanString($this->data['value']);
 		$r = $this->check($type, $value);

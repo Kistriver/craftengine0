@@ -4,6 +4,17 @@ session_start();
 
 $_SESSION['sid'] = session_id().'php';
 
+function display($core, $twig, $num)
+{
+	$allow = array(403,404,500);
+	$key = array_search($num, $allow);
+	if(!isset($allow[$key]))die;
+	$template = $twig->loadTemplate('errors/'.$allow[$key]);
+	header('HTTP/1.1 '.$allow[$key]);
+	echo $template->render($core->render());
+	die;
+}
+
 include_once(dirname(__FILE__).'/core.class.php');
 $core = new core();
 
@@ -36,5 +47,5 @@ $ver = $core->render['MAIN']['V'];
 
 include_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
 Twig_Autoloader::register(true);
-$loader = new Twig_Loader_Filesystem('tpl/'.$ver);
-$twig = new Twig_Environment($loader,array(/*'cache'=>'/../../tmp/',*/'auto_reload'=>true,'autoescape'=>false));
+$loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../../php/tpl/'.$ver);
+$twig = new Twig_Environment($loader,array(/*'cache'=>'/../../../system/tmp/',*/'auto_reload'=>true,'autoescape'=>false));

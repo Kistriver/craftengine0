@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__).'/../core/include.php');
+include_once(dirname(__FILE__).'/../system/core/include.php');
 
 $core->get('article.posts',array('page'=>'1','sid'=>$_SESSION['sid']));
 $data = $core->answer_decode;

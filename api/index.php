@@ -13,6 +13,7 @@ if(isset($_GET['method']))
 				'profile',
 				'system',
 				'signup',
+				'user',
 	);
 	
 	$modules = in_array($m_f[0],$mod);

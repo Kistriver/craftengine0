@@ -1,0 +1,14 @@
+{%extends "html/main"%}
+
+{%block header%}{{user.login}}{%endblock%}
+
+{%block title%}{{user.login}}{{parent()}}{%endblock%}
+
+{%block content%}
+ID: {{user.id}}<br />
+Ник: {{user.nickname}}<br />
+Логин: {{user.login}}<br />
+Пол: {%if user.sex==1%}Мужской{%else%}Женский{%endif%}<br />
+Ранги: {{user.rank}}<br />
+ДР: {{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}<br />
+{%endblock%}

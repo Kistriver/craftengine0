@@ -18,15 +18,9 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 
 RewriteEngine on
 
-RewriteRule ^index.php$ articles.php [L]
+RewriteRule ^robots.txt$ robots.txt.php [L]
+RewriteRule ^sitemap.xml$ sitemap.xml.php [L]
 
-RewriteRule ^article([0-9]*)_([0-9]*)$ articles.php?user_id=$1&post_id=$2 [L]
-
-RewriteRule ^logout$ login.php?act=logout [L]
-
-RewriteRule ^users$ users/page-1 [L]
-RewriteRule ^users/page-([0-9]+)$ users.php?act=all&page=$1 [L]
-RewriteRule ^users/id([0-9]+)$ users.php?act=user&id=$1 [L]
-RewriteRule ^users/([A-Za-z0-9_]+)$ users.php?act=user&login=$1 [L]
-
-RewriteRule ^(([^/]+/)*[^.]+)$ $1.php [L]
+RewriteCond %{HTTP_COOKIE} !js=true
+RewriteRule ^(([^/]+/)*[^.]+)$ php/$1 [L]
+RewriteRule ^(([^/]+/)*[^.]+)$ ajax/$1 [L]

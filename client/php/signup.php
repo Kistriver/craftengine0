@@ -1,6 +1,7 @@
 <?php
-include_once(dirname(__FILE__).'/../core/include.php');
+include_once(dirname(__FILE__).'/../system/core/include.php');
 
+if($_SESSION['loggedin'])display($core, $twig, 403);
 
 if(isset($_POST['login']) and isset($_POST['pass']))
 {

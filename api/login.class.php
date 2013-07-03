@@ -3,7 +3,7 @@ class api_login extends api
 {
 	public function init()
 	{
-	   #$this->functions['function']='act';
+	   #$this->functions['act']='function';
 		$this->functions['login']='login';
 		$this->functions['logout']='logout';
 		$this->functions['activate']='activate';

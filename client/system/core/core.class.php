@@ -63,7 +63,7 @@ class core
 		{
 			header('HTTP/1.0 500');
 			//die('It looks like there is an error there. We have just noticed about it and we\'ll do everything what we can.');
-			die('Service unavaliable('. $method .')');
+			die('Service unavaliable('. $method .')'.$this->url);
 		}
 		$this->answer_decode = json_decode($this->answer, true);
 		if(!$this->answer_decode)

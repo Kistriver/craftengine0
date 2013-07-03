@@ -1,9 +1,5 @@
-{%extends "html/main"%}
-
-{%block header%}Пользователи{%endblock%}
-
-{%block title%}Пользователи{{parent()}}{%endblock%}
-
-{%block content%}
-
-{%endblock%}
+{%if type=='user'%}
+{%include "users/user"%}
+{%elseif type=='all'%}
+{%include "users/all"%}
+{%endif%}

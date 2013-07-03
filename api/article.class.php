@@ -3,7 +3,7 @@ class api_article extends api
 {
 	public function init()
 	{
-	   #$this->functions['function']='act';
+	   #$this->functions['act']='function';
 		/*$this->functions['posts']='posts';
 		$this->functions['post']='post';
 		$this->functions['new_post']='new';
