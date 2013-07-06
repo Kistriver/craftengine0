@@ -1,5 +1,6 @@
-ErrorDocument 404 /system/404.php
-ErrorDocument 403 /system/403.php
+ErrorDocument 404 /new/www/client/php/errors.php?code=404
+ErrorDocument 403 /new/www/client/php/errors.php?code=403
+ErrorDocument 500 /new/www/client/php/errors.php?code=500
 AddType application/octet-stream .rar .doc .mov .avi .pdf .xls .mp4 .jar .bat
 AddType application/x-httpd-php .php
 AddDefaultCharset utf-8
@@ -18,11 +19,17 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 
 RewriteEngine on
 
-RewriteRule ^index.php$ articles.php [L]
+#RewriteRule ^index.php$ articles.php [L]
 
-RewriteRule ^article([0-9]*)_([0-9]*)$ articles.php?user_id=$1&post_id=$2 [L]
+RewriteRule ^articles$ articles.php?act=posts&page=1 [L]
+RewriteRule ^articles/page-([0-9]*)$ articles.php?act=posts&page=$1 [L]
+#RewriteRule ^article([0-9]*)_([0-9]*)$ articles.php?act=post&user_id=$1&post_id=$2 [L]
+RewriteRule ^articles/([0-9]*)/([0-9]*)$ articles.php?act=post&user_id=$1&post_id=$2 [L]
+RewriteRule ^articles/([a-z]*)$ articles.php?act=$1 [L]
 
 RewriteRule ^logout$ login.php?act=logout [L]
+
+RewriteRule ^login/restore$ login.php?act=restore [L]
 
 RewriteRule ^users$ users/page-1 [L]
 RewriteRule ^users/page-([0-9]+)$ users.php?act=all&page=$1 [L]

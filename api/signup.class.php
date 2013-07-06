@@ -207,7 +207,7 @@ class api_signup extends api
 		if(!$this->check('password',$login))
 		$err_lev = 1;
 		if(!empty($invite))
-			if(!$this->check('invite',$login))
+			if(!$this->check('invite',$invite))
 			$err_lev = 1;
 		
 		if($err_lev == 0)

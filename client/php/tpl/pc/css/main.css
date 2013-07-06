@@ -53,6 +53,8 @@ textarea
 .content
 {
 	height: 100%;
+	max-width: 612px;
+	overflow: hidden;
 	border-left: solid 1px #ddd;
 	border-right: solid 1px #ddd; 
 }

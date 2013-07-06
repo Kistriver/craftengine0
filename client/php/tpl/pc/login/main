@@ -35,4 +35,18 @@
 </tbody>
 </table>
 </form>
+
+<form action="{{MAIN.ROOT_HTTP}}login/restore">
+<table width="100%">
+<tbody>
+<tr>
+<td colspan="2">
+<button style="width: 41%;" class="btn warning">
+Забыл пароль
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</form>
 {%endblock%}

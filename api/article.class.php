@@ -21,6 +21,7 @@ class api_article extends api
 	//Получение одной страницы статей
 	protected function posts()
 	{
+		$this->input('page');
 		$page=(int)$this->core->SanString($this->data['page']);
 		$limit = 10;
 		$time = time();
@@ -94,6 +95,7 @@ class api_article extends api
 	//Получение одной статьи, установка просмотра++
 	protected function post()
 	{
+		$this->input('post_id','user_id');
 		$id = (int)$this->core->SanString($this->data['post_id']);
 		$userid = (int)$this->core->SanString($this->data['user_id']);
 		$res = $this->core->mysql->query("SELECT * FROM articles WHERE id='$id' and user='$userid'");
@@ -147,6 +149,7 @@ class api_article extends api
 		else
 		{
 			$this->core->error->error('server','404');
+			return $this->json(array(false));
 		}
 		
 		return $this->json($post);
@@ -163,12 +166,13 @@ class api_article extends api
 			{
 				if((isset($this->data['title']) AND isset($this->data['article'])) AND (!empty($this->data['title']) AND !empty($this->data['article'])))
 				{
+					$this->input('title','article','tags');
 					$title = $this->core->SanString($this->data['title']);
 					$body = $this->core->SanString($this->data['article']);
 					$tags = $this->core->SanString($this->data['tags']);
 					$user = $_SESSION['id'];
 					$time = time();
-					$date = $this->core->SanString($this->data['date']);
+					//$date = $this->core->SanString($this->data['date']);
 					if(!empty($date))
 					{
 						$d = $this->art_date($date);
@@ -179,7 +183,7 @@ class api_article extends api
 						else
 						{
 							$this->core->error->error('article','000');
-							return;
+							return $this->json(array(false));
 						}
 					}
 					
@@ -196,8 +200,9 @@ class api_article extends api
 						if($this->core->mysql->rows($r)!=1)
 						{
 							$this->core->error->error('article','001');
-							return $this->json();
+							return $this->json(array(false));
 						}
+						$r = $this->core->mysql->fetch($r);
 						
 						$this->core->plugin('user');
 						$user = new user($this->core);
@@ -205,7 +210,7 @@ class api_article extends api
 						$r['userid'] = $r['user'];
 						$r['user'] = $user->login;
 						
-						$r = $this->core->mysql->fetch($r);
+						//$r = $this->core->mysql->fetch($r);
 						$post = array(
 									'author_login'	=>	$r['user'],
 									'author_id'		=>	$r['userid'],
@@ -236,7 +241,7 @@ class api_article extends api
 		{
 			$this->core->error->error('server','403');
 		}
-		return $this->json();
+		return $this->json(array(false));
 	}
 	
 	//Подтверждение или удаление статьи во временной таблице

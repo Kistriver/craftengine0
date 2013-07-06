@@ -1,0 +1,183 @@
+{%extends "html/main"%}
+
+{%block title%}Новая статья {{parent()}}{%endblock%}
+{%block header%}
+Новая статья
+{%endblock%}
+
+{%block content%}
+<p style="color: red; font-weight: bold;">Внимание! Возможно, у Вас нет прав на написание статьи.</p>
+<p>
+Перед публикацией Ваша статья будет отправлена на модерацию и, если она устроит 
+модераторов(то есть не будет нарушать ни чьих прав), то будет опубликована. Как правило 
+статьи рассматриваются в течение недели. После проверки, Вам на e-mail прийдёт письмо 
+с решением модераторов.
+</p>
+<p>
+Написать статью не так уж и сложно. Нужно просто иметь интересную тему. К публикации допускаются статьи, 
+имеющие ценность для сообщества KachalovCRAFT.
+</p>
+<p>
+Ах, да. Чуть не забыл. Вы можете использовать BB коды в статье, также размер заголовка не должен превышать
+64 символов, а статья - 5000. Также, в случае указания тегов, нужно указывать только те теги, которые 
+относятся непосредственно к теме статьи.<!-- И ещё кое-что: не надо спрашивать, когда будет опубликована статья.-->
+</p>
+<center>
+<form method="post">
+<input type="text" style="width: 98%;" class="textfield" name="title" maxlength="64" placeholder="Заголовок" />
+<textarea class="" style="width: 98%; height: 300px;" name="article" placeholder="Сама статья."></textarea>
+<input type="text" style="width: 98%;" class="textfield" name="tags" maxlength="128" placeholder="Теги" />
+<input type="submit" style="width: 98%;" class="btn success" value="На первую полосу!" />
+</form>
+</center>
+
+<table style="width: 100%;">
+<tbody>
+
+<tr>
+<th>
+BB-тег
+</th>
+<th>
+Описание
+</th>
+<th colspan="2">
+Пример
+</th>
+</tr>
+
+<tr>
+<td>
+[b][/b]
+</td>
+<td>
+Делает текст жирным
+</td>
+<td>
+[b]Это жирный текст[/b]
+</td>
+<td>
+<strong>Это жирный текст</strong>
+</td>
+</tr>
+
+<tr>
+<td>
+[i][/i]
+</td>
+<td>
+Делает текст курсивным
+</td>
+<td>
+[i]Это курсивный текст[/i]
+</td>
+<td>
+<em>Это курсивный текст</em>
+</td>
+</tr>
+
+<tr>
+<td>
+[u][/u]
+</td>
+<td>
+Делает текст подчёркнутым
+</td>
+<td>
+[u]Это подчёркнутый текст[/u]
+</td>
+<td>
+<u>Это подчёркнутый текст</u>
+</td>
+</tr>
+
+<tr>
+<td>
+[s][/s]
+</td>
+<td>
+Делает текст зачёркнутым
+</td>
+<td>
+[s]Это зачёркнутый текст[/s]
+</td>
+<td>
+<strike>Это зачёркнутый текст</strike>
+</td>
+</tr>
+
+<tr>
+<td>
+[sup][/sup]
+</td>
+<td>
+Делает текст надстрочным
+</td>
+<td>
+[sup]Это надстрочный текст[/sup]
+</td>
+<td>
+<sup>Это надстрочный текст</sup>
+</td>
+</tr>
+
+<tr>
+<td>
+[sub][/sub]
+</td>
+<td>
+Делает текст подстрочным
+</td>
+<td>
+[sub]Это подстрочный текст[/sub]
+</td>
+<td>
+<sub>Это подстрочный текст</sub>
+</td>
+</tr>
+
+<tr>
+<td>
+[url][/url]<br />
+[url=][/url]
+</td>
+<td>
+Создаёт гипперссылку
+</td>
+<td>
+[url]http://vk.com/kachalovcraft[/url]<br />
+[url=http://yandex.ru]Яндекс[/url]
+</td>
+<td>
+<a href="http://vk.com/kachalovcraft">http://vk.com/kachalovcraft</a><br />
+<a href="http://yandex.ru">Яндекс</a>
+</td>
+</tr>
+
+<tr>
+<td>
+@
+</td>
+<td>
+Позволяет "позвать" пользователя
+</td>
+<td>
+@Kachalov
+</td>
+<td>
+<a href="{{MAIN.ROOT_HTTP}}users/Kachalov">@Kachalov</a>
+</td>
+</tr>
+
+<tr>
+<td colspan="4">
+<hr />
+<center>
+Подробнее о BB-Code <a href="{{MAIN.ROOT_HTTP}}help">здесь</a>
+</center>
+</td>
+</tr>
+
+</tbody>
+</table>
+{%endblock%}

@@ -1,7 +1,25 @@
 {%extends "html/main"%}
 
 {%block title%}Новости {{parent()}}{%endblock%}
-{%block header%}Новости{%endblock%}
+{%block header%}
+{%if SYS.LOGGEDIN%}
+<div style="position: relative; top: 4px;">
+<form action="{{MAIN.ROOT_HTTP}}articles/new">
+<button title="Добавить статью" class="btn success" style="position: absolute; margin: 0 5px;">
++
+</button>
+</form>
+<form action="{{MAIN.ROOT_HTTP}}articles/confirm">
+<button title="Модерация статей" class="btn info" style="position: absolute; left: 37px; width: 76px; margin: 0 5px;">
++0
+</button>
+</form>
+<div style="/*margin: -32px 0 0 46px;*/ margin-left: 120px;">Новости</div>
+</div>
+{%else%}
+Новости
+{%endif%}
+{%endblock%}
 
 {%block content%}
 {%for post in posts%}

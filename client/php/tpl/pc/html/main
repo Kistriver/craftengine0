@@ -103,7 +103,9 @@ Large company for large people
 [{{error[0]}}]{%if error[1] is defined%}[{{error[1]}}]{%endif%}<br />
 </div>
 {%endfor%}
+<div style="margin: 3px;">
 {%block content%}MAIN PAGE{%endblock%}
+</div>
 </div>
 </td>
 <td class="ads">
@@ -120,11 +122,14 @@ Large company for large people
 <!--/*Условия пользовательского соглашения<br />
 <br />*/-->
 Powered by <a href="http://vk.com/kachalovcraft">KachalovCRAFT</a><br />
-KachalovCRAFT NET © 2012 - 2013<br />
-v1.0 closed alpha<br />
+KachalovCRAFT NET © 2011 - {{"now"|date('Y')}}<br />
+{{MAIN.VERSION}}<br />
 </div>
 </center>
 <!--/* ПОДВАЛ */-->
+<div style="border-radius: 3px 0 0; font-size: 18px; font-weight: bolder; position: fixed; bottom: 0px; right: 0px; padding: 7px; background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
+6+
+</div>
 </td>
 </tr>
 </tbody>

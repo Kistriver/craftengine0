@@ -164,7 +164,7 @@ class user
 		if(!empty($invite))
 		{
 			$ch = $this->get_user($invite, "login");
-			if($ch)$invite = $u->id;
+			if($ch)$invite = $this->id;
 			else $invite='';
 		}
 		if($sex=='male'){$sex=1;}elseif($sex=='female'){$sex=0;}

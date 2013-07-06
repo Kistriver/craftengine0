@@ -3,7 +3,8 @@ include_once(dirname(__FILE__).'/../system/core/include.php');
 
 if(!empty($_GET['act']))
 {
-	if($_GET['act']=='logout')
+	$act = $_GET['act'];
+	if($act=='logout')
 	{
 		if($_SESSION['loggedin'])
 		{
@@ -14,6 +15,12 @@ if(!empty($_GET['act']))
 		{
 			display($core, $twig, 403);
 		}
+	}
+	elseif($act=='restore')
+	{
+		$template = $twig->loadTemplate('login/restore');
+		echo $template->render($core->render());
+		die;
 	}
 }
 else

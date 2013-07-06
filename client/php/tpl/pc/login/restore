@@ -1,0 +1,9 @@
+{%extends "html/main"%}
+
+{%block title%}Восстановление пароля{{parent()}}{%endblock%}
+
+{%block header%}Восстановление пароля{%endblock%}
+
+{%block content%}
+Пока нереализовано. Чтобы восстановить пароль, свяжитесь с администрацией.
+{%endblock%}

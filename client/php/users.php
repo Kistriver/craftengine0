@@ -21,6 +21,7 @@ if(isset($_GET['act']))
 		display($core,$twig,404);
 		
 		$data['data']['rank'] = implode(', ',$data['data']['rank']);
+		$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
 		
 		$core->render['user'] = $data['data'];
 	}
@@ -34,6 +35,11 @@ if(isset($_GET['act']))
 		if($data['data'][0]==false)
 		display($core,$twig,404);
 		
+		for($i=0;$i<sizeof($data['data']);$i++)
+		{
+			$user = &$data['data'][$i];
+			$user['appointment'] = appointment($user['rank_main'])?appointment($user['rank_main']):'Undefined';
+		}
 		$core->render['users'] = $data['data'];
 	}
 }

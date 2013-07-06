@@ -1,12 +1,18 @@
+{%extends "html/main"%}
+
+{%block title%}{{post.title}}{{parent()}}{%endblock%}
+{%block header%}<a href="{{MAIN.ROOT_HTTP}}articles">Новости</a> » {{post.title}}{%endblock%}
+
+{%block content%}
 <div>
-<h1>{{post.title}}</h1>
 <div style='word-wrap: break-word; max-width: 860px;'>{{post.article}}</div>
 <font color='#AAA' style='float: left;'>{{post.post_time|date("d-m-Y H:i")}}&nbsp;&nbsp;&nbsp;&nbsp;
 Просмотров: {{post.post_views}}&nbsp;&nbsp;&nbsp;&nbsp;
-<a href="{{MAIN.ROOT_HTTP}}articles/{{post.author_id}}/{{post.post_id}}">Подробнее<a/>
 </font>
 <font style='float: right;font-family: Flamme-LET;font-size: 16px;'><a href='{{MAIN.ROOT_HTTP}}users/{{post.author_login}}'>
 <img alt='{{post.author_login}}' src='/files/uploads/avatars/{{post.author_login}}.png' style='border-radius: 2px; margin-bottom: -3px' width='16px' height='16px' />
 {{post.author_login}}</a></font><br />
+{{post.tags|join(', ')}}
 <hr size='1' style="color: #DDD" />
 </div>
+{%endblock%}
