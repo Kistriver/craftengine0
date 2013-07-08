@@ -15,6 +15,11 @@ class conf
 		
 		$conf = $core->file->get_all_file('core');
 		$conf = json_decode($conf, true);
+		foreach($conf as $key=>$value)
+		{
+			$this->$key = $value;
+		}
+		/*
 		$this->db = $conf['db'];
 		$this->admin_mail = $conf['admin_mail'];
 		$this->version = $conf['version'];
@@ -26,7 +31,7 @@ class conf
 		$this->ranks_name = $conf['ranks_name'];
 		$this->length = $conf['length'];
 		$this->preg = $conf['preg'];
-		
+		*/
 		//if($_SERVER['REMOTE_ADDR']!='192.168.1.1')$this->debug = false;
 	}
 	

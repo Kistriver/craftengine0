@@ -25,6 +25,7 @@ RewriteRule ^articles$ articles.php?act=posts&page=1 [L]
 RewriteRule ^articles/page-([0-9]*)$ articles.php?act=posts&page=$1 [L]
 #RewriteRule ^article([0-9]*)_([0-9]*)$ articles.php?act=post&user_id=$1&post_id=$2 [L]
 RewriteRule ^articles/([0-9]*)/([0-9]*)$ articles.php?act=post&user_id=$1&post_id=$2 [L]
+RewriteRule ^articles/confirm/page-([0-9]*)$ articles.php?act=confirm&page=$1 [L]
 RewriteRule ^articles/([a-z]*)$ articles.php?act=$1 [L]
 
 RewriteRule ^logout$ login.php?act=logout [L]

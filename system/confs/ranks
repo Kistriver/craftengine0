@@ -72,5 +72,19 @@
 				],
 			"warnings":"100",
 			"other":{}
+		},
+		
+		
+		
+		"user_confirm_new":
+		{
+			"ranks":
+				[
+					"Main Administrator",
+					"Administrator",
+					"Moderator"
+				],
+			"warnings":"100",
+			"other":{}
 		}
 }

@@ -22,7 +22,8 @@ class api_article extends api
 	protected function posts()
 	{
 		$this->input('page');
-		$page=(int)$this->core->SanString($this->data['page']);
+		$page = (int)$this->core->SanString($this->data['page']);
+		$type = isset($this->data['type'])?$this->core->SanString($this->data['type']):'default';
 		$limit = 10;
 		$time = time();
 		
@@ -30,8 +31,13 @@ class api_article extends api
 		$rank = new rank($this->core);
 		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
-		if($r)
-		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles"));
+		if(!$r and $type=='unpublished'){$this->core->error->error('server','403');return $this->json(array(false));}
+		$access = 0;
+		if($r)$access++;
+		if($type=='unpublished')$access++;
+		
+		if($access==2)
+		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles_new WHERE time<='$time' and status='1'"));
 		else
 		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles WHERE time<='$time' and status='1'"));
 		$num = $num[0];
@@ -42,11 +48,11 @@ class api_article extends api
 		$cl=0;
 		if($page>$pages){$cl=1;$this->core->error->error('server','404');}
 		if($page<1){$cl=1;$this->core->error->error('server','404');}
-		if($cl==1)return $this->json();
+		if($cl==1)return $this->json(array(false));
 		
 		$from_post = ($page - 1)*$limit;
-		if($r)
-		$result = $this->core->mysql->query("SELECT * FROM articles ORDER BY time DESC LIMIT $from_post,$limit");
+		if($access==2)
+		$result = $this->core->mysql->query("SELECT * FROM articles_new WHERE time<='$time' and status='1' ORDER BY time DESC LIMIT $from_post,$limit");
 		else
 		$result = $this->core->mysql->query("SELECT * FROM articles WHERE time<='$time' and status='1' ORDER BY time DESC LIMIT $from_post,$limit");
 		$rows = $this->core->mysql->rows($result);
@@ -68,7 +74,11 @@ class api_article extends api
 			
 			$results['edited'] = $rank->init($_SESSION['id'], 'article_edit')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'article_delete')? 1:0;
+			if($access==2)$results['times'] = 0;
 			
+			if($access==2)
+			$status = $this->art_status($results['status'],'unpublished');
+			else
 			$status = $this->art_status($results['status']);
 			
 			$posts[] = array(
@@ -247,6 +257,7 @@ class api_article extends api
 	//Подтверждение или удаление статьи во временной таблице
 	protected function confirm_new_post()
 	{
+		$this->input('id','confirm');
 		if($_SESSION['loggedin'])
 		{
 			$this->core->plugin('rank');
@@ -471,18 +482,37 @@ class api_article extends api
 	}
 	
 	//Получение статуса статьи(для методов)
-	protected function art_status($state)
+	protected function art_status($state,$type='default')
 	{
-		switch($state)
+		switch($type)
 		{
-			case 0:
-				$status = 'draft';
+			case 'default':
+				switch($state)
+				{
+					case 0:
+						$status = 'draft';
+						break;
+					case 1:
+						$status = 'publish';
+						break;
+					case 2:
+						$status = 'delete';
+						break;
+				}
 				break;
-			case 1:
-				$status = 'publish';
-				break;
-			case 2:
-				$status = 'delete';
+			case 'unpublished':
+				switch($state)
+				{
+					case 0:
+						$status = 'disallow';
+						break;
+					case 1:
+						$status = 'vote';
+						break;
+					case 2:
+						$status = 'allow';
+						break;
+				}
 				break;
 		}
 		

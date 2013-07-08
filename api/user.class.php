@@ -6,6 +6,7 @@ class api_user extends api
 	   #$this->functions['act']='function';
 		$this->functions['list']='list_users';
 		$this->functions['get']='user';
+		$this->functions['confirm']='confirm_new_user';
 	}
 	
 	protected function list_users()
@@ -91,5 +92,100 @@ class api_user extends api
 		$u['sex'] = $user->sex;
 		
 		return $this->json($u);
+	}
+	
+	protected function confirm_new_user()
+	{
+		$this->input('login','confirm');
+		
+		$this->core->plugin('rank');
+		$rank = new rank($this->core);
+		if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
+		{
+			$this->core->error->error('server', '403');
+			return $this->json(array(false));
+		}
+		
+		$login = $this->core->sanString($this->data['login']);
+		$confirm = $this->core->sanString($this->data['confirm']);
+		
+		if($confirm==true)
+		{
+			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
+			if($this->core->mysql->rows($q)!=1)
+			{
+				$this->core->error->error('server', '404');//replace
+				return $this->json(array(false));
+			}
+			
+			$r = $this->core->mysql->fetch($q);
+			
+			$this->core->plugin('user');
+			$u = new user($this->core);
+			$u->new_user(
+				$r['name'],
+				$r['surname'],
+				$r['email'],
+				$r['password'],
+				$r['login'],
+				$r['sex'],
+				$r['day'],
+				$r['month'],
+				$r['year'],
+				null,
+				null,
+				$r['invite'],
+				$r['time'],
+				$r['about']
+			);
+			
+			$q = $this->core->mysql->query("SELECT * FROM users WHERE login='$login'");
+			if($this->core->mysql->rows($q)!=1)
+			{
+				$this->core->error->error('server', '404');//replace
+				return $this->json(array(false));
+			}
+			
+			$id = $this->core->mysql->fetch($q);
+			$id = $id['id'];
+			$editor = $_SESSION['id'];
+			$time = time();
+			$type = 1;//added
+			$this->core->mysql->query("INSERT INTO users_history(editor,user,type,time,data)
+														VALUES('$editor','$id','$type','$time',null)");
+			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
+			
+			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
+			
+			return $this->json(array(true));
+		}
+		elseif($confirm==false)
+		{
+			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
+			if($this->core->mysql->rows($q)!=1)
+			{
+				$this->core->error->error('server', '404');//replace
+				return $this->json(array(false));
+			}
+			
+			$r = $this->core->mysql->fetch($q);
+			$editor = $_SESSION['id'];
+			$time = time();
+			$type = 2;//removed
+			$data = $this->core->json_encode_ru($r);
+			$data = $this->core->SanString($data, 'mysql');
+			$this->core->mysql->query("INSERT INTO users_history(editor,user,type,time,data)
+														VALUES('$editor','$r[id]','$type','$time','$data')");
+			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
+			
+			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
+			
+			return $this->json(array(true));
+		}
+		else
+		{
+			$this->core->error->error('server', '404');//replace
+			return $this->json(array(false));
+		}
 	}
 }

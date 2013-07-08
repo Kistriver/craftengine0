@@ -218,7 +218,7 @@ class user
 		if(empty($time_reg))$time_reg = time();
 
 		$time = time();
-		$pass_arr = $this->password_md5($password, true, $time);
+		$pass_arr = $this->password_md5($password, true, $time_reg);
 
 		$salt = $pass_arr['salt'];
 		$pass_md5 = $pass_arr['pass'];
@@ -230,7 +230,7 @@ class user
 		if($day<10)$day = '0' . $day;
 		if($month<10)$month = '0' . $month;
 		$birthday = $day . $month . $year;
-
+		
 		$this->core->mysql->query("INSERT INTO users( name, surname, nickname, 
 													  login, birthday, rank, 
 													  password, salt, email,
@@ -239,7 +239,7 @@ class user
 													) 
 		VALUES( '$name', '$surname', '$nickname', 
 				'$login', '$birthday', '$rank', 
-				'$pass_md5', '$salt', '$email'
+				'$pass_md5', '$salt', '$email',
 				'$sex', '0', '$invite',
 				'$time_reg', '$about'
 			  )

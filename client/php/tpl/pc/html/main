@@ -91,7 +91,7 @@ Large company for large people
 </td>
 <td class="content">
 <div class="header">
-<h1>
+<h1 style="word-wrap: break-word;">
 <!--/* ЗАГОЛОВОК */-->
 {%block header%}Untitled{%endblock%}
 <!--/* ЗАГОЛОВОК */-->

@@ -7,8 +7,10 @@
 {%block content%}
 {%for user in users%}
 <div>
+<div style="width: 20px; float: left;">
 <img style="margin: 2px 0 -2px 0px; border-radius: 1px; width: 16px;" alt="" src="/files/uploads/avatars/Char.png" />
 <img style="margin: 2px 0 -2px -20px; border-radius: 1px; width: 16px;" alt="" src="/files/uploads/avatars/{{user.login}}.png" />
+</div>
 <a href="{{MAIN.ROOT_HTTP}}users/{{user.login}}">{{user.nickname}}</a><sup>({{user.login}})</sup> - {%if user.sex==1%}Мужчина{%else%}Женщина{%endif%} - 
 {{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} - {{user.appointment}}
 </div>

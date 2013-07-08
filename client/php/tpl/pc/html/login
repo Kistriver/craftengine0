@@ -22,7 +22,9 @@
 <tbody>
 <tr valign="top">
 <td>
+<div style="width: 88px; height: 88px;">
 <img style="margin: 0 0 -4px 0; border-radius: 3px; width: 88px;" alt="{{SYS.LOGIN}}" src="/files/uploads/avatars/{{SYS.LOGIN}}.png" />
+</div>
 </td>
 <td>
 <div style="margin: 0 3px;">

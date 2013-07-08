@@ -56,6 +56,7 @@ if(!empty($_GET['act']))
 			
 			$posts[] = $post;
 		}
+		$core->render['type'] = 'default';
 		$core->render['posts'] = $posts;
 		echo $template->render($core->render());
 	}
@@ -78,6 +79,29 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='confirm')
 	{
+		if(!empty($_POST['vote']) AND !empty($_POST['id']))
+		{
+			if($_POST['vote']=='plus')$con = true;
+			elseif($_POST['vote']=='minus')$con = false;
+			else return;
+			$core->get('article.confirm_new',array('id'=>$_POST['id'],'confirm'=>$con,'sid'=>$_SESSION['sid']));
+		}
+		
+		
+		$page = (!empty($_GET['page']) AND $_GET['page']>0)?$_GET['page']:'1';
+		$core->get('article.posts',array('page'=>$page,'type'=>'unpublished','sid'=>$_SESSION['sid']));
+		$data = $core->answer_decode;
+		//print_r($data);
+		
+		if(isset($data['data'][0]))
+		if($data['data'][0]==false)
+		display($core,$twig,403);
+		
+		$core->render['type'] = 'unpublished';
+		$core->render['posts'] = $data['data']['posts'];
+		$core->render['pages'] = $data['data']['pages'];
+		$core->render['page'] = $page;
+		
 		$template = $twig->loadTemplate('articles/confirm');
 		
 		echo $template->render($core->render());
