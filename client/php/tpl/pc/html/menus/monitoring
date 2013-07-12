@@ -1,0 +1,12 @@
+{%extends "/html/menus/menus"%}
+
+{%block header%}Мониторинг{%endblock%}
+
+{%block content%}
+<center>
+<img src="/monitoring/monitoring.php?name=Primary" alt="Error" height="81px" width="66px">
+<img src="/monitoring/monitoring.php?name=Extreme" alt="Error" height="81px" width="66px">
+<img src="/monitoring/monitoring.php?name=MineZ" alt="Error" height="81px" width="66px">
+<img src="/monitoring/monitoring.php?name=Total" alt="Error">
+</center>
+{%endblock%}

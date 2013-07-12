@@ -1,0 +1,7 @@
+{%extends "/html/menus/menus"%}
+
+{%block header%}Пользователи онлайн{%endblock%}
+
+{%block content%}
+Этот модуль находится на стадии разработки
+{%endblock%}

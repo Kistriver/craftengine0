@@ -2,4 +2,6 @@
 {%include "users/user"%}
 {%elseif type=='all'%}
 {%include "users/all"%}
+{%elseif type=='confirm'%}
+{%include "users/confirm"%}
 {%endif%}

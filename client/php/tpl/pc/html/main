@@ -86,7 +86,9 @@ Large company for large people
 <tr>
 <td class="menu">
 <!--/* МЕНЮ */-->
-{%include "html/menus/menu"%}
+{%for menu in SYS.MENU.LEFT%}
+{%include "html/menus/" ~ menu%}
+{%endfor%}
 <!--/* МЕНЮ */-->
 </td>
 <td class="content">
@@ -110,7 +112,9 @@ Large company for large people
 </td>
 <td class="ads">
 <!--/* РЕКЛАМА */-->
-{%include "html/ads"%}
+{%for menu in SYS.MENU.RIGHT%}
+{%include "html/menus/" ~ menu%}
+{%endfor%}
 <!--/* РЕКЛАМА */-->
 </td>
 </tr>
@@ -121,7 +125,7 @@ Large company for large people
 <div class="copyright">
 <!--/*Условия пользовательского соглашения<br />
 <br />*/-->
-Powered by <a href="http://vk.com/kachalovcraft">KachalovCRAFT</a><br />
+Powered by <a href="http://vk.com/craftengine">CRAFTEngine</a><br />
 KachalovCRAFT NET © 2011 - {{"now"|date('Y')}}<br />
 {{MAIN.VERSION}}<br />
 </div>

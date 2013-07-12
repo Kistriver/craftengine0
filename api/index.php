@@ -14,6 +14,7 @@ if(isset($_GET['method']))
 				'system',
 				'signup',
 				'user',
+				'vote',
 	);
 	
 	$modules = in_array($m_f[0],$mod);

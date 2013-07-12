@@ -14,39 +14,84 @@ class api_user extends api
 		$this->input('page');
 		
 		$page = (int)$this->data['page'];
+		$type = !empty($this->data['type'])?$this->core->sanString($this->data['type']):'default';
 		$limit = 10;
 		
-		$users_num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(*) FROM users"));
+		if($type=='signup')
+		{
+			$this->core->plugin('rank');
+			$rank = new rank($this->core);
+			if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
+			{
+				$this->core->error->error('server', '403');
+				return $this->json(array(false));
+			}
+			
+			$users_num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(*) FROM signup"));
+		}
+		else
+		{
+			$users_num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(*) FROM users"));
+		}
 		
 		$pages = ceil($users_num[0]/$limit);
 		
-		if($page<1 or $page>$pages)
+		if($page<1)$page=1;
+		
+		if($page<1 or ($page>$pages and $pages!=0))
 		{
 			$this->core->error->error('server', '404');
 			return $this->json(array(false));
 		}
 		
 		$offset = ($page-1) * $limit;
+		if($type=='signup')
+		$users_list = $this->core->mysql->query("SELECT * FROM signup LIMIT $offset, $limit");
+		else
 		$users_list = $this->core->mysql->query("SELECT id FROM users LIMIT $offset, $limit");
 		
-		$this->core->plugin('user');
-		$user = new user($this->core);
-		for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
+		if($type=='signup')
 		{
-			$id = $this->core->mysql->fetch($users_list);
+			$users = array();
+			for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
+			{
+				$r = $this->core->mysql->fetch($users_list);
+				
+				$inf['name'] = $r['name'];
+				$inf['surname'] = $r['surname'];
+				$inf['login'] = $r['login'];
+				$inf['bd'] = array($r['day'],$r['month'],$r['year']);
+				$inf['email'] = $r['email'];
+				$inf['sex'] = $r['sex'];
+				$inf['invite'] = $r['invite'];
+				$inf['about'] = $r['about'];
+				
+				$users[] = $inf;
+			}
 			
-			$user->get_user($id[0], 'id');
-			$arinf['login'] = $user->login;
-			$arinf['nickname'] = $user->nickname;
-			$arinf['id'] = $user->id;
-			$arinf['rank'] = $user->rank;
-			$arinf['rank_main'] = $user->rank_main;
-			$arinf['bd'] = $user->birthday;
-			$arinf['sex'] = $user->sex;
-			$users[] = $arinf;
+			return $this->json($users);
 		}
-		
-		return $this->json($users);
+		else
+		{
+			$this->core->plugin('user');
+			$user = new user($this->core);
+			for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
+			{
+				$id = $this->core->mysql->fetch($users_list);
+				
+				$user->get_user($id[0], 'id');
+				$arinf['login'] = $user->login;
+				$arinf['nickname'] = $user->nickname;
+				$arinf['id'] = $user->id;
+				$arinf['rank'] = $user->rank;
+				$arinf['rank_main'] = $user->rank_main;
+				$arinf['bd'] = $user->birthday;
+				$arinf['sex'] = $user->sex;
+				$users[] = $arinf;
+			}
+			
+			return $this->json($users);
+		}
 	}
 	
 	protected function user()
@@ -147,15 +192,15 @@ class api_user extends api
 			}
 			
 			$id = $this->core->mysql->fetch($q);
-			$id = $id['id'];
-			$editor = $_SESSION['id'];
+			$id = (int)$id['id'];
+			$editor = (int)$_SESSION['id'];
 			$time = time();
 			$type = 1;//added
 			$this->core->mysql->query("INSERT INTO users_history(editor,user,type,time,data)
 														VALUES('$editor','$id','$type','$time',null)");
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
-			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
+			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],true));
 			
 			return $this->json(array(true));
 		}

@@ -279,6 +279,9 @@ class api_article extends api
 						{
 							$type = 1;//Adding into main article table
 							
+							foreach($art as &$i)
+							$i = $this->core->SanString($i, 'mysql');
+							
 							$this->core->mysql->query("INSERT INTO articles(user, title, article, time, tags, times, status) VALUES('$art[user]', '$art[title]', '$art[article]', '$art[time]', '$art[tags]', '0', '1')");
 							$this->core->mysql->query("UPDATE articles_new SET status='2' WHERE id='$art_id'");
 							$this->core->mysql->query("SELECT * FROM articles WHERE time='$art[time]' and user='$art[user]' and title='$art[title]'");

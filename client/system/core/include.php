@@ -53,6 +53,13 @@ if($_SESSION['loggedin']==true)
 	$core->render['SYS']['APPOINTMENT'] = appointment($_SESSION['rank_main'])?appointment($_SESSION['rank_main']):'Undefined';
 }
 
+$core->render['SYS']['MENU']['LEFT'][] = 'menu';
+$core->render['SYS']['MENU']['LEFT'][] = 'monitoring';
+$core->render['SYS']['MENU']['LEFT'][] = 'online';
+
+$core->render['SYS']['MENU']['RIGHT'][] = 'vk';
+$core->render['SYS']['MENU']['RIGHT'][] = 'ads';
+
 $menu = array();
 $menu[] = array('Главная','');
 $menu[] = array('Новости','articles');
