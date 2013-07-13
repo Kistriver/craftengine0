@@ -1,0 +1,24 @@
+{
+	"author":"Kachalov",
+	"version":"1.4",
+	"web":"",
+	"id":"",
+	"name":"user",
+	"loadClass":"load.class.php",
+	"confs":
+	{
+		"user":["self"],
+		"rank":["self"],
+		"core":["core"],
+		"ids":["plugin","user","rank"]
+	},
+	"api":
+	[
+		"profile",
+		"user"
+	],
+	"requires":
+	[
+		
+	]
+}

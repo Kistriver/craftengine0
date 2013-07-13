@@ -1,0 +1,18 @@
+{
+	"author":"Kachalov",
+	"id":"23354(в каталоге)",
+	"version":"0.1_alpha",
+	"web":"",
+	"azaza":[1,2,3,4],
+	"debug":false,
+	"db":
+	[
+		[
+			"site",
+			"",
+			"",
+			"",
+			""
+		]
+	]
+}

@@ -28,8 +28,8 @@ class api_login extends api
 			if($email!=null AND $password!=null)
 			{
 				if(preg_match($this->core->preg('mail'), $email) AND 
-				strlen($password)<=$this->core->conf->length['password']['max'] AND
-				strlen($password)>=$this->core->conf->length['password']['min'])
+				strlen($password)<=$this->core->conf->conf->core->length['password']['max'] AND
+				strlen($password)>=$this->core->conf->conf->core->length['password']['min'])
 				{
 					$time = $user->time_reg;
 					$salt = $user->salt;

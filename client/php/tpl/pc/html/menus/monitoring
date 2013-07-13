@@ -4,9 +4,9 @@
 
 {%block content%}
 <center>
-<img src="/monitoring/monitoring.php?name=Primary" alt="Error" height="81px" width="66px">
-<img src="/monitoring/monitoring.php?name=Extreme" alt="Error" height="81px" width="66px">
-<img src="/monitoring/monitoring.php?name=MineZ" alt="Error" height="81px" width="66px">
-<img src="/monitoring/monitoring.php?name=Total" alt="Error">
+<img src="/monitoring/servers/Primary.png" alt="Error" height="81px" width="66px">
+<img src="/monitoring/servers/Extreme.png" alt="Error" height="81px" width="66px">
+<img src="/monitoring/servers/MineZ.png" alt="Error" height="81px" width="66px">
+<img src="/monitoring/servers/Total.png" alt="Error">
 </center>
 {%endblock%}

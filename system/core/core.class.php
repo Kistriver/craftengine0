@@ -16,6 +16,7 @@ class core
 							'error',		//Ошибки
 							'mysql',		//СУБД
 							'mail',			//Мыло
+							'plugin',
 						);
 		
 		for($i=0;$i<sizeof($includes);$i++)
@@ -26,6 +27,10 @@ class core
 			//Вызов модулей
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
+		
+		//Объявление обработчиков ошибок
+		set_error_handler(array($this->error,'error_php'));
+		register_shutdown_function(array($this->error, 'fatal_error_php'));
 		
 		//Авторизирован ли пользователь
 		if(isset($_SESSION['id']) AND isset($_SESSION['login']))
@@ -45,9 +50,9 @@ class core
 		//$this->mysql->connect_all();
 		$this->mysql->connect('site');
 		
-		//Объявление обработчиков ошибок
-		set_error_handler(array($this->error,'error_php'));
-		register_shutdown_function(array($this->error, 'fatal_error_php'));
+		$r = $this->plugin->add('user');
+		$r = $this->plugin->add('user');
+		print_r($r);
 	}
 	
 	//Время выполнения скрипта
@@ -63,15 +68,15 @@ class core
 	{
 		$name = func_get_args();//Получение аргументов функции
 		
-		for($i=0;$i<sizeof($this->conf->includes['plugins']);$i++)
+		for($i=0;$i<sizeof($this->conf->system->core->includes['plugins']);$i++)
 		{
-			if(!in_array($this->conf->includes['plugins'][$i],$name))continue;
+			if(!in_array($this->conf->system->core->includes['plugins'][$i],$name))continue;
 			//Подключение модуля
 			
-			include_once(dirname(__FILE__)."/../plugins/". $this->conf->includes['plugins'][$i] .".class.php");
+			include_once(dirname(__FILE__)."/../plugins/". $this->conf->system->core->includes['plugins'][$i] .".class.php");
 			
 			//Вызов модуля
-			//$this->plugins->$this->conf->includes['plugins'][$i] = new $this->conf->includes['plugins'][$i]($this);
+			//$this->plugins->$this->conf->system->core->includes['plugins'][$i] = new $this->conf->system->core->includes['plugins'][$i]($this);
 		}
 	}
 	
@@ -90,7 +95,7 @@ class core
 		if($san!='mysql')$var = strip_tags($var);
 		if($san!='mysql')$var = htmlentities($var, ENT_COMPAT, 'utf-8');
 		//$var = stripslashes($var);
-		if($san!='html')$var = $this->mysql->db[$this->conf->db[0][0]]->real_escape_string($var);
+		if($san!='html')$var = $this->mysql->db[$this->conf->system->core->db[0][0]]->real_escape_string($var);
 		if($san!='mysql')$var = str_replace("&amp;", "&", $var);
 		return $var;
 	}
@@ -120,21 +125,21 @@ class core
 		switch($type)
 		{
 			case 'mail':
-				$mails = implode('|',$this->conf->preg['mail']);
+				$mails = implode('|',$this->conf->system->core->preg['mail']);
 				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'$/';
 				break;
 			
 			case 'login':
-				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->length['nickname']['min'] .','. $this->conf->length['nickname']['max'] .'}$/';
+				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->system->core->length['nickname']['min'] .','. $this->conf->system->core->length['nickname']['max'] .'}$/';
 				break;
 			case 'password':
-				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->length['password']['min'] .','. $this->conf->length['password']['max'] .'}$/';
+				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->system->core->length['password']['min'] .','. $this->conf->system->core->length['password']['max'] .'}$/';
 				break;
 			case 'name':
-				$pattern = '/^[\w]{'. $this->conf->length['name']['min'] .','. $this->conf->length['name']['max'] .'}$/';
+				$pattern = '/^[\w]{'. $this->conf->system->core->length['name']['min'] .','. $this->conf->system->core->length['name']['max'] .'}$/';
 				break;
 			case 'surname':
-				$pattern = '/^[\w]{'. $this->conf->length['surname']['min'] .','. $this->conf->length['surname']['max'] .'}$/';
+				$pattern = '/^[\w]{'. $this->conf->system->core->length['surname']['min'] .','. $this->conf->system->core->length['surname']['max'] .'}$/';
 				break;
 		}
 		return $pattern;

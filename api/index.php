@@ -1,13 +1,16 @@
 <?php
 		header('Access-Control-Allow-Origin: *');
 		header('Content-type: application/json; charset=utf-8');
+
 if(isset($_GET['method']))
 {
 	$m_f = $_GET['method'];
 	if(!preg_match('/^[a-z_-]{1,25}\.[a-z0-9_-]{1,25}$/',$m_f))die('fuuu');
 	$m_f = explode('.',$m_f);
 	
-	$mod = array(
+	include_once(dirname(__FILE__)."/../system/core/core.class.php");
+	$core = new core();
+	/*$mod = array(
 				'article',
 				'login',
 				'profile',
@@ -15,7 +18,8 @@ if(isset($_GET['method']))
 				'signup',
 				'user',
 				'vote',
-	);
+	);*/
+	$mod = $core->conf->system->api->modules;
 	
 	$modules = in_array($m_f[0],$mod);
 	include_once(dirname(__FILE__)."/../system/core/api.class.php");
@@ -49,7 +53,7 @@ if(isset($_GET['method']))
 	}
 }
 
-
+/*
 if(isset($_GET['module']))
 {
 	$m = $_GET['module'];
@@ -80,5 +84,5 @@ if(isset($_GET['module']))
 		
 		echo $class->returned;
 	}
-}
+}*/
 ?>

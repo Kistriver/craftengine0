@@ -23,11 +23,11 @@ class error
 	//Добавление ошибки PHP
 	public function error_php($code,$msg,$file,$line)
 	{
-		if(!$this->core->conf->debug)$this->error[] = $this->error_make('engine','003');
+		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine','003');
 		else $this->error[] = array('01003',"[$code][$file:$line]$msg");
-		if($this->core->conf->send_mail_report)
+		if($this->core->conf->system->core->send_mail_report)
 		$this->core->mail->add_waiting_list(
-		$this->core->conf->admin_mail, 
+		$this->core->conf->system->core->admin_mail, 
 		'001', 
 		array(
 			'code'=>$code,
@@ -49,12 +49,12 @@ class error
 			|| $error['type'] == E_CORE_ERROR)
 			{
 				ob_end_clean();
-				if(!$this->core->conf->debug)echo 'Unfortunately, there is an error there. But our team is working on elimination of this problem.';
+				if(!$this->core->conf->system->core->debug)echo 'Unfortunately, there is an error there. But our team is working on elimination of this problem.';
 				else echo "[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n";
 				header('HTTP/1.0 500');
-				if($this->core->conf->send_mail_report)
+				if($this->core->conf->system->core->send_mail_report)
 				$this->core->mail->add_waiting_list(
-				$this->core->conf->admin_mail, 
+				$this->core->conf->system->core->admin_mail, 
 				'000', 
 				array(
 					'code'=>$error['type'],

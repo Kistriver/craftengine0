@@ -25,34 +25,34 @@ class mysql
 	public function connect()
 	{
 		$name = func_get_args();//Получение аргументов функции
-		for($i=0;$i<sizeof($this->core->conf->db);$i++)
+		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
 		{
-			if(!in_array($this->core->conf->db[$i][0],$name))continue;
-			$this->connect_db($this->core->conf->db[$i][0], 	//Имя
-							  $this->core->conf->db[$i][1], 	//Хост
-							  $this->core->conf->db[$i][2], 	//БД
-							  $this->core->conf->db[$i][3], 	//Пользователь
-							  $this->core->conf->db[$i][4]);	//Пароль
+			if(!in_array($this->core->conf->system->core->db[$i][0],$name))continue;
+			$this->connect_db($this->core->conf->system->core->db[$i][0], 	//Имя
+							  $this->core->conf->system->core->db[$i][1], 	//Хост
+							  $this->core->conf->system->core->db[$i][2], 	//БД
+							  $this->core->conf->system->core->db[$i][3], 	//Пользователь
+							  $this->core->conf->system->core->db[$i][4]);	//Пароль
 		}
 	}
 	
 	//Подключение всех БД
 	public function connect_all()
 	{
-		for($i=0;$i<sizeof($this->core->conf->db);$i++)
+		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
 		{
-			$this->connect_db($this->core->conf->db[$i][0], 
-							$this->core->conf->db[$i][1], 
-							$this->core->conf->db[$i][2], 
-							$this->core->conf->db[$i][3], 
-							$this->core->conf->db[$i][4]);
+			$this->connect_db($this->core->conf->system->core->db[$i][0], 
+							$this->core->conf->system->core->db[$i][1], 
+							$this->core->conf->system->core->db[$i][2], 
+							$this->core->conf->system->core->db[$i][3], 
+							$this->core->conf->system->core->db[$i][4]);
 		}
 	}
 	
 	//Запрос к БД
 	public function query($query, $name = null)
 	{
-		if(empty($name))$name = $this->core->conf->db[0][0];//Если не передано имя, использовать имя по умолчанию
+		if(empty($name))$name = $this->core->conf->system->core->db[0][0];//Если не передано имя, использовать имя по умолчанию
 		$this->result = $this->db[$name]->query($query) or trigger_error(mysqli_error($this->db[$name]), E_USER_ERROR);
 		return $this->result;
 	}
@@ -86,19 +86,19 @@ class mysql
 	
 	public function connect_all()
 	{
-		for($i=0;$i<sizeof($this->core->conf->db);$i++)
+		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
 		{
-			$this->connect(	$this->core->conf->db[$i][0], 
-							$this->core->conf->db[$i][1], 
-							$this->core->conf->db[$i][2], 
-							$this->core->conf->db[$i][3], 
-							$this->core->conf->db[$i][4]);
+			$this->connect(	$this->core->conf->system->core->db[$i][0], 
+							$this->core->conf->system->core->db[$i][1], 
+							$this->core->conf->system->core->db[$i][2], 
+							$this->core->conf->system->core->db[$i][3], 
+							$this->core->conf->system->core->db[$i][4]);
 		}
 	}
 	
 	public function query($query, $name = null)
 	{
-		if(empty($name))$name = $this->core->conf->db[0][0];
+		if(empty($name))$name = $this->core->conf->system->core->db[0][0];
 		$this->result = mysql_query($query, $this->db[$name]) or trigger_error(mysql_error($this->db[$name]), E_USER_ERROR);
 		return $this->result;
 	}*/
