@@ -50,9 +50,9 @@ class core
 		//$this->mysql->connect_all();
 		$this->mysql->connect('site');
 		
+		//$r = $this->plugin->add('user');
 		$r = $this->plugin->add('user');
-		$r = $this->plugin->add('user');
-		print_r($r);
+		//print_r($r);
 	}
 	
 	//Время выполнения скрипта
@@ -65,7 +65,7 @@ class core
 	
 	//Подключение плагинов
 	public function plugin()
-	{
+	{return;
 		$name = func_get_args();//Получение аргументов функции
 		
 		for($i=0;$i<sizeof($this->conf->system->core->includes['plugins']);$i++)

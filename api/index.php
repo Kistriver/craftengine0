@@ -20,6 +20,7 @@ if(isset($_GET['method']))
 				'vote',
 	);*/
 	$mod = $core->conf->system->api->modules;
+	$pl = $core->conf->system->api->plugins;
 	
 	$modules = in_array($m_f[0],$mod);
 	include_once(dirname(__FILE__)."/../system/core/api.class.php");
@@ -31,7 +32,18 @@ if(isset($_GET['method']))
 	}
 	else
 	{
+		$plugin = null;
+		foreach($pl as $n=>$p)
+		{
+			if(array_search($m_f[0],$p))
+			{
+				$plugin = $n;
+			}
+		}
+		if(empty($plugin))
 		include_once(dirname(__FILE__)."/".$m_f[0].".class.php");
+		else
+		include_once(dirname(__FILE__)."/../system/plugins/".$plugin."/api/".$m_f[0].".class.php");
 		
 		$cl_n = "api_" . $m_f[0];
 		$class = new $cl_n();

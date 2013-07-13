@@ -28,8 +28,8 @@ class api_login extends api
 			if($email!=null AND $password!=null)
 			{
 				if(preg_match($this->core->preg('mail'), $email) AND 
-				strlen($password)<=$this->core->conf->conf->core->length['password']['max'] AND
-				strlen($password)>=$this->core->conf->conf->core->length['password']['min'])
+				strlen($password)<=$this->core->conf->system->core->length['password']['max'] AND
+				strlen($password)>=$this->core->conf->system->core->length['password']['min'])
 				{
 					$time = $user->time_reg;
 					$salt = $user->salt;
@@ -45,7 +45,7 @@ class api_login extends api
 							$time_now = time();
 							//$this->core->mysql->query("UPDATE login SET time_login='$time_now' WHERE id='$user->id'");
 							
-							$this->core->plugin('browser');
+							$this->core->plugin->lib('browser.class');
 							$browser = new Browser();
 							$bro = $browser->getBrowser() . " " . $browser->getVersion();
 							$platform = $browser->getPlatform();
@@ -68,7 +68,7 @@ class api_login extends api
 					{
 						$this->core->error->error('login','000');
 						
-						$this->core->plugin('browser');
+						$this->core->plugin->lib('browser.class');
 						$browser = new Browser();
 						$bro = $browser->getBrowser() . " " . $browser->getVersion();
 						$platform = $browser->getPlatform();

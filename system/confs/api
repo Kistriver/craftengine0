@@ -2,9 +2,7 @@
 	"modules":
 	[
 		"article",
-		"login",
 		"system",
-		"signup",
 		"vote"
 	]
 }

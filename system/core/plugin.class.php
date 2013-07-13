@@ -21,7 +21,7 @@ class plugin
 		//Подключение файлов
 		//Вызов главного файла
 		
-		$denied = array('libs','system','core','plugin','plugins');
+		$denied = array('libs','system','core','plugin','plugins','api');
 		
 		foreach($denied as $non)
 		if($folder==$non)
@@ -47,10 +47,15 @@ class plugin
 			return array(false,4);
 		}
 		
+		if(!file_exists($root.'/core/'.$main->loadClass))
+		{
+			return array(false,5);
+		}
+		
 		foreach($main->requires as $r)
 		if(!isset($this->plugins[$r]))
 		{
-			return array(false,5);
+			return array(false,6);
 		}
 		
 		//echo "<pre>";
@@ -59,7 +64,7 @@ class plugin
 		
 		if(!preg_match("'^([0-9]).([0-9])(.([0-9]*)|)(_(alpha|beta|release|)|)$'i", $main->version, $version))
 		{
-			return array(false,6);
+			return array(false,7);
 		}
 		
 		$version[4] = empty($version[4])?0:$version[4];
@@ -73,11 +78,13 @@ class plugin
 								'version'=>"$version[1].$version[2].$version[4]_$version[6]"
 								);
 		
+		$main->web = parse_url($main->web);
+		
 		if(isset($this->plugins[$main->name]))
 		{
 			if($this->plugins[$main->name]->author==$main->author)
 			{
-				return array(false,7);
+				return array(false,8);
 			}
 		}
 		
@@ -105,12 +112,17 @@ class plugin
 					$this->core->conf->plugins->$p[1]->$p[2] = $this->merge($this->core->conf->plugins->$p[1]->$p[2],$pluginConf);
 					break;
 				default:
-					return array(false,8);
+					return array(false,9);
 					break;
 			}
 		}
 		
-		print_r($this->core->conf->system);
+		$this->core->conf->system->api->modules = array_merge($this->core->conf->system->api->modules,$main->api);
+		
+		$this->core->conf->system->api->plugins[$folder] = $main->api;
+		
+		include_once($root.'/core/'.$main->loadClass);
+		//print_r($main);
 		return array(true);
 	}
 	
@@ -123,6 +135,11 @@ class plugin
 		$r = (object)$r;
 		
 		return $r;
+	}
+	
+	public function lib($lib)
+	{
+		include_once(dirname(__FILE__).'/../plugins/libs/'.$lib.'.php');
 	}
 	
 	/*public function inc($plugin,$autoload=true,$type='name'/*name or catalog id*//*)

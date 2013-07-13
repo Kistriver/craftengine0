@@ -1,5 +1,5 @@
 {
-	"version":"0.0.3_alpha",
+	"version":"0.1.1_alpha",
 	"admin_mail":"alex-kachalov@mail.ru",
 	"debug":true,
 	"send_mail_report":false,

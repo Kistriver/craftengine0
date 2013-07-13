@@ -1,24 +1,30 @@
 {
 	"author":"Kachalov",
 	"version":"1.4",
-	"web":"",
-	"id":"",
+	"web":"https://twitter.com/KachalovCRAFT",
+	"id":"1",
 	"name":"user",
 	"loadClass":"load.class.php",
 	"confs":
 	{
 		"user":["self"],
 		"rank":["self"],
-		"core":["core"],
-		"ids":["plugin","user","rank"]
+		"core":["core"]
 	},
 	"api":
 	[
 		"profile",
-		"user"
+		"user",
+		"login",
+		"signup"
 	],
 	"requires":
 	[
 		
+	],
+	"permissions":
+	[
+		"plugins",
+		"core"
 	]
 }
