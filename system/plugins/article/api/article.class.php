@@ -27,7 +27,6 @@ class api_article extends api
 		$limit = 10;
 		$time = time();
 		
-		$this->core->plugin('rank');
 		$rank = new rank($this->core);
 		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
@@ -65,7 +64,6 @@ class api_article extends api
 			//$num_msg = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM wall_art WHERE id='$results[id]' and status='0'"));
 			//$results['num_msg'] = $num_msg[0];
 			
-			$this->core->plugin('user');
 			$user = new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
@@ -112,8 +110,7 @@ class api_article extends api
 		if($this->core->mysql->rows($res))
 		{
 			$results = $this->core->mysql->fetch($res);
-
-			$this->core->plugin('user');
+			
 			$user = new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
@@ -129,12 +126,11 @@ class api_article extends api
 			}
 			
 			$status = $this->art_status($results['status']);
-
-			$this->core->plugin('rank');
+			
 			$rank = new rank($this->core);
 			$results['edited'] = $rank->init($_SESSION['id'], 'edit_art')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'delete_art')? 1:0;
-
+			
 			if($status=='publish')
 			$post = array(
 									'author_id'		=>	$results['userid'],
@@ -170,7 +166,6 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$this->core->plugin('rank');
 			$rank = new rank($this->core);
 			if($rank->init($_SESSION['id'], 'article_write_new'))
 			{
@@ -214,7 +209,6 @@ class api_article extends api
 						}
 						$r = $this->core->mysql->fetch($r);
 						
-						$this->core->plugin('user');
 						$user = new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];
@@ -260,7 +254,6 @@ class api_article extends api
 		$this->input('id','confirm');
 		if($_SESSION['loggedin'])
 		{
-			$this->core->plugin('rank');
 			$rank = new rank($this->core);
 			if($rank->init($_SESSION['id'], 'article_confirm_new'))
 			{
@@ -325,7 +318,6 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$this->core->plugin('rank');
 			$rank = new rank($this->core);
 			
 			$user = $_SESSION['id'];
@@ -381,7 +373,6 @@ class api_article extends api
 						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$userid', '$art', '$time_now', '$type', '$post_id')");
 						
 						$r = $this->core->mysql->fetch($r);
-						$this->core->plugin('user');
 						$user = new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];

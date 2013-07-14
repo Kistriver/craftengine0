@@ -3,7 +3,7 @@
 	"version":"1.4",
 	"web":"https://twitter.com/KachalovCRAFT",
 	"id":"1",
-	"name":"balance",
+	"name":"article",
 	"loadClass":"",
 	"confs":
 	{
@@ -11,7 +11,7 @@
 	},
 	"api":
 	[
-		
+		"article"
 	],
 	"requires":
 	[

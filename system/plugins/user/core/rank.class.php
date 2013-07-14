@@ -39,7 +39,6 @@ class rank
 	public function get_rank($id)
 	{
 		$id = $this->core->sanString($id);
-		$this->core->plugin('user');
 		$u = new user($this->core);
 		$is = $u->get_user($id, 'id');
 		if(!$is)return false;
@@ -148,7 +147,6 @@ class rank
 		$result = $this->core->mysql->fetch($result);
 		
 		//Друзья
-		$this->core->plugin('user');
 		$user = new user($this->core);
 		$friend = $user->friends($subject, $target);
 		

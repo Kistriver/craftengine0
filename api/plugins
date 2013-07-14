@@ -1,0 +1,1 @@
+{"article":{"author":"Kachalov","version":{"update":"1","smallUpdate":"4","smallFixes":0,"stage":"release","version":"1.4.0_release"},"web":{"scheme":"https","host":"twitter.com","path":"\/KachalovCRAFT"},"id":"1","name":"article","loadClass":"","confs":[],"api":["article"],"requires":["user"],"permissions":["plugins","core"]}}

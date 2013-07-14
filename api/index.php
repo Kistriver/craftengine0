@@ -35,11 +35,12 @@ if(isset($_GET['method']))
 		$plugin = null;
 		foreach($pl as $n=>$p)
 		{
-			if(array_search($m_f[0],$p))
+			if(array_search($m_f[0],$p)!==false)
 			{
 				$plugin = $n;
 			}
 		}
+		
 		if(empty($plugin))
 		include_once(dirname(__FILE__)."/".$m_f[0].".class.php");
 		else

@@ -2,6 +2,9 @@
 
 {%block header%}Группа VK{%endblock%}
 
+{%block header_css%}blue{%endblock%}
+{%block content_css%}blue{%endblock%}
+
 {%block content%}
 <center>
 <script type="text/javascript" src="//vk.com/js/api/openapi.js?97"></script>

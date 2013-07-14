@@ -1,9 +1,6 @@
 .menu_header
 {
-	background: #f89406;  
-	color: #ffffff;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); 
 	border: solid 1px;
-	border-color: #f89406 #f89406 #ad6704; 
 	border-radius: 5px 5px 0 0; 
 	padding: 4px;
 }
@@ -13,8 +10,46 @@
 	border-radius: 0 0 5px 5px; 
 	padding: 4px; 
 	border: solid 1px; 
-	border-color:#f89406 #f89406 #ad6704;
 	margin-bottom:12px;
+	background: #ffffff;
+}
+
+.menu_header_orange
+{
+	background: #f89406;
+	color: #ffffff;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); 
+	border-color: #f89406 #f89406 #ad6704; 
+}
+
+.menu_content_orange
+{
+	border-color:#f89406 #f89406 #ad6704;
+	background: #ffffff;
+}
+
+.menu_header_grey
+{
+	background: #A2A19F;
+	color: #ffffff;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); 
+	border-color: #E4E3E2 #E4E3E2 #666563; 
+}
+
+.menu_content_blue
+{
+	border-color: #0509F8 #0509F8 #030CAE; 
+	background: #ffffff;
+}
+
+.menu_header_blue
+{
+	background: #0905F8;
+	color: #ffffff;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); 
+	border-color: #0509F8 #0509F8 #030CAE; 
+}
+
+.menu_content_grey
+{
+	border-color:#E4E3E2 #E4E3E2 #666563;
 	background: #ffffff;
 }
 

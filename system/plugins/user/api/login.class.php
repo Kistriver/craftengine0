@@ -19,7 +19,6 @@ class api_login extends api
 		$email = mb_convert_case($email, MB_CASE_LOWER, 'UTF-8');
 		$password = $this->core->SanString($this->data['password']);
 		
-		$this->core->plugin('user');
 		$user = new user($this->core);
 		$u = $user->get_user($email, 'email');
 		if(!$_SESSION['loggedin'])
@@ -36,7 +35,6 @@ class api_login extends api
 					$password_md5 = $user->password_md5($password, false, $time, $salt);
 					if($password_md5 == $user->pass)
 					{
-						$this->core->plugin('rank');
 						$rank = new rank($this->core);
 						$rank->get_rank($user->id);
 						

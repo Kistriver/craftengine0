@@ -41,6 +41,11 @@ class file{
 		fclose($fp);
 	}
 	
+	public function set_file($file,$content)
+	{
+		file_put_contents($this->root.$file, $content);
+	}
+	
 	public function write_a_p($file, $text)
 	{
 		$text = $text."\r\n";

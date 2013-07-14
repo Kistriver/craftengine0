@@ -129,6 +129,14 @@ class core
 	public function render()
 	{
 		$this->render['MAIN']['ERRORS'] = $this->error();
+		
+		if($_SERVER['REMOTE_ADDR']!='192.168.1.1')
+		foreach($this->render['MAIN']['ERRORS'] as &$er)
+		{
+			if($er[0]=='01003')
+			$er[1] = 'PHP ERROR';
+		}
+		
 		return $this->render;
 	}
 }

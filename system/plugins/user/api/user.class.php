@@ -7,6 +7,31 @@ class api_user extends api
 		$this->functions['list']='list_users';
 		$this->functions['get']='user';
 		$this->functions['confirm']='confirm_new_user';
+		$this->functions['loggedin']='loggedin';
+	}
+	
+	protected function loggedin()
+	{
+		if($_SESSION['loggedin'])
+		{
+			$ses = array(
+				true,
+				'nickname' => $_SESSION['nickname'],
+				//'salt' => $_SESSION['salt'],
+				//'pass' => $_SESSION['pass'],
+				'email' => $_SESSION['email'],
+				'id' => $_SESSION['id'],
+				'login' => $_SESSION['login'],
+				'rank' => $_SESSION['rank'],
+				'rank_main' => $_SESSION['rank_main'],
+			);
+			
+			return $this->json($ses);
+		}
+		else
+		{
+			return $this->json(array(false));
+		}
 	}
 	
 	protected function list_users()
@@ -19,7 +44,6 @@ class api_user extends api
 		
 		if($type=='signup')
 		{
-			$this->core->plugin('rank');
 			$rank = new rank($this->core);
 			if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 			{
@@ -73,7 +97,6 @@ class api_user extends api
 		}
 		else
 		{
-			$this->core->plugin('user');
 			$user = new user($this->core);
 			for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
 			{
@@ -101,7 +124,6 @@ class api_user extends api
 		$type = $this->core->sanString($this->data['type']);
 		$value = $this->core->sanString($this->data['value']);
 		
-		$this->core->plugin('user');
 		$user = new user($this->core);
 		
 		$err = 1;
@@ -143,7 +165,6 @@ class api_user extends api
 	{
 		$this->input('login','confirm');
 		
-		$this->core->plugin('rank');
 		$rank = new rank($this->core);
 		if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 		{
@@ -165,7 +186,6 @@ class api_user extends api
 			
 			$r = $this->core->mysql->fetch($q);
 			
-			$this->core->plugin('user');
 			$u = new user($this->core);
 			$u->new_user(
 				$r['name'],

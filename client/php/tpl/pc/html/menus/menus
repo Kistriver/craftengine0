@@ -1,6 +1,6 @@
-<div class="menu_header">
+<div class="menu_header menu_header_{%block header_css%}orange{%endblock%}">
 {%block header%}Заголовок{%endblock%}
 </div>
-<div class="menu_content">
+<div class="menu_content menu_content_{%block content_css%}orange{%endblock%}">
 {%block content%}{%endblock%}
 </div>

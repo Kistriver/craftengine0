@@ -1,8 +1,8 @@
 {
 	"modules":
 	[
-		"article",
 		"system",
-		"vote"
+		"vote",
+		"plugin"
 	]
 }

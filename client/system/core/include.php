@@ -34,7 +34,7 @@ function appointment($rank)
 include_once(dirname(__FILE__).'/core.class.php');
 $core = new core();
 
-$core->get('system.loggedin',array('sid'=>$_SESSION['sid']));
+$core->get('user.loggedin',array('sid'=>$_SESSION['sid']));
 $loggedin = $core->answer_decode;
 if(sizeof($loggedin['errors'])==0)
 $_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = $loggedin['data'][0];

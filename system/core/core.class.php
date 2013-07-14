@@ -51,7 +51,8 @@ class core
 		$this->mysql->connect('site');
 		
 		//$r = $this->plugin->add('user');
-		$r = $this->plugin->add('user');
+		//$r = $this->plugin->add('user');
+		//$r = $this->plugin->add('article');
 		//print_r($r);
 	}
 	
@@ -65,7 +66,7 @@ class core
 	
 	//Подключение плагинов
 	public function plugin()
-	{return;
+	{$this->error->error();return;
 		$name = func_get_args();//Получение аргументов функции
 		
 		for($i=0;$i<sizeof($this->conf->system->core->includes['plugins']);$i++)

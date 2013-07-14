@@ -9,7 +9,7 @@
 	{
 		"user":["self"],
 		"rank":["self"],
-		"core":["core"]
+		"core":["core","replacement"]
 	},
 	"api":
 	[
