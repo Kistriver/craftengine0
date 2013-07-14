@@ -147,6 +147,7 @@ class plugin
 			
 			if($ex==0)
 			{
+				$this->off($c->name);
 				return array(false,4);
 			}
 		}
@@ -209,6 +210,7 @@ class plugin
 		
 		$inc = $this->core->conf->system->plugins;
 		
+		//Есть ли такие плагины, какие нужно подключить
 		foreach((object)$inc as $pl)
 		{
 			foreach($this->pluginsExist as $f=>$c)
@@ -243,6 +245,24 @@ class plugin
 		if($ex = 1)
 		$this->pluginsIncluded[$folder] = $config;
 		
+		foreach($config->requires as $r)
+		{
+			foreach($this->pluginsIncluded as $f=>$c)
+			{
+				$exr = 0;
+				if($r==$c->name)
+				{
+					$exr = 1;
+					break;
+				}
+			}
+			
+			if($exr==0)
+			{
+				return array(false,4);
+			}
+		}
+		
 		$list = array();
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
@@ -276,6 +296,11 @@ class plugin
 		}
 		
 		$this->core->file->set_file('plugins',json_encode($list, JSON_PRETTY_PRINT));
+	}
+	
+	public function lib($lib)
+	{
+		include_once(dirname(__FILE__).'/../plugins/libs/'.$lib.'.php');
 	}
 	
 	/*public function add($folder)

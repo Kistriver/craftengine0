@@ -1,10 +1,11 @@
 {
 	"author":"Kachalov",
-	"version":"1.4",
-	"web":"https://twitter.com/KachalovCRAFT",
+	"version":"1.0_alpha",
+	"web":"http://vk.com/craftengine",
 	"id":"1",
 	"name":"user",
 	"loadClass":"load.class.php",
+	"description":"Этот модуль предназначен для добавления пользователей на сайт",
 	"confs":
 	{
 		"user":["self"],
@@ -25,6 +26,7 @@
 	"permissions":
 	[
 		"plugins",
-		"core"
+		"core",
+		"unshutable"
 	]
 }

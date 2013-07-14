@@ -9,6 +9,7 @@ if(!empty($_GET['act']))
 		if($_SESSION['loggedin'])
 		{
 		$core->get('login.logout',array('sid'=>$_SESSION['sid']));
+		//session_destroy();
 		header('Location: index');
 		}
 		else
@@ -33,7 +34,7 @@ else
 		
 		if(sizeof($data['errors'])==0)
 		{
-			$core->get('system.loggedin',array('sid'=>$_SESSION['sid']));
+			$core->get('user.loggedin',array('sid'=>$_SESSION['sid']));
 			$loggedin = $core->answer_decode;
 			header('Location: users/'.$loggedin['data']['login']);
 		}

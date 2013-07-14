@@ -48,6 +48,8 @@ textarea
 .menu
 {
 	width: 240px;
+	max-width: 240px;
+	overflow: hidden;
 }
 
 .content
@@ -74,6 +76,8 @@ textarea
 .ads
 {
 	width: 240px;
+	max-width: 240px;
+	overflow: hidden;
 }
 
 .footer

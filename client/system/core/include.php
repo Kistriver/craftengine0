@@ -52,6 +52,15 @@ if($_SESSION['loggedin']==true)
 	
 	$core->render['SYS']['APPOINTMENT'] = appointment($_SESSION['rank_main'])?appointment($_SESSION['rank_main']):'Undefined';
 }
+else
+{
+	$_SESSION['nickname'] = '';
+	$_SESSION['email'] = '';
+	$_SESSION['id'] = '';
+	$_SESSION['login'] = '';
+	$_SESSION['rank'] = '';
+	$_SESSION['rank_main'] = '';
+}
 
 $core->render['SYS']['MENU']['LEFT'][] = 'menu';
 $core->render['SYS']['MENU']['LEFT'][] = 'monitoring';
@@ -64,6 +73,7 @@ $menu = array();
 $menu[] = array('Главная','');
 $menu[] = array('Новости','articles');
 $menu[] = array('Пользователи','users');
+if($_SESSION['rank_main']==1)$menu[] = array('Плагины','plugins');
 if(!$_SESSION['loggedin'])$menu[] = array('Регистрация','signup');
 if($_SESSION['loggedin'])$menu[] = array('Настройки','profile');
 if(!$_SESSION['loggedin'])$menu[] = array('Вход','login');
@@ -72,7 +82,7 @@ $core->render['MAIN']['MENU']['MAIN'] = $menu;
 
 $ver = $core->render['MAIN']['V'];
 
-$core->render['MAIN']['VERSION'] = 'v1.1 closed alpha';
+$core->render['MAIN']['VERSION'] = 'v1.2 closed alpha';
 
 include_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
 Twig_Autoloader::register(true);

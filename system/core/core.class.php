@@ -16,7 +16,7 @@ class core
 							'error',		//Ошибки
 							'mysql',		//СУБД
 							'mail',			//Мыло
-							'plugin',
+							'plugin',		//Плагинридер
 						);
 		
 		for($i=0;$i<sizeof($includes);$i++)
@@ -49,11 +49,6 @@ class core
 		//Подключение БД
 		//$this->mysql->connect_all();
 		$this->mysql->connect('site');
-		
-		//$r = $this->plugin->add('user');
-		//$r = $this->plugin->add('user');
-		//$r = $this->plugin->add('article');
-		//print_r($r);
 	}
 	
 	//Время выполнения скрипта

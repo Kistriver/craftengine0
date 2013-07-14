@@ -4,12 +4,6 @@ class api_article extends api
 	public function init()
 	{
 	   #$this->functions['act']='function';
-		/*$this->functions['posts']='posts';
-		$this->functions['post']='post';
-		$this->functions['new_post']='new';
-		$this->functions['confirm_new_post']='confirm_new';
-		$this->functions['edit_post']='edit';
-		$this->functions['status']='status';*/
 		$this->functions['posts']='posts';
 		$this->functions['post']='post';
 		$this->functions['new']='new_post';
