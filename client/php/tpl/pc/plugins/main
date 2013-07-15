@@ -32,7 +32,7 @@ ON
 Новые API: {{plugin.api|join(', ')}}<br />
 Требующиеся плагины: {{plugin.requires|join(', ')}}<br />
 Привилегии: {{plugin.permissions|join(', ')}}<br />
-ID в каталоге: {{plugin.id}}<br />
+ID в каталоге: {%if plugin.id==null%}Это сторонний плагин{%else%}{{plugin.id}}{%endif%}<br />
 Web-сайт разработчика: <a href="{{plugin.web.scheme}}://{{plugin.web.host}}{{plugin.web.path}}{{plugin.web.query}}{{plugin.web.fragment}}"><font style="color: dark;">{{plugin.web.host}}</font><font style="color: grey;">{{plugin.web.port}}</font><font style="color: grey;">{{plugin.web.path}}</font><font style="color: grey;">{{plugin.web.query}}</font><font style="color: grey;">{{plugin.web.fragment}}</font></a>
 <br />
 </div>

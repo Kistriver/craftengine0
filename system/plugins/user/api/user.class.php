@@ -89,6 +89,7 @@ class api_user extends api
 				$inf['sex'] = $r['sex'];
 				$inf['invite'] = $r['invite'];
 				$inf['about'] = $r['about'];
+				$inf['status'] = $r['status'];
 				
 				$users[] = $inf;
 			}
@@ -186,26 +187,38 @@ class api_user extends api
 			
 			$r = $this->core->mysql->fetch($q);
 			
-			$u = new user($this->core);
-			$u->new_user(
-				$r['name'],
-				$r['surname'],
-				$r['email'],
-				$r['password'],
-				$r['login'],
-				$r['sex'],
-				$r['day'],
-				$r['month'],
-				$r['year'],
-				null,
-				null,
-				$r['invite'],
-				$r['time'],
-				$r['about']
-			);
+			$status = $r['status'];
+			$signid = (int)$r['id'];
+			if($status==0 OR $status==2)
+			{
+				$this->core->mysql->query("UPDATE signup SET status='2' WHERE id='$signid' AND login='$login'");
+				//return $this->json(array(true));
+			}
+			elseif($status==1 OR $status==3)
+			{
+				$this->core->mysql->query("UPDATE signup SET status='3' WHERE id='$signid' AND login='$login'");
+				$u = new user($this->core);
+				$u->new_user(
+					$r['name'],
+					$r['surname'],
+					$r['email'],
+					$r['password'],
+					$r['login'],
+					$r['sex'],
+					$r['day'],
+					$r['month'],
+					$r['year'],
+					null,
+					null,
+					$r['invite'],
+					$r['time'],
+					$r['about']
+				);
+				//return $this->json(array(true));
+			}
 			
 			$q = $this->core->mysql->query("SELECT * FROM users WHERE login='$login'");
-			if($this->core->mysql->rows($q)!=1)
+			if($this->core->mysql->rows($q)!=1 AND ($status!=0 AND $status!=2))
 			{
 				$this->core->error->error('server', '404');//replace
 				return $this->json(array(false));
@@ -216,12 +229,17 @@ class api_user extends api
 			$editor = (int)$_SESSION['id'];
 			$time = time();
 			$type = 1;//added
-			$this->core->mysql->query("INSERT INTO users_history(editor,user,type,time,data)
-														VALUES('$editor','$id','$type','$time',null)");
+			
+			if($status==0 OR $status==1)
+			{
+				$this->core->mysql->query("INSERT INTO users_history(editor,user,type,time,data)
+															VALUES('$editor','$id','$type','$time',null)");
+			}
+			
+			if($status==1 OR $status==3)
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
-			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],true));
-			
+			//NOT WORK//$this->core->mail->add_waiting_list($r['email'], '004', array($r['login'],true));
 			return $this->json(array(true));
 		}
 		elseif($confirm==false)

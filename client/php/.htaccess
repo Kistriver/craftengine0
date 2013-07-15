@@ -31,10 +31,12 @@ RewriteRule ^articles/([a-z]*)$ articles.php?act=$1 [L]
 RewriteRule ^logout$ login.php?act=logout [L]
 
 RewriteRule ^login/restore$ login.php?act=restore [L]
+RewriteRule ^login/confirm$ login.php?act=confirm [L]
+RewriteRule ^login/confirm/([a-z0-9]*)$ login.php?act=confirm&code=$1 [L]
 
 RewriteRule ^users$ users/page-1 [L]
 RewriteRule ^users/page-([0-9]+)$ users.php?act=all&page=$1 [L]
-RewriteRule ^users/id([0-9]+)$ users.php?act=user&id=$1 [L]
+RewriteRule ^users/id([0-9]*)$ users.php?act=user&id=$1 [L]
 RewriteRule ^users/confirm$ users.php?act=confirm&page=1 [L]
 RewriteRule ^users/confirm/page-([0-9]*)$ users.php?act=confirm&page=$1 [L]
 RewriteRule ^users/([A-Za-z0-9_]+)$ users.php?act=user&login=$1 [L]

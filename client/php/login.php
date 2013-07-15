@@ -23,6 +23,14 @@ if(!empty($_GET['act']))
 		echo $template->render($core->render());
 		die;
 	}
+	elseif($act=='confirm')
+	{
+		if(!empty($_GET['code']) OR !empty($_POST['code']))
+		{
+			$code = !empty($_POST['code'])?$_POST['code']:$_GET['code'];
+			$core->get('login.activate',array('code'=>$code,'sid'=>$_SESSION['sid']));
+		}
+	}
 }
 else
 {

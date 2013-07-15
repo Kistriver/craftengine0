@@ -34,6 +34,13 @@ function appointment($rank)
 include_once(dirname(__FILE__).'/core.class.php');
 $core = new core();
 
+$_SESSION['nickname'] = '';
+$_SESSION['email'] = '';
+$_SESSION['id'] = '';
+$_SESSION['login'] = '';
+$_SESSION['rank'] = '';
+$_SESSION['rank_main'] = '';
+
 $core->get('user.loggedin',array('sid'=>$_SESSION['sid']));
 $loggedin = $core->answer_decode;
 if(sizeof($loggedin['errors'])==0)
@@ -65,9 +72,14 @@ else
 $core->render['SYS']['MENU']['LEFT'][] = 'menu';
 $core->render['SYS']['MENU']['LEFT'][] = 'monitoring';
 $core->render['SYS']['MENU']['LEFT'][] = 'online';
+$core->render['SYS']['MENU']['LEFT'][] = 'stat';
 
 $core->render['SYS']['MENU']['RIGHT'][] = 'vk';
+$core->render['SYS']['MENU']['RIGHT'][] = 'news';
 $core->render['SYS']['MENU']['RIGHT'][] = 'ads';
+
+
+
 
 $menu = array();
 $menu[] = array('Главная','');

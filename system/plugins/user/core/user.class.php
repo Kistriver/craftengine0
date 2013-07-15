@@ -134,6 +134,19 @@ class user
 		}
 	}
 	
+	public function generate_code($type, $params=array())
+	{
+		switch($type)
+		{
+			case 'signup':
+				$code = sha1($params['id'].md5($params['login']));
+				$data = $this->core->sanString(json_encode($params),'mysql');
+				$this->core->mysql->query("INSERT INTO code(type,value,data) VALUES('signup','$code','$data')");
+				return $code;
+				break;
+		}
+	}
+	
 	//Регистрация нового пользователя во временной БД
 	public function signup(
 	$name,
@@ -172,14 +185,16 @@ class user
 		$time = time();
 		
 		$this->core->mysql->query("INSERT INTO signup
-		(name, surname, email, password, login, sex, day, month, year, time, invite, about) VALUES
-		('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about')");
+		(name, surname, email, password, login, sex, day, month, year, time, invite, about, status) VALUES
+		('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '0')");
 		
 		$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
 		$id = $this->core->mysql->fetch();
 		$id = $id['id'];
 		
-		$this->core->mail->add_waiting_list($email, 'register', array($login, $id));
+		$code = $this->generate_code('signup',array('login'=>$login,'id'=>$id));
+		
+		$this->core->mail->add_waiting_list($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
 	}
 	
 	//Создание нового пользователя
@@ -216,13 +231,19 @@ class user
 		if(empty($rank))$rank = $this->core->conf->system->core->ranks['user'];
 		if(empty($nickname))$nickname = $login;
 		if(empty($time_reg))$time_reg = time();
-
+		
+		$login = strtolower($login);
+		$login = ucfirst($login);
+		$email = mb_convert_case($email, MB_CASE_LOWER, 'UTF-8');
+		$name = mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
+		$surname = mb_convert_case($surname, MB_CASE_TITLE, 'UTF-8');
+		
 		$time = time();
 		$pass_arr = $this->password_md5($password, true, $time_reg);
-
+		
 		$salt = $pass_arr['salt'];
 		$pass_md5 = $pass_arr['pass'];
-
+		
 		if($sex=='male'){$sex=1;}elseif($sex=='female'){$sex=0;}
 		if(!$day)$day = 99;
 		if(!$month)$month = 99;
@@ -230,6 +251,14 @@ class user
 		if($day<10)$day = '0' . $day;
 		if($month<10)$month = '0' . $month;
 		$birthday = $day . $month . $year;
+		
+		$check = $this->core->mysql->query("SELECT * FROM users WHERE login='$login' OR email='$email'");
+		if($this->core->mysql->rows($check)!=0)
+		{
+			$this->core->error->error('signup','004');
+			$this->core->error->error('signup','005');
+			return false;
+		}
 		
 		$this->core->mysql->query("INSERT INTO users( name, surname, nickname, 
 													  login, birthday, rank, 

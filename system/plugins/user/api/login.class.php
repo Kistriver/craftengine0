@@ -112,7 +112,65 @@ class api_login extends api
 	//Активация аккаунта с помощью email
 	protected function activate()
 	{
-		$this->wip();
+		$code = $this->core->sanString($this->data['code']);
+		$c = $this->core->mysql->query("SELECT * FROM code WHERE type='signup' AND value='$code'");
+		if($this->core->mysql->rows($c)==1)
+		{
+			$r = $this->core->mysql->fetch($c);
+			
+			$data = json_decode($r['data'],true);
+			$login = $this->core->sanString($data['login']);
+			$id = (int)$data['id'];
+			
+			$us = $this->core->mysql->query("SELECT * FROM signup WHERE id='$id' AND login='$login'");
+			if($this->core->mysql->rows($us)==1)
+			{
+				$signup = $this->core->mysql->fetch($us);
+				
+				$status = $signup['status'];
+				if($status==2 OR $status==3)
+				{
+					$this->core->mysql->query("UPDATE signup SET status='3' WHERE id='$id' AND login='$login'");
+					//REGISTER
+					$u = new user($this->core);
+					$u->new_user(
+						$signup['name'],
+						$signup['surname'],
+						$signup['email'],
+						$signup['password'],
+						$signup['login'],
+						$signup['sex'],
+						$signup['day'],
+						$signup['month'],
+						$signup['year'],
+						null,
+						null,
+						$signup['invite'],
+						$signup['time'],
+						$signup['about']
+					);
+					
+					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='code'");
+					$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
+					
+					return $this->json(array(true));
+				}
+				elseif($status==0 OR $status==1)
+				{
+					$this->core->mysql->query("UPDATE signup SET status='1' WHERE id='$id' AND login='$login'");
+					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='code'");
+					return $this->json(array(true));
+				}
+			}
+			else
+			{
+				return $this->json(array(false));
+			}
+		}
+		else
+		{
+			return $this->json(array(false));
+		}
 	}
 	
 	//Восстановление аккаунта

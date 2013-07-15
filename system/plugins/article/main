@@ -2,7 +2,7 @@
 	"author":"Kachalov",
 	"version":"1.0_alpha",
 	"web":"http://vk.com/craftengine",
-	"id":"1",
+	"id":"2",
 	"name":"article",
 	"loadClass":"",
 	"description":"Этот модуль позволяет писать и публиковать статьи",

@@ -2,7 +2,7 @@
 	"author":"Kachalov",
 	"version":"1.0_alpha",
 	"web":"http://vk.com/craftengine",
-	"id":"1",
+	"id":"",
 	"name":"balance",
 	"loadClass":"",
 	"description":"Этот модуль добавляет информацию о счёте на minecraft сервере",
@@ -16,7 +16,7 @@
 	],
 	"requires":
 	[
-		"article"
+		
 	],
 	"permissions":
 	[

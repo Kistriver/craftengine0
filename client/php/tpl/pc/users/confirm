@@ -17,7 +17,7 @@
 ДР
 </th>
 <th>
-Приглашение
+Приглашение:Confirm
 </th>
 </tr>
 
@@ -48,7 +48,7 @@ e-mail
 {{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}
 </td>
 <td>
-{{user.invite}}
+{{user.invite}}:{{user.status}}
 </td>
 </tr>
 

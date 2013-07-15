@@ -109,7 +109,9 @@ class core
 		#$_SESSION['sid'] = session_id().'php';
 		}
 		
-		if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
+		//if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
+		
+		$this->error($method.': '.$this->answer_decode['runtime'].'sec');
 		
 		return $this->answer_decode;
 	}
