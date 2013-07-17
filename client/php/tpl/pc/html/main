@@ -132,7 +132,7 @@ KachalovCRAFT NET © 2011 - {{"now"|date('Y')}}<br />
 </center>
 <!--/* ПОДВАЛ */-->
 <div style="border-radius: 3px 0 0; font-size: 18px; font-weight: bolder; position: fixed; bottom: 0px; right: 0px; padding: 7px; background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
-6+
+16+
 </div>
 </td>
 </tr>
