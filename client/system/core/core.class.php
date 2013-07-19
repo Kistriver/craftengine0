@@ -1,7 +1,8 @@
 <?php
 class core
 {
-	public	$root = 'http://178.140.61.70/new/www/api/',
+	public	//$root = 'http://178.140.61.70:8080/new/www/api/',
+			$root = 'http://178.140.61.70:8081/',
 			$url,
 			$answer,
 			$answer_decode,
@@ -22,8 +23,10 @@ class core
 				'KEYWORDS'=>$name,
 				'DESC'=>$name,
 				'HEADER'=>$name,
-				'ROOT'=>'/new/www/client/php/',
-				'ROOT_HTTP'=>'/new/www/',
+				//'ROOT'=>'/new/www/client/php/',
+				//'ROOT_HTTP'=>'/new/www/',
+				'ROOT'=>'/php/',
+				'ROOT_HTTP'=>'/',
 				'V'=>'pc',
 				'ERRORS'=>$this->error(),
 			),

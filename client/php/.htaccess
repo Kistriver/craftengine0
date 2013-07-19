@@ -1,6 +1,6 @@
-ErrorDocument 404 /new/www/client/php/errors.php?code=404
-ErrorDocument 403 /new/www/client/php/errors.php?code=403
-ErrorDocument 500 /new/www/client/php/errors.php?code=500
+ErrorDocument 404 /php/errors.php?code=404
+ErrorDocument 403 /php/errors.php?code=403
+ErrorDocument 500 /php/errors.php?code=500
 AddType application/octet-stream .rar .doc .mov .avi .pdf .xls .mp4 .jar .bat
 AddType application/x-httpd-php .php
 AddDefaultCharset utf-8

@@ -1,5 +1,3 @@
-ErrorDocument 404 /system/404.php
-ErrorDocument 403 /system/403.php
 AddType application/octet-stream .rar .doc .mov .avi .pdf .xls .mp4 .jar .bat
 AddType application/x-httpd-php .php
 AddDefaultCharset utf-8
@@ -18,6 +16,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 
 RewriteEngine on
 
+RewriteRule ^$ /php/index.php [L]
 RewriteRule ^robots.txt$ robots.txt.php [L]
 RewriteRule ^sitemap.xml$ sitemap.xml.php [L]
 

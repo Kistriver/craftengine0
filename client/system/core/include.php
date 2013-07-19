@@ -96,7 +96,13 @@ $ver = $core->render['MAIN']['V'];
 
 $core->render['MAIN']['VERSION'] = 'v1.2 closed alpha';
 
+try{
 include_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
 Twig_Autoloader::register(true);
 $loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../../php/tpl/'.$ver);
 $twig = new Twig_Environment($loader,array(/*'cache'=>dirname(__FILE__).'/../../system/tmp',*/'auto_reload'=>true,'autoescape'=>false));
+}
+catch (Exception $e)
+{
+die('ERROR: ' . $e->getMessage());
+}

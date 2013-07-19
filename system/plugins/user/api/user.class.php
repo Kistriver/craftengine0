@@ -261,7 +261,7 @@ class api_user extends api
 														VALUES('$editor','$r[id]','$type','$time','$data')");
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
-			$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
+			//$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
 			
 			return $this->json(array(true));
 		}

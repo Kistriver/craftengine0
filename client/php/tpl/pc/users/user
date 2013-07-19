@@ -1,15 +1,26 @@
 {%extends "html/main"%}
 
-{%block header%}{{user.login}}{%endblock%}
+{%block header%}{{user.nickname}}<sup>({{user.login}})</sup>{%endblock%}
 
 {%block title%}{{user.login}}{{parent()}}{%endblock%}
 
 {%block content%}
+<table width="100%">
+<tr valign="top">
+<td style="border-right: solid 1px #DDD;">
+<div style="width: 200px; height: 200px; background: #ddd; border-radius: 3px;">
+<img style="margin: 0 0 -4px 0; border-radius: 3px; width: 200px;" alt="" src="http://178.140.61.70:8080/files/uploads/avatars/{{user.login}}.png" />
+</div>
+<div style="text-align: center; font-size: 17px;">
+{{user.appointment}}
+</div>
+</td>
+<td width="100%">
 ID: {{user.id}}<br />
-Ник: {{user.nickname}}<br />
-Логин: {{user.login}}<br />
 Пол: {%if user.sex==1%}Мужской{%else%}Женский{%endif%}<br />
-Ранги: {{user.rank}}<br />
-Должность: {{user.appointment}}<br />
-ДР: {{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}<br />
+Должности: {{user.rank|join(', ')}}<br />
+Родился: {{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}<br />
+</td>
+</tr>
+</table>
 {%endblock%}

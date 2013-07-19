@@ -22,22 +22,22 @@
 <tbody>
 <tr valign="top">
 <td>
-<div style="width: 88px; height: 88px;">
-<img style="margin: 0 0 -4px 0; border-radius: 3px; width: 88px;" alt="{{SYS.LOGIN}}" src="/files/uploads/avatars/{{SYS.LOGIN}}.png" />
+<div style="width: 88px; height: 88px; background: #ddd; border-radius: 3px;">
+<img style="margin: 0 0 -4px 0; border-radius: 3px; width: 88px;" alt="" src="/files/uploads/avatars/{{SYS.LOGIN}}.png" />
 </div>
 </td>
 <td>
 <div style="margin: 0 3px;">
-{{SYS.LOGIN}}<br />
+<div style="overflow: hidden; width: 133px; text-overflow: ellipsis;">{{SYS.LOGIN}}</div><bsr />
 <div style="color: #777; font-size: 10px; margin: -3px 0 0 0;">{{SYS.NICKNAME}}</div>
-{{SYS.APPOINTMENT}}<br />
+<font style="font-size: 14px;">{{SYS.APPOINTMENT}}</div><br />
 <form action="{{MAIN.ROOT_HTTP}}logout">
 <button class="btn danger" style="position: absolute; top: 66px; width: /*132*/52px; right: 7px;">
 Выход
 </button>
 </form>
 <form action="{{MAIN.ROOT_HTTP}}profile">
-<button class="btn info" style="position: absolute; top: /*7*/66px; width: /*70*/80px; /*height: 60px;*/">
+<button class="btn info" style="position: absolute; top: /*7*/66px; width: /*70*/83px; /*height: 60px;*/">
 Настройки
 </button>
 </form>

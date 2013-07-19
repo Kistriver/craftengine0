@@ -21,7 +21,12 @@ if(isset($_GET['act']))
 		if($data['data'][0]==false)
 		display($core,$twig,404);
 		
-		$data['data']['rank'] = implode(', ',$data['data']['rank']);
+		foreach($data['data']['rank'] as &$r)
+		{
+			$r = appointment($r)?appointment($r):'Undefined';
+		}
+		
+		//$data['data']['rank'] = implode(', ',$data['data']['rank']);
 		$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
 		
 		$core->render['user'] = $data['data'];

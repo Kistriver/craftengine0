@@ -3,16 +3,16 @@
 	"version":"1.0_alpha",
 	"web":"http://vk.com/craftengine",
 	"id":"",
-	"name":"balance",
+	"name":"stat",
 	"loadClass":"",
-	"description":"Этот модуль добавляет информацию о счёте на minecraft сервере",
+	"description":"Этот модуль собирает статистику. Не выкладывать в паблик.",
 	"confs":
 	{
 		
 	},
 	"api":
 	[
-		
+		"stat"
 	],
 	"requires":
 	[

@@ -20,6 +20,19 @@ class plugin
 		
 		$this->pluginsList();
 		$this->pluginsInclude();
+		
+		if(method_exists($core,'stat'))
+		{
+			$this->core->stat();
+			if(!isset($this->core->stat))
+			{
+				die;
+			}
+		}
+		else
+		{
+			die;
+		}
 	}
 	
 	public function mainLoad($folder)

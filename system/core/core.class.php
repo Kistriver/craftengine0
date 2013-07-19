@@ -60,7 +60,7 @@ class core
 	}
 	
 	//Подключение плагинов
-	public function plugin()
+	/*public function plugin()
 	{$this->error->error();return;
 		$name = func_get_args();//Получение аргументов функции
 		
@@ -74,6 +74,35 @@ class core
 			//Вызов модуля
 			//$this->plugins->$this->conf->system->core->includes['plugins'][$i] = new $this->conf->system->core->includes['plugins'][$i]($this);
 		}
+	}*/
+	
+	public function stat()
+	{
+		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
+		'host'=>$_SERVER['SERVER_NAME'],
+		'port'=>$_SERVER['SERVER_PORT'],
+		'version'=>$this->conf->system->core->version,
+		'admin_mail'=>$this->conf->system->core->admin_mail);
+		
+		$data = http_build_query(
+			array(
+				'data' => $post
+			)
+		);
+		
+		//$data = http_build_query(array('data'=>$_GET['data'],));
+		$context = stream_context_create(array(
+			'http' => array(
+			'method' => 'POST',
+			'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL ,/*. 
+			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*/
+			'content' => $data,
+		),));
+		//$answer = @file_get_contents('http://178.140.61.70/new/www/api/?method=stat.add',false,$context);
+		$answer = false;
+		
+		if($answer)$this->stat = true;
+		else $this->stat = false;
 	}
 	
 	//Подготовка переменных к занесению в БД

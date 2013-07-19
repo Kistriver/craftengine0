@@ -27,6 +27,7 @@
 	[
 		"plugins",
 		"core",
-		"unshutable"
+		"unshutable",
+		"db"
 	]
 }

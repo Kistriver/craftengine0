@@ -52,7 +52,7 @@
 	border-color:#E4E3E2 #E4E3E2 #666563;
 	background: #ffffff;
 }
-
+/*
 .menu_content a:link
 {
 	text-decoration: none;
@@ -62,7 +62,7 @@
 .menu_content a:visited
 {
 	text-decoration: none;
-	/*color: #035e0a;*/
+	/*color: #035e0a;*//*
 	color: #21759B;
 }
 
@@ -85,4 +85,26 @@
 .menu_content .a
 {
 	padding: 4px;
+}*/
+
+.menu_content .a
+{
+	padding: 4px;
+}
+
+.menu_content .a:hover
+{
+	background-color: #EFEFEF;
+}
+
+.menu_content a
+{
+	color: #0088cc;
+	text-decoration: none;
+}
+
+.menu_content a:hover
+{
+	color: #005580; 
+	text-decoration: underline;
 }
