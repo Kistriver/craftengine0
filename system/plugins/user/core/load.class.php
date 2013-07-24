@@ -1,5 +1,5 @@
 <?php
-class main
+class plugin_user_load
 {
 	public function __construct()
 	{
@@ -7,6 +7,4 @@ class main
 		include_once(dirname(__FILE__).'/rank.class.php');
 	}
 }
-
-new main();
 ?>

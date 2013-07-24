@@ -99,6 +99,8 @@ class api_user extends api
 		else
 		{
 			$user = new user($this->core);
+			
+			$users = array();
 			for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
 			{
 				$id = $this->core->mysql->fetch($users_list);

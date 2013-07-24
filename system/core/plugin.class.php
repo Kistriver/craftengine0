@@ -197,9 +197,47 @@ class plugin
 		$this->core->conf->system->api->plugins[$folder] = $main->api;
 		
 		if(!empty($main->loadClass))
-		include_once($this->root.$folder.'/core/'.$main->loadClass);
+		//include_once($this->root.$folder.'/core/'.$main->loadClass);
+		
+		$this->initPl($main->name,$main->loadClass);
 		
 		return array(true);
+	}
+	
+	public function initPl($name,$class='main')
+	{
+		foreach($this->pluginsIncluded as $f=>$c)
+		{
+			$ex = 0;
+			if($c->name==$name)
+			{
+				$ex = 1;
+				$folder = $f;
+				$config = $c;
+				break;
+			}
+		}
+		
+		if($ex = 1)
+		{
+			$fi = $this->root.$folder.'/core/'.$class.'.class.php';
+			if(file_exists($fi))
+			include_once($fi);
+			
+			if(/*1===1 or */class_exists('plugin_'.$config->name.'_'.$class))
+			{
+				$cl = 'plugin_'.$config->name.'_'.$class;
+				return new $cl($this->core);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function merge($p,$e,$t='replacement'/*combination*/)

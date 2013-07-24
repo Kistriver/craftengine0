@@ -2,7 +2,7 @@
 class core
 {
 	public	//$root = 'http://178.140.61.70:8080/new/www/api/',
-			$root = 'http://178.140.61.70:8081/',
+			$root = 'http://localhost:8081/',
 			$url,
 			$answer,
 			$answer_decode,
@@ -12,8 +12,8 @@ class core
 	
 	public function __construct()
 	{
-		include_once(dirname(__FILE__)."/tpl.class.php");
-		$this->tpl = new tpl(/*Mobile(m) or PC(pc)*/);
+		//include_once(dirname(__FILE__)."/tpl.class.php");
+		//$this->tpl = new tpl(/*Mobile(m) or PC(pc)*/);
 		
 		$name = 'KachalovCRAFT NET';
 		$this->render = array(
@@ -26,7 +26,7 @@ class core
 				//'ROOT'=>'/new/www/client/php/',
 				//'ROOT_HTTP'=>'/new/www/',
 				'ROOT'=>'/php/',
-				'ROOT_HTTP'=>'/',
+				'ROOT_HTTP'=>'/php/',
 				'V'=>'pc',
 				'ERRORS'=>$this->error(),
 			),
@@ -47,7 +47,7 @@ class core
 		'Ё', 'ё', 'Ж','ж','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н','О','о',
 		'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
 		'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
-		$str1 = json_encode($str, JSON_PRETTY_PRINT);
+		$str1 = json_encode($str/*, JSON_PRETTY_PRINT*/);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}
