@@ -51,7 +51,12 @@ class core
 		$this->mysql->connect('site');
 	}
 	
-	//Время выполнения скрипта
+	/**
+	 * Время выполнения скрипта
+	 * 
+	 * @access public
+	 * @param $round=true округление
+	 */
 	public function runtime($round = true/*Округление*/)
 	{
 		$time = microtime(true) - $this->runtime;
@@ -76,6 +81,9 @@ class core
 		}
 	}*/
 	
+	/**
+	 * Сбор статистики об использовании движка. Просьба не убирать
+	 */
 	public function stat()
 	{
 		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
@@ -105,7 +113,14 @@ class core
 		else $this->stat = false;
 	}
 	
-	//Подготовка переменных к занесению в БД
+	/**
+	 * Подготовка переменных к занесению в БД
+	 * 
+	 * @access public
+	 * @param $var переменная
+	 * @param $san='all' тип обработки(mysql - только экранирование для БД, html - только обработка HTML, all - всё)
+	 * @return string
+	 */
 	public function sanString($var, $san='all')
 	{
 		if(is_array($var))
@@ -125,7 +140,13 @@ class core
 		return $var;
 	}
 	
-	//JSON с кирилицей
+	/**
+	 * JSON с кирилицей
+	 * 
+	 * @access public
+	 * @param $srt array
+	 * @return string 
+	 */
 	public function json_encode_ru($str)
 	{
 		$arr_replace_utf = array('\u0410', '\u0430','\u0411','\u0431','\u0412','\u0432',
@@ -145,6 +166,9 @@ class core
 		return $str2;
 	}
 	
+	/**
+	 * Preg регулярки
+	 */
 	public function preg($type)
 	{
 		switch($type)

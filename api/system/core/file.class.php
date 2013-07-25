@@ -1,5 +1,6 @@
 <?php
-class file{
+class file
+{
 	public $core, $root;
 	
 	public function __construct($core)

@@ -8,7 +8,7 @@ if(isset($_GET['method']))
 	if(!preg_match('/^[a-z_-]{1,25}\.[a-z0-9_-]{1,25}$/',$m_f))die('Method error: doesn\'t exists');
 	$m_f = explode('.',$m_f);
 	
-	include_once(dirname(__FILE__)."/../system/core/core.class.php");
+	include_once(dirname(__FILE__)."/system/core/core.class.php");
 	$core = new core();
 	/*$mod = array(
 				'article',
@@ -23,7 +23,7 @@ if(isset($_GET['method']))
 	$pl = $core->conf->system->api->plugins;
 	
 	$modules = in_array($m_f[0],$mod);
-	include_once(dirname(__FILE__)."/../system/core/api.class.php");
+	include_once(dirname(__FILE__)."/system/core/api.class.php");
 	if(empty($modules) or is_array($modules))
 	{
 		$api = new api();
@@ -44,7 +44,7 @@ if(isset($_GET['method']))
 		if(empty($plugin))
 		include_once(dirname(__FILE__)."/".$m_f[0].".class.php");
 		else
-		include_once(dirname(__FILE__)."/../system/plugins/".$plugin."/api/".$m_f[0].".class.php");
+		include_once(dirname(__FILE__)."/system/plugins/".$plugin."/api/".$m_f[0].".class.php");
 		
 		$cl_n = "api_" . $m_f[0];
 		$class = new $cl_n();

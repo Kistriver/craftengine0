@@ -12,7 +12,9 @@ class mysql
 		
 	}
 	
-	//Подключение к БД
+	/**
+	 * Подключение к БД
+	 */
 	public function connect_db($name, $host, $db, $user, $pass)
 	{
 		$mysqli = new mysqli($host,$user,$pass,$db);
@@ -21,7 +23,12 @@ class mysql
 		$this->db[$name] = $mysqli;
 	}
 	
-	//Подключение к БД только по имени
+	/**
+	 * Подключение к БД только по имени
+	 * 
+	 * @access public
+	 * @param unsizable
+	 */
 	public function connect()
 	{
 		$name = func_get_args();//Получение аргументов функции
@@ -36,7 +43,9 @@ class mysql
 		}
 	}
 	
-	//Подключение всех БД
+	/**
+	 * Подключение всех БД
+	 */
 	public function connect_all()
 	{
 		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
@@ -49,15 +58,19 @@ class mysql
 		}
 	}
 	
-	//Запрос к БД
+	/**
+	 * Запрос к БД
+	 */
 	public function query($query, $name = null)
 	{
 		if(empty($name))$name = $this->core->conf->system->core->db[0][0];//Если не передано имя, использовать имя по умолчанию
 		$this->result = $this->db[$name]->query($query) or trigger_error(mysqli_error($this->db[$name]), E_USER_ERROR);
 		return $this->result;
 	}
-	//Возвращает ассоциативный массив последнего запроса
 	
+	/**
+	 * Возвращает ассоциативный массив
+	 */
 	public function fetch($result = null)
 	{
 		if(empty($result))$result = $this->result;
@@ -65,42 +78,14 @@ class mysql
 		return $result->fetch_array(MYSQLI_BOTH);
 	}
 	
-	//Возвращает число строк в последнем запросе
+	/**
+	 * Возвращает число строк в запросе
+	 */
 	public function rows($result = null)
 	{
 		if(empty($result))$result = $this->result;
 		if(empty($result))return false;
 		return $result->num_rows;
 	}
-	
-	/*public function connect($name, $host, $dbname, $user, $pass)
-	{
-		$db = mysql_connect($host, $user, $pass) or 
-		trigger_error(mysql_error($db), E_USER_ERROR);
-		mysql_select_db($dbname, $db) or 
-		trigger_error(mysql_error($db), E_USER_ERROR);
-		mysql_set_charset("utf8", $db);
-		
-		$this->db[$name] = $db;
-	}
-	
-	public function connect_all()
-	{
-		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
-		{
-			$this->connect(	$this->core->conf->system->core->db[$i][0], 
-							$this->core->conf->system->core->db[$i][1], 
-							$this->core->conf->system->core->db[$i][2], 
-							$this->core->conf->system->core->db[$i][3], 
-							$this->core->conf->system->core->db[$i][4]);
-		}
-	}
-	
-	public function query($query, $name = null)
-	{
-		if(empty($name))$name = $this->core->conf->system->core->db[0][0];
-		$this->result = mysql_query($query, $this->db[$name]) or trigger_error(mysql_error($this->db[$name]), E_USER_ERROR);
-		return $this->result;
-	}*/
 }
 ?>
