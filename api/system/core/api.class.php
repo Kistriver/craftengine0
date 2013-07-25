@@ -12,10 +12,56 @@ class api
 	   #'act'=>'func',
 	);
 	
-	public function __construct()
+	public function __construct($core,$module=null,$function=null)
 	{
-		ini_set('session.gc_maxlifetime', 120960);
-		ini_set('session.cookie_lifetime', 120960);
+		$this->core = $core;
+		
+		if(!empty($module) AND !empty($function))
+		{
+			$mod = $core->conf->system->api->modules;
+			$pl = $core->conf->system->api->plugins;
+			
+			$modules = in_array($module,$mod);
+			if(empty($modules) or is_array($modules))
+			{
+				$core->error->error('api','000');
+				echo $this->json();
+			}
+			else
+			{
+				$plugin = null;
+				foreach($pl as $n=>$p)
+				{
+					if(array_search($module,$p)!==false)
+					{
+						$plugin = $n;
+					}
+				}
+				
+				if(empty($plugin))
+				include_once(dirname(__FILE__)."/../../".$module.".class.php");
+				else
+				include_once(dirname(__FILE__)."/../plugins/".$plugin."/api/".$module.".class.php");
+				
+				$cl_n = "api_" . $module;
+				$class = new $cl_n($core);
+				$class->init();
+				
+				//$func = array_search($m_f[1],$class->functions);
+				//if(empty($func))
+				if(!isset($class->functions[$function]))
+				{
+					$core->error->error('api','001');
+					echo $this->json();
+				}
+				else
+				{
+					$func = $class->functions[$function];
+					$class->method($func);
+					echo $class->returned;
+				}
+			}
+		}
 		
 		if(method_exists($this,'init'))$this->init();//Если есть метод init, вызвать его
 		$f = $this->initalize();//Вызвать инициализацию ядра API

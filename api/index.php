@@ -10,15 +10,21 @@ if(isset($_GET['method']))
 	
 	include_once(dirname(__FILE__)."/system/core/core.class.php");
 	$core = new core();
-	/*$mod = array(
-				'article',
-				'login',
-				'profile',
-				'system',
-				'signup',
-				'user',
-				'vote',
-	);*/
+	
+	include_once(dirname(__FILE__)."/system/core/api.class.php");
+	$api = new api($core,$m_f[0],$m_f[1]);
+	
+	/*
+	DIE();DIE();DIE();DIE();DIE();DIE();DIE();DIE();DIE();DIE();DIE();DIE();
+	////////////////////////////////////////////////////////////////////////
+	//                    |--\      -----    -----                        //
+	//                    |   \       |      |__                          //
+	//                    |   /       |      |                            //
+	//                    |__/      __|__    |____                        //
+	////////////////////////////////////////////////////////////////////////
+	
+	include_once(dirname(__FILE__)."/system/core/core.class.php");
+	$core = new core();
 	$mod = $core->conf->system->api->modules;
 	$pl = $core->conf->system->api->plugins;
 	
@@ -63,7 +69,7 @@ if(isset($_GET['method']))
 			$class->method($func);
 			echo $class->returned;
 		}
-	}
+	}*/
 }
 else
 {
