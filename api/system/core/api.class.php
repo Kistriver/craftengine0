@@ -8,13 +8,27 @@ class api
 	
 	//Массив разрешённых функций
 	public $functions = array(
-				   #'funct'=>'act',
 	   #'act'=>'func',
 	);
 	
-	public function __construct($core,$module=null,$function=null)
+	/**
+	 * Инициализация ядра и API
+	 * 
+	 * @access public
+	 * @param object $core[optional] объект ядра, передаётся только дочерним классам API
+	 * @param $module[optional] модуль, который надо подключить
+	 * @param $functions[optional] функция, которую надо вызвать
+	 * @return void
+	 */
+	public function __construct($core=null,$module=null,$function=null)
 	{
-		$this->core = $core;
+		if(empty($core))
+		{
+			include_once(dirname(__FILE__)."/core.class.php");
+			$core = new core();
+		}
+		
+		$this->core = &$core;
 		
 		if(!empty($module) AND !empty($function))
 		{
@@ -62,14 +76,16 @@ class api
 				}
 			}
 		}
-		
-		if(method_exists($this,'init'))$this->init();//Если есть метод init, вызвать его
-		$f = $this->initalize();//Вызвать инициализацию ядра API
-		if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
+		else
+		{
+			if(method_exists($this,'init'))$this->init();//Если есть метод init, вызвать его
+			$f = $this->initalize();//Вызвать инициализацию ядра API
+			if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
+		}
 	}
 	
 	//Инициализация ядра API
-	public function initalize()
+	private function initalize()
 	{
 		//Получение информации и её декодирование
 		$this->data_json = isset($_POST['data'])? $_POST['data'] : $_GET['data'];
@@ -101,8 +117,8 @@ class api
 			$sid_err = 2;
 		}
 		
-		include_once(dirname(__FILE__)."/core.class.php");//Подключение ядра
-		$this->core = new core();//Вызов ядра
+		//include_once(dirname(__FILE__)."/core.class.php");//Подключение ядра
+		//$this->core = new core();//Вызов ядра
 		
 		if($sid_err!=0)
 		{
@@ -119,24 +135,19 @@ class api
 			echo $this->json();
 			die();
 		}
-	
-		if(isset($_GET['module']))
+		
+		//Авторизирован ли пользователь
+		if(isset($_SESSION['id']) AND isset($_SESSION['login']))
 		{
-		//Разрешена ли функция
-		//$func = array_search($this->data['act'],$this->functions);
-		//if(empty($func) or is_array($this->data['act']))
-		if(isset($this->functions[$this->data['act']]))
-		{
-			$this->core->error->error('api','001');
-			return false;
+			if($_SESSION['id']!='' AND $_SESSION['login']!='')
+			$_SESSION['loggedin'] = true;
 		}
 		else
-		{
-			$func = $this->functions[$this->data['act']];
-			$this->$func();
-		}
+		$_SESSION['loggedin'] = false;
 		
-		return true;
+		if(!$_SESSION['loggedin'])
+		{
+			$_SESSION['id'] = '';
 		}
 	}
 	

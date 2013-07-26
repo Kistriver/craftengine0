@@ -1,8 +1,8 @@
 <?php
+include_once(dirname(__FILE__).'/../confs/conf.php');
 class core
 {
-	public	//$root = 'http://178.140.61.70:8080/new/www/api/',
-			$root = 'http://localhost:8081/',
+	public	$root = API_ADDRESS,
 			$url,
 			$answer,
 			$answer_decode,
@@ -12,23 +12,21 @@ class core
 	
 	public function __construct()
 	{
-		//include_once(dirname(__FILE__)."/tpl.class.php");
-		//$this->tpl = new tpl(/*Mobile(m) or PC(pc)*/);
-		
-		$name = 'KachalovCRAFT NET';
+		$name = CLIENT_NAME;
 		$this->render = array(
 			'MAIN'=> array(
 				'NAME'=>$name,
 				'TITLE'=>$name,
-				'KEYWORDS'=>$name,
-				'DESC'=>$name,
+				'KEYWORDS'=>$name.', CRAFTEngine, '.CLIENT_KEYWORDS,
+				'DESC'=>CLIENT_DESC,
 				'HEADER'=>$name,
-				//'ROOT'=>'/new/www/client/php/',
-				//'ROOT_HTTP'=>'/new/www/',
-				'ROOT'=>'/php/',
-				'ROOT_HTTP'=>'/php/',
+				'ROOT'=>ROOT,
+				'ROOT_HTTP'=>ROOT_HTTP,
+				'HOST'=>CLIENT_HOST,
 				'V'=>'pc',
 				'ERRORS'=>$this->error(),
+				'SUCCESS',
+				'INFO',
 			),
 		);
 	}
@@ -114,7 +112,7 @@ class core
 		
 		//if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
 		
-		$this->error($method.': '.$this->answer_decode['runtime'].'sec');
+		$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime']*1000 .'ms');
 		
 		return $this->answer_decode;
 	}
@@ -135,7 +133,7 @@ class core
 	{
 		$this->render['MAIN']['ERRORS'] = $this->error();
 		
-		if($_SERVER['REMOTE_ADDR']!='192.168.1.1')
+		if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND TRUE==FALSE)
 		foreach($this->render['MAIN']['ERRORS'] as &$er)
 		{
 			if($er[0]=='01003')

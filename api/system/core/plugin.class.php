@@ -229,7 +229,7 @@ class plugin
 	 * 
 	 * @access public
 	 * @param $name имя плагина
-	 * @param $class='main'
+	 * @param $class[optional]
 	 * @return object boolean
 	 */
 	public function initPl($name,$class='main')

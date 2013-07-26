@@ -63,9 +63,19 @@ class mysql
 	 */
 	public function query($query, $name = null)
 	{
+		try
+		{
 		if(empty($name))$name = $this->core->conf->system->core->db[0][0];//Если не передано имя, использовать имя по умолчанию
-		$this->result = $this->db[$name]->query($query) or trigger_error(mysqli_error($this->db[$name]), E_USER_ERROR);
+		if(!$this->result = $this->db[$name]->query($query))throw new Exception(mysqli_error($this->db[$name]));
+		
 		return $this->result;
+		}
+		catch(exception $e)
+		{
+			$tr = $e->getTrace();
+			
+			$this->core->error->error_php(E_USER_ERROR,$e->getMessage(),$tr[0]['file'],$tr[0]['line']);
+		}
 	}
 	
 	/**

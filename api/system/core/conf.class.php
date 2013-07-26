@@ -19,28 +19,10 @@ class conf
 		$this->plugins = new stdClass();
 		
 		$this->load_conf('core',array('name'=>'core','write'=>true));
-		$this->load_conf('core',array('name'=>'api','write'=>true));
 		
-		/*$conf = $core->file->get_all_file('core');
-		$conf = json_decode($conf, true);
-		foreach($conf as $key=>$value)
-		{
-			$this->$key = $value;
-		}*/
-		/*
-		$this->db = $conf['db'];
-		$this->admin_mail = $conf['admin_mail'];
-		$this->version = $conf['version'];
-		$this->debug = $conf['debug'];
-		$this->send_mail_report = $conf['send_mail_report'];
-		$this->includes['plugins'] = $conf['includes']['plugins'];
-		$this->salt = $conf['salt'];
-		$this->ranks = $conf['ranks'];
-		$this->ranks_name = $conf['ranks_name'];
-		$this->length = $conf['length'];
-		$this->preg = $conf['preg'];
-		*/
-		//if($_SERVER['REMOTE_ADDR']!='192.168.1.1')$this->debug = false;
+		define('CORE_ADMIN_MAIL', $this->system->core->admin_mail);
+		
+		$this->load_conf('core',array('name'=>'api','write'=>true));
 	}
 	
 	public function load_conf(/*$name,$type=0*/$type,$params=array())
@@ -106,56 +88,6 @@ class conf
 				return true;
 				break;
 		}
-		
-		/*if($type==0)
-		//$root = dirname(__FILE__).'../confs/';
-		$root = '/../confs/';
-		elseif($type==1)
-		//$root = dirname(__FILE__).'../plugins/'.$name.'/confs/';
-		//$root = '/../plugins/'.$name.'/confs/';
-		$root = '/../plugins/'.$name.'/main';
-		elseif($type==2)
-		$root = '/../plugins/'.$name[0].'/';
-		
-		if($type==0)
-		if(!file_exists(dirname(__FILE__).$root.$name))
-		return false;
-		
-		if($type==1)
-		if(!file_exists(dirname(__FILE__).$root))
-		return false;
-		
-		if($type==2)
-		if(!file_exists(dirname(__FILE__).$root.$name[1]))
-		return false;
-		
-		if($type==0)
-		$conf = $this->core->file->get_all_file($root.$name);
-		
-		if($type==1)
-		$conf = $this->core->file->get_all_file($root);
-		
-		if($type==2)
-		$conf = $this->core->file->get_all_file($root.$name[1]);
-		
-		$conf = json_decode($conf, true);
-		
-		$conf = (object)$conf;
-		/*foreach($conf as $key => $value)
-		{
-			$this->conf->$name->$key = $value;
-		}
-		
-		if($type==0)
-		@$this->conf->$name = $conf;
-		
-		if($type==1)
-		return $conf;
-		
-		if($type==2)
-		@$this->conf->$name[0].'/'.$name[1] = $conf;
-		
-		return true;*/
 	}
 }
 ?>

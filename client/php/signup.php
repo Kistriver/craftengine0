@@ -49,7 +49,7 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	));
 	if(isset($core->answer_decode['data'][0]))
 	if($core->answer_decode['data'][0]==true)
-	$core->error("Регистрация прошла успешно");
+	$core->render['MAIN']['SUCCESS'][] = "Регистрация прошла успешно";
 	}
 }
 

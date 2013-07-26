@@ -1,7 +1,7 @@
 body
 {
 	margin: 0px;
-	background: url('http://static.tumblr.com/qfn3sex/ezom7y7iq/bg_main.png');
+	background: #222222 url('http://static.tumblr.com/qfn3sex/ezom7y7iq/bg_main.png');
 	height: 100%;
 	font: 15px Arial/*14px Helvetica, Arial, sans-serif*/;
 }
@@ -28,7 +28,7 @@ textarea
 {
 	border: solid 1px #E5E5E5;
 	resize: vertical;
-	background-image: url('http://178.140.61.70:8080/themes/dirt/images/background/slashes1.png');
+	*background-image: url('http://178.140.61.70:8080/themes/dirt/images/background/slashes1.png');
 }
 
 .main_table
@@ -98,7 +98,7 @@ textarea
 	padding: 5px; 
 	margin: 5px; 
 	border-radius: 5px;
-	background-image: url('http://178.140.61.70:8080/themes/dirt/images/background/lite1.png');
+	*background: #DEDEDE url('http://178.140.61.70:8080/themes/dirt/images/background/lite1.png');
 }
 
 .slogan

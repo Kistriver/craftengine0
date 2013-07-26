@@ -9,6 +9,29 @@ class core
 		$this->runtime = microtime(true);
 		ob_start();
 		
+		try
+		{
+			if(defined('CORECALLONCE'))
+			throw new Exception("CORE MAY BE CALLED ONLY ONCE", 1);
+		}
+		catch(exception $e)
+		{
+			//print_r($e);
+			echo $e->getMessage()."\r\n";
+			echo "#Trace: \r\n";
+			$rm = str_replace('api/system/core','',dirname(__FILE__));
+			
+			foreach($e->getTrace() as $tr)
+			{
+				$tr['file'] = str_replace($rm,'{{FRAMEWORK_ROOT}}/',$tr['file']);
+				echo "[$tr[file]:$tr[line]] '$tr[class]' object in function '$tr[function]'\r\n";
+			}
+			die;
+		}
+		
+		if(!defined('CORECALLONCE'))
+		define('CORECALLONCE', true);
+		
 		//ignore_user_abort(1);
 		
 		$includes = array(	'file',			//Файлы
@@ -31,20 +54,6 @@ class core
 		//Объявление обработчиков ошибок
 		set_error_handler(array($this->error,'error_php'));
 		register_shutdown_function(array($this->error, 'fatal_error_php'));
-		
-		//Авторизирован ли пользователь
-		if(isset($_SESSION['id']) AND isset($_SESSION['login']))
-		{
-			if($_SESSION['id']!='' AND $_SESSION['login']!='')
-			$_SESSION['loggedin'] = true;
-		}
-		else
-		$_SESSION['loggedin'] = false;
-		
-		if(!$_SESSION['loggedin'])
-		{
-			$_SESSION['id'] = '';
-		}
 		
 		//Подключение БД
 		//$this->mysql->connect_all();
