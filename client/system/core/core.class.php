@@ -93,8 +93,11 @@ class core
 		if(!$this->answer_decode)
 		{
 			header('HTTP/1.0 500');
-			die('Unavaliable data format('. $method .')'.$this->answer);
+			die('<pre>Unavaliable data format('. $method .")\r\n".$this->answer.'</pre>');
 		}
+		
+		if(!empty($this->answer_decode['error']))
+		$this->errors[] = array('01003',$this->answer_decode['error']);
 		
 		if(sizeof($this->answer_decode['errors'])!=0)
 		foreach ($this->answer_decode['errors'] as $er)
@@ -121,7 +124,7 @@ class core
 	{
 		if(!empty($value))
 		{
-			$this->errors[] = array('00',$value);
+			$this->errors[] = array('local',$value);
 		}
 		else
 		{

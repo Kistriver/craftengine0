@@ -9,6 +9,11 @@ class error
 		$this->core = $core;
 		
 		error_reporting(E_ALL);
+		
+		//Объявление обработчиков ошибок
+		set_error_handler(array($this/*->error*/,'error_php'));
+		register_shutdown_function(array($this/*->error*/, 'fatal_error_php'));
+		
 		//set_error_handler(array($this,'error_php'));
 		//register_shutdown_function(array($this, 'fatal_error_php'));
 	}
@@ -23,6 +28,9 @@ class error
 	//Добавление ошибки PHP
 	public function error_php($code,$msg,$file,$line)
 	{
+		$file_fr = str_replace('/api/system/core','',dirname(__FILE__));
+		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
+		
 		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine','003');
 		else $this->error[] = array('01003',"[$code][$file:$line]$msg");
 		if($this->core->conf->system->core->send_mail_report)
@@ -49,9 +57,15 @@ class error
 			|| $error['type'] == E_CORE_ERROR)
 			{
 				ob_end_clean();
-				if(!$this->core->conf->system->core->debug)echo 'Unfortunately, there is an error there. But our team is working on elimination of this problem.';
-				else echo "[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n";
-				header('HTTP/1.0 500');
+				
+				$file_fr = str_replace('/api/system/core','',dirname(__FILE__));
+				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
+				
+				if(!$this->core->conf->system->core->debug)$errA = 
+				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
+				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n");
+				//header('HTTP/1.0 500');
+				echo json_encode($errA);
 				if($this->core->conf->system->core->send_mail_report)
 				$this->core->mail->add_waiting_list(
 				$this->core->conf->system->core->admin_mail, 

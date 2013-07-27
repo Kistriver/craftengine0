@@ -6,6 +6,7 @@ class core
 	
 	public function __construct()
 	{
+		error_reporting(0);
 		$this->runtime = microtime(true);
 		ob_start();
 		
@@ -50,10 +51,6 @@ class core
 			//Вызов модулей
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
-		
-		//Объявление обработчиков ошибок
-		set_error_handler(array($this->error,'error_php'));
-		register_shutdown_function(array($this->error, 'fatal_error_php'));
 		
 		//Подключение БД
 		//$this->mysql->connect_all();
