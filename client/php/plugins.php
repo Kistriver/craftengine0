@@ -8,21 +8,21 @@ if(isset($data['data'][0]))
 if($data['data'][0]==false)
 if(!isset($data['data']['included']))
 {
-display($core, $twig, 403);
+//////display($core, $twig, 403);
 }
 else
 {
 foreach($data['data']['included'] as $f=>$c)
 if($c['name']=='user')
 {
-if(!$_SESSION['loggedin'])display($core, $twig, 403);
-if($_SESSION['rank'][0]!=1)display($core, $twig, 403);
+if(!$_SESSION['loggedin'])$a;/////display($core, $twig, 403);
+if($_SESSION['rank'][0]!=1)$a;/////display($core, $twig, 403);
 }
 else
 {
 $ip = file_get_contents(dirname(__FILE__).'/../system/confs/admin_ip');
 echo $ip;
-if($_SERVER['REMOTE_ADDR']!=$ip)display($core, $twig, 403);
+if($_SERVER['REMOTE_ADDR']!=$ip)$a;/////display($core, $twig, 403);
 }
 }
 

@@ -115,6 +115,7 @@ class core
 		
 		//if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
 		
+		if(SHOW_API_REQUESTS==true)
 		$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime']*1000 .'ms');
 		
 		return $this->answer_decode;
@@ -136,7 +137,7 @@ class core
 	{
 		$this->render['MAIN']['ERRORS'] = $this->error();
 		
-		if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND TRUE==FALSE)
+		if(SHOW_API_ERRORS==false)
 		foreach($this->render['MAIN']['ERRORS'] as &$er)
 		{
 			if($er[0]=='01003')

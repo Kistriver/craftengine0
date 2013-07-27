@@ -368,7 +368,7 @@ class plugin
 			$list[] = $c->name;
 		}
 		
-		$this->core->file->set_file('plugins',json_encode($list, JSON_PRETTY_PRINT));
+		$this->core->file->set_file('plugins',json_encode($list/*, JSON_PRETTY_PRINT*/));
 	}
 	
 	/**
@@ -400,7 +400,7 @@ class plugin
 			$list[] = $c->name;
 		}
 		
-		$this->core->file->set_file('plugins',json_encode($list, JSON_PRETTY_PRINT));
+		$this->core->file->set_file('plugins',json_encode($list/*, JSON_PRETTY_PRINT*/));
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 <?php
-class user
+class plugin_user_user
 {
 	public	$id,						//Айди
 			$name,						//Имя

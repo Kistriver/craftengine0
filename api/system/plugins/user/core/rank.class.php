@@ -1,5 +1,5 @@
 <?php
-class rank
+class plugin_user_rank
 {
 	public $core;//Ядро
 	public $rank;//Ранк
@@ -39,7 +39,7 @@ class rank
 	public function get_rank($id)
 	{
 		$id = $this->core->sanString($id);
-		$u = new user($this->core);
+		$u = $this->core->plugin->initPl('user','user');//new user($this->core);
 		$is = $u->get_user($id, 'id');
 		if(!$is)return false;
 		$this->rank = $u->rank;
@@ -147,7 +147,7 @@ class rank
 		$result = $this->core->mysql->fetch($result);
 		
 		//Друзья
-		$user = new user($this->core);
+		$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 		$friend = $user->friends($subject, $target);
 		
 		//Я

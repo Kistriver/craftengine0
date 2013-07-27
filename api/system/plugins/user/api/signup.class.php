@@ -100,7 +100,7 @@ class api_signup extends api
 				return true;
 				break;
 			case 'invite':
-				$u = new user($this->core);
+				$u = $this->core->plugin->initPl('user','user');//new user($this->core);
 				$ch = $u->get_user($value, 'login');
 				if(!$ch)
 				{
@@ -211,7 +211,7 @@ class api_signup extends api
 		
 		if($err_lev == 0)
 		{
-			$user = new user($this->core);
+			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			$user->signup(
 			$name,
 			$surname,

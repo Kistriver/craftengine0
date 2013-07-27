@@ -4,7 +4,7 @@
 	"web":"http://vk.com/craftengine",
 	"id":"1",
 	"name":"user",
-	"loadClass":"load",
+	"loadClass":"",
 	"description":"Этот модуль предназначен для добавления пользователей на сайт",
 	"confs":
 	{

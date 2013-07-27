@@ -13,14 +13,14 @@ class api_plugin extends api
 	{
 		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
 		if($c->name=='user')
-		if(!$_SESSION['loggedin'])
+		if(!$_SESSION['loggedin'] AND true==false)
 		{
 			$ex = 1;
 			return $this->json(array(false));
 		}
 		
 		if(!isset($ex))
-		if($_SERVER['REMOTE_ADDR']!='192.168.1.1')
+		if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
 		{
 			return $this->json(array(false));
 		}
@@ -35,14 +35,15 @@ class api_plugin extends api
 	
 	protected function on_plugin()
 	{
+		$this->input('name');
 		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
 		if($c->name=='user')
-		if(!$_SESSION['loggedin'])
+		if(!$_SESSION['loggedin'] AND true==false)
 		{
 			return $this->json(array(false));
 		}
 		else
-		if($_SERVER['REMOTE_ADDR']!='192.168.1.1')
+		if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
 		{
 			return $this->json(array(false));
 		}
@@ -56,12 +57,12 @@ class api_plugin extends api
 	{
 		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
 		if($c->name=='user')
-		if(!$_SESSION['loggedin'])
+		if(!$_SESSION['loggedin'] AND true==false)
 		{
 			return $this->json(array(false));
 		}
 		else
-		if($_SERVER['REMOTE_ADDR']!='192.168.1.1')
+		if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
 		{
 			return $this->json(array(false));
 		}

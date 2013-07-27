@@ -44,7 +44,7 @@ class api_user extends api
 		
 		if($type=='signup')
 		{
-			$rank = new rank($this->core);
+			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 			{
 				$this->core->error->error('server', '403');
@@ -98,7 +98,7 @@ class api_user extends api
 		}
 		else
 		{
-			$user = new user($this->core);
+			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			
 			$users = array();
 			for($i=0;$i<$this->core->mysql->rows($users_list);$i++)
@@ -127,7 +127,7 @@ class api_user extends api
 		$type = $this->core->sanString($this->data['type']);
 		$value = $this->core->sanString($this->data['value']);
 		
-		$user = new user($this->core);
+		$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 		
 		$err = 1;
 		switch($type)
@@ -168,7 +168,7 @@ class api_user extends api
 	{
 		$this->input('login','confirm');
 		
-		$rank = new rank($this->core);
+		$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 		if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 		{
 			$this->core->error->error('server', '403');
@@ -199,7 +199,7 @@ class api_user extends api
 			elseif($status==1 OR $status==3)
 			{
 				$this->core->mysql->query("UPDATE signup SET status='3' WHERE id='$signid' AND login='$login'");
-				$u = new user($this->core);
+				$u = $this->core->plugin->initPl('user','user');//new user($this->core);
 				$u->new_user(
 					$r['name'],
 					$r['surname'],

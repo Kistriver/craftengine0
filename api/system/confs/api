@@ -4,5 +4,6 @@
 		"system",
 		"vote",
 		"plugin"
-	]
+	],
+	"plugins":[]
 }

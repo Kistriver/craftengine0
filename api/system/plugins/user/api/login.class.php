@@ -19,7 +19,7 @@ class api_login extends api
 		$email = mb_convert_case($email, MB_CASE_LOWER, 'UTF-8');
 		$password = $this->core->SanString($this->data['password']);
 		
-		$user = new user($this->core);
+		$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 		$u = $user->get_user($email, 'email');
 		if(!$_SESSION['loggedin'])
 		if($u)
@@ -35,7 +35,7 @@ class api_login extends api
 					$password_md5 = $user->password_md5($password, false, $time, $salt);
 					if($password_md5 == $user->pass)
 					{
-						$rank = new rank($this->core);
+						$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 						$rank->get_rank($user->id);
 						
 						if($rank->warnings!=100)
@@ -132,7 +132,7 @@ class api_login extends api
 				{
 					$this->core->mysql->query("UPDATE signup SET status='3' WHERE id='$id' AND login='$login'");
 					//REGISTER
-					$u = new user($this->core);
+					$u = $this->core->plugin->initPl('user','user');//new user($this->core);
 					$u->new_user(
 						$signup['name'],
 						$signup['surname'],

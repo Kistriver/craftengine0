@@ -21,7 +21,7 @@ class api_article extends api
 		$limit = 10;
 		$time = time();
 		
-		$rank = new rank($this->core);
+		$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
 		if(!$r and $type=='unpublished'){$this->core->error->error('server','403');return $this->json(array(false));}
@@ -58,7 +58,7 @@ class api_article extends api
 			//$num_msg = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM wall_art WHERE id='$results[id]' and status='0'"));
 			//$results['num_msg'] = $num_msg[0];
 			
-			$user = new user($this->core);
+			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
 			$results['user'] = $user->login;
@@ -105,7 +105,7 @@ class api_article extends api
 		{
 			$results = $this->core->mysql->fetch($res);
 			
-			$user = new user($this->core);
+			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
 			$results['user'] = $user->login;
@@ -121,7 +121,7 @@ class api_article extends api
 			
 			$status = $this->art_status($results['status']);
 			
-			$rank = new rank($this->core);
+			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			$results['edited'] = $rank->init($_SESSION['id'], 'edit_art')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'delete_art')? 1:0;
 			
@@ -160,7 +160,7 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank($this->core);
+			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			if($rank->init($_SESSION['id'], 'article_write_new'))
 			{
 				if((isset($this->data['title']) AND isset($this->data['article'])) AND (!empty($this->data['title']) AND !empty($this->data['article'])))
@@ -203,7 +203,7 @@ class api_article extends api
 						}
 						$r = $this->core->mysql->fetch($r);
 						
-						$user = new user($this->core);
+						$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];
 						$r['user'] = $user->login;
@@ -248,7 +248,7 @@ class api_article extends api
 		$this->input('id','confirm');
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank($this->core);
+			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			if($rank->init($_SESSION['id'], 'article_confirm_new'))
 			{
 				$userid = $_SESSION['id'];
@@ -312,7 +312,7 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank($this->core);
+			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			
 			$user = $_SESSION['id'];
 			$post_id = (int)$this->core->SanString($this->data['id']);
@@ -367,7 +367,7 @@ class api_article extends api
 						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$userid', '$art', '$time_now', '$type', '$post_id')");
 						
 						$r = $this->core->mysql->fetch($r);
-						$user = new user($this->core);
+						$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];
 						$r['user'] = $user->login;
@@ -414,7 +414,7 @@ class api_article extends api
 	{
 		if($_SESSION['loggedin'])
 		{
-			$rank = new rank();
+			$rank = $this->core->plugin->initPl('user','rank');//new rank();
 			$target = (int)sanString($this->data['target']);
 			$type = sanString($this->data['type']);
 			
