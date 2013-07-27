@@ -246,7 +246,7 @@ class plugin
 			}
 		}
 		
-		if($ex = 1)
+		if($ex == 1)
 		{
 			$fi = $this->root.$folder.'/core/'.$class.'.class.php';
 			if(file_exists($fi))
@@ -341,7 +341,7 @@ class plugin
 			}
 		}
 		
-		if($ex = 1)
+		if($ex == 1)
 		$this->pluginsIncluded[$folder] = $config;
 		
 		foreach($config->requires as $r)
@@ -356,7 +356,7 @@ class plugin
 				}
 			}
 			
-			if($exr==0)
+			if($exr!=1)
 			{
 				return array(false,4);
 			}
@@ -391,7 +391,7 @@ class plugin
 			}
 		}
 		
-		if($ex = 1)
+		if($ex == 1)
 		unset($this->pluginsIncluded[$folder]);
 		
 		$list = array();
