@@ -82,6 +82,11 @@ class core
 	{
 		$this->about();
 		
+		/**
+		 * TODO: Доделать
+		 * TODO: Сделать защиту от удаления
+		 */
+		
 		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
 		'host'=>$_SERVER['SERVER_NAME'],
 		'port'=>$_SERVER['SERVER_PORT'],
@@ -114,6 +119,11 @@ class core
 		$updatetime = 60 * 60 *12;
 		$file = dirname(__FILE__).'/cache/LastUpdateRequest';
 		
+		/**
+		 * TODO: Доделать
+		 * TODO: Разрывать соединение со скриптом
+		 */
+		
 		//Если нет файла, создать и записать дату сейчас минус день
 		//Проверить дату и, если обновление проверялось позже, чем полдня назад, запросить актуальную версию
 		//Если данная версия не актуальна, запустить скрипт обновления /api/system-scripts/update.php
@@ -143,9 +153,18 @@ class core
 		
 		if($time<time()-$updatetime)
 		{
-			//Check updates
 			$context = stream_context_create();
 			$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
+			//stream_socket_client('tcp://localhost:8081/system-scripts/update.php', $ErrNo, $ErrStr, 0.1);
+			
+			
+			/*$data = time();
+			$data = base64_encode($data);
+			$data = unpack('c*',$data);
+			$data = serialize($data);
+			$data = base64_encode($data);
+			
+			file_put_contents($file, $data);*/
 		}
 	}
 	
