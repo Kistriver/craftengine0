@@ -3,8 +3,8 @@ class api
 {
 	public	$data_json,			//Информация в JSON формате
 			$data,				//Информация в массиве
-			$returned,			//Сгенерированный ответ
-			$core;				//Ядро
+			$returned;			//Сгенерированный ответ
+	protected $core;				//Ядро
 	
 	//Массив разрешённых функций
 	public $functions = array(
@@ -88,7 +88,7 @@ class api
 	private function initalize()
 	{
 		//Получение информации и её декодирование
-		$this->data_json = isset($_POST['data'])? $_POST['data'] : $_GET['data'];
+		$this->data_json = isset($_POST['data'])? $_POST['data'] : (isset($_GET['data'])?$_GET['data']:"{}");
 		$this->data = json_decode($this->data_json, true);
 		
 		//Создание сессии

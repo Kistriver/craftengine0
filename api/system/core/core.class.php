@@ -1,10 +1,15 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class core
 {
-	public	$runtime,			//Время запуска скрипта
-			$plugins;			//Массив плагинов
+	public	$runtime;			//Время запуска скрипта
 	
-	public function __construct()
+	final function __construct()
 	{
 		error_reporting(0);
 		$this->runtime = microtime(true);
@@ -70,28 +75,13 @@ class core
 		return $time;
 	}
 	
-	//Подключение плагинов
-	/*public function plugin()
-	{$this->error->error();return;
-		$name = func_get_args();//Получение аргументов функции
-		
-		for($i=0;$i<sizeof($this->conf->system->core->includes['plugins']);$i++)
-		{
-			if(!in_array($this->conf->system->core->includes['plugins'][$i],$name))continue;
-			//Подключение модуля
-			
-			include_once(dirname(__FILE__)."/../plugins/". $this->conf->system->core->includes['plugins'][$i] .".class.php");
-			
-			//Вызов модуля
-			//$this->plugins->$this->conf->system->core->includes['plugins'][$i] = new $this->conf->system->core->includes['plugins'][$i]($this);
-		}
-	}*/
-	
 	/**
 	 * Сбор статистики об использовании движка. Просьба не убирать
 	 */
-	public function stat()
+	final function stat()
 	{
+		$this->about();
+		
 		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
 		'host'=>$_SERVER['SERVER_NAME'],
 		'port'=>$_SERVER['SERVER_PORT'],
@@ -117,6 +107,70 @@ class core
 		
 		if($answer)$this->stat = true;
 		else $this->stat = false;
+	}
+	
+	final function update()
+	{
+		$updatetime = 60 * 60 *12;
+		$file = dirname(__FILE__).'/cache/LastUpdateRequest';
+		
+		//Если нет файла, создать и записать дату сейчас минус день
+		//Проверить дату и, если обновление проверялось позже, чем полдня назад, запросить актуальную версию
+		//Если данная версия не актуальна, запустить скрипт обновления /api/system-scripts/update.php
+		
+		if(file_exists($file))
+		$time = file_get_contents($file);
+		else
+		$time = null;
+		
+		if(!empty($time))
+		{
+			$time = base64_decode($time);
+			$time = unserialize($time);
+			
+			$da = '';
+			foreach($time as $d)
+			$da .= pack('c*',$d);
+			
+			$time = base64_decode($da);
+			
+			$time = (int)$time;
+		}
+		else
+		{
+			$time = time() - $updatetime - 10;
+		}
+		
+		if($time<time()-$updatetime)
+		{
+			//Check updates
+			$context = stream_context_create();
+			$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
+		}
+	}
+	
+	final function about()
+	{
+		$this->update();
+		if(!empty($_GET['about']))
+		{
+			$a = $_GET['about'];
+			switch($a)
+			{
+				case 'framework':
+					die('CRAFTEngine Framework');
+					break;
+				case 'author':
+					die('Alexey Kachalov <alex-kachalov@mail.ru>');
+					break;
+				case 'version':
+					die($this->conf->system->core->version);
+					break;
+				default:
+					exit;
+					break;
+			}
+		}
 	}
 	
 	/**

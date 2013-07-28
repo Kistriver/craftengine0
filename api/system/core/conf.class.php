@@ -1,15 +1,9 @@
 <?php
 class conf
 {
-	//public	$core,						//Ядро
-			//$admin_mail,				//Мыло сисадмина
-			//$version,					//Версия ядра
-			//$debug,						//Режим дебага
-			//$send_mail_report,			//Отправка сообщений об ошибках
-			//$includes,					//Массив модулей ядра и плагинов
-			//$db;						//Подключаемые БД
 	public $plugins;
 	public $system;
+	protected $core;
 	
 	public function __construct($core)
 	{

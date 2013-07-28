@@ -5,7 +5,7 @@
 */
 class mail
 {
-	public	$core;//Ядро
+	protected $core;//Ядро
 	
 	public function __construct($core)
 	{

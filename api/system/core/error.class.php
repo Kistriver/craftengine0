@@ -1,8 +1,8 @@
 <?php
 class error
 {
-	public	$core,								//Ядро
-			$error		=		Array();		//Массив ошибок
+	protected $core;								//Ядро
+	public	$error		=		Array();		//Массив ошибок
 	
 	public function __construct($core)
 	{

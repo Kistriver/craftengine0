@@ -1,8 +1,8 @@
 <?php
 class mysql
 {
-	public	$core,								//Ядро
-			$db			=		array(),		//Объекты БД
+	protected $core;								//Ядро
+	public	$db			=		array(),		//Объекты БД
 			$result;							//Результат последнего запроса
 	
 	public function __construct($core)

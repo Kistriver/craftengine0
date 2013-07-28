@@ -1,6 +1,8 @@
 <?php
 class plugin
 {
+	protected $core;
+	
 	public function __construct($core)
 	{
 		$this->core = $core;
@@ -10,9 +12,6 @@ class plugin
 		$this->pluginsIncluded = array();
 		$this->pluginsLoaded = array();
 		$this->pluginsDenied = array('libs','system','core','plugin','plugins','api');
-		
-		$this->pluginsList();
-		$this->pluginsInclude();
 		
 		if(method_exists($core,'stat'))
 		{
@@ -26,6 +25,11 @@ class plugin
 		{
 			die;
 		}
+		
+		$this->pluginsList();
+		$this->pluginsInclude();
+		
+		if(!empty($_GET['about']))die('CRAFTEngine Framework by Alexey Kachalov');
 	}
 	
 	/**

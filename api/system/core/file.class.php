@@ -1,7 +1,8 @@
 <?php
 class file
 {
-	public $core, $root;
+	public $root;
+	protected $core;
 	
 	public function __construct($core)
 	{
