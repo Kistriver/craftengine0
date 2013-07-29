@@ -122,6 +122,7 @@ class core
 			{
 				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms";
 			}
+			$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms";
 			$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 		}
 		

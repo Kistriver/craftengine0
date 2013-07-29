@@ -94,6 +94,16 @@ class timer
 				
 				return $times;
 				break;
+			case 'other':
+				$all = $this->display('all');
+				$pl = 0;
+				foreach($this->display('marks') as $p)
+				{
+					$pl += $p[1];
+				}
+				$time = $all - $pl;
+				return round($time,4);
+				break;
 		}
 	}
 }

@@ -180,6 +180,7 @@ class api
 				'runtime'=>array(
 								$this->core->timer->display('all'),
 								$marks,
+								$this->core->timer->display('other'),
 								)
 		);
 		
