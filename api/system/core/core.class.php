@@ -7,10 +7,16 @@
  */
 class core
 {
-	public	$runtime;			//Время запуска скрипта
-	
 	final function __construct()
 	{
+		//Подключение модуля ядра timer
+		include_once(dirname(__FILE__)."/". "timer" .".class.php");
+		
+		//Вызов модуля
+		$this->timer = new timer($this);
+		
+		$this->timer->start();
+		
 		error_reporting(0);
 		$this->runtime = microtime(true);
 		ob_start();
@@ -38,9 +44,11 @@ class core
 		if(!defined('CORECALLONCE'))
 		define('CORECALLONCE', true);
 		
+		//$this->timer->mark('CoreCallOnlyOnce');
 		//ignore_user_abort(1);
 		
-		$includes = array(	'file',			//Файлы
+		$includes = array(//'timer', //INCLUDED
+							'file',			//Файлы
 							'conf',			//Конфигурации
 							'error',		//Ошибки
 							'mysql',		//СУБД
@@ -57,9 +65,12 @@ class core
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
 		
+		$this->timer->mark('IncludeCoreModules');
+		
 		//Подключение БД
 		//$this->mysql->connect_all();
 		$this->mysql->connect('site');
+		$this->timer->mark('ConnectToDb');
 	}
 	
 	/**
@@ -67,6 +78,8 @@ class core
 	 * 
 	 * @access public
 	 * @param $round=true округление
+	 * 
+	 * FIXME: Удалить
 	 */
 	public function runtime($round = true/*Округление*/)
 	{

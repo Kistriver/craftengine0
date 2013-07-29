@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class api
 {
 	public	$data_json,			//Информация в JSON формате
@@ -82,6 +88,7 @@ class api
 			$f = $this->initalize();//Вызвать инициализацию ядра API
 			if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
 		}
+		$this->core->timer->mark('api.class.php/__construct');
 	}
 	
 	//Инициализация ядра API
@@ -159,11 +166,21 @@ class api
 	//Создание ответа
 	public function json($data=array())
 	{
+		$this->core->timer->stop();
+		
+		if($this->core->conf->system->core->debug)
+		$marks = $this->core->timer->display('marks');
+		else
+		$marks = array();
+		
 		$r_a = array(
 				'data'=>$data,
 				'sid'=>$this->data['sid'],
 				'errors'=>$this->core->error->error,
-				'runtime'=>$this->core->runtime(true),
+				'runtime'=>array(
+								$this->core->timer->display('all'),
+								$marks,
+								)
 		);
 		
 		$this->returned = $this->core->json_encode_ru($r_a);

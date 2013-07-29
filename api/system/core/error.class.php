@@ -1,8 +1,15 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class error
 {
-	protected $core;								//Ядро
-	public	$error		=		Array();		//Массив ошибок
+	public			$error						= Array();//Массив ошибок
+	
+	protected		$core;//Ядро
 	
 	public function __construct($core)
 	{
@@ -16,6 +23,8 @@ class error
 		
 		//set_error_handler(array($this,'error_php'));
 		//register_shutdown_function(array($this, 'fatal_error_php'));
+		
+		$this->core->timer->mark('error.class.php/__construct');
 	}
 	
 	//Добавление ошибки

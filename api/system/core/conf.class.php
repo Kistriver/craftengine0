@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class conf
 {
 	public $plugins;
@@ -17,6 +23,7 @@ class conf
 		define('CORE_ADMIN_MAIL', $this->system->core->admin_mail);
 		
 		$this->load_conf('core',array('name'=>'api','write'=>true));
+		$this->core->timer->mark('conf.class.php/__construct');
 	}
 	
 	public function load_conf(/*$name,$type=0*/$type,$params=array())

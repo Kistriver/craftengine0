@@ -116,7 +116,14 @@ class core
 		//if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
 		
 		if(SHOW_API_REQUESTS==true)
-		$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime']*1000 .'ms');
+		{
+			$times = array();
+			foreach($this->answer_decode['runtime'][1] as $t)
+			{
+				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms";
+			}
+			$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
+		}
 		
 		return $this->answer_decode;
 	}

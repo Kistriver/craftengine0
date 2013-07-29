@@ -3,15 +3,21 @@
 загрузка tpl писем
 проврка на идентичное письмо, занесение письма в БД, отправка по крону
 */
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class mail
 {
-	protected $core;//Ядро
+	protected		$core;//Ядро
 	
 	public function __construct($core)
 	{
 		$this->core = $core;
 		
-		
+		$this->core->timer->mark('mail.class.php/__construct');
 	}
 	
 	//Подключение шаблонов писем

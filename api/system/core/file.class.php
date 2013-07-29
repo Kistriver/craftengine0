@@ -1,13 +1,21 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class file
 {
-	public $root;
-	protected $core;
+	public			$root;
+	
+	protected		$core;
 	
 	public function __construct($core)
 	{
 		$this->core = $core;
 		$this->root = dirname(__FILE__).'/../confs/';
+		$this->core->timer->mark('file.class.php/__construct');
 	}
 	
 	public function get_line_array($file)

@@ -1,15 +1,22 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class mysql
 {
-	protected $core;								//Ядро
-	public	$db			=		array(),		//Объекты БД
-			$result;							//Результат последнего запроса
+	public			$db							= array(),//Объекты БД
+					$result;//Результат последнего запроса
+	
+	protected		$core;
 	
 	public function __construct($core)
 	{
 		$this->core = $core;
 		
-		
+		$this->core->timer->mark('mysql.class.php/__construct');
 	}
 	
 	/**

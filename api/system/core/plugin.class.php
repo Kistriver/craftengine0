@@ -1,17 +1,24 @@
 <?php
+/**
+ * @package core
+ * @author Alexey Kachalov <alex-kachalov@mail.ru>
+ * @access public
+ * @see http://178.140.61.70/
+ */
 class plugin
 {
-	protected $core;
+	public			$root,
+					$pluginsExist				= array(),
+					$pluginsIncluded			= array(),
+					$pluginsLoaded				= array(),
+					$pluginsDenied				= array('libs','system','core','plugin','plugins','api');
+	
+	protected 		$core;
 	
 	public function __construct($core)
 	{
 		$this->core = $core;
 		$this->root = dirname(__FILE__).'/../plugins/';
-		
-		$this->pluginsExist = array();
-		$this->pluginsIncluded = array();
-		$this->pluginsLoaded = array();
-		$this->pluginsDenied = array('libs','system','core','plugin','plugins','api');
 		
 		if(method_exists($core,'stat'))
 		{
@@ -30,6 +37,8 @@ class plugin
 		$this->pluginsInclude();
 		
 		if(!empty($_GET['about']))die('CRAFTEngine Framework by Alexey Kachalov');
+		
+		$this->core->timer->mark('plugin.class.php/__construct');
 	}
 	
 	/**
