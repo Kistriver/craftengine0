@@ -95,13 +95,11 @@ class timer
 				return $times;
 				break;
 			case 'other':
-				$all = $this->display('all');
-				$pl = 0;
-				foreach($this->display('marks') as $p)
-				{
-					$pl += $p[1];
-				}
-				$time = $all - $pl;
+				if(count($this->mark)!=0)
+				$last = $this->mark[count($this->mark)-1][1];
+				else
+				$last = $this->start;
+				$time = $this->stop - $last;
 				return round($time,4);
 				break;
 		}

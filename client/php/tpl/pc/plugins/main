@@ -5,6 +5,7 @@
 
 {%block content%}
 {% autoescape true %}
+<hr />
 {%for plugin in plugins%}
 <div style="background-color:{%if plugin._included_%}#82FA58{%else%}#FE642E{%endif%};">
 <h2>{{plugin.name}} - {%if plugin._included_%}ON

@@ -80,6 +80,7 @@ class core
 			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,
 			'content' => $data,
 		),));
+		
 		$this->answer = @file_get_contents($this->url,false,$context);
 		
 		//$this->answer = @file_get_contents($this->url);

@@ -26,7 +26,7 @@ class conf
 		$this->core->timer->mark('conf.class.php/__construct');
 	}
 	
-	public function load_conf(/*$name,$type=0*/$type,$params=array())
+	public function load_conf($type,$params=array())
 	{
 		switch($type)
 		{
@@ -83,8 +83,6 @@ class conf
 				}
 				else
 				return $conf;
-				
-				//echo "\$this->plugins->$params[name]->$params[conf] = $conf;";
 				
 				return true;
 				break;

@@ -67,8 +67,6 @@ class api
 				$class = new $cl_n($core);
 				$class->init();
 				
-				//$func = array_search($m_f[1],$class->functions);
-				//if(empty($func))
 				if(!isset($class->functions[$function]))
 				{
 					$core->error->error('api','001');
@@ -123,9 +121,6 @@ class api
 			if($_SERVER['REMOTE_ADDR']!=$_SESSION['ip'])
 			$sid_err = 2;
 		}
-		
-		//include_once(dirname(__FILE__)."/core.class.php");//Подключение ядра
-		//$this->core = new core();//Вызов ядра
 		
 		if($sid_err!=0)
 		{
@@ -197,8 +192,7 @@ class api
 			{
 				$this->core->error->error('api','005');
 				echo $this->json($args);
-				die;
-				//return false;
+				exit;
 			}
 		}
 	}

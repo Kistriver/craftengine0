@@ -232,8 +232,6 @@ class plugin
 		$this->core->conf->system->api->plugins[$folder] = $main->api;
 		
 		if(!empty($main->loadClass))
-		//include_once($this->root.$folder.'/core/'.$main->loadClass);
-		
 		$this->initPl($main->name,$main->loadClass);
 		
 		return array(true);

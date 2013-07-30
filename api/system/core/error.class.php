@@ -18,11 +18,8 @@ class error
 		error_reporting(E_ALL);
 		
 		//Объявление обработчиков ошибок
-		set_error_handler(array($this/*->error*/,'error_php'));
-		register_shutdown_function(array($this/*->error*/, 'fatal_error_php'));
-		
-		//set_error_handler(array($this,'error_php'));
-		//register_shutdown_function(array($this, 'fatal_error_php'));
+		set_error_handler(array($this,'error_php'));
+		register_shutdown_function(array($this, 'fatal_error_php'));
 		
 		$this->core->timer->mark('error.class.php/__construct');
 	}

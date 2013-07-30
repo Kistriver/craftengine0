@@ -1,6 +1,7 @@
 <?php
 /**
  * @package core
+ * @copyright Alexey Kachalov <alex-kachalov@mail.ru>
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
  * @access public
  * @see http://178.140.61.70/
@@ -18,7 +19,6 @@ class core
 		$this->timer->start();
 		
 		error_reporting(0);
-		$this->runtime = microtime(true);
 		ob_start();
 		
 		try
@@ -28,7 +28,6 @@ class core
 		}
 		catch(exception $e)
 		{
-			//print_r($e);
 			echo $e->getMessage()."\r\n";
 			echo "#Trace: \r\n";
 			$rm = str_replace('api/system/core','',dirname(__FILE__));
@@ -44,10 +43,7 @@ class core
 		if(!defined('CORECALLONCE'))
 		define('CORECALLONCE', true);
 		
-		//$this->timer->mark('CoreCallOnlyOnce');
-		//ignore_user_abort(1);
-		
-		$includes = array(//'timer', //INCLUDED
+		$includes = array(//'timer', //ALREADY INCLUDED
 							'file',			//Файлы
 							'conf',			//Конфигурации
 							'error',		//Ошибки
@@ -68,24 +64,8 @@ class core
 		$this->timer->mark('IncludeCoreModules');
 		
 		//Подключение БД
-		//$this->mysql->connect_all();
 		$this->mysql->connect('site');
 		$this->timer->mark('ConnectToDb');
-	}
-	
-	/**
-	 * Время выполнения скрипта
-	 * 
-	 * @access public
-	 * @param $round=true округление
-	 * 
-	 * FIXME: Удалить
-	 */
-	public function runtime($round = true/*Округление*/)
-	{
-		$time = microtime(true) - $this->runtime;
-		if($round)$time = round($time, 3);
-		return $time;
 	}
 	
 	/**
@@ -121,10 +101,12 @@ class core
 			'content' => $data,
 		),));
 		//$answer = @file_get_contents('http://178.140.61.70/new/www/api/?method=stat.add',false,$context);
+		//$answer = @fopen('http://178.140.61.70/new/www/api/?method=stat.add','rb',false,$context);
 		$answer = false;
 		
 		if($answer)$this->stat = true;
 		else $this->stat = false;
+		$this->timer->mark('core.class.php/stat');
 	}
 	
 	final function update()
@@ -179,6 +161,7 @@ class core
 			
 			file_put_contents($file, $data);*/
 		}
+		$this->timer->mark('core.class.php/update');
 	}
 	
 	final function about()
