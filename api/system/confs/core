@@ -27,65 +27,6 @@
 			"pass"
 		]
 	],
-	"includes":
-	{
-		"plugins":
-		[
-			"user",
-			"rank",
-			"browser"
-		]
-	},
-	"salt":
-	[
-		"KACHALOVCRAFT dfKFd.)%$2@<FM<3lo43MF:34;;\\46)",
-		"!@#Vle;&;,bsk:SLOLdms)-?>DEKlsewLnens"
-	],
-	"ranks":
-	{
-		"main_administrator":1,
-		"administrator":2,
-		"moderator":3,
-		"inspector":4,
-		"desinger":5,
-		"journalist":6,
-		"user":7,
-		"guest":8
-	},
-	"ranks_name":
-	{
-		"1":["Гл. Администратор","Main Administrator"],
-		"2":["Администратор","Administrator"],
-		"3":["Модератор","Moderator"],
-		"4":["Инспектор","Inspector"],
-		"5":["Дизайнер","Desinger"],
-		"6":["Журналист","Journalist"],
-		"7":["Пользователь","User"],
-		"8":["Посетитель","Guest"]
-	},
-	"length":
-	{
-		"name":
-			{
-				"min":2,
-				"max":25
-			},
-		"surname":
-			{
-				"min":5,
-				"max":35
-			},
-		"nickname":
-			{
-				"min":4,
-				"max":30
-			},
-		"password":
-			{
-				"min":6,
-				"max":100
-			}
-	},
 	"preg":
 	{
 		"mail":

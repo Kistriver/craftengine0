@@ -51,8 +51,8 @@ class plugin_user_rank
 	//Получение наименования ранка
 	public function rank_name_get($rank)
 	{
-		$this->rank_name = $this->core->conf->system->core->ranks_name[$rank][0];
-		$this->rank_name_en = $this->core->conf->system->core->ranks_name[$rank][1];
+		$this->rank_name = $this->core->conf->plugins->user->user->ranks_name[$rank][0];
+		$this->rank_name_en = $this->core->conf->plugins->user->user->ranks_name[$rank][1];
 	}
 	
 	private function get_rank_confs($subj)

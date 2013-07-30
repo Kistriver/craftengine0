@@ -120,9 +120,22 @@ class core
 			$times = array();
 			foreach($this->answer_decode['runtime'][1] as $t)
 			{
-				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms";
+				$prec = 0;
+				if($t[1]==0)
+				$prec = 0;
+				else
+				$prec = round($t[1]/$this->answer_decode['runtime'][0]*100,1);
+				
+				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms ($prec%)";
 			}
-			$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms";
+			
+			if($this->answer_decode['runtime'][2]==0)
+			$prec = 0;
+			else
+			$prec = round($this->answer_decode['runtime'][2]/$this->answer_decode['runtime'][0]*100,1);
+			
+			$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
+			
 			$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 		}
 		

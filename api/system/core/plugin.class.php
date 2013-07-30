@@ -34,7 +34,9 @@ class plugin
 		}
 		
 		$this->pluginsList();
+		$this->core->timer->mark('plugin.class.php/pluginsList');
 		$this->pluginsInclude();
+		$this->core->timer->mark('plugin.class.php/pluginsInclude');
 		
 		if(!empty($_GET['about']))die('CRAFTEngine Framework by Alexey Kachalov');
 		
