@@ -210,11 +210,13 @@ class plugin
 					//print_r($this->core->conf->plugins);
 					break;
 				
+				/* //FIXME: IT'S VERY DANGEROUS
 				case 'core':
 					$coreConf = $this->core->conf->load_conf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
 					if(!$coreConf)break;
 					$this->core->conf->system->{$c} = $this->merge($this->core->conf->system->{$c},$coreConf,$p[1]);
 					break;
+				*/
 				
 				case 'plugin':
 					$pluginConf = $this->core->conf->load_conf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$p[1],'conf'=>$c));
@@ -424,7 +426,7 @@ class plugin
 	 */
 	public function lib($lib)
 	{
-		include_once(dirname(__FILE__).'/../plugins/libs/'.$lib.'.php');
+		include_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
 	}
 }
 ?>
