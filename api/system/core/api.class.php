@@ -44,7 +44,7 @@ class api
 			$modules = in_array($module,$mod);
 			if(empty($modules) or is_array($modules))
 			{
-				$core->error->error('api','000');
+				$core->error->error('api',0);
 				echo $this->json();
 			}
 			else
@@ -69,7 +69,7 @@ class api
 				
 				if(!isset($class->functions[$function]))
 				{
-					$core->error->error('api','001');
+					$core->error->error('api',0);
 					echo $this->json();
 				}
 				else
@@ -128,10 +128,10 @@ class api
 			{
 				case 1:
 					$this->data['sid'] = session_id();
-					$this->core->error->error('api','003');
+					$this->core->error->error('api',3);
 					break;
 				case 2:
-					$this->core->error->error('engine','004');
+					$this->core->error->error('engine',4);
 					break;
 			}
 			echo $this->json();
@@ -190,7 +190,7 @@ class api
 		{
 			if(!isset($this->data[$arg]))
 			{
-				$this->core->error->error('api','005');
+				$this->core->error->error('api',5);
 				echo $this->json($args);
 				exit;
 			}
@@ -200,7 +200,7 @@ class api
 	//Затычка для ещё неосуществлённого функционала
 	protected function wip()
 	{
-		$this->core->error->error('api','002');
+		$this->core->error->error('api',2);
 		return $this->json(array());
 	}
 }

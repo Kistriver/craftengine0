@@ -59,12 +59,12 @@ class api_login extends api
 						}
 						else
 						{
-							$this->core->error->error('login','003');
+							$this->core->error->error('plugin_user_login',3);
 						}
 					}
 					else
 					{
-						$this->core->error->error('login','000');
+						$this->core->error->error('plugin_user_login',0);
 						
 						$this->core->plugin->lib('browser.class');
 						$browser = new Browser();
@@ -78,20 +78,20 @@ class api_login extends api
 				}
 				else
 				{
-					$this->core->error->error('login','002');
+					$this->core->error->error('plugin_user_login',2);
 				}
 			}
 			else
 			{
-				$this->core->error->error('login','001');
+				$this->core->error->error('plugin_user_login',1);
 			}
 		}
 		else
 		{
-			$this->core->error->error('login','000');
+			$this->core->error->error('plugin_user_login',0);
 		}
 		else
-		$this->core->error->error('server','403');
+		$this->core->error->error('server',403);
 		
 		return $this->json();
 	}
@@ -102,7 +102,7 @@ class api_login extends api
 		if($_SESSION['loggedin'])
 		session_destroy();
 		else
-		$this->core->error->error('server','403');
+		$this->core->error->error('server',403);
 		
 		$returned = array();
 		

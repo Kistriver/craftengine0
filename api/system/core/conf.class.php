@@ -23,6 +23,8 @@ class conf
 		define('CORE_ADMIN_MAIL', $this->system->core->admin_mail);
 		
 		$this->load_conf('core',array('name'=>'api','write'=>true));
+		$this->load_conf('core',array('name'=>'errors','write'=>true));
+		
 		$this->core->timer->mark('conf.class.php/__construct');
 	}
 	

@@ -255,8 +255,8 @@ class plugin_user_user
 		$check = $this->core->mysql->query("SELECT * FROM users WHERE login='$login' OR email='$email'");
 		if($this->core->mysql->rows($check)!=0)
 		{
-			$this->core->error->error('signup','004');
-			$this->core->error->error('signup','005');
+			$this->core->error->error('plugin_user_signup',4);
+			$this->core->error->error('plugin_user_signup',5);
 			return false;
 		}
 		
@@ -301,7 +301,7 @@ class plugin_user_user
 		$exist = $this->get_user($user);
 		if(!$exist)
 		{
-			$this->core->error->error('user','000');
+			$this->core->error->error('plugin_user_user',0);
 			return false;
 		}
 		
@@ -310,13 +310,13 @@ class plugin_user_user
 		{
 			if(mb_strlen($after, 'UTF-8')>$this->core->conf->plugins->user->user->length['name']['max'])
 			{
-				$this->core->error->error('profile','002');
+				$this->core->error->error('plugin_user_profile',2);
 				return false;
 			}
 			
 			if(mb_strlen($after, 'UTF-8')<$this->core->conf->plugins->user->user->length['name']['min'])
 			{
-				$this->core->error->error('profile','001');
+				$this->core->error->error('plugin_user_profile',1);
 				return false;
 			}
 			
@@ -334,13 +334,13 @@ class plugin_user_user
 		{
 			if(mb_strlen($after, 'UTF-8')>$this->core->conf->plugins->user->user->length['surname']['max'])
 			{
-				$this->core->error->error('profile','004');
+				$this->core->error->error('plugin_user_profile',4);
 				return false;
 			}
 			
 			if(mb_strlen($after, 'UTF-8')<$this->core->conf->plugins->user->user->length['surname']['min'])
 			{
-				$this->core->error->error('profile','003');
+				$this->core->error->error('plugin_user_profile',3);
 				return false;
 			}
 			
@@ -358,13 +358,13 @@ class plugin_user_user
 		{
 			if(mb_strlen($after, 'UTF-8')>$this->core->conf->plugins->user->user->length['nickname']['max'])
 			{
-				$this->core->error->error('profile','006');
+				$this->core->error->error('plugin_user_profile',6);
 				return false;
 			}
 			
 			if(mb_strlen($after, 'UTF-8')<$this->core->conf->plugins->user->user->length['nickname']['min'])
 			{
-				$this->core->error->error('profile','005');
+				$this->core->error->error('plugin_user_profile',5);
 				return false;
 			}
 			
@@ -386,7 +386,7 @@ class plugin_user_user
 				}
 				else
 				{
-					$this->core->error->error('profile','007');
+					$this->core->error->error('plugin_user_profile',7);
 					return false;
 				}
 			}
@@ -404,25 +404,25 @@ class plugin_user_user
 			
 			if($after[0]!=$after[1])
 			{
-				$this->core->error->error('profile','010');
+				$this->core->error->error('plugin_user_profile',10);
 				return false;
 			}
 			
 			if(strlen($after[0])>$this->core->conf->plugins->user->user->length['password']['max'])
 			{
-				$this->core->error->error('profile','009');
+				$this->core->error->error('plugin_user_profile',9);
 				return false;
 			}
 			
 			if(strlen($after[0])<$this->core->conf->plugins->user->user->length['password']['min'])
 			{
-				$this->core->error->error('profile','008');
+				$this->core->error->error('plugin_user_profile',8);
 				return false;
 			}
 			
 			if($after[0]==$this->login)
 			{
-				$this->core->error->error('profile','011');
+				$this->core->error->error('plugin_user_profile',11);
 				return false;
 			}
 			
@@ -440,14 +440,14 @@ class plugin_user_user
 			
 			if($pass_base==1)
 			{
-				$this->core->error->error('profile','012');
+				$this->core->error->error('plugin_user_profile',12);
 				return false;
 			}
 
 			$pass = $this->password_md5($after[2], false, $this->time_reg, $this->salt);
 			if($this->pass!=$pass)
 			{		
-				$this->core->error->error('profile','013');
+				$this->core->error->error('plugin_user_profile',13);
 				return false;
 			}	
 			

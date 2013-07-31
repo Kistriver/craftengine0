@@ -37,14 +37,14 @@ class api_signup extends api
 					if(strtolower($f[$i])==strtolower($login))
 					//if(preg_match("/^$f[$i]\$/i", $login))
 					{
-						$this->core->error->error('signup','001');
+						$this->core->error->error('plugin_user_signup',1);
 						return false;
 						//break;
 					}
 				}
 				if(!preg_match($this->core->preg('login'), $login))
 				{
-					$this->core->error->error('signup','001');
+					$this->core->error->error('plugin_user_signup',1);
 					return false;
 				}
 				elseif
@@ -54,7 +54,7 @@ class api_signup extends api
 						$this->core->mysql->rows($this->core->mysql->query("SELECT login FROM signup WHERE login='$login'"))!=0
 				)
 				{
-					$this->core->error->error('signup','004');
+					$this->core->error->error('plugin_user_signup',4);
 					return false;
 					//break;
 				}
@@ -66,7 +66,7 @@ class api_signup extends api
 			case 'name':
 				if(!preg_match($this->core->preg('name'), $value))
 				{
-					$this->core->error->error('signup','010');
+					$this->core->error->error('plugin_user_signup',10);
 					return false;
 				}
 				return true;
@@ -74,7 +74,7 @@ class api_signup extends api
 			case 'surname':
 				if(!preg_match($this->core->preg('surname'), $value))
 				{
-					$this->core->error->error('signup','011');
+					$this->core->error->error('plugin_user_signup',11);
 					return false;
 				}
 				return true;
@@ -82,7 +82,7 @@ class api_signup extends api
 			case 'password':
 				if(!preg_match($this->core->preg('password'), $value))
 				{
-					$this->core->error->error('signup','012');
+					$this->core->error->error('plugin_user_signup',12);
 					return false;
 				}
 				
@@ -92,7 +92,7 @@ class api_signup extends api
 					if($f[$i] == $value)
 					{
 						
-						$this->core->error->error('signup','013');
+						$this->core->error->error('plugin_user_signup',13);
 						return false;
 						//break;
 					}
@@ -104,7 +104,7 @@ class api_signup extends api
 				$ch = $u->get_user($value, 'login');
 				if(!$ch)
 				{
-					$this->core->error->error('signup','014');
+					$this->core->error->error('plugin_user_signup',14);
 					return false;
 				}
 				return true;
@@ -112,7 +112,7 @@ class api_signup extends api
 			case 'email':
 				if(!preg_match($this->core->preg('mail'), $value))
 				{
-					$this->core->error->error('signup','016');
+					$this->core->error->error('plugin_user_signup',16);
 					return false;
 				}
 				elseif
@@ -122,7 +122,7 @@ class api_signup extends api
 						$this->core->mysql->rows($this->core->mysql->query("SELECT email FROM signup WHERE email='$value'"))!=0
 				)
 				{
-					$this->core->error->error('signup','005');
+					$this->core->error->error('plugin_user_signup',5);
 					return false;
 				}
 				return true;
@@ -174,14 +174,14 @@ class api_signup extends api
 			$err_lev = 1;
 		if($sex!='male' AND $sex!='female')
 		{
-			$this->core->error->error('signup','008');
+			$this->core->error->error('plugin_user_signup',8);
 			$err_lev = 1;
 		}
 		if(!$this->check('login',$login))
 		$err_lev = 1;
 		if(strtolower($password)==strtolower($login))
 		{
-		$this->core->error->error('signup','009');
+		$this->core->error->error('plugin_user_signup',9);
 		$err_lev = 1;
 		}
 		
@@ -189,18 +189,18 @@ class api_signup extends api
 		
 		if($date[0]<=0 OR $date[0]>31)
 		{
-			$this->core->error->error('signup','015');
+			$this->core->error->error('plugin_user_signup',15);
 			$err_lev = 1;
 		}
 		if($date[1]<=0 AND $date[1]>12)
 		{
-			$this->core->error->error('signup','015');
+			$this->core->error->error('plugin_user_signup',15);
 			$err_lev = 1;
 		}
 		$now = date('Y', time());
 		if($date[2]<1970 AND $date[2]>($now - 90))
 		{
-			$this->core->error->error('signup','015');
+			$this->core->error->error('plugin_user_signup',15);
 			$err_lev = 1;
 		}
 		if(!$this->check('password',$login))

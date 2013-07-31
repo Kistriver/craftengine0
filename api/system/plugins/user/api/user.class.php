@@ -47,7 +47,7 @@ class api_user extends api
 			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 			{
-				$this->core->error->error('server', '403');
+				$this->core->error->error('server', 403);
 				return $this->json(array(false));
 			}
 			
@@ -64,7 +64,7 @@ class api_user extends api
 		
 		if($page<1 or ($page>$pages and $pages!=0))
 		{
-			$this->core->error->error('server', '404');
+			$this->core->error->error('server', 404);
 			return $this->json(array(false));
 		}
 		
@@ -141,15 +141,15 @@ class api_user extends api
 				if($is)$err = 0;
 				break;
 			default:
-				//$this->core->error->error(/*unexpected type*/);
-				$this->core->error->error('server', '403');
+				//FIXME: $this->core->error->error(/*unexpected type*/);
+				$this->core->error->error('server', 403);
 				return $this->json(array(false));
 				break;
 		}
 		
 		if($err == 1)
 		{
-			$this->core->error->error('server', '404');
+			$this->core->error->error('server', 404);
 			return $this->json(array(false));
 		}
 		
@@ -171,7 +171,7 @@ class api_user extends api
 		$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 		if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 		{
-			$this->core->error->error('server', '403');
+			$this->core->error->error('server', 403);
 			return $this->json(array(false));
 		}
 		
@@ -183,7 +183,7 @@ class api_user extends api
 			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1)
 			{
-				$this->core->error->error('server', '404');//replace
+				$this->core->error->error('server', 404);//replace
 				return $this->json(array(false));
 			}
 			
@@ -222,7 +222,7 @@ class api_user extends api
 			$q = $this->core->mysql->query("SELECT * FROM users WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1 AND ($status!=0 AND $status!=2))
 			{
-				$this->core->error->error('server', '404');//replace
+				$this->core->error->error('server', 404);//replace
 				return $this->json(array(false));
 			}
 			
@@ -249,7 +249,7 @@ class api_user extends api
 			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1)
 			{
-				$this->core->error->error('server', '404');//replace
+				$this->core->error->error('server', 404);//replace
 				return $this->json(array(false));
 			}
 			
@@ -269,7 +269,7 @@ class api_user extends api
 		}
 		else
 		{
-			$this->core->error->error('server', '404');//replace
+			$this->core->error->error('server', 404);//replace
 			return $this->json(array(false));
 		}
 	}

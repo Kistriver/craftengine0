@@ -24,7 +24,7 @@ class api_article extends api
 		$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
-		if(!$r and $type=='unpublished'){$this->core->error->error('server','403');return $this->json(array(false));}
+		if(!$r and $type=='unpublished'){$this->core->error->error('server',403);return $this->json(array(false));}
 		$access = 0;
 		if($r)$access++;
 		if($type=='unpublished')$access++;
@@ -39,8 +39,8 @@ class api_article extends api
 		//if($page>$pages)$page=$pages;
 		//if($page<1)$page=1;
 		$cl=0;
-		if($page>$pages){$cl=1;$this->core->error->error('server','404');}
-		if($page<1){$cl=1;$this->core->error->error('server','404');}
+		if($page>$pages){$cl=1;$this->core->error->error('server',404);}
+		if($page<1){$cl=1;$this->core->error->error('server',404);}
 		if($cl==1)return $this->json(array(false));
 		
 		$from_post = ($page - 1)*$limit;
@@ -148,7 +148,7 @@ class api_article extends api
 		}
 		else
 		{
-			$this->core->error->error('server','404');
+			$this->core->error->error('server',404);
 			return $this->json(array(false));
 		}
 		
@@ -181,7 +181,7 @@ class api_article extends api
 						}
 						else
 						{
-							$this->core->error->error('article','000');
+							$this->core->error->error('plugin_article_article',0);
 							return $this->json(array(false));
 						}
 					}
@@ -198,7 +198,7 @@ class api_article extends api
 						$r = $this->core->mysql->query("SELECT * FROM articles_new WHERE user='$user' and title='$title' and time='$time'");
 						if($this->core->mysql->rows($r)!=1)
 						{
-							$this->core->error->error('article','001');
+							$this->core->error->error('plugin_article_article',1);
 							return $this->json(array(false));
 						}
 						$r = $this->core->mysql->fetch($r);
@@ -222,22 +222,22 @@ class api_article extends api
 					}
 					else
 					{
-						$this->core->error->error('article','002');
+						$this->core->error->error('plugin_article_article',2);
 					}
 				}
 				else
 				{
-					$this->core->error->error('article','003');
+					$this->core->error->error('plugin_article_article',3);
 				}
 			}
 			else
 			{
-				$this->core->error->error('server','403');
+				$this->core->error->error('server',403);
 			}
 		}
 		else
 		{
-			$this->core->error->error('server','403');
+			$this->core->error->error('server',403);
 		}
 		return $this->json(array(false));
 	}
@@ -287,22 +287,22 @@ class api_article extends api
 					}
 					else
 					{
-						$this->core->error->error('server','404');
+						$this->core->error->error('server',404);
 					}
 				}
 				else
 				{
-					$this->core->error->error('server','404');
+					$this->core->error->error('server',404);
 				}
 			}
 			else
 			{
-				$this->core->error->error('server','403');
+				$this->core->error->error('server',403);
 			}
 		}
 		else
 		{
-			$this->core->error->error('server','403');
+			$this->core->error->error('server',403);
 		}
 		return $this->json();
 	}
@@ -335,7 +335,7 @@ class api_article extends api
 						}
 						else
 						{
-							$this->core->error->error('article','000');
+							$this->core->error->error('plugin_article_article',0);
 							return;
 						}
 					}
@@ -345,7 +345,7 @@ class api_article extends api
 						$art_is = $this->core->mysql->query("SELECT * FROM articles WHERE id='$post_id'");
 						if($this->core->mysql->rows($art_is)!=1)
 						{
-							$this->core->error->error('server','403');
+							$this->core->error->error('server',403);
 							return $this->json();
 						}
 						
@@ -354,7 +354,7 @@ class api_article extends api
 						$r = $this->core->mysql->query("SELECT * FROM articles WHERE user='$user' and title='$title' and time='$time'");
 						if($this->core->mysql->rows($r)!=1)
 						{
-							$this->core->error->error('article','001');
+							$this->core->error->error('plugin_article_article',1);
 							return $this->json();
 						}
 						
@@ -386,22 +386,22 @@ class api_article extends api
 					}
 					else
 					{
-						$this->core->error->error('article','002');
+						$this->core->error->error('plugin_article_article',2);
 					}
 				}
 				else
 				{
-					$this->core->error->error('article','003');
+					$this->core->error->error('plugin_article_article',3);
 				}
 			}
 			else
 			{
-				$this->core->error->error('server','403');
+				$this->core->error->error('server',403);
 			}
 		}
 		else
 		{
-			$this->core->error->error('server','403');
+			$this->core->error->error('server',403);
 		}
 		
 		$post = array(
@@ -431,7 +431,7 @@ class api_article extends api
 					}
 					else
 					{
-						$this->error('server','403');
+						$this->error('server',403);
 					}
 					break;
 					
@@ -442,7 +442,7 @@ class api_article extends api
 					}
 					else
 					{
-						$this->error('server','403');
+						$this->error('server',403);
 					}
 					break;
 					
@@ -453,7 +453,7 @@ class api_article extends api
 					}
 					else
 					{
-						$this->error('server','403');
+						$this->error('server',403);
 					}
 					break;
 				}
@@ -461,7 +461,7 @@ class api_article extends api
 		}
 		else
 		{
-			$this->error('server','403');
+			$this->error('server',403);
 		}
 		
 		$status = array(

@@ -10,7 +10,8 @@
 	{
 		"user":["self"],
 		"rank":["self"],
-		"core":["core","replacement"]
+		"core":["core","replacement"],
+		"errors":["self"]
 	},
 	"api":
 	[
