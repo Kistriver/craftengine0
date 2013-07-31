@@ -34,8 +34,8 @@ class error
 	//Добавление ошибки PHP
 	public function error_php($code,$msg,$file,$line)
 	{
-		$file_fr = str_replace('/api/system/core','',dirname(__FILE__));
-		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
+		$file_fr = str_replace('/system/core','',dirname(__FILE__));
+		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}/',$file);
 		
 		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine',3);
 		else $this->error[] = array('engine',3,"[$code][$file:$line]$msg");

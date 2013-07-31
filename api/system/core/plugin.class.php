@@ -265,7 +265,7 @@ class plugin
 		{
 			$fi = $this->root.$folder.'/core/'.$class.'.class.php';
 			if(file_exists($fi))
-			include_once($fi);
+			require_once($fi);
 			
 			if(class_exists('plugin_'.$config->name.'_'.$class))
 			{
@@ -426,7 +426,7 @@ class plugin
 	 */
 	public function lib($lib)
 	{
-		include_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
+		require_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
 	}
 }
 ?>

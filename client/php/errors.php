@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__).'/../system/core/include.php');
+require_once(dirname(__FILE__).'/../system/core/include.php');
 
 if(!empty($_GET['code']))
 {

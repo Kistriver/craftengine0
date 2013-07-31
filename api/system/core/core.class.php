@@ -11,7 +11,7 @@ class core
 	final function __construct()
 	{
 		//Подключение модуля ядра timer
-		include_once(dirname(__FILE__)."/". "timer" .".class.php");
+		require_once(dirname(__FILE__)."/". "timer" .".class.php");
 		
 		//Вызов модуля
 		$this->timer = new timer($this);
@@ -30,7 +30,7 @@ class core
 		{
 			echo $e->getMessage()."\r\n";
 			echo "#Trace: \r\n";
-			$rm = str_replace('api/system/core','',dirname(__FILE__));
+			$rm = str_replace('/system/core','',dirname(__FILE__));
 			
 			foreach($e->getTrace() as $tr)
 			{
@@ -55,7 +55,7 @@ class core
 		for($i=0;$i<sizeof($includes);$i++)
 		{
 			//Подключение модулей ядра
-			include_once(dirname(__FILE__)."/". $includes[$i] .".class.php");
+			require_once(dirname(__FILE__)."/". $includes[$i] .".class.php");
 			
 			//Вызов модулей
 			$this->$includes[$i] = new $includes[$i]($this);

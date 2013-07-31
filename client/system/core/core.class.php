@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__).'/../confs/conf.php');
+require_once(dirname(__FILE__).'/../confs/conf.php');
 class core
 {
 	public	$root = API_ADDRESS,

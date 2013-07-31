@@ -8,10 +8,10 @@ if(isset($_GET['method']))
 	if(!preg_match('/^[a-z_-]{1,25}\.[a-z0-9_-]{1,25}$/',$m_f))die('Method error: doesn\'t exists');
 	$m_f = explode('.',$m_f);
 	
-	include_once(dirname(__FILE__)."/system/core/core.class.php");
+	require_once(dirname(__FILE__)."/system/core/core.class.php");
 	$core = new core();
 	
-	include_once(dirname(__FILE__)."/system/core/api.class.php");
+	require_once(dirname(__FILE__)."/system/core/api.class.php");
 	$api = new api($core,$m_f[0],$m_f[1]);
 }
 else

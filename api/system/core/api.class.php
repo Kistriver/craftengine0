@@ -30,7 +30,7 @@ class api
 	{
 		if(empty($core))
 		{
-			include_once(dirname(__FILE__)."/core.class.php");
+			require_once(dirname(__FILE__)."/core.class.php");
 			$core = new core();
 		}
 		
@@ -59,9 +59,9 @@ class api
 				}
 				
 				if(empty($plugin))
-				include_once(dirname(__FILE__)."/../../".$module.".class.php");
+				require_once(dirname(__FILE__)."/../../".$module.".class.php");
 				else
-				include_once(dirname(__FILE__)."/../plugins/".$plugin."/api/".$module.".class.php");
+				require_once(dirname(__FILE__)."/../plugins/".$plugin."/api/".$module.".class.php");
 				
 				$cl_n = "api_" . $module;
 				$class = new $cl_n($core);

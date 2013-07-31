@@ -2,7 +2,7 @@
 
 DIE();
 
-include_once(dirname(__FILE__)."/../system/core/core.class.php");
+require_once(dirname(__FILE__)."/../system/core/core.class.php");
 $core = new core();
 set_time_limit(0);
 $user = new user($core);
