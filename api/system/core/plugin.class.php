@@ -40,6 +40,10 @@ class plugin
 		
 		if(!empty($_GET['about']))die('CRAFTEngine Framework by Alexey Kachalov');
 		
+		ksort($this->pluginsExist,SORT_STRING);
+		ksort($this->pluginsIncluded,SORT_STRING);
+		ksort($this->pluginsLoaded,SORT_STRING);
+		
 		$this->core->timer->mark('plugin.class.php/__construct');
 	}
 	
