@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors',"1");
+ini_set('display_startup_errors',"1");
+ini_set('log_errors',"1");
+
 /**
  * @package core
  * @copyright Alexey Kachalov <alex-kachalov@mail.ru>
@@ -18,7 +22,6 @@ class core
 		
 		$this->timer->start();
 		
-		error_reporting(0);
 		ob_start();
 		
 		try
@@ -66,6 +69,8 @@ class core
 		//Подключение БД
 		$this->mysql->connect('site');
 		$this->timer->mark('ConnectToDb');
+		
+		
 	}
 	
 	/**
@@ -146,12 +151,17 @@ class core
 			$time = time() - $updatetime - 10;
 		}
 		
-		if($time<time()-$updatetime)
+		if($time<time()-$updatetime or true===true)
 		{
 			$context = stream_context_create();
-			$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
-			//stream_socket_client('tcp://localhost:8081/system-scripts/update.php', $ErrNo, $ErrStr, 0.1);
+			//$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
+			//$answer = fopen('http://localhost:8081/system-scripts/update.php', 'r', false);
 			
+			//TODO: доделать, разобраться с таймаутом, вынести адрес в конфиг
+			$answer = fsockopen("localhost", 8081);
+			stream_set_timeout($answer, 0, 10);
+			fwrite($answer, "GET /system-scripts/update.php HTTP/1.0\r\n\r\n");
+			//print_r(fread($answer, 2000));
 			
 			/*$data = time();
 			$data = base64_encode($data);
