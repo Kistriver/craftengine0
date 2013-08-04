@@ -98,12 +98,20 @@ class core
 		}
 		
 		if(!empty($this->answer_decode['error']))
-		$this->errors[] = array('01003',$this->answer_decode['error']);
+		$this->errors[] = $this->answer_decode['error'];
 		
 		if(sizeof($this->answer_decode['errors'])!=0)
 		foreach ($this->answer_decode['errors'] as $er)
 		{
-			$this->errors[] = $er;
+			//$this->errors[] = $er;
+			if(is_array($er[2]))
+			{
+				$this->errors[] = "[".$er[2][2].":".$er[2][3]."] ".$er[2][1]." #".$er[2][0]."";
+			}
+			else
+			{
+				$this->errors[] = $er[2]." #".$er[0]."-".$er[1];
+			}
 		}
 		
 		if(sizeof($this->answer_decode['errors'])==1)

@@ -57,7 +57,7 @@ d.addEventListener("DOMContentLoaded", f, false);
 
 <link rel="shortcut icon" href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/favicon.ico"/>
 <title>
-{%block title%} | KachalovCRAFT NET{%endblock%}
+{%block title%} | {{MAIN.TITLE}}{%endblock%}
 </title>
 </head>
 <body>
@@ -141,7 +141,7 @@ Large company for large people
 <div style="margin: 3px;">
 {%for error in MAIN.ERRORS%}
 <div style="margin: 2px /*0*/3px; padding: 5px; border: solid 1px #C60000; color: #EE3355; background: #FFB7B7; min-width: /*98*/97%; left: 0px;">
-[{{error[0]}}]{%if error[1] is defined%}[{{error[1]}}]{%endif%}<br />
+{{error}}<br />
 </div>
 {%endfor%}
 {%for success in MAIN.SUCCESS%}
@@ -174,7 +174,7 @@ Large company for large people
 <div class="copyright">
 <!--/*Условия пользовательского соглашения<br />
 <br />*/-->
-Powered by <a href="http://vk.com/craftengine">CRAFTEngine</a><br />
+Powered by <a target="_blank" href="http://vk.com/craftengine">CRAFTEngine</a><br />
 KachalovCRAFT NET © 2011 - {{"now"|date('Y')}}<br />
 {{MAIN.VERSION}}<br />
 </div>

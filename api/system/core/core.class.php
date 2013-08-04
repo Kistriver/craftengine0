@@ -2,6 +2,7 @@
 ini_set('display_errors',"1");
 ini_set('display_startup_errors',"1");
 ini_set('log_errors',"1");
+ini_set('html_errors',"0");
 
 /**
  * @package core
@@ -29,7 +30,7 @@ class core
 			if(defined('CORECALLONCE'))
 			throw new Exception("CORE MAY BE CALLED ONLY ONCE", 1);
 		}
-		catch(exception $e)
+		catch(Exception $e)
 		{
 			echo $e->getMessage()."\r\n";
 			echo "#Trace: \r\n";
@@ -46,7 +47,7 @@ class core
 		if(!defined('CORECALLONCE'))
 		define('CORECALLONCE', true);
 		
-		$includes = array(//'timer', //ALREADY INCLUDED
+		$includes = array(//'timer', 		//Подсчёт времени выполнения скрипта	//ALREADY INCLUDED
 							'file',			//Файлы
 							'conf',			//Конфигурации
 							'error',		//Ошибки
@@ -63,14 +64,7 @@ class core
 			//Вызов модулей
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
-		
 		$this->timer->mark('IncludeCoreModules');
-		
-		//Подключение БД
-		$this->mysql->connect('site');
-		$this->timer->mark('ConnectToDb');
-		
-		
 	}
 	
 	/**
@@ -105,8 +99,11 @@ class core
 			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*/
 			'content' => $data,
 		),));
-		//$answer = @file_get_contents('http://178.140.61.70/new/www/api/?method=stat.add',false,$context);
-		//$answer = @fopen('http://178.140.61.70/new/www/api/?method=stat.add','rb',false,$context);
+		/*$answer = fsockopen("178.140.61.70", 80);
+		stream_set_timeout($answer, 0, 10);
+		fwrite($answer, "GET /api/?method=stat.add HTTP/1.0\r\n\r\n");*/
+		//print_r(fread($answer, 2000));
+		
 		$answer = false;
 		
 		if($answer)$this->stat = true;
@@ -151,7 +148,7 @@ class core
 			$time = time() - $updatetime - 10;
 		}
 		
-		if($time<time()-$updatetime or true===true)
+		if($time<time()-$updatetime)
 		{
 			$context = stream_context_create();
 			//$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
@@ -163,13 +160,13 @@ class core
 			fwrite($answer, "GET /system-scripts/update.php HTTP/1.0\r\n\r\n");
 			//print_r(fread($answer, 2000));
 			
-			/*$data = time();
+			$data = time();
 			$data = base64_encode($data);
 			$data = unpack('c*',$data);
 			$data = serialize($data);
 			$data = base64_encode($data);
 			
-			file_put_contents($file, $data);*/
+			file_put_contents($file, $data);
 		}
 		$this->timer->mark('core.class.php/update');
 	}

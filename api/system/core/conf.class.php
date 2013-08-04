@@ -40,6 +40,7 @@ class conf
 				
 				$conf = $this->core->file->get_all_file($root.$params['name']);
 				$conf = json_decode($conf, true);
+				//print_r(json_last_error());echo JSON_ERROR_SYNTAX."<-".$params['name'];
 				$conf = (object)$conf;
 				
 				if($params['write'])

@@ -38,7 +38,7 @@ class error
 		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}/',$file);
 		
 		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine',3);
-		else $this->error[] = array('engine',3,"[$code][$file:$line]$msg");
+		else $this->error[] = array('engine',3,array($code,$msg,$file,$line));
 		if($this->core->conf->system->core->send_mail_report)
 		$this->core->mail->add_waiting_list(
 		$this->core->conf->system->core->admin_mail, 

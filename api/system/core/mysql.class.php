@@ -16,6 +16,9 @@ class mysql
 	{
 		$this->core = $core;
 		
+		//Подключение БД
+		$this->connect('site');
+		
 		$this->core->timer->mark('mysql.class.php/__construct');
 	}
 	
