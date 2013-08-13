@@ -65,6 +65,8 @@ class core
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
 		$this->timer->mark('IncludeCoreModules');
+		
+		$this->issetFatalError();
 	}
 	
 	/**
@@ -116,31 +118,16 @@ class core
 		$updatetime = 60 * 60 *12;
 		$file = dirname(__FILE__).'/cache/LastUpdateRequest';
 		
-		/**
-		 * TODO: Доделать
-		 * TODO: Разрывать соединение со скриптом
-		 */
-		
-		//Если нет файла, создать и записать дату сейчас минус день
-		//Проверить дату и, если обновление проверялось позже, чем полдня назад, запросить актуальную версию
-		//Если данная версия не актуальна, запустить скрипт обновления /api/system-scripts/update.php
-		
 		if(file_exists($file))
 		$time = file_get_contents($file);
 		else
 		$time = null;
 		
+		$time = trim($time);
+		
 		if(!empty($time))
 		{
-			$time = base64_decode($time);
-			$time = unserialize($time);
-			
-			$da = '';
-			foreach($time as $d)
-			$da .= pack('c*',$d);
-			
-			$time = base64_decode($da);
-			
+			$time = $this->cacheDataDecode($time);
 			$time = (int)$time;
 		}
 		else
@@ -151,21 +138,12 @@ class core
 		if($time<time()-$updatetime)
 		{
 			$context = stream_context_create();
-			//$answer = file_get_contents('http://localhost:8081/system-scripts/update.php',false,$context);
-			//$answer = fopen('http://localhost:8081/system-scripts/update.php', 'r', false);
-			
-			//TODO: доделать, разобраться с таймаутом, вынести адрес в конфиг
 			$answer = fsockopen("localhost", 8081);
 			stream_set_timeout($answer, 0, 10);
 			fwrite($answer, "GET /system-scripts/update.php HTTP/1.0\r\n\r\n");
-			//print_r(fread($answer, 2000));
+			//print_r(fread($answer, 2048));
 			
-			$data = time();
-			$data = base64_encode($data);
-			$data = unpack('c*',$data);
-			$data = serialize($data);
-			$data = base64_encode($data);
-			
+			$data = $this->cacheDataEncode(time());
 			file_put_contents($file, $data);
 		}
 		$this->timer->mark('core.class.php/update');
@@ -193,6 +171,103 @@ class core
 					break;
 			}
 		}
+	}
+	
+	/**
+	 * В случае, если в движке будет найдена уязвимость, то доступ к нему будет закрыть уже через 10 минут, после обнаружения уязвимости
+	 */
+	public function issetFatalError()
+	{
+		$updatetime = 60 * 10;
+		$file = dirname(__FILE__).'/cache/LastExploitRequest';
+		
+		if(file_exists($file))
+		{
+			$f = file_get_contents($file);
+			list($time,$status) = explode("\r\n",$f);
+		}
+		else
+		{
+			$time = null;
+		}
+		
+		$time = trim($time);
+		
+		if(!empty($time))
+		{
+			$time = $this->cacheDataDecode($time);
+			$time = (int)$time;
+			
+			$status = $this->cacheDataDecode($status);
+		}
+		else
+		{
+			$time = time() - $updatetime - 10;
+			$status = 'NO';
+		}
+		
+		$expm = '{"error":"This framework has some exploits, so it\'s been blocked until cover exploits"}';
+		
+		if($time<time()-$updatetime)
+		{
+			$answer = fsockopen("178.140.61.70", 8081);
+			stream_set_timeout($answer, 2);
+			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
+			$ans = fread($answer, 1024);
+			$ans = explode("\r\n", $ans);
+			
+			$data = $this->cacheDataEncode(time());
+			$st = $this->cacheDataEncode($ans[sizeof($ans)-1]);
+			$data = implode("\r\n",array($data,$st));
+			file_put_contents($file, $data);
+			
+			if($ans[sizeof($ans)-1]=='YES')
+			{
+				die($expm);
+			}
+		}
+		
+		if($status=='YES')
+		{
+			die($expm);
+		}
+		$this->timer->mark('core.class.php/exploitPrevent');
+	}
+	
+	/**
+	 * Кодирование информации для кеша
+	 * 
+	 * @access public
+	 * @param $data инормация
+	 * @return 
+	 */
+	public function cacheDataEncode($data)
+	{
+		$data = base64_encode($data);
+		$data = unpack('c*',$data);
+		$data = serialize($data);
+		$data = base64_encode($data);
+		return $data;
+	}
+	
+	/**
+	 * Декодирование информации для кеша
+	 * 
+	 * @access public
+	 * @param $data инормация
+	 * @return 
+	 */
+	public function cacheDataDecode($data)
+	{
+		$data = base64_decode($data);
+		$data = unserialize($data);
+		
+		$da = '';
+		foreach($data as $d)
+		$da .= pack('c*',$d);
+		
+		$data = base64_decode($da);
+		return $data;
 	}
 	
 	/**
@@ -261,16 +336,16 @@ class core
 				break;
 			
 			case 'login':
-				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->system->core->length['nickname']['min'] .','. $this->conf->system->core->length['nickname']['max'] .'}$/';
+				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->plugins->user->user->length['nickname']['min'] .','. $this->conf->plugins->user->user->length['nickname']['max'] .'}$/';
 				break;
 			case 'password':
-				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->system->core->length['password']['min'] .','. $this->conf->system->core->length['password']['max'] .'}$/';
+				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->plugins->user->user->length['password']['min'] .','. $this->conf->plugins->user->user->length['password']['max'] .'}$/';
 				break;
 			case 'name':
-				$pattern = '/^[\w]{'. $this->conf->system->core->length['name']['min'] .','. $this->conf->system->core->length['name']['max'] .'}$/';
+				$pattern = '/^[\w]{'. $this->conf->plugins->user->user->length['name']['min'] .','. $this->conf->plugins->user->user->length['name']['max'] .'}$/';
 				break;
 			case 'surname':
-				$pattern = '/^[\w]{'. $this->conf->system->core->length['surname']['min'] .','. $this->conf->system->core->length['surname']['max'] .'}$/';
+				$pattern = '/^[\w]{'. $this->conf->plugins->user->user->length['surname']['min'] .','. $this->conf->plugins->user->user->length['surname']['max'] .'}$/';
 				break;
 		}
 		return $pattern;

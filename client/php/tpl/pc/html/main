@@ -63,7 +63,7 @@ d.addEventListener("DOMContentLoaded", f, false);
 <body>
 <table class="main_table" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
 <tbody valign="top">
-{%if SYS.LOGGEDIN!=true%}
+{%if MAIN.TOPWARN.SHOW==true%}
 <tr>
 <td colspan="3" class="main_info" style="padding: 8px;
 /*box-shadow: inset 0 0 15px rgba(0,0,0,2);

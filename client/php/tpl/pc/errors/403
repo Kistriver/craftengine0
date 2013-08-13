@@ -1,4 +1,9 @@
-<center>
-<h1>403 - ACCESS DENIED</h1>
+{%extends "errors/main"%}
+
+{%block header%}403 - ACCESS DENIED{%endblock%}
+{%block content%}
+<p>
 <img src='http://kotomail.ru/sites/kotomail.ru/files/images/20111612194953.jpg' />
-</center>
+</p>
+{%if desc is defined%}<p>{{desc}}</p>{%endif%}
+{%endblock%}

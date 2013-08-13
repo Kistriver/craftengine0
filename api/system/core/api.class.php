@@ -38,9 +38,6 @@ class api
 		
 		if(!empty($module) AND !empty($function))
 		{
-			$f = $this->initalize();//Вызвать инициализацию ядра API
-			if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
-			
 			$mod = $core->conf->system->api->modules;
 			$pl = $core->conf->system->api->plugins;
 			
@@ -86,8 +83,8 @@ class api
 		else
 		{
 			if(method_exists($this,'init'))$this->init();//Если есть метод init, вызвать его
-			//$f = $this->initalize();//Вызвать инициализацию ядра API
-			//if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
+			$f = $this->initalize();//Вызвать инициализацию ядра API
+			if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
 		}
 		$this->core->timer->mark('api.class.php/__construct');
 	}

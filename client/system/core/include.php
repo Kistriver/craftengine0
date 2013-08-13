@@ -4,14 +4,17 @@ session_start();
 
 $_SESSION['sid'] = session_id().'php';
 
-function display($core, $twig, $num)
+function display($core, $twig, $num, $desc=null)
 {
 	$allow = array(403,404,500);
 	$key = array_search($num, $allow);
 	if(!isset($allow[$key]))die;
 	$template = $twig->loadTemplate('errors/'.$allow[$key]);
 	header('HTTP/1.1 '.$allow[$key]);
-	echo $template->render($core->render());
+	if(!empty($desc))
+	echo $template->render(array('desc'=>$desc));
+	else
+	echo $template->render(array());
 	die;
 }
 
@@ -43,8 +46,12 @@ $_SESSION['rank_main'] = '';
 
 $core->get('user.loggedin',array('sid'=>$_SESSION['sid']));
 $loggedin = $core->answer_decode;
+if(isset($loggedin['errors']))
+{
 if(sizeof($loggedin['errors'])==0)
+{
 $_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = $loggedin['data'][0];
+}
 else $_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = false;
 
 if($_SESSION['loggedin']==true)
@@ -67,6 +74,7 @@ else
 	$_SESSION['login'] = '';
 	$_SESSION['rank'] = '';
 	$_SESSION['rank_main'] = '';
+}
 }
 
 $core->render['SYS']['MENU']['LEFT'][] = 'menu';
@@ -100,9 +108,16 @@ try{
 require_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
 Twig_Autoloader::register(true);
 $loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../../php/tpl/'.$ver);
-$twig = new Twig_Environment($loader,array(/*'cache'=>dirname(__FILE__).'/../../system/tmp',*/'auto_reload'=>true,'autoescape'=>false));
+$twig = new Twig_Environment($loader,array('cache'=>dirname(__FILE__).'/../../system/tmp','auto_reload'=>true,'autoescape'=>false));
 }
 catch (Exception $e)
 {
 die('ERROR: ' . $e->getMessage());
+}
+
+if($core->_FatalError_)
+{
+	display($core, $twig, 500,$core->errors[0]);
+	//$template = $twig->loadTemplate('index/main');
+	//echo $template->render($core->render());
 }

@@ -8,6 +8,7 @@ class core
 			$answer_decode,
 			$errors = array(),
 			$render = array(),
+			$_FatalError_ = false,
 			$tpl;
 	
 	public function __construct()
@@ -27,6 +28,10 @@ class core
 				'ERRORS'=>$this->error(),
 				'SUCCESS',
 				'INFO',
+				'TOPWARN'=>array(
+					'SHOW'=>TOPWARN_SHOW,
+					),
+				'TOPINFO'=>array(TOPINFO_SHOW,TOPINFO),
 			),
 		);
 	}
@@ -98,54 +103,58 @@ class core
 		}
 		
 		if(!empty($this->answer_decode['error']))
-		$this->errors[] = $this->answer_decode['error'];
-		
-		if(sizeof($this->answer_decode['errors'])!=0)
-		foreach ($this->answer_decode['errors'] as $er)
 		{
-			//$this->errors[] = $er;
-			if(is_array($er[2]))
-			{
-				$this->errors[] = "[".$er[2][2].":".$er[2][3]."] ".$er[2][1]." #".$er[2][0]."";
-			}
-			else
-			{
-				$this->errors[] = $er[2]." #".$er[0]."-".$er[1];
-			}
+			$this->errors[] = $this->answer_decode['error'];
+			$this->_FatalError_ = true;
 		}
 		
-		if(sizeof($this->answer_decode['errors'])==1)
-		if($this->answer_decode['errors'][0][0]=='09003')
+		if(isset($this->answer_decode['errors']))
 		{
-		//echo 1;
-		#session_id($this->answer_decode['sid']);
-		#$_SESSION['sid'] = session_id().'php';
-		}
-		
-		//if(isset($_GET['debug']))$this->error('<br /><b>Request: </b><br /><pre>'.rawurldecode($this->url).'</pre><br /><br /><b>Answer: </b><br /><pre>'.$this->answer.'</pre><br />');
-		
-		if(SHOW_API_REQUESTS==true)
-		{
-			$times = array();
-			foreach($this->answer_decode['runtime'][1] as $t)
+			if(sizeof($this->answer_decode['errors'])!=0)
+			foreach ($this->answer_decode['errors'] as $er)
 			{
-				$prec = 0;
-				if($t[1]==0)
+				//$this->errors[] = $er;
+				if(is_array($er[2]))
+				{
+					$this->errors[] = "[".$er[2][2].":".$er[2][3]."] ".$er[2][1]." #".$er[2][0]."";
+				}
+				else
+				{
+					$this->errors[] = $er[2]." #".$er[0]."-".$er[1];
+				}
+			}
+			
+			if(sizeof($this->answer_decode['errors'])==1)
+			if($this->answer_decode['errors'][0][0]=='09003')
+			{
+			//echo 1;
+			#session_id($this->answer_decode['sid']);
+			#$_SESSION['sid'] = session_id().'php';
+			}
+			
+			if(SHOW_API_REQUESTS==true)
+			{
+				$times = array();
+				foreach($this->answer_decode['runtime'][1] as $t)
+				{
+					$prec = 0;
+					if($t[1]==0)
+					$prec = 0;
+					else
+					$prec = round($t[1]/$this->answer_decode['runtime'][0]*100,1);
+					
+					$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms ($prec%)";
+				}
+				
+				if($this->answer_decode['runtime'][2]==0)
 				$prec = 0;
 				else
-				$prec = round($t[1]/$this->answer_decode['runtime'][0]*100,1);
+				$prec = round($this->answer_decode['runtime'][2]/$this->answer_decode['runtime'][0]*100,1);
 				
-				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms ($prec%)";
+				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
+				
+				$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 			}
-			
-			if($this->answer_decode['runtime'][2]==0)
-			$prec = 0;
-			else
-			$prec = round($this->answer_decode['runtime'][2]/$this->answer_decode['runtime'][0]*100,1);
-			
-			$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
-			
-			$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 		}
 		
 		return $this->answer_decode;
@@ -155,7 +164,7 @@ class core
 	{
 		if(!empty($value))
 		{
-			$this->errors[] = array('local',$value);
+			$this->errors[] = $value;
 		}
 		else
 		{

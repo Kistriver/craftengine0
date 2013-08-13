@@ -1,4 +1,9 @@
-<center>
-<h1>404 - NOT FOUND</h1>
+{%extends "errors/main"%}
+
+{%block header%}404 - NOT FOUND{%endblock%}
+{%block content%}
+<p>
 <img src='http://farm8.staticflickr.com/7172/6508022985_b7862b580a_o.jpg' />
-</center>
+</p>
+{%if desc is defined%}<p>{{desc}}</p>{%endif%}
+{%endblock%}

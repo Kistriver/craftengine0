@@ -11,7 +11,8 @@
 		"1":"Ошибка при создании ошибки",
 		"2":"Ошибка при создании ошибки",
 		"3":"PHP error",
-		"4":"Hack attempt"
+		"4":"Hack attempt",
+		"5":"Exploit discovered"
 	},
 		
 	"mysql":
