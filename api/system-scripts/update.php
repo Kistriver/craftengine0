@@ -15,12 +15,12 @@ ignore_user_abort(1);
 for ($i=0; $i < 1000000; $i++) { 
 	md5(sha1(md5(sha1($i))));
 }
-
+/*
 $data = time();
 $data = base64_encode($data);
 $data = unpack('c*',$data);
 $data = serialize($data);
 $data = base64_encode($data);
 
-file_put_contents(dirname(__FILE__).'/../system/core/cache/LastUpdateRequest', $data);
+file_put_contents(dirname(__FILE__).'/../system/core/cache/LastUpdateRequest', $data);*/
 ?>

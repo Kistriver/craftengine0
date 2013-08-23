@@ -1,0 +1,33 @@
+{
+	"api":
+	{
+		"url":"http:\/\/178.140.61.70:8081\/"
+	},
+	"core":
+	{
+		"tech":"0",
+		"admin_ip":["127.0.0.1"],
+		"errors":
+		{
+			"api":true,
+			"client":true
+		},
+		"detailed_req":false
+	},
+	"twig":
+	{
+		"ver":"pc",
+		"cache":false,
+		"reload":true,
+		"escape":false
+	},
+	"tpl":
+	{
+		"client_name":"KachalovCRAFT NET",
+		"root":"\/php\/",
+		"root_http":"\/",
+		"client_host":"http:\/\/localhost\/",
+		"client_keywords":"KachalovCRAFT NET, Minecraft",
+		"client_desc":"Look at my site, my site is amazing! Give it a lick..."
+	}
+}

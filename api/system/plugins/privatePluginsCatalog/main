@@ -1,0 +1,25 @@
+{
+	"author":"Kachalov",
+	"version":"1.0.0_alpha",
+	"web":"http://vk.com/craftengine",
+	"id":"",
+	"name":"pluginsCatalog",
+	"loadClass":"",
+	"description":"Каталог плагинов. Плагин не для паблика.",
+	"confs":
+	{
+		
+	},
+	"api":
+	[
+		"catalog"
+	],
+	"requires":
+	[
+		
+	],
+	"permissions":
+	[
+		
+	]
+}
