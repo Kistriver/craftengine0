@@ -1,42 +1,19 @@
-<!--=======================================================-->
-<!--        WHAT THE FUCKING ARE YOU DOING THERE?          -->
-<!--             GET THE FUCKING OUT, BITCH!               -->
-<!--                                                       -->
-<!--                              With love, your site :3  -->
-<!--=======================================================-->
-
-
-
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html style="height: 100%;">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{{MAIN.KEYWORDS}}" />
 <meta name="description" content="{{MAIN.DESC}}" />
 <meta name="author" lang="ru" content="Алексей Качалов" />
 <meta name="document-state" content="Dynamic" />
-<!--/*<meta property="og:image" content="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/logo.png" />*/-->
 <link rel="image_src" href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/logo.png" />
 <!--/* INCLUDED CSS */-->
-{%block css%}{%endblock%}
-<link href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/css/main.css" rel="stylesheet" type="text/css" />
-<link href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/css/buttons.css" rel="stylesheet" type="text/css" />
-<link href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/css/menu.css" rel="stylesheet" type="text/css" />
-<link href="{{MAIN.ROOT}}tpl/{{MAIN.V}}/css/signup.css" rel="stylesheet" type="text/css" />
-<style type="text/css">
-.copyright
-{
-background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/lite1.png');
-}
-textarea
-{
-background-image: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/slashes-small.png');
-}
-</style>
-
+{%block css%}{%endblock%}<!--cosmo,cyborg,flatly,spacelab,united-->
+<link href="http://bootswatch.com/cosmo/bootstrap.css" rel="stylesheet" media="screen">
 <!--/* INCLUDED JS */-->
 {%block js%}{%endblock%}
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/bootstrap/js/bootstrap.js"></script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function (d, w, c) {
@@ -70,132 +47,199 @@ d.addEventListener("DOMContentLoaded", f, false);
 {%block title%} | {{MAIN.TITLE}}{%endblock%}
 </title>
 </head>
-<body>
-<table class="main_table" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
-<tbody valign="top">
-{%if MAIN.TOPWARN.SHOW==true%}
-<tr>
-<td colspan="3" class="main_info" style="padding: 8px;
-/*box-shadow: inset 0 0 15px rgba(0,0,0,2);
-padding-top: /*15px*/; background-color: #F94A11; color: white;
-background-image: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/slashes-red.png');
-">
-<h3>
-<a style="color: white;" href="http://178.140.61.70:8080/articles/post_10_1">
-CRAFTEngine<img src="http://www.iconsearch.ru/uploads/icons/humano2/16x16/emblem-symbolic-link.png" alt="" />
-</a>
-</h3>
-<h4>
-В данный момент пишется новый движок сайта. Подробности <a href="http://178.140.61.70:8080/articles/post_10_1">здесь</a>.
-</h4>
-</td>
-</tr>
-{%endif%}
-<tr>
-<td colspan="3" class="hat">
-<div class="hat_div" style="background: 
-{%if SYS.LOGGEDIN==true%}url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/slashes-red.png')
-{%else%}url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/slashes-grey.png'){%endif%} grey;">
-<!--/* ШАПКА */-->
-<!--/* BACKGROUND */-->
-<!--/* SEARCH */-->
-{%include "/html/search"%}
-<!--/* SEARCH */-->
-<!--/* LOGIN */-->
-{%include "/html/login"%}
-<!--/* LOGIN */-->
-<div class="groups" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
+<body style="height: 100%; margin: 0px; padding: 0px;">
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="{{MAIN.ROOT_HTTP}}">{{MAIN.NAME}}</a>
+</div>
+
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+<ul class="nav navbar-nav">
+<li><a href="{{MAIN.ROOT_HTTP}}signup">Регистрация</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Меню <b class="caret"></b></a>
+<ul class="dropdown-menu">
+{%for menu in NAVMENU%}
+<li /*class="active"*/><a href="{{MAIN.ROOT_HTTP}}{{menu['1']}}">{{menu['0']}}</a></li>
+{%endfor%}
+</ul>
+</li>
+</ul>
+<form class="navbar-form navbar-left" role="search">
+<div class="form-group">
+<input type="text" class="form-control" placeholder="Поиск">
+</div>
+<button type="submit" class="btn btn-success">Поехали</button>
+</form>
+<ul class="nav navbar-nav navbar-right">
+<li><a href="{{MAIN.ROOT_HTTP}}login">Вход</a></li>
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Username <b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li><a href="{{MAIN.ROOT_HTTP}}profile">Настройки</a></li>
+<li><a href="{{MAIN.ROOT_HTTP}}logout">Выход</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<br /><br />
+
 <center>
-<a href="https://www.facebook.com/groups/kachalovcraft/" target="_blank"><img alt="facebook" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/facebook.png" /></a>
-<a href="https://twitter.com/KachalovCRAFT" target="_blank"><img alt="twitter" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/twitter.png" /></a>
-<a href="http://vk.com/kcraft" target="_blank"><img alt="vkontakte" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/vkontakte.png" /></a>
+<div id="myCarousel" class="carousel slide">
+<div class="carousel-inner">
+
+<div class="active item">
+<div class="carousel-caption">
+<h4>Игровые сервера</h4>
+<p>Имеется несколько игровых серверов</p>
+</div>
+<img src="http://178.140.61.70/php/tpl/pc/img/index/3.png" style="height:550px" />
+</div>
+
+<div class="item">
+<img src="http://www.ybs.gen.tr/wp-content/uploads/2012/10/php-logo.jpg" style="height:550px" />
+<div class="carousel-caption">
+<h4>Самописный сайт</h4>
+<p>Его Вы также можете скачать</p>
+</div>
+</div>
+
+<div class="item">
+<img src="http://cs418222.vk.me/v418222634/825f/Td0Z5NabsQ4.jpg" style="height:550px" />
+<div class="carousel-caption">
+<h4>Большие перспективы</h4>
+<p>2 года мы с Вами</p>
+</div>
+</div>
+
+</div>
+<a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-right"></span></a>
+<a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-left"></span></a>
+</div>
 </center>
-</div>
-<!--/* BACKGROUND */-->
-<!--/* LOGOTYPE */-->
-<span class="logo">
-<a href="{{MAIN.ROOT_HTTP}}">
-<img alt="logotype" style="width: 100%;" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/logo.png" />
-</a>
-</span>
-<div class="slogan" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
-Large company for large people
-</div>
-<!--/* LOGOTYPE */-->
-<!--/* ШАПКА */-->
-</div>
-</td>
-</tr>
-<!--/*
-<tr>
-<td colspan="3" class="branches">
-РАЗДЕЛЫ
-</td>
-</tr>*/-->
-<tr>
-<td class="menu">
-<!--/* МЕНЮ */-->
-{%for menu in SYS.MENU.LEFT%}
+
+<div style="margin: 0px; padding: 30px 45px 0;">
+<div class="row">
+
+<div class="col-md-3" style="/*background: #F0F0FA;*/">
+{%for menu in MAIN.MENU%}
 {%include "html/menus/" ~ menu%}
 {%endfor%}
-<!--/* МЕНЮ */-->
-</td>
-<td class="content">
-<div class="header">
-<h1 style="word-wrap: break-word;">
-<!--/* ЗАГОЛОВОК */-->
-{%block header%}Untitled{%endblock%}
-<!--/* ЗАГОЛОВОК */-->
-</h1>
 </div>
-<div style="margin: 3px;">
+
+<div class="col-md-9" style="background: #FAFAF0;">
+<h1><ol class="breadcrumb">{%block header%}<li><a href="#root">Root</a></li><li class="active">Untitled</li>{%endblock%}</ol></h1>
+
 {%for error in MAIN.ERRORS%}
-<div style="margin: 2px /*0*/3px; padding: 5px; border: solid 1px #C60000; color: #EE3355; background: #FFB7B7; min-width: /*98*/97%; left: 0px;">
+<div class="alert alert-danger">
 {{error}}<br />
 </div>
 {%endfor%}
 {%for success in MAIN.SUCCESS%}
-<div style="margin: 2px 3px; padding: 5px; border: solid 1px #63982f; color: #40631e; background: #9dd666; min-width: 97%; left: 0px;">
+<div class="alert alert-success">
 {{success}}<br />
 </div>
 {%endfor%}
 {%for info in MAIN.INFO%}
-<div style="margin: 2px 3px; padding: 5px; border: solid 1px #676767; color: #3f3e3e; background: #c3c2c1; min-width: 97%; left: 0px;">
+<div class="alert alert-info">
 {{info}}<br />
 </div>
 {%endfor%}
-<div style="margin: 3px;">
+
 {%block content%}MAIN PAGE{%endblock%}
 </div>
+
 </div>
-</td>
-<td class="ads">
-<!--/* РЕКЛАМА */-->
-{%for menu in SYS.MENU.RIGHT%}
-{%include "html/menus/" ~ menu%}
-{%endfor%}
-<!--/* РЕКЛАМА */-->
-</td>
-</tr>
-<tr>
-<td colspan="3" class="footer" style="background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/slashes-grey.png') grey;">
-<!--/* ПОДВАЛ */-->
-<center>
-<div class="copyright">
-<!--/*Условия пользовательского соглашения<br />
-<br />*/-->
-Powered by <a target="_blank" href="http://vk.com/craftengine">CRAFTEngine</a><br />
-KachalovCRAFT NET © 2011 - {{"now"|date('Y')}}<br />
-{{MAIN.VERSION}}<br />
 </div>
-</center>
-<!--/* ПОДВАЛ */-->
-<div style="border-radius: 3px 0 0; font-size: 18px; font-weight: bolder; position: fixed; bottom: 0px; right: 0px; padding: 7px; background: url('{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/main/white.png') #f9f9f9;">
-16+
+
+<div style="position: relative; clear:both; padding-top:20px; background: #FAF0F0; font-size: 12px;">
+<p style="margin: 15px;">CRAFTEngine is a trademark of KachalovCRAFT. All rights reserved.</p>
+<div class="row" style="margin: 0px;">
+<div class="col-md-1"></div>
+<div class="col-md-2" style="">
+<b>What is CRAFTEngine?</b><br />
+
+Elevator Pitches<br />
+Case Studies<br />
+Versioning Policy<br />
+Long Term Support<br />
+Security Policy<br />
+License<br />
 </div>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="col-md-2" style="">
+
+<b>Get Started</b><br />
+
+Download<br />
+Roadmap<br />
+Distributions<br />
+Components<br />
+Quick Tour<br />
+CRAFTEngine Legacy<br /><br />
+
+<b>Learn CRAFTEngine</b><br />
+
+The Book<br />
+The Cookbook<br />
+The Components<br />
+Reference<br />
+Glossary<br />
+Index<br />
+Bundles<br />
+CMF<br />
+Security Advisories<br />
+Docs for CRAFTENgine<br />
+Contributing<br />
+Talks<br />
+Trainings<br />
+Books<br />
+</div>
+<div class="col-md-2" style="">
+<b>Services</b><br />
+
+Our services<br />
+Starting a new project<br />
+Struggling with your project<br />
+Support<br />
+Contact us<br />
+</div>
+<div class="col-md-2" style="">
+<b>Blog</b><br />
+
+Community Events<br />
+Call the expert<br />
+Case studies<br />
+Community<br />
+Documentation<br />
+Living on the edge<br />
+Plugins<br />
+Releases<br />
+Security Advisories<br />
+Tutorials<br />
+</div>
+<div class="col-md-2" style="">
+<b>About</b><br />
+
+SensioLabs<br />
+Contributors<br />
+Trademark & Logo Policy<br />
+Logo<br />
+Jobs<br />
+</div>
+<div class="col-md-1"></div>
+</div>
+<br /><br />
+</div>
+
 </body>
 </html>

@@ -40,11 +40,11 @@ class core
 				'ROOT_HTTP'=>$ccc->root_http,
 				'HOST'=>$ccc->client_host,
 				'V'=>$cc->twig->ver,
-				'ERRORS'=>$this->error->error(),
+				'ERRORS',
 				'SUCCESS',
 				'INFO',
 			),
-		);
+		);print_r($this->error->error());
 		
 		try
 		{

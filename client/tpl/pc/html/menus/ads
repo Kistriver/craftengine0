@@ -2,9 +2,6 @@
 
 {%block header%}Реклама{%endblock%}
 
-{%block header_css%}grey{%endblock%}
-{%block content_css%}grey{%endblock%}
-
 {%block content%}
 <!--USE IFRAME-->
 Продам старые, проржавевшие жигули. Дорого...<hr />

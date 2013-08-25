@@ -30,7 +30,7 @@ class functions
 		return $str2;
 	}
 	
-	public function quit($code,$msg)
+	public function quit($code,$msg='')
 	{
 		//echo "Exit with code: $code. Info: $msg";
 		//exit;
@@ -61,6 +61,7 @@ class functions
 		try
 		{
 			$template = $this->core->twig->loadTemplate($tpl);
+			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
 			echo $template->render($this->core->render);
 		}
 		catch (Exception $e)

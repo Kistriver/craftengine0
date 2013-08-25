@@ -1,6 +1,8 @@
-<div class="menu_header menu_header_{%block header_css%}orange{%endblock%}">
-{%block header%}Заголовок{%endblock%}
+<div class="panel panel-default">
+<div class="panel-heading">
+<h3 class="panel-title">{%block header%}Заголовок{%endblock%}</h3>
 </div>
-<div class="menu_content menu_content_{%block content_css%}orange{%endblock%}">
-{%block content%}{%endblock%}
+<div class="panel-body">
+{%block content%}Контент{%endblock%}
+</div>
 </div>

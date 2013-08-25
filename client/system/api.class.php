@@ -11,7 +11,7 @@ class api
 		$this->core = $core;
 	}
 	
-	public function get($method, $data)
+	public function get($method, $data=array())
 	{
 		$keys = array_keys($data);
 		for($i=0;$i<sizeof($data);$i++)
@@ -19,6 +19,8 @@ class api
 			$key = $keys[$i];
 			$post[$key] = $data[$key];
 		}
+		$post['sid'] = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
+		//$post['sid'] = $_SESSION['sid'];
 		
 		$post = $this->core->f->json_encode_ru($post);
 		$url = $this->url . '?method=' . $method/* . '&data=' . rawurlencode($post)*/;
@@ -69,6 +71,11 @@ class api
 			foreach ($this->answer_decode['errors'] as $er)
 			{
 				$this->core->error->error($er);
+				
+				if($er[0]=='api' AND $er[1]==3)
+				{
+					$_SESSION['sid']=$this->answer_decode['sid'];
+				}
 			}
 			
 			//TODO: work on it
