@@ -2,7 +2,7 @@
 
 {%block title%}Восстановление пароля{{parent()}}{%endblock%}
 
-{%block header%}Восстановление пароля{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}login">Вход</a></li><li class="active">Восстановление пароля</li>{%endblock%}
 
 {%block content%}
 Пока нереализовано. Чтобы восстановить пароль, свяжитесь с администрацией.

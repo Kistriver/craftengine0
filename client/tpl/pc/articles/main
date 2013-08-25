@@ -3,6 +3,7 @@
 {%block title%}Новости {{parent()}}{%endblock%}
 {%block header%}
 {%if SYS.LOGGEDIN%}
+<li class="active">
 <div style="position: relative; top: 4px;">
 <form action="{{MAIN.ROOT_HTTP}}articles/new">
 <button title="Добавить статью" class="btn success" style="position: absolute; margin: 0 5px;">
@@ -16,8 +17,11 @@
 </form>
 <div style="/*margin: -32px 0 0 46px;*/ margin-left: 120px;">Новости</div>
 </div>
+</li>
 {%else%}
+<li class="active">
 Новости
+</li>
 {%endif%}
 {%endblock%}
 

@@ -3,6 +3,7 @@
 {%block title%}Пользователи{{parent()}}{%endblock%}
 {%block header%}
 {%if SYS.LOGGEDIN%}
+<li class="active">
 <div style="position: relative; top: 4px;">
 <form action="{{MAIN.ROOT_HTTP}}users/confirm">
 <button title="Модерация новых пользователей" class="btn success" style="position: absolute; width: 76px; margin: 0 5px;">
@@ -11,8 +12,9 @@
 </form>
 <div style="/*margin: -32px 0 0 46px;*/ margin-left: 83px;">Пользователи</div>
 </div>
+</li>
 {%else%}
-Пользователи
+<li class="active">Пользователи</li>
 {%endif%}
 {%endblock%}
 

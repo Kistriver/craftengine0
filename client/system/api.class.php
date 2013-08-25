@@ -14,6 +14,7 @@ class api
 	public function get($method, $data=array())
 	{
 		$keys = array_keys($data);
+		$_data = $data;
 		for($i=0;$i<sizeof($data);$i++)
 		{
 			$key = $keys[$i];
@@ -75,11 +76,16 @@ class api
 				if($er[0]=='api' AND $er[1]==3)
 				{
 					$_SESSION['sid']=$this->answer_decode['sid'];
+					return $this->get($method, $_data);
 				}
 			}
 			
 			//TODO: work on it
-			if('SHOW_API_REQUESTS'===true)
+			$cc = $this->core->conf->get('core');
+			$cc = json_decode($cc,false);
+			if($cc==false)$this->core->f->quit(500,'can\'t load config');
+			
+			if($cc->core->detailed_req===true)
 			{
 				$times = array();
 				foreach($this->answer_decode['runtime'][1] as $t)
@@ -100,7 +106,7 @@ class api
 				
 				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
 				
-				$this->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
+				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 			}
 		}
 		

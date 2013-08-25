@@ -2,7 +2,7 @@
 
 {%block title%}Регистрация{{parent()}}{%endblock%}
 
-{%block header%}Регистрация{%endblock%}
+{%block header%}<li class="active">Регистрация</li>{%endblock%}
 
 {%block content%}
 <form method="post">

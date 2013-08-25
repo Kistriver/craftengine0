@@ -1,6 +1,6 @@
 {%extends "html/main"%}
 
-{%block header%}{{user.nickname}}<sup>({{user.login}})</sup>{%endblock%}
+{%block header%}<li class="active">{{user.nickname}}<sup>({{user.login}})</sup></li>{%endblock%}
 
 {%block title%}{{user.login}}{{parent()}}{%endblock%}
 

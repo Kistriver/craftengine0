@@ -1,7 +1,7 @@
 {%extends "html/main"%}
 
 {%block title%}Настройки {{parent()}}{%endblock%}
-{%block header%}Настройки{%endblock%}
+{%block header%}<li class="active">Настройки</li>{%endblock%}
 
 {%block content%}
 <form method="post">

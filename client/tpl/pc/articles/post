@@ -1,7 +1,7 @@
 {%extends "html/main"%}
 
 {%block title%}{{post.title}}{{parent()}}{%endblock%}
-{%block header%}<a href="{{MAIN.ROOT_HTTP}}articles">Новости</a> » {{post.title}}{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}articles">Новости</a></li><li class="active">{{post.title}}</li>{%endblock%}
 
 {%block content%}
 <div>

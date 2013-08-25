@@ -2,51 +2,43 @@
 
 {%block title%}Вход{{parent()}}{%endblock%}
 
-{%block header%}Вход{%endblock%}
+{%block header%}<li class="active">Вход</li>{%endblock%}
 
 {%block content%}
 <form method="post">
-<table width="100%">
-<tbody>
 
-<tr>
-<td>
-<input type="text" style="width: 40%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
-</td>
-<td>
-</td>
-</tr>
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+<div class="input-group">
+<span class="input-group-addon">@</span>
+<input name="email" maxlength="100" type="text" class="form-control" placeholder="Адрес электронной почты">
+</div>
+</div>
+</div>
 
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+<div class="input-group">
+<span class="input-group-addon">&#182;</span>
+<input name="password" maxlength="100" type="password" class="form-control" placeholder="Пароль">
+</div>
+</div>
+</div>
 
-<tr>
-<td>
-<input type="password" style="width: 40%;" class="textfield" name="password" maxlength="100" placeholder="Пароль" />
-</td>
-<td>
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-<input type="submit" style="width: 41%;" class="btn success" value="Есть контакт!" />
-</td>
-</tr>
-
-</tbody>
-</table>
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+<input type="submit" style="width: 100%;" class="btn btn-success" value="Есть контакт!" />
+</div>
+</div>
 </form>
 
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
 <form action="{{MAIN.ROOT_HTTP}}login/restore">
-<table width="100%">
-<tbody>
-<tr>
-<td colspan="2">
-<button style="width: 41%;" class="btn warning">
+<button style="width: 100%;" class="btn btn-warning">
 Забыл пароль
 </button>
-</td>
-</tr>
-</tbody>
-</table>
 </form>
+</div>
+</div>
 {%endblock%}

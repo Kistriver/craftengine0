@@ -1,7 +1,7 @@
 {%extends "html/main"%}
 
 {%block title%}Пользователи{{parent()}}{%endblock%}
-{%block header%}<a href="{{MAIN.ROOT_HTTP}}users">Пользователи</a> » Подтверждение пользователей{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}users">Пользователи</a></li><li class="active">Подтверждение пользователей</li>{%endblock%}
 
 {%block content%}
 <table width="100%">

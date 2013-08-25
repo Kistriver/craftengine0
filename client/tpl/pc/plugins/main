@@ -1,7 +1,7 @@
 {%extends "html/main"%}
 
 {%block title%}Плагины {{parent()}}{%endblock%}
-{%block header%}Плагины{%endblock%}
+{%block header%}<li class="active">Плагины</li>{%endblock%}
 
 {%block content%}
 {% autoescape true %}
