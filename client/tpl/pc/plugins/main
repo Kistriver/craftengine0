@@ -10,7 +10,7 @@
 <div style="background-color:{%if plugin._included_%}#82FA58{%else%}#FE642E{%endif%};">
 <h2>{{plugin.name}} - {%if plugin._included_%}ON
 <form action="{{MAIN.ROOT_HTTP}}plugins" method="post">
-<button title="OFF" class="btn danger">
+<button title="OFF" class="btn btn-danger">
 <input type="hidden" name="state" value="OFF" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
 OFF
@@ -18,7 +18,7 @@ OFF
 </form>
 {%else%}OFF
 <form action="{{MAIN.ROOT_HTTP}}plugins" method="post">
-<button title="ON" class="btn success">
+<button title="ON" class="btn btn-success">
 <input type="hidden" name="state" value="ON" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
 ON

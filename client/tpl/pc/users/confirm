@@ -73,14 +73,14 @@ e-mail
 <form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
 <input type="hidden" name="vote" value="plus" />
 <input type="hidden" name="user" value="{{user.login}}" />
-<button title="" class="btn success" style="">
+<button title="" class="btn btn-success" style="">
 +
 </button>
 </form>
 <form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
 <input type="hidden" name="vote" value="minus" />
 <input type="hidden" name="user" value="{{user.login}}" />
-<button title="" class="btn danger" style="">
+<button title="" class="btn btn-danger" style="">
 -
 </button>
 </form>

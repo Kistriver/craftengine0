@@ -4,25 +4,6 @@ require_once(dirname(__FILE__).'/core.class.php');
 session_start();
 $core = new core();
 
-$core->render['MAIN']['MENU'] = array('menu','vk','online','ads','news');
-$core->render['NAVMENU'] = array(
-array('Главная',''),
-array('Новости','articles',false,'+42'),
-array('Пользователи','users'),
-array('Регистрация','signup'),
-array('Вход','login'),
-);
-
-//TODO: Remake it!
-$s = explode('/',$_SERVER['SCRIPT_NAME']);
-foreach($core->render['NAVMENU'] as &$m)
-{
-	if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))
-	{
-		$m[2] = true;
-	}
-}
-
 $core->api->get('user.loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
 $loggedin = $core->api->answer_decode;
 if(isset($loggedin['errors']))
@@ -65,10 +46,40 @@ if(isset($loggedin['errors']))
 	}
 }
 
+$core->render['MAIN']['MENU'] = array('menu','vk','online','ads','news');
+
+if($_SESSION['loggedin'])
+{
+	$core->render['NAVMENU'] = array(
+	array('Главная',''),
+	array('Новости','articles',false,'+42'),
+	array('Пользователи','users'),
+	array('Настройки','profile'),
+	array('Выход','logout'),
+	);
+}
+else
+{
+	$core->render['NAVMENU'] = array(
+	array('Главная',''),
+	array('Новости','articles'),
+	array('Пользователи','users'),
+	array('Регистрация','signup'),
+	array('Вход','login'),
+	);
+}
+
+//TODO: Remake it!
+$s = explode('/',$_SERVER['SCRIPT_NAME']);
+foreach($core->render['NAVMENU'] as &$m)
+{
+	if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))
+	{
+		$m[2] = true;
+	}
+}
+
 //$core->render['MAIN']['INFO'][] = 'Инфа';
 //$core->render['MAIN']['ERRORS'][] = 'Ошибка';
 //$core->render['MAIN']['SUCCESS'][] = 'Успешно';
-
-//$core->api->get('plugins.list',array('sid'=>'sdsd'));
-//echo '<pre>';print_r($core);echo '</pre>';
 ?>

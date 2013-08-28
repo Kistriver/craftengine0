@@ -13,6 +13,8 @@ class api
 	
 	public function get($method, $data=array())
 	{
+		static $repeat_req = 0;
+		
 		$keys = array_keys($data);
 		$_data = $data;
 		for($i=0;$i<sizeof($data);$i++)
@@ -71,13 +73,15 @@ class api
 			if(sizeof($this->answer_decode['errors'])!=0)
 			foreach ($this->answer_decode['errors'] as $er)
 			{
-				$this->core->error->error($er);
-				
-				if($er[0]=='api' AND $er[1]==3)
+				if($er[0]=='api' AND $er[1]==3 AND $repeat_req==0)
 				{
 					$_SESSION['sid']=$this->answer_decode['sid'];
+					$repeat_req = 1;
 					return $this->get($method, $_data);
 				}
+				
+				$this->core->error->error($er);
+				$repeat_req = 0;
 			}
 			
 			//TODO: work on it
