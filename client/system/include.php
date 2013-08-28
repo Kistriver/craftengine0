@@ -23,37 +23,46 @@ foreach($core->render['NAVMENU'] as &$m)
 	}
 }
 
-$core->api->get('user.loggedin',array());
+$core->api->get('user.loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
 $loggedin = $core->api->answer_decode;
 if(isset($loggedin['errors']))
 {
-if(sizeof($loggedin['errors'])==0)
-{
-$_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = $loggedin['data'][0];
-}
-else $_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = false;
-
-if($_SESSION['loggedin']==true)
-{
-	$_SESSION['nickname'] = $core->render['SYS']['NICKNAME'] = $loggedin['data']['nickname'];
-	$_SESSION['email'] = $core->render['SYS']['EMAIL'] = $loggedin['data']['email'];
-	$_SESSION['id'] = $core->render['SYS']['ID'] = $loggedin['data']['id'];
-	$_SESSION['login'] = $core->render['SYS']['LOGIN'] = $loggedin['data']['login'];
-	$_SESSION['rank'] = $core->render['SYS']['RANK'] = $loggedin['data']['rank'];
-	$_SESSION['rank_main'] = $core->render['SYS']['RANK_MAIN'] = $loggedin['data']['rank_main'];
+	if(sizeof($loggedin['errors'])==0)
+	{
+		$_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = $loggedin['data'][0];
+		if($loggedin['data'][0]===true)
+		if($_COOKIE['authed']!=$loggedin['data']['id'].':'.$loggedin['data']['auth'])
+		{
+			setcookie("authed", $loggedin['data']['id'].':'.$loggedin['data']['auth'], time()+36000, '/');
+		}
+	}
+	else
+	{
+		
+		$_SESSION['loggedin'] = $core->render['SYS']['LOGGEDIN'] = false;
+	}
 	
-	
-	$core->render['SYS']['APPOINTMENT'] = 'Undefined';
-}
-else
-{
-	$_SESSION['nickname'] = '';
-	$_SESSION['email'] = '';
-	$_SESSION['id'] = '';
-	$_SESSION['login'] = '';
-	$_SESSION['rank'] = '';
-	$_SESSION['rank_main'] = '';
-}
+	if($_SESSION['loggedin']==true)
+	{
+		$_SESSION['nickname'] = $core->render['SYS']['NICKNAME'] = $loggedin['data']['nickname'];
+		$_SESSION['email'] = $core->render['SYS']['EMAIL'] = $loggedin['data']['email'];
+		$_SESSION['id'] = $core->render['SYS']['ID'] = $loggedin['data']['id'];
+		$_SESSION['login'] = $core->render['SYS']['LOGIN'] = $loggedin['data']['login'];
+		$_SESSION['rank'] = $core->render['SYS']['RANK'] = $loggedin['data']['rank'];
+		$_SESSION['rank_main'] = $core->render['SYS']['RANK_MAIN'] = $loggedin['data']['rank_main'];
+		
+		
+		$core->render['SYS']['APPOINTMENT'] = 'Undefined';
+	}
+	else
+	{
+		$_SESSION['nickname'] = '';
+		$_SESSION['email'] = '';
+		$_SESSION['id'] = '';
+		$_SESSION['login'] = '';
+		$_SESSION['rank'] = '';
+		$_SESSION['rank_main'] = '';
+	}
 }
 
 //$core->render['MAIN']['INFO'][] = 'Инфа';

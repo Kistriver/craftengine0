@@ -9,6 +9,7 @@ if(!empty($_GET['act']))
 		if($_SESSION['loggedin'])
 		{
 		$core->api->get('login.logout',array('sid'=>$_SESSION['sid']));
+		setcookie("authed", "", 0,'/');
 		//session_destroy();
 		header('Location: index');
 		}
@@ -27,7 +28,7 @@ if(!empty($_GET['act']))
 		if(!empty($_GET['code']) OR !empty($_POST['code']))
 		{
 			$code = !empty($_POST['code'])?$_POST['code']:$_GET['code'];
-			$core->api->get('login.activate',array('code'=>$code,'sid'=>$_SESSION['sid']));
+			$core->api->get('login.activate',array('code'=>$code));
 		}
 	}
 }
@@ -43,6 +44,7 @@ else
 		{
 			$core->api->get('user.loggedin',array('sid'=>$_SESSION['sid']));
 			$loggedin = $core->api->answer_decode;
+			setcookie("authed", $loggedin['data']['id'].':'.$loggedin['data']['auth'], time()+36000,'/');
 			header('Location: users/'.$loggedin['data']['login']);
 		}
 	}

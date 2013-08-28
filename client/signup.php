@@ -51,6 +51,11 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	if($core->api->answer_decode['data'][0]==true)
 	$core->render['MAIN']['SUCCESS'][] = "Регистрация прошла успешно";
 	}
+	else
+	{
+		$core->render['_POST'] = $_POST;
+		$core->render['_GET'] = $_GET;
+	}
 }
 
 $core->f->show('signup/main');

@@ -105,11 +105,11 @@ d.addEventListener("DOMContentLoaded", f, false);
 <h4>Сервера Minecraft</h4>
 <p>Имеется несколько серверов Minecraft с <del>блэк джэком и ..</del> экономикой</p>
 </div>
-<img src="http://178.140.61.70/php/tpl/pc/img/index/3.png" style="height:550px;" />
+<img src="http://178.140.61.70/php/tpl/pc/img/index/3.png" style="height:275px;" />
 </div>
 
 <div class="item">
-<img src="http://www.ybs.gen.tr/wp-content/uploads/2012/10/php-logo.jpg" style="height:550px" />
+<img src="http://www.ybs.gen.tr/wp-content/uploads/2012/10/php-logo.jpg" style="height:275px" />
 <div class="carousel-caption" style="border-radius: 6px; background:url('http://178.140.61.70/php/tpl/pc/img/main/dark1.png');">
 <h4>Собственный фреймворк</h4>
 <p>Наш фреймворк легко расширяем и не имеет аналогов</p>
@@ -117,7 +117,7 @@ d.addEventListener("DOMContentLoaded", f, false);
 </div>
 
 <div class="item">
-<img src="http://cs418222.vk.me/v418222634/825f/Td0Z5NabsQ4.jpg" style="height:550px" />
+<img src="http://cs418222.vk.me/v418222634/825f/Td0Z5NabsQ4.jpg" style="height:275px" />
 <div class="carousel-caption" style="border-radius: 6px; background:url('http://178.140.61.70/php/tpl/pc/img/main/dark1.png');">
 <h4>Перспектива развития</h4>
 <p>Наш проект радует Вас с 2011 года</p>

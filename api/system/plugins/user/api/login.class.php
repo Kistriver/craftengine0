@@ -51,11 +51,12 @@ class api_login extends api
 							$this->core->mysql->query("INSERT INTO login_ok(user, browser, ip, platform, time) 
 							VALUES('$id','$bro','$_SERVER[REMOTE_ADDR]','$platform','$time_now')");
 							$user->set_user($user->id, 'id');
-
+							
+							$this->core->mysql->query("INSERT INTO login_sid(id,time,sid) VALUES('$user->id','$_SESSION[auth_time]','$_SESSION[auth]')");
+							
 							//$time_end = time() + 60*60*24*7;
 							//setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
-
-							//return true;
+							return $this->json(array(false));
 						}
 						else
 						{
@@ -92,15 +93,16 @@ class api_login extends api
 		}
 		else
 		$this->core->error->error('server',403);
-		
-		return $this->json();
+		return $this->json(array(false));
 	}
 	
 	//Деавторизация пользователя
 	protected function logout()
 	{
 		if($_SESSION['loggedin'])
-		session_destroy();
+		{
+			session_destroy();
+		}
 		else
 		$this->core->error->error('server',403);
 		
@@ -150,15 +152,16 @@ class api_login extends api
 						$signup['about']
 					);
 					
-					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='code'");
+					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='$code'");
 					$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 					
 					return $this->json(array(true));
 				}
+				//mail - 1, admin - 2
 				elseif($status==0 OR $status==1)
 				{
 					$this->core->mysql->query("UPDATE signup SET status='1' WHERE id='$id' AND login='$login'");
-					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='code'");
+					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='$code'");
 					return $this->json(array(true));
 				}
 			}

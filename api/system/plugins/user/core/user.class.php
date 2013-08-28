@@ -113,6 +113,11 @@ class plugin_user_user
 		$_SESSION['login'] = $this->login;
 		$_SESSION['rank'] = $this->rank;
 		$_SESSION['rank_main'] = $this->rank_main;
+		
+		$time = time();
+		$_SESSION['auth_time'] = $time;
+		$_SESSION['auth'] = sha1($time.$this->pass.md5($this->salt));
+		
 		//$_SESSION['cache'] = $this->cache;
 	}
 	
@@ -273,6 +278,9 @@ class plugin_user_user
 				'$time_reg', '$about'
 			  )
 		");
+		
+		$pass_authme = md5($password);
+		$this->core->mysql->query("INSERT INTO authme(username,password) VALUES('$login','$pass_authme')","mcprimary");
 		
 		//$this->email($email, 'activate', array($login, $id));
 	}

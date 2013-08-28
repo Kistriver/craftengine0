@@ -11,7 +11,7 @@
 
 <tr>
 <td width="35%">
-<input type="text" style="width: 90%;" class="textfield" name="invite" maxlength="30" placeholder="Логин пригласившего" />
+<input type="text" value="{%if _POST.invite is defined %}{{_POST.invite}}{%else%}{{_GET.invited}}{%endif%}" style="width: 90%;" class="textfield" name="invite" maxlength="30" placeholder="Логин пригласившего(этот пользователь должен быть зарегистрирован)" />
 </td>
 <td>
 (От 4 до 30 символов в диапазоне: a-z, A-Z, 0-9, _)
@@ -26,7 +26,7 @@
 
 <tr>
 <td>
-<input type="text" style="width: 90%;" class="textfield" name="name" maxlength="25" placeholder="Имя" />
+<input type="text" value="{{_POST.name}}" style="width: 90%;" class="textfield" name="name" maxlength="25" placeholder="Имя" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -36,7 +36,7 @@
 
 <tr>
 <td>
-<input type="text" style="width: 90%;" class="textfield" name="surname" maxlength="35" placeholder="Фамилия" />
+<input type="text" value="{{_POST.surname}}" style="width: 90%;" class="textfield" name="surname" maxlength="35" placeholder="Фамилия" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -46,7 +46,7 @@
 
 <tr>
 <td>
-<input type="text" style="width: 90%;" class="textfield" name="login" maxlength="30" placeholder="Логин" />
+<input type="text" value="{{_POST.login}}" style="width: 90%;" class="textfield" name="login" maxlength="30" placeholder="Логин" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -87,7 +87,7 @@
 
 <tr>
 <td>
-<input type="text" style="width: 90%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
+<input type="text" value="{{_POST.email}}" style="width: 90%;" class="textfield" name="email" maxlength="100" placeholder="Адрес электронной почты" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -125,7 +125,7 @@
 
 <tr>
 <td>
-<input type="text" style="width: 90%;" class="textfield" maxlength="10" name="birthday" placeholder="День рождения" />
+<input type="text" value="{{_POST.birthday}}" style="width: 90%;" class="textfield" maxlength="10" name="birthday" placeholder="День рождения" />
 <font class="obligatory_star">*</font>
 </td>
 <td>
@@ -139,6 +139,7 @@
 Пару слов о себе. Но не более 1000 знаков! Желательно несколько ссылок на 
 Ваши аккаунты в других соц. сетях. Это не обязательно, но перед тем, как отправить 
 заявку, подумайте: &quot;А одобрят ли меня? Ведь фамилия у меня Иванов&quot;.">
+{{_POST.about}}
 </textarea>
 </td>
 </tr>

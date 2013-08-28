@@ -24,12 +24,46 @@ class api_user extends api
 				'login' => $_SESSION['login'],
 				'rank' => $_SESSION['rank'],
 				'rank_main' => $_SESSION['rank_main'],
+				'auth' => $_SESSION['auth'],
 			);
 			
 			return $this->json($ses);
 		}
 		else
 		{
+			if(!empty($this->data['auth']))
+			{
+				$au = $this->core->SanString($this->data['auth']);
+				list($id, $sid) = explode(':',$au);
+				
+				$m = $this->core->mysql->query("SELECT * FROM login_sid WHERE sid='$sid' AND id='$id'");
+				if($this->core->mysql->rows($m)==1)
+				{
+					$u = $this->core->plugin->initPl('user','user');
+					$_SESSION['auth_time'] = time();
+					$u->set_user($id,'id');
+					$this->core->mysql->query("INSERT INTO login_sid(id,time,sid) VALUES('$id','$_SESSION[auth_time]','$_SESSION[auth]')");
+					$this->core->mysql->query("DELETE FROM login_sid WHERE sid='$sid' AND id='$id'");
+					
+					$ses = array(
+					true,
+					'nickname' => $_SESSION['nickname'],
+					//'salt' => $_SESSION['salt'],
+					//'pass' => $_SESSION['pass'],
+					'email' => $_SESSION['email'],
+					'id' => $_SESSION['id'],
+					'login' => $_SESSION['login'],
+					'rank' => $_SESSION['rank'],
+					'rank_main' => $_SESSION['rank_main'],
+					'auth' => $_SESSION['auth'],
+					);
+					
+					return $this->json($ses);
+				}
+				return $this->json(array(false));
+			}
+			else
+			
 			return $this->json(array(false));
 		}
 	}
