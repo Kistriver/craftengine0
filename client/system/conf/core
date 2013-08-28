@@ -1,7 +1,7 @@
 {
 	"api":
 	{
-		"url":"http:\/\/178.140.61.70:8081\/"
+		"url":"http:\/\/178.140.61.70:8080\/"
 	},
 	"core":
 	{
@@ -24,8 +24,8 @@
 	"tpl":
 	{
 		"client_name":"KachalovCRAFT NET",
-		"root":"\/new\/",
-		"root_http":"\/new\/",
+		"root":"\/",
+		"root_http":"\/",
 		"client_host":"http:\/\/localhost\/",
 		"client_keywords":"KachalovCRAFT NET, Minecraft",
 		"client_desc":"Look at my site, my site is amazing! Give it a lick..."

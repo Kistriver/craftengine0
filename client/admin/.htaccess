@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "KachalovCRAFT NET Admin Panel"
+AuthUserFile /var/www/engine/client/admin/.htpasswd
+require valid-user

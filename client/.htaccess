@@ -1,10 +1,11 @@
-ErrorDocument 404 /php/errors.php?code=404
-ErrorDocument 403 /php/errors.php?code=403
-ErrorDocument 500 /php/errors.php?code=500
+ErrorDocument 404 /errors.php?code=404
+ErrorDocument 403 /errors.php?code=403
+ErrorDocument 500 /errors.php?code=500
 AddType application/octet-stream .rar .doc .mov .avi .pdf .xls .mp4 .jar .bat
 AddType application/x-httpd-php .php
 AddDefaultCharset utf-8
 DefaultLanguage ru-RU
+DirectoryIndex index.php index.html
 ServerSignature Off
 #php_flag display_errors off
 php_flag display_errors on
@@ -20,7 +21,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 RewriteEngine on
 
 #RewriteRule ^index.php$ articles.php [L]
-RewriteRule ^$ index.php [L]
+#RewriteRule ^$ index.php [L]
 
 RewriteRule ^articles$ articles.php?act=posts&page=1 [L]
 RewriteRule ^articles/page-([0-9]*)$ articles.php?act=posts&page=$1 [L]
@@ -36,7 +37,7 @@ RewriteRule ^login/confirm$ login.php?act=confirm [L]
 RewriteRule ^login/confirm/([a-z0-9]*)$ login.php?act=confirm&code=$1 [L]
 
 RewriteRule ^users$ users/page-1 [L]
-RewriteRule ^users/page-([0-9]+)$ users.php?act=all&page=$1 [L]
+RewriteRule ^users/page-([0-9]*)$ users.php?act=all&page=$1 [L]
 RewriteRule ^users/id([0-9]*)$ users.php?act=user&id=$1 [L]
 RewriteRule ^users/confirm$ users.php?act=confirm&page=1 [L]
 RewriteRule ^users/confirm/page-([0-9]*)$ users.php?act=confirm&page=$1 [L]

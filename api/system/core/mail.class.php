@@ -52,7 +52,7 @@ class mail
 			$content .= file_get_contents($root.'footer');
 			
 			$params['date'] = date('d-m-Y');
-			$params['domain'] = '178.140.61.70/new/';
+			$params['domain'] = '178.140.61.70';
 			$params['header'] = $typeid[$id][1];
 			
 			foreach($params as $blockname => $value)
