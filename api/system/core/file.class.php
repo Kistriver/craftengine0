@@ -36,7 +36,7 @@ class file
 	
 	public function get_all_file($file)
 	{
-		$fp = fopen($this->root.$file, "r"); // Открываем файл в режиме чтения
+		/*$fp = fopen($this->root.$file, "r"); // Открываем файл в режиме чтения
 		$arr='';
 		if ($fp)
 		{
@@ -48,7 +48,10 @@ class file
 		return $arr;
 		}
 		else return false;
-		fclose($fp);
+		fclose($fp);*/
+
+		$f = file_get_contents($this->root.$file, false);
+		return $f;
 	}
 	
 	public function set_file($file,$content)

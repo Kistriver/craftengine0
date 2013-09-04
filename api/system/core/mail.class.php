@@ -59,8 +59,11 @@ class mail
 			{
 				$content = preg_replace('/{\$' . $blockname . '}/i', $value, $content);
 			}
-			$this->core->mysql->query("DELETE FROM mail WHERE id='$msg_id'");
-			mail($to, $typeid[$id][1], $content, $headers);
+
+			$m = mail($to, $typeid[$id][1], $content, $headers);
+
+			if($m===true)
+			$this->core->mysql->query("UPDATE mail SET status='0' WHERE id='$msg_id'");
 		}
 	}
 	
@@ -79,13 +82,13 @@ class mail
 		$time = time();
 		$time_loop = 60;
 		$time_left = $time - $time_loop;
-		$this->core->mysql->query("SELECT * FROM mail WHERE adress='$to' AND typeid='$type' AND date>='$time_left'");
+		$this->core->mysql->query("SELECT * FROM mail WHERE adress='$to' AND typeid='$type' AND date>='$time_left' AND status='1'");
 		if(!$this->core->mysql->rows($this->core->mysql->result))
 		{
 			if(!empty($params))$params = $this->core->json_encode_ru($params);
 			$params = $this->core->sanString($params, 'mysql');
-			$this->core->mysql->query(	"INSERT INTO mail(adress, typeid, params, date) 
-										VALUES('$to', '$type', '$params', '$time')");
+			$this->core->mysql->query(	"INSERT INTO mail(adress, typeid, params, date, status)
+										VALUES('$to', '$type', '$params', '$time', '1')");
 			return true;
 		}
 		else
@@ -97,7 +100,7 @@ class mail
 	//Получения листа ожидания писем на отправку
 	public function get_waiting_list()
 	{
-		$r = $this->core->mysql->query("SELECT * FROM mail LIMIT 0,20");
+		$r = $this->core->mysql->query("SELECT * FROM mail WHERE status='1' LIMIT 0,20");
 		for($i=0;$i<$this->core->mysql->rows($r);$i++)
 		{
 			$m = $this->core->mysql->fetch($r);

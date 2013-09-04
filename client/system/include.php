@@ -46,7 +46,7 @@ if(isset($loggedin['errors']))
 	}
 }
 
-$core->render['MAIN']['MENU'] = array('menu','vk','online','ads','news');
+$core->render['MAIN']['MENU'] = $core->conf->conf->core->menu;
 
 if($_SESSION['loggedin'])
 {

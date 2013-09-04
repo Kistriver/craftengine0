@@ -29,6 +29,14 @@ if(!empty($_GET['act']))
 		{
 			$code = !empty($_POST['code'])?$_POST['code']:$_GET['code'];
 			$core->api->get('login.activate',array('code'=>$code));
+			if($core->api->answer_decode['data'][0]===true)
+			{
+				$core->render['MAIN']['SUCCESS'][] = 'Код активации принят';
+			}
+			elseif($core->api->answer_decode['data'][0]===false)
+			{
+				$core->error->error('Код активации не принят');
+			}
 		}
 	}
 }

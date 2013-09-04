@@ -1,4 +1,4 @@
-{%extends "html/main"%}
+{%extends "html/main.twig"%}
 
 {%block title%}{{post.title}}{{parent()}}{%endblock%}
 {%block header%}<li><a href="{{MAIN.ROOT_HTTP}}articles">Новости</a></li><li class="active">{{post.title}}</li>{%endblock%}

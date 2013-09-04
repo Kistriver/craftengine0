@@ -23,8 +23,6 @@ class core
 		$this->api = new api($this);
 		
 		$cc = $this->conf->get('core');
-		$cc = json_decode($cc,false);
-		if($cc==false)$this->f->quit(500,'can\'t load config');
 		$this->api->url = $cc->api->url;
 		
 		$ccc = $cc->tpl;

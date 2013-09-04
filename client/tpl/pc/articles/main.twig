@@ -1,4 +1,4 @@
-{%extends "html/main"%}
+{%extends "html/main.twig"%}
 
 {%block title%}Новости {{parent()}}{%endblock%}
 {%block header%}
@@ -27,7 +27,7 @@
 
 {%block content%}
 {%for post in posts%}
-{%include "articles/instance"%}
+{%include "articles/instance.twig"%}
 {%endfor%}
 
 {%endblock%}

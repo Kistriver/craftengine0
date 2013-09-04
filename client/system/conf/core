@@ -29,5 +29,11 @@
 		"client_host":"http:\/\/localhost\/",
 		"client_keywords":"KachalovCRAFT NET, Minecraft",
 		"client_desc":"Look at my site, my site is amazing! Give it a lick..."
-	}
+	},
+	"menu":
+	[
+		"menu",
+		"vk",
+		"ads"
+	]
 }

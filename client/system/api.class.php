@@ -86,9 +86,6 @@ class api
 			
 			//TODO: work on it
 			$cc = $this->core->conf->get('core');
-			$cc = json_decode($cc,false);
-			if($cc==false)$this->core->f->quit(500,'can\'t load config');
-			
 			if($cc->core->detailed_req===true)
 			{
 				$times = array();
@@ -112,6 +109,7 @@ class api
 				
 				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 			}
+			$this->core->render['MAIN']['INFO'][] = "$method: ". $this->answer_decode['runtime'][0]*1000 ." ms";
 		}
 		
 		return $this->answer_decode;

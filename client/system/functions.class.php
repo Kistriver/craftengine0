@@ -41,12 +41,10 @@ class functions
 		
 		if(isset($this->core->twig))
 		{
-			$template = $this->core->twig->loadTemplate('errors/'.$allow[$key]);
 			header('HTTP/1.1 '.$allow[$key]);
 			if(!empty($msg))
-			echo $template->render(array('desc'=>$msg));
-			else
-			echo $template->render(array());
+			$this->core->render['desc'][] = $msg;
+			$this->show('errors/'.$allow[$key]);
 			die;
 		}
 		else
@@ -60,7 +58,7 @@ class functions
 	{
 		try
 		{
-			$template = $this->core->twig->loadTemplate($tpl);
+			$template = $this->core->twig->loadTemplate($tpl.'.twig');
 			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
 			echo $template->render($this->core->render);
 		}

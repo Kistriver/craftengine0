@@ -1,0 +1,7 @@
+{%if type=='user'%}
+{%include "users/user.twig"%}
+{%elseif type=='all'%}
+{%include "users/all.twig"%}
+{%elseif type=='confirm'%}
+{%include "users/confirm.twig"%}
+{%endif%}
