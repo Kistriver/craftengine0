@@ -24,8 +24,8 @@
 <div style="width: 20px; float: left;">
 <img style="border-radius: 1px; width: 16px;" alt="" src="/files/uploads/avatars/{{user.login}}.png" />
 </div>
-<a href="{{MAIN.ROOT_HTTP}}users/{{user.login}}">{{user.nickname}}</a><sup>({{user.login}})</sup> - {%if user.sex==1%}Мужчина{%else%}Женщина{%endif%} - 
-{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} - {{user.appointment}}
+<a href="{{MAIN.ROOT_HTTP}}users/{{user.login}}">{{user.nickname}}</a><sup>({{user.login}})</sup> - {%if true==false%}{%if user.sex==1%}Мужчина{%else%}Женщина{%endif%} -
+{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} - {%endif%}{{user.appointment}}
 </div>
 {%endfor%}
 {%endblock%}

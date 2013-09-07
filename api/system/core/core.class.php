@@ -78,7 +78,6 @@ class core
 		
 		/**
 		 * TODO: Доделать
-		 * TODO: Сделать защиту от удаления
 		 */
 		
 		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
@@ -93,7 +92,6 @@ class core
 			)
 		);
 		
-		//$data = http_build_query(array('data'=>$_GET['data'],));
 		$context = stream_context_create(array(
 			'http' => array(
 			'method' => 'POST',
@@ -101,10 +99,9 @@ class core
 			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*/
 			'content' => $data,
 		),));
-		/*$answer = fsockopen("178.140.61.70", 80);
+		$answer = fsockopen("178.140.61.70", 8080);
 		stream_set_timeout($answer, 0, 10);
-		fwrite($answer, "GET /api/?method=stat.add HTTP/1.0\r\n\r\n");*/
-		//print_r(fread($answer, 2000));
+		fwrite($answer, "GET /system-scripts/stat.php HTTP/1.0\r\n\r\n");
 		
 		$answer = false;
 		
@@ -113,45 +110,8 @@ class core
 		$this->timer->mark('core.class.php/stat');
 	}
 	
-	final function update()
-	{
-		$updatetime = 60 * 60 *12;
-		$file = dirname(__FILE__).'/cache/LastUpdateRequest';
-		
-		if(file_exists($file))
-		$time = file_get_contents($file);
-		else
-		$time = null;
-		
-		$time = trim($time);
-		
-		if(!empty($time))
-		{
-			$time = $this->cacheDataDecode($time);
-			$time = (int)$time;
-		}
-		else
-		{
-			$time = time() - $updatetime - 10;
-		}
-		
-		if($time<time()-$updatetime)
-		{
-			$context = stream_context_create();
-			$answer = fsockopen("localhost", 8080);
-			stream_set_timeout($answer, 0, 10);
-			fwrite($answer, "GET /system-scripts/update.php HTTP/1.0\r\n\r\n");
-			//print_r(fread($answer, 2048));
-			
-			$data = $this->cacheDataEncode(time());
-			file_put_contents($file, $data);
-		}
-		$this->timer->mark('core.class.php/update');
-	}
-	
 	final function about()
 	{
-		$this->update();
 		if(!empty($_GET['about']))
 		{
 			$a = $_GET['about'];

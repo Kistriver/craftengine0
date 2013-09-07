@@ -2,7 +2,6 @@
 	"modules":
 	[
 		"system",
-		"vote",
 		"plugin"
 	],
 	"plugins":[]

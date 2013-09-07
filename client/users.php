@@ -23,13 +23,13 @@ if(isset($_GET['act']))
 		
 		foreach($data['data']['rank'] as &$r)
 		{
-			//$r = appointment($r)?appointment($r):'Undefined';
-			$r = 'Undefined';
+			$r = appointment($r)?appointment($r):'Undefined';
+			//$r = 'Undefined';
 		}
 		
 		//$data['data']['rank'] = implode(', ',$data['data']['rank']);
-		$data['data']['appointment'] = 'Undefined';
-		//$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
+		//$data['data']['appointment'] = 'Undefined';
+		$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
 		
 		$core->render['user'] = $data['data'];
 	}
@@ -40,6 +40,7 @@ if(isset($_GET['act']))
 		{
 			if($_POST['vote']=='plus')$con = true;
 			elseif($_POST['vote']=='minus')$con = false;
+			elseif($_POST['vote']=='mail')$con = 'mail';
 			else return;
 			$core->api->get('user.confirm',array('login'=>$_POST['user'],'confirm'=>$con,'sid'=>$_SESSION['sid']));
 		}
@@ -56,8 +57,8 @@ if(isset($_GET['act']))
 		for($i=0;$i<sizeof($data['data']);$i++)
 		{
 			$user = &$data['data'][$i];
-			//$user['appointment'] = appointment($user['rank_main'])?appointment($user['rank_main']):'Undefined';
-			$user['appointment'] = 'Undefined';
+			$user['appointment'] = appointment($user['rank_main'])?appointment($user['rank_main']):'Undefined';
+			//$user['appointment'] = 'Undefined';
 		}
 		$core->render['users'] = $data['data'];
 	}

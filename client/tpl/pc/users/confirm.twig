@@ -45,7 +45,7 @@ e-mail
 {{user.login}}
 </td>
 <td>
-{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}}
+{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} ({{"now"|date("Y")-user.bd.2}})
 </td>
 <td>
 {{user.invite}}:{{user.status}}
@@ -82,6 +82,13 @@ e-mail
 <input type="hidden" name="user" value="{{user.login}}" />
 <button title="" class="btn btn-danger" style="">
 -
+</button>
+</form>
+<form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
+<input type="hidden" name="vote" value="mail" />
+<input type="hidden" name="user" value="{{user.login}}" />
+<button title="" class="btn btn-info" style="">
+mail
 </button>
 </form>
 </div>

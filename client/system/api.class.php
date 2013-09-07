@@ -84,7 +84,6 @@ class api
 				$repeat_req = 0;
 			}
 			
-			//TODO: work on it
 			$cc = $this->core->conf->get('core');
 			if($cc->core->detailed_req===true)
 			{
@@ -109,7 +108,7 @@ class api
 				
 				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 			}
-			$this->core->render['MAIN']['INFO'][] = "$method: ". $this->answer_decode['runtime'][0]*1000 ." ms";
+			//$this->core->render['MAIN']['INFO'][] = "$method: ". $this->answer_decode['runtime'][0]*1000 ." ms";
 		}
 		
 		return $this->answer_decode;

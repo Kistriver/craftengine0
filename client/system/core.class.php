@@ -42,7 +42,7 @@ class core
 				'SUCCESS',
 				'INFO',
 			),
-		);print_r($this->error->error());
+		);
 		
 		try
 		{
@@ -67,7 +67,8 @@ class core
 		}
 		catch (Exception $e)
 		{
-			die('Fatal Twig error: ' . $e->getMessage());
+			//die('Fatal Twig error: ' . $e->getMessage());
+			$this->core->f->quit(500,'can\'t load Twig');
 		}
 	}
 }

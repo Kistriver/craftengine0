@@ -20,7 +20,7 @@
 <font style='float: right;font-family: Flamme-LET;font-size: 16px;'><a href='{{MAIN.ROOT_HTTP}}users/{{post.author_login}}'>
 <img alt='' src='/files/uploads/avatars/{{post.author_login}}.png' style='border-radius: 2px; margin-bottom: -3px' width='16px' height='16px' />
 {{post.author_login}}</a></font><br />
-<font style="word-wrap: break-word;">{{post.tags|join(', ')}}</font>
+Теги: <font style="word-wrap: break-word;">{{post.tags|join(', ')}}</font>
 <div style="position: relative;">
 <form method="post" action="{{MAIN.ROOT_HTTP}}articles/confirm/page-{{page}}">
 <input type="hidden" name="vote" value="plus" />

@@ -1,0 +1,27 @@
+ErrorDocument 404 /errors.php?code=404
+ErrorDocument 403 /errors.php?code=403
+ErrorDocument 500 /errors.php?code=500
+AddType application/octet-stream .rar .doc .mov .avi .pdf .xls .mp4 .jar .bat .sh
+AddType application/x-httpd-php .php
+AddDefaultCharset utf-8
+DefaultLanguage ru-RU
+DirectoryIndex index.php index.html
+ServerSignature Off
+php_flag display_errors on
+php_value upload_max_filesize 32M
+#php_value user_agent “Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)”
+
+Options All -ExecCGI -Indexes -Includes +FollowSymLinks
+
+RewriteEngine on
+
+RewriteEngine On
+
+RewriteCond  %{REMOTE_ADDR} !192.168.1.1
+RewriteCond  %{REMOTE_ADDR} !192.168.1.42
+#RewriteCond %{REQUEST_FILENAME} !themes/dirt/images/favicon/favicon4.ico
+RewriteRule ^(.*)$ http://vk.com/craftengine?w=wall-55881921_28 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?req=$1 [QSA]

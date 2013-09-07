@@ -43,4 +43,7 @@ RewriteRule ^users/confirm$ users.php?act=confirm&page=1 [L]
 RewriteRule ^users/confirm/page-([0-9]*)$ users.php?act=confirm&page=$1 [L]
 RewriteRule ^users/([A-Za-z0-9_]*)$ users.php?act=user&login=$1 [L]
 
+RewriteRule ^profile(|\/)$ profile.php?type=main [L]
+RewriteRule ^profile/([A-Za-z_]*)$ profile.php?type=$1 [L]
+
 RewriteRule ^(([^/]+/)*[^.]+)$ $1.php [L]

@@ -60,6 +60,7 @@ class functions
 		{
 			$template = $this->core->twig->loadTemplate($tpl.'.twig');
 			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
+			$this->core->render['_GET'] = $_GET;
 			echo $template->render($this->core->render);
 		}
 		catch (Exception $e)

@@ -4,6 +4,23 @@ require_once(dirname(__FILE__).'/core.class.php');
 session_start();
 $core = new core();
 
+
+function appointment($rank)
+{
+	$appointments = array(
+		'1'=>'Гл. Администратор',
+		'2'=>'Администратор',
+		'3'=>'Модератор',
+		'4'=>'Инспектор',
+		'5'=>'Дизайнер',
+		'6'=>'Журналист',
+		'7'=>'Пользователь',
+		'8'=>'Посетитель',
+	);
+
+	return isset($appointments[$rank]) ? $appointments[$rank]:false;
+}
+
 $core->api->get('user.loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
 $loggedin = $core->api->answer_decode;
 if(isset($loggedin['errors']))
@@ -33,7 +50,7 @@ if(isset($loggedin['errors']))
 		$_SESSION['rank_main'] = $core->render['SYS']['RANK_MAIN'] = $loggedin['data']['rank_main'];
 		
 		
-		$core->render['SYS']['APPOINTMENT'] = 'Undefined';
+		$core->render['SYS']['APPOINTMENT'] = appointment($_SESSION['rank_main'])?appointment($_SESSION['rank_main']):'Undefined';
 	}
 	else
 	{
@@ -52,7 +69,7 @@ if($_SESSION['loggedin'])
 {
 	$core->render['NAVMENU'] = array(
 	array('Главная',''),
-	array('Новости','articles',false,'+42'),
+	array('Новости','articles',false/*,'+42'*/),
 	array('Пользователи','users'),
 	array('Настройки','profile'),
 	array('Выход','logout'),

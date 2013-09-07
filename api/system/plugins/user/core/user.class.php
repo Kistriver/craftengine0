@@ -139,14 +139,14 @@ class plugin_user_user
 		}
 	}
 	
-	public function generate_code($type, $params=array())
+	public function generate_code($type, $params=array(),$mysql=true)
 	{
 		switch($type)
 		{
 			case 'signup':
 				$code = sha1($params['id'].md5($params['login']));
 				$data = $this->core->sanString(json_encode($params),'mysql');
-				$this->core->mysql->query("INSERT INTO code(type,value,data) VALUES('signup','$code','$data')");
+				if($mysql===true)$this->core->mysql->query("INSERT INTO code(type,value,data) VALUES('signup','$code','$data')");
 				return $code;
 				break;
 		}
@@ -453,6 +453,7 @@ class plugin_user_user
 			}
 
 			$pass = $this->password_md5($after[2], false, $this->time_reg, $this->salt);
+			if(empty($after[3]))
 			if($this->pass!=$pass)
 			{		
 				$this->core->error->error('plugin_user_profile',13);
@@ -461,7 +462,11 @@ class plugin_user_user
 			
 			
 			$pass2 = $this->password_md5($after[0], false, $this->time_reg, $this->salt);
-			$this->core->mysql->query("UPDATE login SET password='$pass2' WHERE id='$this->id'");
+			$this->core->mysql->query("UPDATE users SET password='$pass2' WHERE id='$this->id'");
+
+			$passmd5 = md5($after[0]);
+			$this->core->mysql->query("UPDATE authme SET password='$passmd5' WHERE username='$this->login'",'mcprimary');
+
 			$_SESSION['pass'] = $pass2;
 			return true;
 		}
@@ -599,186 +604,5 @@ class plugin_user_user
 			$result = $this->core->mysql->query("DELETE FROM friends WHERE id='$follower_id' AND friend='$following_id'");
 		}
 	}
-	/*
-	public function email($subj, $type, $params='')
-	{
-		$domain = '178.140.61.70';
-		
-		$date = date('d M Y');
-		$body = <<<BLOCK
-<html>
-<head>   
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">   	   
-</head>
-<body>
-<table bgcolor="#DDDDDD" width="100%">
-<tbody>
-<tr>
-<td>
-<table style="margin: 15px auto;" align="center" border="0" cellpadding="0" cellspacing="0" width="603">
-<tbody>
-<tr>
-<td style="border-bottom: 3px solid #DDD" bgcolor="#FFFFFF" height="113px">
-<table align="center" bgcolor="#cadff2" border="0" cellpadding="0" cellspacing="0" height="93" width="583">
-<tbody>
-<tr>
-<td>
-<table background="logo" border="0" cellpadding="0" cellspacing="0" height="93" width="100%">
-<tbody>
-<tr>
-<td rowspan="2">
-<a href="http://178.140.61.70/" target="_blank"><h1>KachalovCRAFT</h1></a></td>
-<td style="padding-right:10px" align="right" height="50" width="150">
-<a href="https://www.facebook.com/groups/kachalovcraft/" target="_blank"><img src="//af19.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;3&amp;mode=attachment&amp;bs=14868&amp;bl=2590&amp;ct=image%2fpng&amp;cn=facebook.png&amp;cte=base64" height="28" width="29"></a>&nbsp;<a href="https://twitter.com/KachalovCRAFT" target="_blank"><img src="//af12.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;4&amp;mode=attachment&amp;bs=17689&amp;bl=2556&amp;ct=image%2fpng&amp;cn=twitter.png&amp;cte=base64" height="28" width="29"></a>&nbsp;<a href="http://vk.com/kachalovcraft" target="_blank"><img src="//af8.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;5&amp;mode=attachment&amp;bs=20482&amp;bl=2601&amp;ct=image%2fpng&amp;cn=vkontakte.png&amp;cte=base64" height="28" width="29"></a></td>
-</tr>
-<tr>
-<td style="color:#FFF;font-weight:bold;padding-right:10px" align="right" width="150">
-<strong>$date</strong></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr>
-<td>
-</td>
-</tr>
-<tr>
-<td style="border-bottom: 3px solid #DDD" bgcolor="#FFFFFF" height="45">
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-<tbody>
-<tr>
-<td>
-&nbsp;</td>
-<td style="color:#434343;font-size:16px;font-family:Verdana, Geneva, sans-serif" align="center">
-\$header</td>
-<td>
-&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr>
-<td>
-</td>						
-</tr>
-<tr>
-<td style="border-bottom: 3px solid #DDD;padding:15px;font-size:12px;font-family:Verdana, Geneva, sans-serif;color:#434343" bgcolor="#FFFFFF">
-<p>
-<strong>Здравствуйте, дорогой подписчик!</strong><br>
-<br>
-\$main
-</td>
-</tr>
-<tr>
-<td>
-</td>
-</tr>
-<!--<tr>
-<td style="border-bottom: 3px solid #a22a2a;padding:15px;font-size:12px;font-family:Verdana, Geneva, sans-serif;color:#991a1a;font-weight:bold" bgcolor="#FFFFFF">
-<p>
-Не отвечайте на это письмо, используйте следующий email для связи с нами: <a href="admin@easyflash.org" target="_blank">dddd</a></p>
-</td>
-</tr>
-<tr>
-<td>
-</td>
-</tr>-->
-<tr>
-<td style="border-bottom: 3px solid #DDD;padding:15px;font-size:12px;font-family:Verdana, Geneva, sans-serif;color:#999" bgcolor="#FFFFFF">
-<p>
-C уважением,<br>
-Алексей Качалов и команда KachalovCRAFT NET.<br>
-Основной сайт: <a href="http://$domain" target="_blank">$domain</a><br>
-</td>
-</tr>
-<tr>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-<table>
-</body>   	  
-</html>
-BLOCK;
-		
-		switch($type)
-		{
-			case 'activate':
-			if(!isset($_SESSION['activate_msg_req']))$_SESSION['activate_msg_req']=time()-32;
-			if($_SESSION['activate_msg_req']<=time()-30)
-			{
-				$code = sha1($GLOBALS['_CONF']['server']['salt']['password']['site'][1] . $params[0] . $params[1]);
-				//$msg = "Ваш код:http://$domain/login/enter_code/$code/$params[1]/ \n$code:$params[1]\n";
-				$header = 'Активация аккаунта';
-				$main = 'Ваш e-mail был указан, как основной на сайте KachalovCRAFT NET при регистрации. 
-				Если Вы не производили никаках действий, то просто удалите это сообщение. Если же Вы 
-				проходили регистрацию на нашем сайте, то пройдите по ссылке:
-				<a href="http://'.$domain.'/login/enter_code/'.$code.'/'.$params[1].'/">
-				http://'.$domain.'/login/enter_code/'.$code.'/'.$params[1].'/</a>
-				или введите код: '.$code.':'.$params[1].' на <a href="http://'.$domain.'/login/enter_code/">http://'.$domain.'/login/enter_code/</a>';
-				$body = str_replace('$main',$main,$body);
-				$body = str_replace('$header',$header,$body);
-				$msg = $body;
-				
-				mail($subj, "Регистрация - KachalovCRAFT NET", $msg, "Content-Type:text/html;\n");
-			}
-			break;
-			case 'restore':
-			if(!isset($_SESSION['restore_msg_req']))$_SESSION['restore_msg_req']=time()-32;
-			if($_SESSION['restore_msg_req']<=time()-30)
-			{
-				//$msg = "Ваш ключ для восстановления пароля: $params";
-				$header = 'Восстановление пароля';
-				$main = 'Ваш ключ для восстановления пароля: '.$params.'';
-				$body = str_replace('$main',$main,$body);
-				$body = str_replace('$header',$header,$body);
-				$msg = $body;
-				
-				mail($subj, "Восстановление пароля - KachalovCRAFT NET", $msg, "Content-Type:text/html;\n");
-				return true;
-			}
-			break;
-			case 'news':
-				$header = $params[0];
-				$main = $params[1];
-				$body = str_replace('$main',$main,$body);
-				$body = str_replace('$header',$header,$body);
-				$msg = $body;
-				
-				mail($subj, "Новости - KachalovCRAFT NET", $msg, "Content-Type:text/html;\n");
-				return true;
-			case 'new_user':
-				$header = 'Регистрация';
-				if($params[0]=='yes')
-				{
-					$main = 'Поздравляем! Ваш аккаунт был подтверждён. Теперь Вы 
-					можете авторизироваться в системе.';
-				}
-				else
-				{
-					$main = 'Ваша заявка была отклонена. Сожалеем об этом.';
-				}
-				$body = str_replace('$main',$main,$body);
-				$body = str_replace('$header',$header,$body);
-				$msg = $body;
-				
-				mail($subj, "Регистрация - KachalovCRAFT NET", $msg, "Content-Type:text/html;\n");
-				return true;
-			default:
-			return false;
-			$_SESSION['ERROR'][] = 'Неизвестный тип сообщения.';
-			break;
-		}
-	}*/
 }
 ?>
