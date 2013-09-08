@@ -20,7 +20,7 @@ if(isset($_GET['act']))
 		if(isset($data['data'][0]))
 		if($data['data'][0]==false)
 		$core->f->quit(404);
-		
+
 		foreach($data['data']['rank'] as &$r)
 		{
 			$r = appointment($r)?appointment($r):'Undefined';

@@ -194,6 +194,7 @@ class api_user extends api
 		$u['rank_main'] = $user->rank_main;
 		$u['bd'] = $user->birthday;
 		$u['sex'] = $user->sex;
+		$u['last_login'] = $user->time_login;
 		
 		return $this->json($u);
 	}

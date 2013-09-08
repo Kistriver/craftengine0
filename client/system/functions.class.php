@@ -39,7 +39,7 @@ class functions
 		$key = array_search($code, $allow);
 		if(!isset($allow[$key]))$this->quit(500, 'error failed');
 		
-		if(isset($this->core->twig))
+		if(1==2 and isset($this->core->twig))
 		{
 			header('HTTP/1.1 '.$allow[$key]);
 			if(!empty($msg))

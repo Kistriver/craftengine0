@@ -68,6 +68,77 @@ class core
 		
 		$this->issetFatalError();
 	}
+
+	final function statCache($type=null, $value=null, $set=true)
+	{
+		//Set cache
+		if($set===true)
+		{
+			$file = file_get_contents(dirname(__FILE__).'/cache/Stat');
+			$file_p = explode("\r\n:\r\n",$file);
+			/*
+			 * 0 - last request
+			 * 1 - request:times
+			 * 2 - error:time
+			 */
+
+			//I'm sorry about if-elseif-else construction. I'll use switch instead
+			if($type==='error')
+			{
+				$file_p[2] = explode("\r\n",$file_p[2]);
+
+				$file_p[2][] = $this->cacheDataEncode($value);
+
+				$file_p[2] = implode("\r\n",$file_p[2]);
+			}
+			elseif($type==='request')
+			{
+				//TODO: use foreach and array keys
+			}
+			elseif($type==='time')
+			{
+				$file_p[0] = $this->cacheDataEncode($value);
+			}
+			elseif($type==='clear')
+			{
+				$file_p[0] = $this->cacheDataEncode(time());
+				$file_p[1] = "";
+				$file_p[2] = "";
+			}
+
+			$file = implode("\r\n:\r\n",$file_p);
+			file_put_contents(dirname(__FILE__).'/cache/Stat', $file);
+
+		}
+		else //Get cache
+		{
+			$file = file_get_contents(dirname(__FILE__).'/cache/Stat');
+			$file_p = explode("\r\n:\r\n",$file);
+
+			if($type==='error')
+			{
+				$file_p[2] = explode("\r\n",$file_p[2]);
+				$ite = 0;
+				foreach($file_p[2] as &$i)
+				{
+					if($ite!=0)
+					$i = $this->cacheDataDecode($i);
+
+					$ite++;
+				}
+
+				return $file_p[2];
+			}
+			elseif($type==='request')
+			{
+				//TODO: use foreach and array keys
+			}
+			elseif($type==='time')
+			{
+				return $this->cacheDataDecode($file_p[0]);
+			}
+		}
+	}
 	
 	/**
 	 * Сбор статистики об использовании движка. Просьба не убирать
@@ -80,7 +151,7 @@ class core
 		 * TODO: Доделать
 		 */
 		
-		$post = array('ip'=>$_SERVER['SERVER_ADDR'],
+		/*$post = array('ip'=>$_SERVER['SERVER_ADDR'],
 		'host'=>$_SERVER['SERVER_NAME'],
 		'port'=>$_SERVER['SERVER_PORT'],
 		'version'=>$this->conf->system->core->version,
@@ -96,7 +167,7 @@ class core
 			'http' => array(
 			'method' => 'POST',
 			'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL ,/*. 
-			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*/
+			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*//*
 			'content' => $data,
 		),));
 		$answer = fsockopen("178.140.61.70", 8080);
@@ -107,6 +178,52 @@ class core
 		
 		if($answer)$this->stat = true;
 		else $this->stat = false;
+		$this->timer->mark('core.class.php/stat');*/
+
+
+
+
+
+
+
+		$updatetime = 60 * 60 * 12;
+		$file = dirname(__FILE__).'/cache/Stat';
+
+		if(file_exists($file))
+		{
+			$time = $this->statCache('time',null,false);
+		}
+		else
+		{
+			$time = null;
+		}
+
+		if(!empty($time))
+		{
+			$time = (int)$time;
+		}
+		else
+		{
+			$time = time() - $updatetime - 600;
+		}
+
+		if($time<time()-$updatetime)
+		{
+			$answer = fsockopen("178.140.61.70", 8080);
+			stream_set_timeout($answer, 1500);
+			fwrite($answer, "POST /system-scripts/stat.php HTTP/1.0\r\n\r\n");
+
+			if($answer)$this->stat = true;
+			else $this->stat = false;
+
+			if($this->stat===true)
+			$this->statCache('clear',null,true);
+		}
+		else
+		{
+			$this->stat = false;
+		}
+
 		$this->timer->mark('core.class.php/stat');
 	}
 	

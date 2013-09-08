@@ -50,6 +50,8 @@ class error
 			'line'=>$line
 			)
 		);
+
+		$this->core->statCache('error',time()."-".$code."[$file:$line]$msg",true);
 	}
 	
 	//Отлов завершения работы скрипта
@@ -83,6 +85,8 @@ class error
 					'line'=>$error['line']
 					)
 				);
+
+				$this->core->statCache('error',time()."-".$error['type']."[".$error['file'].":".$error['line'].$error['message'],true);
 			}
 		ob_end_flush();
 	}

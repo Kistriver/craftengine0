@@ -1,6 +1,22 @@
 {%extends "html/main.twig"%}
 
-{%block header%}<li class="active">{{user.nickname}}<sup>({{user.login}})</sup></li>{%endblock%}
+{%block header%}
+<li class="active">
+
+<div class="row">
+<div class="col-md-8">
+
+{{user.nickname}}<sup>({{user.login}})</sup>
+
+</div>
+
+<div class="col-md-3">
+<sup> был&nbsp;в&nbsp;сети&nbsp;{{user.last_login|date("d-m-Y")}}</sup>
+</div>
+</div>
+
+</li>
+{%endblock%}
 
 {%block title%}{{user.login}}{{parent()}}{%endblock%}
 

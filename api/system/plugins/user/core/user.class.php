@@ -51,12 +51,14 @@ class plugin_user_user
 				break;
 		}
 		
-		if($this->core->mysql->rows()!=1)
+		if($this->core->mysql->rows()!==1)
 		{
 			return false;
 		}
 		
 		$result = $this->core->mysql->fetch();
+		$result2 = $this->core->mysql->fetch($this->core->mysql->query("SELECT * FROM login_ok WHERE user='$result[id]' ORDER BY time DESC LIMIT 0,1"));
+
 		$bday = $result['birthday'];
 		if(strlen($bday)<8)
 		{
@@ -82,7 +84,7 @@ class plugin_user_user
 		$this->sex = $result['sex'];
 		$this->email = $result['email'];
 		$this->time_reg = $result['time_reg'];
-		//$this->time_login = $result['time_login'];
+		$this->time_login = $result2['time'];
 		//$this->time_fail = $result['time_fail'];
 		//$this->time_logout = $result['time_logout'];
 		$this->totaltime = $result['totaltime'];
