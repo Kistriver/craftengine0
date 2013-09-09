@@ -17,7 +17,7 @@
 	"twig":
 	{
 		"ver":"pc",
-		"cache":true,
+		"cache":false,
 		"reload":true,
 		"escape":false
 	},

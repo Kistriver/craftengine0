@@ -85,6 +85,7 @@ class core
 			//I'm sorry about if-elseif-else construction. I'll use switch instead
 			if($type==='error')
 			{
+				if(str_replace("\r\n",'',$file_p[2]))
 				$file_p[2] = explode("\r\n",$file_p[2]);
 
 				$file_p[2][] = $this->cacheDataEncode($value);
@@ -118,13 +119,9 @@ class core
 			if($type==='error')
 			{
 				$file_p[2] = explode("\r\n",$file_p[2]);
-				$ite = 0;
 				foreach($file_p[2] as &$i)
 				{
-					if($ite!=0)
 					$i = $this->cacheDataDecode($i);
-
-					$ite++;
 				}
 
 				return $file_p[2];
@@ -185,7 +182,6 @@ class core
 
 
 
-
 		$updatetime = 60 * 60 * 12;
 		$file = dirname(__FILE__).'/cache/Stat';
 
@@ -195,29 +191,21 @@ class core
 		}
 		else
 		{
-			$time = null;
-		}
-
-		if(!empty($time))
-		{
-			$time = (int)$time;
-		}
-		else
-		{
-			$time = time() - $updatetime - 600;
+			$time = time();
+			$this->statCache('clear',$time,true);
 		}
 
 		if($time<time()-$updatetime)
 		{
-			$answer = fsockopen("178.140.61.70", 8080);
-			stream_set_timeout($answer, 1500);
-			fwrite($answer, "POST /system-scripts/stat.php HTTP/1.0\r\n\r\n");
+			$answer = fsockopen("localhost", 8080);
+			stream_set_timeout($answer, 2);
+			fwrite($answer, "GET /system-scripts/stat.php HTTP/1.0\r\n\r\n");
 
 			if($answer)$this->stat = true;
 			else $this->stat = false;
 
-			if($this->stat===true)
-			$this->statCache('clear',null,true);
+			//if($this->stat===true)
+			//$this->statCache('clear',null,true);
 		}
 		else
 		{
@@ -340,6 +328,7 @@ class core
 		$data = unserialize($data);
 		
 		$da = '';
+		if(!is_array($data))return false;
 		foreach($data as $d)
 		$da .= pack('c*',$d);
 		

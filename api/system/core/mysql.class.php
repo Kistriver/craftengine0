@@ -85,6 +85,8 @@ class mysql
 			$tr = $e->getTrace();
 			
 			$this->core->error->error_php(E_USER_ERROR,$e->getMessage(),$tr[0]['file'],$tr[0]['line']);
+
+			//return false;
 		}
 	}
 	
