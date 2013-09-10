@@ -3,6 +3,7 @@
 	"admin_mail":"alex-kachalov@mail.ru",
 	"debug":true,
 	"send_mail_report":true,
+	"http_root":"/",
 	"db":
 	[
 		[
@@ -27,6 +28,7 @@
 			"MCprimary2013"
 		]
 	],
+	"system_scripts":["localhost",8080],
 	"preg":
 	{
 		"mail":

@@ -70,13 +70,13 @@ class mail
 	//Добавления письма в лист ожидания на отправку
 	public function add_waiting_list($to, $type, $params=null)
 	{
-		$types = array(	'000' => 'Fatal PHP error',
+		/**array(	'000' => 'Fatal PHP error',
 						'001' => 'PHP error',
 						'002' => 'Register',
 						'003' => 'Restore',
 						'004' => 'Regular',
 						'005' => 'News',
-					);
+					);*/
 					
 					
 		$time = time();

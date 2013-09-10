@@ -12,7 +12,7 @@
 			"api":true,
 			"client":true
 		},
-		"detailed_req":false
+		"detailed_req":true
 	},
 	"twig":
 	{

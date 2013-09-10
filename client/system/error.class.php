@@ -7,6 +7,9 @@ class error
 	public function __construct($core)
 	{
 		$this->core = $core;
+
+		set_error_handler(array($this,'error_php'));
+		//register_shutdown_function(array($this, 'fatal_error_php'));
 	}
 	
 	public function error($er=null)
@@ -27,6 +30,14 @@ class error
 		{
 			$this->errors[] = $er[2]." #".$er[0]."-".$er[1];
 		}
+	}
+
+	public function error_php($code,$msg,$file,$line)
+	{
+		$file_fr = str_replace('/system','',dirname(__FILE__));
+		$file = str_replace($file_fr,'{{CLIENT_ROOT}}',$file);
+
+		$this->error("[$file:$line]$msg #client-$code");
 	}
 }
 ?>

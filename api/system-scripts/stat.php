@@ -46,7 +46,7 @@ $answer = @file_get_contents($url,false,$context);
 $answer_decode = json_decode($answer, true);
 if(!$answer_decode)
 {
-	exit;
+
 }
 
 if(!empty($answer_decode['data'][0]))
@@ -56,4 +56,6 @@ if(!empty($answer_decode['data'][0]))
 		$core->statCache('clear',time(),true);
 	}
 }
+
+unlink(dirname(__FILE__).'/../system/core/cache/StatLock');
 ?>

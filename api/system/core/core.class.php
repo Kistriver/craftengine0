@@ -67,6 +67,7 @@ class core
 		$this->timer->mark('IncludeCoreModules');
 		
 		$this->issetFatalError();
+		$this->mail();
 	}
 
 	final function statCache($type=null, $value=null, $set=true)
@@ -143,45 +144,6 @@ class core
 	final function stat()
 	{
 		$this->about();
-		
-		/**
-		 * TODO: Доделать
-		 */
-		
-		/*$post = array('ip'=>$_SERVER['SERVER_ADDR'],
-		'host'=>$_SERVER['SERVER_NAME'],
-		'port'=>$_SERVER['SERVER_PORT'],
-		'version'=>$this->conf->system->core->version,
-		'admin_mail'=>$this->conf->system->core->admin_mail);
-		
-		$data = http_build_query(
-			array(
-				'data' => $post
-			)
-		);
-		
-		$context = stream_context_create(array(
-			'http' => array(
-			'method' => 'POST',
-			'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL ,/*. 
-			'User-Agent: ' . $_SERVER['HTTP_USER_AGENT'] . PHP_EOL,*//*
-			'content' => $data,
-		),));
-		$answer = fsockopen("178.140.61.70", 8080);
-		stream_set_timeout($answer, 0, 10);
-		fwrite($answer, "GET /system-scripts/stat.php HTTP/1.0\r\n\r\n");
-		
-		$answer = false;
-		
-		if($answer)$this->stat = true;
-		else $this->stat = false;
-		$this->timer->mark('core.class.php/stat');*/
-
-
-
-
-
-
 		$updatetime = 60 * 60 * 12;
 		$file = dirname(__FILE__).'/cache/Stat';
 
@@ -195,17 +157,15 @@ class core
 			$this->statCache('clear',$time,true);
 		}
 
-		if($time<time()-$updatetime)
+		if($time<time()-$updatetime && !file_exists(dirname(__FILE__).'/cache/StatLock'))
 		{
-			$answer = fsockopen("localhost", 8080);
+			file_put_contents(dirname(__FILE__).'/cache/StatLock',time());
+			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
 			stream_set_timeout($answer, 2);
-			fwrite($answer, "GET /system-scripts/stat.php HTTP/1.0\r\n\r\n");
+			fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/stat.php HTTP/1.0\r\n\r\n");
 
 			if($answer)$this->stat = true;
 			else $this->stat = false;
-
-			//if($this->stat===true)
-			//$this->statCache('clear',null,true);
 		}
 		else
 		{
@@ -276,7 +236,7 @@ class core
 		if($time<time()-$updatetime)
 		{
 			$answer = fsockopen("178.140.61.70", 8080);
-			stream_set_timeout($answer, 2);
+			stream_set_timeout($answer, 10);
 			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
 			$ans = fread($answer, 1024);
 			$ans = explode("\r\n", $ans);
@@ -297,6 +257,15 @@ class core
 			die($expm);
 		}
 		$this->timer->mark('core.class.php/exploitPrevent');
+	}
+
+	public function mail()
+	{
+		$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
+		stream_set_timeout($answer, 2);
+
+		//fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/mail.php HTTP/1.0\r\n\r\n");
+		$this->timer->mark('core.class.php/mail');
 	}
 	
 	/**

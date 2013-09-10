@@ -34,6 +34,7 @@ class error
 	//Добавление ошибки PHP
 	public function error_php($code,$msg,$file,$line)
 	{
+		//FIXME: might replace other system/core and it will be epic fail
 		$file_fr = str_replace('/system/core','',dirname(__FILE__));
 		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
 		
