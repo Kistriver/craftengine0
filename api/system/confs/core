@@ -28,7 +28,7 @@
 			"MCprimary2013"
 		]
 	],
-	"system_scripts":["localhost",8080],
+	"system_scripts":["api.kcraft.su",80],
 	"preg":
 	{
 		"mail":

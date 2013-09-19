@@ -47,7 +47,8 @@ class core
 		try
 		{
 			Twig_Autoloader::register(true);
-			$loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../tpl/'.$cc->twig->ver);
+			$v = isset($cc->twig->ver)?$cc->twig->ver:'pc';
+			$loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../tpl/'.$v);
 			
 			if($cc->twig->cache==true)
 			$t_cache = dirname(__FILE__).'/tmp';

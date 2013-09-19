@@ -21,9 +21,9 @@ else
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="shortcut icon" href="http://178.140.61.70/php/tpl/pc/img/main/favicon.ico">
+<link rel="shortcut icon" href="http://kcraft.su/php/tpl/pc/img/main/favicon.ico">
 <meta name="robots" content="noindex,nofollow">
-<meta http-equiv="refresh" content="30; url=http://178.140.61.70/help">
+<meta http-equiv="refresh" content="30; url=http://api.kcraft.su/help">
 <title>CRAFTEngine API</title>
 <style type="text/css">
 body { color: #333333; background: #e7e7e8; font-size: 14px; font-family: Arial; }
@@ -47,7 +47,7 @@ left = 30;
 <body onLoad = 'startTime()'>
 <div>
 <h1>API</h1>
-<p>Чтобы воспользоваться <b>CRAFTEngine API</b> нужно прочитать <a href="http://178.140.61.70/help">документацию</a>.<br />
+<p>Чтобы воспользоваться <b>CRAFTEngine API</b> нужно прочитать <a href="http://api.kcraft.su/help">документацию</a>.<br />
 	Вы будете автоматически перенаправлены через <span id="time">30</span> секунд.</p>
 </div>
 </body>

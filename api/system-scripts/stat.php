@@ -18,7 +18,7 @@ $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
 
 $stat = $core->json_encode_ru($stat);
 
-$url = 'http://178.140.61.70:8080/index.php?method=stat.set';
+$url = 'http://stat.kcraft.su:80/index.php?method=stat.set';
 
 $data = http_build_query
 (

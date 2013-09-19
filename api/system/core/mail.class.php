@@ -7,7 +7,7 @@
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
  * @access public
- * @see http://178.140.61.70/
+ * @see http://kcraft.su/
  */
 class mail
 {
@@ -52,7 +52,7 @@ class mail
 			$content .= file_get_contents($root.'footer');
 			
 			$params['date'] = date('d-m-Y');
-			$params['domain'] = '178.140.61.70';
+			$params['domain'] = 'kcraft.su';
 			$params['header'] = $typeid[$id][1];
 			
 			foreach($params as $blockname => $value)

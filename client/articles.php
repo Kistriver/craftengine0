@@ -20,7 +20,7 @@ if(!empty($_GET['act']))
 		$post = $data['data'];
 		//$post['tags'] = implode(', ',$post['tags']);	
 		//$post['post_time'] = date('d-m-Y H:i',$post['post_time']);
-		$post['article'] = str_replace("\r\n",'<br /> ',$post['article']);
+		$post['article'] = str_replace("\n",'<br /> ',$post['article']);
 		$post['article'] = str_replace('<br /> ',"<br />\r\n",$post['article']);
 
 
@@ -49,7 +49,7 @@ if(!empty($_GET['act']))
 		{
 			//$template = $twig->loadTemplate('articles/main');
 			$post = $data['data']['posts'][$i];
-			$post['article'] = str_replace("\r\n",'<br /> ',$post['article']);
+			$post['article'] = str_replace("\n",'<br /> ',$post['article']);
 			$post['article'] = str_replace('<br /> ',"<br />\r\n",$post['article']);
 			$desc = mb_substr($post['article'], 0, 150, 'UTF-8');
 			$desc = str_replace("<br />\r\n",' ',$desc);

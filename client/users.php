@@ -38,8 +38,8 @@ if(isset($_GET['act']))
 		//$core->render['type'] = 'all';
 		if(!empty($_POST['vote']) AND !empty($_POST['user']))
 		{
-			if($_POST['vote']=='plus')$con = true;
-			elseif($_POST['vote']=='minus')$con = false;
+			if($_POST['vote']=='plus')$con = 'true';
+			elseif($_POST['vote']=='minus')$con = 'false';
 			elseif($_POST['vote']=='mail')$con = 'mail';
 			else return;
 			$core->api->get('user.confirm',array('login'=>$_POST['user'],'confirm'=>$con,'sid'=>$_SESSION['sid']));

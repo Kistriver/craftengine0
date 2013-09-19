@@ -19,6 +19,11 @@ class api_stat extends api
 
 		$data = explode("\r\n:\r\n",$data);
 
+		if(sizeof($data)!=3)
+		{
+			return $this->json(array(false));
+		}
+
 		$req = $this->core->sanString('');
 
 		$data[2] = explode("\r\n",$data[2]);

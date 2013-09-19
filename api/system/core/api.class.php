@@ -3,7 +3,7 @@
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
  * @access public
- * @see http://178.140.61.70/
+ * @see http://kcraft.su/
  */
 class api
 {

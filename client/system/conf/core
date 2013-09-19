@@ -1,7 +1,7 @@
 {
 	"api":
 	{
-		"url":"http:\/\/178.140.61.70:8080\/"
+		"url":"http://api.kcraft.su/"
 	},
 	"core":
 	{
@@ -12,7 +12,7 @@
 			"api":true,
 			"client":true
 		},
-		"detailed_req":true
+		"detailed_req":false
 	},
 	"twig":
 	{
@@ -26,7 +26,7 @@
 		"client_name":"KachalovCRAFT NET",
 		"root":"\/",
 		"root_http":"\/",
-		"client_host":"http:\/\/localhost\/",
+		"client_host":"http://localhost/",
 		"client_keywords":"KachalovCRAFT NET, Minecraft",
 		"client_desc":"Look at my site, my site is amazing! Give it a lick..."
 	},
