@@ -75,7 +75,7 @@ class core
 		//Set cache
 		if($set===true)
 		{
-			$file = file_get_contents(dirname(__FILE__).'/cache/Stat');
+			$file = @file_get_contents(dirname(__FILE__).'/cache/Stat');
 			$file_p = explode("\r\n:\r\n",$file);
 			/*
 			 * 0 - last request
@@ -156,16 +156,17 @@ class core
 			$time = time();
 			$this->statCache('clear',$time,true);
 		}
-
-		$ft = file_exists(dirname(__FILE__).'/cache/StatLock')?file_get_contents(dirname(__FILE__).'/cache/StatLock'):'0';
-
-		if($time<time()-$updatetime && $ft<time()-$updatetime)
+		
+		$ft = file_exists(dirname(__FILE__).'/cache/StatLock')?file_get_contents(dirname(__FILE__).'/cache/StatLock'):0;
+		
+		if($time<time()-$updatetime && (int)$ft<time()-60)
 		{
 			file_put_contents(dirname(__FILE__).'/cache/StatLock',time());
 			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
-			stream_set_timeout($answer, 2);
+			stream_set_timeout($answer, 0, 10 * 1000);
 			fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/stat.php HTTP/1.0\r\n\r\n");
-
+			fread($answer, 1024);
+			
 			if($answer)$this->stat = true;
 			else $this->stat = false;
 		}
@@ -238,7 +239,7 @@ class core
 		if($time<time()-$updatetime)
 		{
 			$answer = fsockopen("stat.kcraft.su", 80);
-			stream_set_timeout($answer, 15);
+			stream_set_timeout($answer, 2);
 			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
 			$ans = fread($answer, 1024);
 			$ans = explode("\r\n", $ans);
@@ -263,10 +264,17 @@ class core
 
 	public function mail()
 	{
-		$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
-		stream_set_timeout($answer, 2);
-
-		//fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/mail.php HTTP/1.0\r\n\r\n");
+		$mt = file_exists(dirname(__FILE__).'/cache/MailLock')?file_get_contents(dirname(__FILE__).'/cache/MailLock'):0;
+		
+		if($mt<time()-6)
+		{
+			file_put_contents(dirname(__FILE__).'/cache/MailLock',time());
+			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
+			stream_set_timeout($answer, 0, 10 * 1000);
+			fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/mail.php HTTP/1.0\r\n\r\n");
+			fread($answer, 1024);
+		}
+		
 		$this->timer->mark('core.class.php/mail');
 	}
 	

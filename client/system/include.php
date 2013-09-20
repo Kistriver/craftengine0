@@ -4,7 +4,6 @@ require_once(dirname(__FILE__).'/core.class.php');
 session_start();
 $core = new core();
 
-
 function appointment($rank)
 {
 	$appointments = array(

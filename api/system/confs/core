@@ -4,6 +4,7 @@
 	"debug":true,
 	"send_mail_report":true,
 	"http_root":"/",
+	"mail_addr":"kcraft.su",
 	"db":
 	[
 		[

@@ -57,5 +57,5 @@ if(!empty($answer_decode['data'][0]))
 	}
 }
 
-unlink(dirname(__FILE__).'/../system/core/cache/StatLock');
+if(file_exists(dirname(__FILE__).'/../system/core/cache/StatLock'))unlink(dirname(__FILE__).'/../system/core/cache/StatLock');
 ?>

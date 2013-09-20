@@ -52,7 +52,7 @@ class mail
 			$content .= file_get_contents($root.'footer');
 			
 			$params['date'] = date('d-m-Y');
-			$params['domain'] = 'kcraft.su';
+			$params['domain'] = $this->core->conf->system->core->mail_addr;
 			$params['header'] = $typeid[$id][1];
 			
 			foreach($params as $blockname => $value)

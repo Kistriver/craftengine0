@@ -11,6 +11,23 @@ class core
 	
 	public function __construct()
 	{
+		if(!empty($_GET['getinfo']))
+		switch($_GET['getinfo'])
+		{
+			case 'author':
+				die("<a href='http://vk.com/ak1998'>Alexey Kachalov</a> for <a href='http://kcraft.su/'>KachalovCRAFT NET</a>");
+				break;
+			case 'core':
+				die("CRAFTEngine Client v1.0");
+				break;
+			case 'contact':
+				die("alex-kachalov@mail.ru<br />http://kcraft.su/users/Kachalov<br />http://vk.com/ak1998");
+				break;
+			default:
+				die("usage: ?getinfo=(author|core|contact)");
+				break;
+		}
+		
 		$php_min = '5.3.0';
 		if(version_compare(PHP_VERSION, $php_min) <= 0)
 		{
