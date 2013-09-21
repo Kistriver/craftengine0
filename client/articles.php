@@ -24,8 +24,8 @@ if(!empty($_GET['act']))
 		$post['article'] = str_replace('<br /> ',"<br />\r\n",$post['article']);
 
 
-		$b = array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[url]','[/url]');
-		$a = array('<b>','</b>','<i>','</i>','<u>','</u>','<a href="','">Link</a>');
+		$b = array('[b]','[/b]','[i]','[/i]','[s]','[/s]','[u]','[/u]','[url]','[/url]');
+		$a = array('<b>','</b>','<i>','</i>','<s>','</s>','<u>','</u>','<a href="','">Link</a>');
 		$post['article'] = str_replace($b,$a,$post['article']);
 
 		$core->render['post'] = $post;
@@ -57,8 +57,8 @@ if(!empty($_GET['act']))
 			//$post['tags'] = implode(', ',$post['tags']);	
 			//$post['post_time'] = date('d-m-Y H:i',$post['post_time']);
 
-			$b = array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[url]','[/url]');
-			$a = array('<b>','</b>','<i>','</i>','<u>','</u>','<a href="','">Link</a>');
+			$b = array('[b]','[/b]','[i]','[/i]','[s]','[/s]','[u]','[/u]','[url]','[/url]');
+			$a = array('<b>','</b>','<i>','</i>','<s>','</s>','<u>','</u>','<a href="','">Link</a>');
 			$post['article'] = str_replace($b,$a,$post['article']);
 
 			$posts[] = $post;
