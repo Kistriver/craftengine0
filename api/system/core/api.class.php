@@ -59,7 +59,7 @@ class api
 				}
 				
 				if(empty($plugin))
-				require_once(dirname(__FILE__)."/../../".$module.".class.php");
+				require_once(dirname(__FILE__)."/../api/".$module.".class.php");
 				else
 				require_once(dirname(__FILE__)."/../plugins/".$plugin."/api/".$module.".class.php");
 				

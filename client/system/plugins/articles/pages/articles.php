@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/system/include.php');
+if(!defined('CE_HUB'))die('403');
 
 if(!empty($_GET['act']))
 {
@@ -34,7 +34,7 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='posts')
 	{
-		$core->api->get('article.posts',array('page'=>'1'));
+		$core->api->get('article.posts',array('page'=>$_GET['page']));
 		
 		$data = $core->api->answer_decode;
 		

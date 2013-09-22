@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/system/include.php');
+if(!defined('CE_HUB'))die('403');
 
 $core->api->get('plugin.list');
 $data = $core->api->answer_decode;

@@ -1,10 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/core.class.php');
-
-session_start();
-$core = new core();
-
-/*function appointment($rank)
+function appointment($rank)
 {
 	$appointments = array(
 		'1'=>'Гл. Администратор',
@@ -68,7 +63,7 @@ if($_SESSION['loggedin'])
 {
 	$core->render['NAVMENU'] = array(
 	array('Главная',''),
-	array('Новости','articles',false/*,'+42'*//*),
+	array('Новости','articles',false/*,'+42'*/),
 	array('Пользователи','users'),
 	array('Настройки','profile'),
 	array('Выход','logout'),
@@ -83,9 +78,5 @@ else
 	array('Регистрация','signup'),
 	array('Вход','login'),
 	);
-}*/
-
-//$core->render['MAIN']['INFO'][] = 'Инфа';
-//$core->render['MAIN']['ERRORS'][] = 'Ошибка';
-//$core->render['MAIN']['SUCCESS'][] = 'Успешно';
+}
 ?>

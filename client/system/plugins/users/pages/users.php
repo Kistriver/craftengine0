@@ -1,5 +1,6 @@
 <?php
-require_once(dirname(__FILE__).'/system/include.php');
+if(!defined('CE_HUB'))die('403');
+
 if(isset($_GET['act']))
 {
 	$act = $_GET['act'];

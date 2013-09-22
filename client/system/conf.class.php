@@ -8,7 +8,7 @@ class conf
 	public function __construct($core)
 	{
 		$this->core = $core;
-		$this->folder = dirname(__FILE__).'/conf/';
+		$this->folder = dirname(__FILE__).'/confs/';
 		$this->conf = new stdClass();
 	}
 	
