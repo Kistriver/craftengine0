@@ -15,13 +15,6 @@
 			"websitepass1998"
 		],
 		[
-			"social",
-			"127.0.0.1",
-			"social",
-			"root",
-			"pass"
-		],
-		[
 			"mcprimary",
 			"127.0.0.1",
 			"mcprimary",
@@ -29,20 +22,5 @@
 			"MCprimary2013"
 		]
 	],
-	"system_scripts":["api.kcraft.su",80],
-	"preg":
-	{
-		"mail":
-			[
-				"mail.ru",
-				"gmail.com",
-				"yandex.ru",
-				"bk.ru",
-				"inbox.ru",
-				"list.ru",
-				"live.ru",
-				"hotmail.com",
-				"yahoo.com"
-			]
-	}
+	"system_scripts":["api.kcraft.su",80]
 }

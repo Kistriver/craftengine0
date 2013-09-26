@@ -20,7 +20,7 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='restore')
 	{
-		$core->f->show('login/restore');
+		$core->f->show('login/restore','users');
 		die;
 	}
 	elseif($act=='confirm')
@@ -58,5 +58,5 @@ else
 	}
 }
 
-$core->f->show('login/main');
+$core->f->show('login/main','users');
 ?>

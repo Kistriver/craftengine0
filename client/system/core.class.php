@@ -13,6 +13,7 @@ class core
 	
 	public function __construct()
 	{
+		$ver = 'v1.3';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{
@@ -20,13 +21,16 @@ class core
 				die("<a href='http://vk.com/ak1998'>Alexey Kachalov</a> for <a href='http://kcraft.su/'>KachalovCRAFT NET</a>");
 				break;
 			case 'core':
-				die("CRAFTEngine Client v1.0");
+				die("CRAFTEngine Client ".$ver);
 				break;
 			case 'contact':
 				die("alex-kachalov@mail.ru<br />http://kcraft.su/users/Kachalov<br />http://vk.com/ak1998");
 				break;
+			case 'version':
+				die($ver);
+				break;
 			default:
-				die("usage: ?getinfo=(author|core|contact)");
+				die("usage: ?getinfo=(author|core|contact|version)");
 				break;
 		}
 		
@@ -56,7 +60,6 @@ class core
 				'ROOT'=>$ccc->root,
 				'ROOT_HTTP'=>$ccc->root_http,
 				'HOST'=>$ccc->client_host,
-				'V'=>$cc->twig->ver,
 				'ERRORS',
 				'SUCCESS',
 				'INFO',
@@ -66,8 +69,7 @@ class core
 		try
 		{
 			Twig_Autoloader::register(true);
-			$v = isset($cc->twig->ver)?$cc->twig->ver:'pc';
-			$loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/../tpl/'.$v);
+			$loader = new Twig_Loader_Filesystem(dirname(__FILE__).'/');
 			
 			if($cc->twig->cache==true)
 			$t_cache = dirname(__FILE__).'/tmp';
@@ -97,33 +99,7 @@ class core
 		////========================REWRITE RULES ZONE========================////
 		$this->rules[] = array(array('^index$','^$'),'index.php');
 		
-		$this->rules[] = array('^articles$','articles.php', array('act'=>'posts','page'=>'1'));
-		$this->rules[] = array('^articles/page-([0-9]*)$','articles.php', array('act'=>'posts','page'=>'$1'));
-		$this->rules[] = array('^articles/([0-9]*)/([0-9]*)$','articles.php', array('act'=>'post','user_id'=>'$1','post_id'=>'$2'));
-		$this->rules[] = array('^articles/confirm/page-([0-9]*)$','articles.php', array('act'=>'confirm','page'=>'$1'));
-		$this->rules[] = array('^articles/([a-z]*)$','articles.php', array('act'=>'$1'));
-		
-		$this->rules[] = array('^logout$','login.php', array('act'=>'logout'));
-		$this->rules[] = array('^login$','login.php'/*, array('act'=>'login')*/);
-		$this->rules[] = array('^login/restore$','login.php', array('act'=>'restore'));
-		$this->rules[] = array('^login/confirm$','login.php', array('act'=>'confirm'));
-		$this->rules[] = array('^login/confirm/([a-z0-9]*)$','login.php', array('act'=>'confirm','code'=>'$1'));
-		
-		$this->rules[] = array('^users$','users.php', array('act'=>'all','page'=>'1'));
-		$this->rules[] = array('^users/page-([0-9]*)$','users.php', array('act'=>'all','page'=>'$1'));
-		$this->rules[] = array('^users/id([0-9]*)$','users.php', array('act'=>'user','page'=>'$1'));
-		$this->rules[] = array('^users/confirm$','users.php', array('act'=>'confirm','page'=>'1'));
-		$this->rules[] = array('^users/confirm/page-([0-9]*)$','users.php', array('act'=>'confirm','page'=>'$1'));
-		$this->rules[] = array('^users/([A-Za-z0-9_]*)$','users.php', array('act'=>'user','login'=>'$1'));
-		
-		$this->rules[] = array('^profile(|\/)$','profile.php', array('type'=>'main'));
-		$this->rules[] = array('^profile/([A-Za-z_]*)$','profile.php', array('type'=>'$1'));
-		
 		$this->rules[] = array('^plugins$','plugins.php');
-		
-		$this->rules[] = array('^signup$','signup.php');
-		
-		$this->rules[] = array('^download$','download.php');
 		////========================REWRITE RULES ZONE========================////
 	}
 }

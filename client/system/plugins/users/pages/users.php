@@ -69,5 +69,5 @@ else
 	$core->f->quit(404);
 }
 
-$core->f->show('users/main');
+$core->f->show('users/main','users');
 ?>

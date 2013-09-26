@@ -23,10 +23,6 @@ class functions
 		'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
 		'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
 		
-		//Doesn't work
-		/*if(defined('JSON_PRETTY_PRINT'))
-		$str1 = json_encode($str, JSON_PRETTY_PRINT);
-		else*/
 		$str1 = json_encode($str);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
@@ -56,11 +52,12 @@ class functions
 		}
 	}
 	
-	public function show($tpl)
+	public function show($tpl,$plugin=null)
 	{
 		try
 		{
-			$template = $this->core->twig->loadTemplate($tpl.'.twig');
+			$path = (!empty($plugin)?'plugins/'.$plugin.'/tpl':'tpl').'/';
+			$template = $this->core->twig->loadTemplate($path.$tpl.'.twig');
 			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
 			$this->core->render['_GET'] = $_GET;
 			echo $template->render($this->core->render);

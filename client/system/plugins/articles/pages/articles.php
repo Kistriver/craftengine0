@@ -65,7 +65,7 @@ if(!empty($_GET['act']))
 		}
 		$core->render['type'] = 'default';
 		$core->render['posts'] = $posts;
-		$core->f->show('articles/main');
+		$core->f->show('articles/main','articles');
 	}
 	elseif($act=='new')
 	{
@@ -80,7 +80,7 @@ if(!empty($_GET['act']))
 			
 		}
 		
-		$core->f->show('articles/new');
+		$core->f->show('articles/new','articles');
 	}
 	elseif($act=='confirm')
 	{
@@ -107,7 +107,7 @@ if(!empty($_GET['act']))
 		$core->render['pages'] = $data['data']['pages'];
 		$core->render['page'] = $page;
 		
-		$core->f->show('articles/confirm');
+		$core->f->show('articles/confirm','articles');
 	}
 	else
 		$core->f->quit(404);

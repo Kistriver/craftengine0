@@ -13,8 +13,11 @@ if(substr($uri, 0, strlen($hr))==$hr)$uri = substr($uri, strlen($hr));
 
 if(preg_match("'\.\.'", $uri))die('Hack attempt');
 
-//Так как обрабатываются запросы с файлами в формате php или вообще без формата, то это не нужно
-if(preg_match("'^((tpl|files|other|moni)/)'", $uri))
+elseif(preg_match("'^((system)/)'", $uri))
+{
+	$core->f->quit(403);
+}
+elseif(preg_match("'^((files|other|style)/)'", $uri))
 {
 	if(file_exists(dirname(__FILE__).'/'.$uri))
 	{

@@ -58,5 +58,5 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	}
 }
 
-$core->f->show('signup/main');
+$core->f->show('signup/main','users');
 ?>

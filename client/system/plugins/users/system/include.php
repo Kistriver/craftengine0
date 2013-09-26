@@ -1,4 +1,23 @@
 <?php
+
+$core->rules[] = array('^signup$','signup.php');
+
+$core->rules[] = array('^logout$','login.php', array('act'=>'logout'));
+$core->rules[] = array('^login$','login.php'/*, array('act'=>'login')*/);
+$core->rules[] = array('^login/restore$','login.php', array('act'=>'restore'));
+$core->rules[] = array('^login/confirm$','login.php', array('act'=>'confirm'));
+$core->rules[] = array('^login/confirm/([a-z0-9]*)$','login.php', array('act'=>'confirm','code'=>'$1'));
+
+$core->rules[] = array('^users$','users.php', array('act'=>'all','page'=>'1'));
+$core->rules[] = array('^users/page-([0-9]*)$','users.php', array('act'=>'all','page'=>'$1'));
+$core->rules[] = array('^users/id([0-9]*)$','users.php', array('act'=>'user','page'=>'$1'));
+$core->rules[] = array('^users/confirm$','users.php', array('act'=>'confirm','page'=>'1'));
+$core->rules[] = array('^users/confirm/page-([0-9]*)$','users.php', array('act'=>'confirm','page'=>'$1'));
+$core->rules[] = array('^users/([A-Za-z0-9_]*)$','users.php', array('act'=>'user','login'=>'$1'));
+
+$core->rules[] = array('^profile(|\/)$','profile.php', array('type'=>'main'));
+$core->rules[] = array('^profile/([A-Za-z_]*)$','profile.php', array('type'=>'$1'));
+
 function appointment($rank)
 {
 	$appointments = array(

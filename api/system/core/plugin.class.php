@@ -58,7 +58,7 @@ class plugin
 		$main = $this->core->conf->load_conf('pluginConf',array('folder'=>$folder,'write'=>false));
 		
 		if(isset($main->name,$main->version,$main->web,$main->id,$main->author,
-		$main->loadClass,$main->confs,$main->api,$main->requires,$main->permissions))
+		$main->loadClass,$main->confs,$main->api,$main->requires/*,$main->permissions*/))
 		{}else
 		{
 			return array(false,1);

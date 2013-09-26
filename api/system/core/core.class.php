@@ -370,33 +370,5 @@ class core
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}
-	
-	/**
-	 * Preg регулярки
-	 */
-	public function preg($type)
-	{
-		switch($type)
-		{
-			case 'mail':
-				$mails = implode('|',$this->conf->system->core->preg['mail']);
-				$pattern = '/^[.a-z0-9_-]{4,70}\@'.$mails.'$/';
-				break;
-			
-			case 'login':
-				$pattern = '/^[a-zA-Z0-9_]{'. $this->conf->plugins->user->user->length['nickname']['min'] .','. $this->conf->plugins->user->user->length['nickname']['max'] .'}$/';
-				break;
-			case 'password':
-				$pattern = '/^[a-zA-Z0-9_-]{'. $this->conf->plugins->user->user->length['password']['min'] .','. $this->conf->plugins->user->user->length['password']['max'] .'}$/';
-				break;
-			case 'name':
-				$pattern = '/^[\w]{'. $this->conf->plugins->user->user->length['name']['min'] .','. $this->conf->plugins->user->user->length['name']['max'] .'}$/';
-				break;
-			case 'surname':
-				$pattern = '/^[\w]{'. $this->conf->plugins->user->user->length['surname']['min'] .','. $this->conf->plugins->user->user->length['surname']['max'] .'}$/';
-				break;
-		}
-		return $pattern;
-	}
 }
 ?>

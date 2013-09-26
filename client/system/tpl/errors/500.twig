@@ -1,0 +1,9 @@
+{%extends "/tpl/errors/main.twig"%}
+
+{%block header%}500 - INTERNAL SERVER ERROR{%endblock%}
+{%block content%}
+<p>
+<img src='http://farm8.staticflickr.com/7001/6509400855_aaaf915871_z.jpg' />
+</p>
+{%if desc is defined%}<p>{{desc}}</p>{%endif%}
+{%endblock%}

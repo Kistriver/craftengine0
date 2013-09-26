@@ -1,0 +1,57 @@
+{%extends "/tpl/html/main.twig"%}
+
+{%block title%}Скачать фреймворк {{parent()}}{%endblock%}
+{%block header%}<li class="active">Скачать фреймворк</li>{%endblock%}
+
+{%block content%}
+<div class="row alert alert-info">
+<div class="col-md-3">
+<b>Название</b>
+</div>
+<div class="col-md-2">
+<b>Характеристики</b>
+</div>
+<div class="col-md-3">
+<b>Описание</b>
+</div>
+<div class="col-md-4">
+<b>Скачать</b>
+</div>
+</div>
+
+<div class="row alert alert-danger">
+<div class="col-md-3">
+Standart Edition
+</div>
+<div class="col-md-2">
+---
+</div>
+<div class="col-md-3">
+Ничего лишнего. Только ядро и клиент.
+</div>
+<div class="col-md-4">
+<a class="alert-link">Download</a><br />
+(Release)<br />
+(01.10.13 18:00)
+</div>
+
+</div>
+<div class="row alert alert-success">
+<div class="col-md-3">
+Minecraft Edition
+</div>
+<div class="col-md-2">
+API:&nbsp;0.1.5_alpha
+Client: v1.3
+Size: ~2MB
+</div>
+<div class="col-md-3">
+Плагины: users, articles. Модифицированный под плагины клиент. Интергация плагина users с Bukkit плагином AuthMe.
+</div>
+<div class="col-md-4">
+<a class="alert-link" href="{{MAIN.ROOT_HTTP}}files/downloads/me/latest.zip">Download</a><br />
+(Update 2)<br />
+(23.09.13 09:30)
+</div>
+</div>
+{%endblock%}

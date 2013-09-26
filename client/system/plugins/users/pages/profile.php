@@ -51,5 +51,5 @@ elseif($type=='security')
 	}
 }
 
-$core->f->show('profile/main');
+$core->f->show('profile/main','users');
 ?>

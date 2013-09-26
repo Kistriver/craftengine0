@@ -24,6 +24,7 @@ class api_signup extends api
 	//Проверка полей для программы
 	protected function check($type, $value)
 	{
+		$u = $this->core->plugin->initPl('user','user');
 		
 		switch($type)
 		{
@@ -31,7 +32,7 @@ class api_signup extends api
 				$login = strtolower($value);
 				$login = ucfirst($login);
 				
-				$f = $this->core->file->get_line_array('blacklist/login');
+				/*$f = $this->core->file->get_line_array('blacklist/login');
 				for($i=0;$i<sizeof($f);++$i)
 				{
 					if(strtolower($f[$i])==strtolower($login))
@@ -41,8 +42,10 @@ class api_signup extends api
 						return false;
 						//break;
 					}
-				}
-				if(!preg_match($this->core->preg('login'), $login))
+				}*/
+				
+				
+				if(!preg_match($u->preg('login'), $login))
 				{
 					$this->core->error->error('plugin_user_signup',1);
 					return false;
@@ -64,7 +67,7 @@ class api_signup extends api
 				}
 				break;
 			case 'name':
-				if(!preg_match($this->core->preg('name'), $value))
+				if(!preg_match($u->preg('name'), $value))
 				{
 					$this->core->error->error('plugin_user_signup',10);
 					return false;
@@ -72,7 +75,7 @@ class api_signup extends api
 				return true;
 				break;
 			case 'surname':
-				if(!preg_match($this->core->preg('surname'), $value))
+				if(!preg_match($u->preg('surname'), $value))
 				{
 					$this->core->error->error('plugin_user_signup',11);
 					return false;
@@ -80,7 +83,7 @@ class api_signup extends api
 				return true;
 				break;
 			case 'password':
-				if(!preg_match($this->core->preg('password'), $value))
+				if(!preg_match($u->preg('password'), $value))
 				{
 					$this->core->error->error('plugin_user_signup',12);
 					return false;
@@ -100,7 +103,7 @@ class api_signup extends api
 				return true;
 				break;
 			case 'invite':
-				$u = $this->core->plugin->initPl('user','user');//new user($this->core);
+				$u = $this->core->plugin->initPl('user','user');
 				$ch = $u->get_user($value, 'login');
 				if(!$ch)
 				{
@@ -110,7 +113,7 @@ class api_signup extends api
 				return true;
 				break;
 			case 'email':
-				if(!preg_match($this->core->preg('mail'), $value))
+				if(!preg_match($u->preg('mail'), $value))
 				{
 					$this->core->error->error('plugin_user_signup',16);
 					return false;

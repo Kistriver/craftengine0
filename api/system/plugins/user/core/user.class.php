@@ -33,7 +33,32 @@ class plugin_user_user
 	{
 		$this->core = $core;
 	}
-
+	
+	public function preg($type)
+	{
+		switch($type)
+		{
+			case 'mail': case 'email':
+				$mails = implode('|',$this->core->conf->plugins->user->user->preg['mail']);
+				$pattern = '/^[.a-z0-9_-]{4,70}\@'.$mails.'$/';
+				break;
+			
+			case 'login':
+				$pattern = '/^[a-zA-Z0-9_]{'. $this->core->conf->plugins->user->user->length['nickname']['min'] .','. $this->core->conf->plugins->user->user->length['nickname']['max'] .'}$/';
+				break;
+			case 'password':
+				$pattern = '/^[a-zA-Z0-9_-]{'. $this->core->conf->plugins->user->user->length['password']['min'] .','. $this->core->conf->plugins->user->user->length['password']['max'] .'}$/';
+				break;
+			case 'name':
+				$pattern = '/^[\w]{'. $this->core->conf->plugins->user->user->length['name']['min'] .','. $this->core->conf->plugins->user->user->length['name']['max'] .'}$/';
+				break;
+			case 'surname':
+				$pattern = '/^[\w]{'. $this->core->conf->plugins->user->user->length['surname']['min'] .','. $this->core->conf->plugins->user->user->length['surname']['max'] .'}$/';
+				break;
+		}
+		return $pattern;
+	}
+	
 	//Получение инфы о пользователе, запись в публичные переменные класса
 	public function get_user($user='', $search='id')
 	{
