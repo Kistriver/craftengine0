@@ -30,7 +30,7 @@ if(!empty($_GET['act']))
 
 		$core->render['post'] = $post;
 		
-		$core->f->show('articles/post');
+		$core->f->show('articles/post','articles');
 	}
 	elseif($act=='posts')
 	{
@@ -69,7 +69,7 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='new')
 	{
-		if(!$_SESSION['loggedin'])display($core,$twig,403);
+		if(!$_SESSION['loggedin'])$core->f->quit(404);
 		
 		if(!empty($_POST['title']) AND !empty($_POST['article']))
 		{
@@ -108,6 +108,43 @@ if(!empty($_GET['act']))
 		$core->render['page'] = $page;
 		
 		$core->f->show('articles/confirm','articles');
+	}
+	elseif($act=='edit')
+	{
+		if(!$_SESSION['loggedin'])$core->f->quit(404);
+		
+		$err_up = false;
+		if(!empty($_POST['title']) AND !empty($_POST['article']))
+		{
+			if(empty($_POST['tags']))$_POST['tags'] = '';
+			
+			$core->api->get('article.edit',array('id'=>$_GET['post_id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$_POST['tags'],'sid'=>$_SESSION['sid']));
+			$data = $core->api->answer_decode;
+			
+			if(isset($data['data'][0]))
+			if($data['data'][0]==false)
+			$err_up = true;
+			
+			$post['title'] = $_POST['title'];
+			$post['article'] = $_POST['article'];
+			$post['tags'] = $_POST['tags'];
+		}
+		
+		if($err_up==false)
+		{
+			$core->api->get('article.post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id'],'sid'=>$_SESSION['sid']));
+			$data = $core->api->answer_decode;
+			
+			if(isset($data['data'][0]))
+			if($data['data'][0]==false)
+			$core->f->quit(404);
+			
+			$post = $data['data'];
+			
+			$core->render['post'] = $post;
+		}
+		
+		$core->f->show('articles/edit','articles');
 	}
 	else
 		$core->f->quit(404);

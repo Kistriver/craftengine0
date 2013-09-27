@@ -19,39 +19,24 @@
 </div>
 </div>
 
-<div class="row alert alert-danger">
+{%for ed in editions%}
+<div class="row alert alert-{{ed.status}}">
 <div class="col-md-3">
-Standart Edition
+{{ed.name}}
 </div>
 <div class="col-md-2">
----
+{{ed.info}}
 </div>
 <div class="col-md-3">
-Ничего лишнего. Только ядро и клиент.
+{{ed.desc}}
 </div>
 <div class="col-md-4">
-<a class="alert-link">Download</a><br />
-(Release)<br />
-(01.10.13 18:00)
+<a class="alert-link" href="{%if ed.link!=''%}{{MAIN.ROOT_HTTP}}files/downloads{{ed.link}}{%endif%}">Download</a><br />
+({{ed.update}})<br />
+({{ed.time}})
 </div>
+</div>
+{%endfor%}
 
-</div>
-<div class="row alert alert-success">
-<div class="col-md-3">
-Minecraft Edition
-</div>
-<div class="col-md-2">
-API:&nbsp;0.1.5_alpha
-Client: v1.3
-Size: ~2MB
-</div>
-<div class="col-md-3">
-Плагины: users, articles. Модифицированный под плагины клиент. Интергация плагина users с Bukkit плагином AuthMe.
-</div>
-<div class="col-md-4">
-<a class="alert-link" href="{{MAIN.ROOT_HTTP}}files/downloads/me/latest.zip">Download</a><br />
-(Update 2)<br />
-(23.09.13 09:30)
-</div>
 </div>
 {%endblock%}

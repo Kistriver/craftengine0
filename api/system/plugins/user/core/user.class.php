@@ -216,17 +216,45 @@ class plugin_user_user
 		
 		$time = time();
 		
-		$this->core->mysql->query("INSERT INTO signup
-		(name, surname, email, password, login, sex, day, month, year, time, invite, about, status) VALUES
-		('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '0')");
+		$mode = 0;
+		$conf_confirm = $this->core->conf->conf->plugins->user->user->signup_confirm;
+		if(!in_array('email', $conf_confirm))$mode += 1;
+		if(!in_array('admin', $conf_confirm))$mode += 2;
 		
-		$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
-		$id = $this->core->mysql->fetch();
-		$id = $id['id'];
-		
-		$code = $this->generate_code('signup',array('login'=>$login,'id'=>$id));
-		
-		$this->core->mail->add_waiting_list($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
+		if($mode==2 or $mode==1 or $mode==0)
+		{
+			$this->core->mysql->query("INSERT INTO signup
+			(name, surname, email, password, login, sex, day, month, year, time, invite, about, status) VALUES
+			('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '$mode')");
+			
+			$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
+			$id = $this->core->mysql->fetch();
+			$id = $id['id'];
+			
+			$code = $this->generate_code('signup',array('login'=>$login,'id'=>$id));
+			
+			if($mode==2 or $mode==0)
+			$this->core->mail->add_waiting_list($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
+		}
+		else
+		{
+			$this->new_user(
+						$name,
+						$surname,
+						$email,
+						$password,
+						$login,
+						$sex,
+						$day,
+						$month,
+						$year,
+						null,
+						null,
+						$invite,
+						null,
+						$about
+					);
+		}
 	}
 	
 	//Создание нового пользователя
@@ -461,7 +489,7 @@ class plugin_user_user
 				return false;
 			}
 			
-			$f=$this->core->file->get_line_array('blacklist/password');	
+			/*$f=$this->core->file->get_line_array('blacklist/password');	
 			$pass_base = 0;		
 			//print_r(sizeof($f));			
 			for($i=0;$i<sizeof($f);++$i)
@@ -477,7 +505,7 @@ class plugin_user_user
 			{
 				$this->core->error->error('plugin_user_profile',12);
 				return false;
-			}
+			}*/
 
 			$pass = $this->password_md5($after[2], false, $this->time_reg, $this->salt);
 			if(empty($after[3]))

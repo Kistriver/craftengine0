@@ -325,7 +325,7 @@ class api_article extends api
 					$body = $this->core->SanString($this->data['article']);
 					$tags = $this->core->SanString($this->data['tags']);
 					$time = time();
-					$date = $this->core->SanString($this->data['date']);
+					$date = !empty($this->data['date'])?$this->core->SanString($this->data['date']):null;
 					if(!empty($date))
 					{
 						$d = $this->art_date($date);
@@ -364,7 +364,7 @@ class api_article extends api
 						$art = $this->core->SanString($art, 'mysql');
 						
 						$time_now = time();
-						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$userid', '$art', '$time_now', '$type', '$post_id')");
+						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$user', '$art', '$time_now', '$type', '$post_id')");
 						
 						$r = $this->core->mysql->fetch($r);
 						$user = $this->core->plugin->initPl('user','user');//new user($this->core);
@@ -404,8 +404,7 @@ class api_article extends api
 			$this->core->error->error('server',403);
 		}
 		
-		$post = array(
-		);
+		$post = array(false);
 		return $this->json($post);
 	}
 	

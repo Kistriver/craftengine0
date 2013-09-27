@@ -13,7 +13,7 @@ class core
 	
 	public function __construct()
 	{
-		$ver = 'v1.3';
+		$ver = 'v1.4';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{
