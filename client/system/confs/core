@@ -1,7 +1,8 @@
 {
 	"api":
 	{
-		"url":"http://api.kcraft.su/"
+		"url":"http://api.kcraft.su/",
+		"files":"http://api.kcraft.su/files/"
 	},
 	"core":
 	{

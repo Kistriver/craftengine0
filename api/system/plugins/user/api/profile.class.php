@@ -56,6 +56,15 @@ class api_profile extends api
 					$this->json(array(true));
 				}
 				break;
+			
+			case 'icon':
+				/*$name = time();
+				if(file_put_contents(dirname(__FILE__).'/../../../../files/'.$name,$value))
+				return $this->json(array($name));
+				else*/
+				$this->json(array(false));
+				
+				break;
 		}
 	}
 }

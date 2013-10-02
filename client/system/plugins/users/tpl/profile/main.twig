@@ -17,33 +17,54 @@
 </h1>
 </div>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 <div class="row">
+<div class="col-md-9">
 
-<div class="col-md-6">
+<div class="row">
+<div class="col-md-3">
 Имя
 </div>
-<div class="col-md-6">
+<div class="col-md-9">
 <input type="text" disabled class="form-control" value="*****" />
 </div>
+</div>
 
-<div class="col-md-6">
+<div class="row">
+<div class="col-md-3">
 Фамилия
 </div>
-<div class="col-md-6">
+<div class="col-md-9">
 <input type="text" disabled class="form-control" value="*****" />
 </div>
+</div>
 
-<div class="col-md-6">
+<div class="row">
+<div class="col-md-3">
 Ник
 </div>
-<div class="col-md-6">
+<div class="col-md-9">
 <input type="text" name="nickname" class="form-control" value="{{SYS.NICKNAME}}" />
 </div>
+</div>
+
+<div class="row">
+<div class="col-md-3">
+Аватара
+</div>
+<div class="col-md-9">
+<input class="form-control" type="file" name="icon" />
+</div>
+</div>
 
 </div>
-<div class="row">
+<div class="col-md-3">
+<img src="http://cs4389.vk.me/v4389634/ce/LW2v3odHjYc.jpg" style="width:170px; height:170px;" />
+</div>
+</div>
 
+
+<div class="row">
 <div class="col-md-12">
 <input type="submit" style="width: 100%;" class="btn btn-success" value="Переименоваться" />
 </div>

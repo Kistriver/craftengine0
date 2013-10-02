@@ -5,6 +5,7 @@
 	"send_mail_report":true,
 	"http_root":"/",
 	"mail_addr":"kcraft.su",
+	"upload_file_max_size":"5MB",
 	"db":
 	[
 		[

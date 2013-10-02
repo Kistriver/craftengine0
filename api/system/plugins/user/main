@@ -2,7 +2,6 @@
 	"author":"Kachalov",
 	"version":"1.0.0_alpha",
 	"web":"http://vk.com/craftengine",
-	"id":"1",
 	"name":"user",
 	"loadClass":"load",
 	"description":"Этот модуль предназначен для добавления пользователей на сайт",

@@ -57,12 +57,19 @@ class plugin
 	{
 		$main = $this->core->conf->load_conf('pluginConf',array('folder'=>$folder,'write'=>false));
 		
-		if(isset($main->name,$main->version,$main->web,$main->id,$main->author,
-		$main->loadClass,$main->confs,$main->api,$main->requires/*,$main->permissions*/))
+		/*if(isset($main->name,$main->version,$main->web,$main->id,$main->author,
+		$main->loadClass,$main->confs,$main->api,$main->requires,$main->permissions))*/
+		if(isset($main->name,$main->version,$main->author))
 		{}else
 		{
 			return array(false,1);
 		}
+		
+		if(!isset($main->web))$main->web = '';
+		if(!isset($main->loadClass))$main->loadClass = '';
+		if(!isset($main->confs))$main->confs = array();
+		if(!isset($main->api))$main->api = array();
+		if(!isset($main->requires))$main->requires = array();
 		
 		if(!preg_match("'^([0-9]).([0-9])(.([0-9]*)|)(_(alpha|beta|release|)|)$'i", $main->version, $version))
 		{
@@ -211,7 +218,6 @@ class plugin
 			{
 				case 'self':
 					$selfConf = $this->core->conf->load_conf('plugin',array('write'=>true,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
-					//print_r($this->core->conf->plugins);
 					break;
 				
 				/* //FIXME: IT'S VERY DANGEROUS

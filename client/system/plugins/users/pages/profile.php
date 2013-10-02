@@ -23,6 +23,32 @@ if($type=='main')
 			$core->render['MAIN']['SUCCESS'][] = 'Никнейм изменён';
 		}
 	}
+	
+	if(!empty($_FILES['icon']['size']) && $_FILES['icon']['size']!=0)
+	{
+		$file = file_get_contents($_FILES['icon']['tmp_name']);
+		
+		/*$params = array('http' => array(
+			'method' => 'POST',
+			'content' => $fileString
+		));
+		$context = stream_context_create($params);
+		
+		if($remote = @fopen('http://server2.ru/filesend.php', 'rb', false, $context)){
+			$response = @stream_get_contents($remote);
+		}*/
+		
+		$core->api->get('profile.change',array('type'=>'icon','value'=>$file));
+		if(!empty($core->api->answer_decode['data'][0]))
+		$ans = $core->api->answer_decode['data'][0];
+		else
+		$ans = false;
+		
+		if($ans!=false)
+		{
+			$core->render['MAIN']['SUCCESS'][] = 'Аватарка обновлена: '.$ans;
+		}
+	}
 }
 elseif($type=='private')
 {
