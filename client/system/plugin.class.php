@@ -1,6 +1,8 @@
 <?php
 class plugin
 {
+	public $list = array();
+	
 	public function __construct($core)
 	{
 		$this->core = $core;

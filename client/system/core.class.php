@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: charset=utf-8');
 require_once(dirname(__FILE__).'/functions.class.php');
 require_once(dirname(__FILE__).'/conf.class.php');
 require_once(dirname(__FILE__).'/api.class.php');
@@ -94,13 +95,6 @@ class core
 		}
 		
 		$this->plugins = new plugin($this);
-		
-		
-		////========================REWRITE RULES ZONE========================////
-		$this->rules[] = array(array('^index$','^$'),'index.php');
-		
-		$this->rules[] = array('^plugins$','plugins.php');
-		////========================REWRITE RULES ZONE========================////
 	}
 }
 ?>

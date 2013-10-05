@@ -62,8 +62,19 @@ class api_profile extends api
 				if(file_put_contents(dirname(__FILE__).'/../../../../files/'.$name,$value))
 				return $this->json(array($name));
 				else*/
+				
+				$time = time();
+				$hash = sha1(microtime(true));
+				$ip = $_SERVER['REMOTE_ADDR'];
+				$type = 1;
+				
+				if(!$this->core->mysql->query("INSERT INTO upload_sid(hash,time,ip,type) 
+														VALUES('$hash','$time','$ip','$type')"))
 				$this->json(array(false));
 				
+				$this->json(array("http://".$this->core->conf->system->core->system_scripts[0].":".
+				$this->core->conf->system->core->system_scripts[1].$this->core->conf->system->core->http_root.
+				"system-scripts/"."upload.php?hash=$hash&time=$time"));
 				break;
 		}
 	}

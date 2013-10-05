@@ -3,6 +3,7 @@ ini_set('display_errors',"1");
 ini_set('display_startup_errors',"1");
 ini_set('log_errors',"1");
 ini_set('html_errors',"0");
+header('Content-Type: charset=utf-8');
 
 /**
  * @package core
@@ -82,6 +83,14 @@ class core
 			 * 1 - request:times
 			 * 2 - error:time
 			 */
+			
+			if(sizeof($file_p)<3)
+			{
+				$file_p[0] = empty($file_p[0])?'':$file_p[0];
+				$file_p[1] = empty($file_p[1])?'':$file_p[1];
+				$file_p[2] = empty($file_p[2])?'':$file_p[2];
+				
+			}
 
 			//I'm sorry about if-elseif-else construction. I'll use switch instead
 			if($type==='error')
@@ -149,7 +158,7 @@ class core
 
 		if(file_exists($file))
 		{
-			$time = $this->statCache('time',null,false);
+			$time = (int)$this->statCache('time',null,false);
 		}
 		else
 		{
@@ -194,6 +203,9 @@ class core
 				case 'version':
 					die($this->conf->system->core->version);
 					break;
+				case 'edition':
+					die($this->conf->system->core->name);
+					break;
 				default:
 					exit;
 					break;
@@ -212,7 +224,15 @@ class core
 		if(file_exists($file))
 		{
 			$f = file_get_contents($file);
-			list($time,$status) = explode("\r\n",$f);
+			$fe = explode("\r\n",$f);
+			
+			if(sizeof($fe)<2)
+			{
+				$fe[0] = empty($fe[0])?'':$fe[0];
+				$fe[1] = empty($fe[1])?'':$fe[1];
+			}
+			
+			list($time,$status) = $fe;
 		}
 		else
 		{
@@ -304,7 +324,7 @@ class core
 	public function cacheDataDecode($data)
 	{
 		$data = base64_decode($data);
-		$data = unserialize($data);
+		$data = @unserialize($data);
 		
 		$da = '';
 		if(!is_array($data))return false;

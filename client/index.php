@@ -2,6 +2,7 @@
 require_once(dirname(__FILE__).'/system/include.php');
 define('CE_HUB', true);
 
+if(sizeof($core->plugins->list)!=0)
 foreach($core->plugins->list as $pl => $pages)
 {
 	include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
@@ -72,6 +73,7 @@ foreach($core->rules as $r)
 			//Меню
 			//TODO: Remake it!
 			$s = explode('/',$_SERVER['SCRIPT_NAME']);
+			if(sizeof($core->render['NAVMENU'])!=0)
 			foreach($core->render['NAVMENU'] as &$m)
 			{
 				if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))

@@ -24,21 +24,11 @@ if($type=='main')
 		}
 	}
 	
-	if(!empty($_FILES['icon']['size']) && $_FILES['icon']['size']!=0)
+	if(!empty($_FILES['icon']['size']))
 	{
 		$file = file_get_contents($_FILES['icon']['tmp_name']);
 		
-		/*$params = array('http' => array(
-			'method' => 'POST',
-			'content' => $fileString
-		));
-		$context = stream_context_create($params);
-		
-		if($remote = @fopen('http://server2.ru/filesend.php', 'rb', false, $context)){
-			$response = @stream_get_contents($remote);
-		}*/
-		
-		$core->api->get('profile.change',array('type'=>'icon','value'=>$file));
+		$core->api->get('profile.change',array('type'=>'icon','value'=>'icon'));
 		if(!empty($core->api->answer_decode['data'][0]))
 		$ans = $core->api->answer_decode['data'][0];
 		else
@@ -46,7 +36,20 @@ if($type=='main')
 		
 		if($ans!=false)
 		{
-			$core->render['MAIN']['SUCCESS'][] = 'Аватарка обновлена: '.$ans;
+			$params = array('http' => array(
+				'method' => 'POST',
+				'content' => $file,
+				'header' => "Content-type: application/x-www-form-urlencoded\r\n".
+				"Content-Length: ".strlen($file)."\r\n"
+			));
+			$context = stream_context_create($params);
+			
+			if($remote = @fopen($ans, 'rb', false, $context)){
+				$response = @stream_get_contents($remote);
+			}
+			$a = json_decode($response,true);
+			$core->render['icon_src'] = $core->conf->conf->core->api->files.$a[1];
+			$core->render['MAIN']['SUCCESS'][] = 'Аватарка обновлена';
 		}
 	}
 }
