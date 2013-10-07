@@ -1,10 +1,4 @@
 <?php
-ini_set('display_errors',"1");
-ini_set('display_startup_errors',"1");
-ini_set('log_errors',"1");
-ini_set('html_errors',"0");
-header('Content-Type: charset=utf-8');
-
 /**
  * @package core
  * @copyright Alexey Kachalov <alex-kachalov@mail.ru>
@@ -12,6 +6,12 @@ header('Content-Type: charset=utf-8');
  * @access public
  * @see http://kcraft.su/
  */
+
+ini_set('display_errors',"1");
+ini_set('display_startup_errors',"1");
+ini_set('log_errors',"1");
+ini_set('html_errors',"0");
+
 class core
 {
 	final function __construct()
@@ -49,6 +49,7 @@ class core
 		define('CORECALLONCE', true);
 		
 		$includes = array(//'timer', 		//Подсчёт времени выполнения скрипта	//ALREADY INCLUDED
+							'functions',	//Функции
 							'file',			//Файлы
 							'conf',			//Конфигурации
 							'error',		//Ошибки

@@ -5,12 +5,16 @@ class api_captcha extends api
 	{
 		#$this->functions['act']='function';
 		//$this->functions['pict']='get';
-		$this->functions['get']='pict';
+		$this->functions['set']='set';
 	}
 	
-	protected function pict()
+	protected function set()
 	{
+		$this->input('type');
+		$c = $this->core->plugin->initPl('captcha','captcha');
+		$c->generate($this->data['type']);
 		
+		return $this->json(array(true));
 	}
 }
 ?>
