@@ -10,102 +10,162 @@
 указанному Вами e-mail и дождитесь, пока Ваш аккаунт подтвердит администрация. Это может занять от 1 до 3 дней. Наберитесь терпения.
 </p>
 <form method="post">
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Логин пригласившего
+</span>
+<input name="invite" type="text" class="form-control" 
+value="{%if _POST.invite is defined %}{{_POST.invite}}{%else%}{{_GET.invited}}{%endif%}" 
+maxlength="30" placeholder="Этот пользователь должен быть зарегистрирован" />
+</div>
+</div>
+<div class="col-md-3">
+(От 4 до 30 символов : a-z, A-Z, 0-9, _)
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Имя
+</span>
+<input name="name" type="text" class="form-control" 
+value="{{_POST.name}}" 
+maxlength="25" placeholder="Вася" />
+</div>
+</div>
+<div class="col-md-3">
+(От 2 до 25 символов : a-z, A-Z, а-я, А-Я)
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Фамилия
+</span>
+<input name="surname" type="text" class="form-control" 
+value="{{_POST.surname}}" 
+maxlength="35" placeholder="Пупкин" />
+</div>
+</div>
+<div class="col-md-3">
+(От 5 до 35 символов : a-z, A-Z, а-я, А-Я)
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Логин
+</span>
+<input name="login" type="text" class="form-control" 
+value="{{_POST.login}}" 
+maxlength="30" placeholder="Admin4eg" />
+</div>
+</div>
+<div class="col-md-3">
+(От 4 до 30 символов : a-z, A-Z, 0-9, _)
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Пароль
+</span>
+<input name="pass" type="password" class="form-control" 
+value="{{_POST.pass}}" 
+maxlength="100" placeholder="********" />
+</div>
+</div>
+<div class="col-md-3">
+(От 6 до 100 символов : a-z, A-Z, _, -)
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Повторите пароль
+</span>
+<input name="pass_r" type="password" class="form-control" 
+value="{{_POST.pass_r}}" 
+maxlength="100" placeholder="********" />
+</div>
+</div>
+<div class="col-md-3">
+(От 6 до 100 символов : a-z, A-Z, _, -)
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+E-mail
+</span>
+<input name="email" type="text" class="form-control" 
+value="{{_POST.email}}" 
+maxlength="100" placeholder="admin@kcraft.su" />
+</div>
+</div>
+<div class="col-md-3">
+
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Повторите e-mail
+</span>
+<input name="email_r" type="text" class="form-control" 
+value="{{_POST.email_r}}" 
+maxlength="100" placeholder="admin@kcraft.su" />
+</div>
+</div>
+<div class="col-md-3">
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+<img src="{{cap_src}}" />
+</span>
+<input style="height: 68px;" maxlength="6" name="captcha" type="text" class="form-control" placeholder="ABCDEF">
+</div>
+</div>
+</div>
+
+
+
+
+
+
 <table width="100%">
 <tbody>
 
-<tr>
-<td width="35%">
-<input type="text" value="{%if _POST.invite is defined %}{{_POST.invite}}{%else%}{{_GET.invited}}{%endif%}" style="width: 90%;" class="form-control" name="invite" maxlength="30" placeholder="Логин пригласившего(этот пользователь должен быть зарегистрирован)" />
-</td>
-<td>
-(От 4 до 30 символов в диапазоне: a-z, A-Z, 0-9, _)
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-<hr />
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" value="{{_POST.name}}" style="width: 90%;" class="form-control" name="name" maxlength="25" placeholder="Имя" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-(От 2 до 25 символов в диапазоне: a-z, A-Z, а-я, А-Я)
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" value="{{_POST.surname}}" style="width: 90%;" class="form-control" name="surname" maxlength="35" placeholder="Фамилия" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-(От 5 до 35 символов в диапазоне: a-z, A-Z, а-я, А-Я)
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" value="{{_POST.login}}" style="width: 90%;" class="form-control" name="login" maxlength="30" placeholder="Логин" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-(От 4 до 30 символов в диапазоне: a-z, A-Z, 0-9, _)
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-<hr />
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="password" style="width: 90%;" class="form-control" name="pass" maxlength="100" placeholder="Пароль" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-(От 6 до 100 символов в диапазоне: a-z, A-Z, _, -)
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="password" style="width: 90%;" class="form-control" name="pass_r" maxlength="100" placeholder="Повторите пароль" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-<hr />
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" value="{{_POST.email}}" style="width: 90%;" class="form-control" name="email" maxlength="100" placeholder="Адрес электронной почты" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" style="width: 90%;" class="form-control" name="email_r" maxlength="100" placeholder="Повторите адрес e-mail" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-</td>
-</tr>
 
 <tr>
 <td colspan="2">
@@ -136,6 +196,7 @@
 (В формате ДД/ММ/ГГГГ)
 </td>
 </tr>
+
 
 <tr>
 <td colspan="2">

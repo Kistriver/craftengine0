@@ -5,7 +5,7 @@ class plugin_captcha_captcha
 	{
 		$this->core = $core;
 		
-		
+		$this->conf = &$this->core->conf->plugins->captcha;
 	}
 	
 	public function generate($type)
@@ -22,7 +22,7 @@ class plugin_captcha_captcha
 		);
 		shuffle($symbols);
 		
-		$c = array_rand($symbols, 6);
+		$c = array_rand($symbols, $this->conf->captcha->length);
 		
 		$ca = '';
 		foreach($c as $c)
@@ -60,14 +60,14 @@ class plugin_captcha_captcha
 	public function pict($type)
 	{
 		$width = 120; $height = 40;
-		$font = dirname(__FILE__).'/../fonts/default.ttf';
+		$font = dirname(__FILE__).'/../fonts/'.$this->conf->captcha->font;
 		$fontsize = 14;
 		$im = imagecreatetruecolor($width, $height);
 		imagesavealpha($im, true);
 		$bg = imagecolorallocatealpha($im, 255, 255, 255, 127);
 		imagefill($im, 0, 0, $bg);
 		
-		for($i=0;$i<15;$i++)
+		for($i=0;$i<$this->conf->captcha->rand_lines;$i++)
 		{
 			imageline($im, (int)rand(0,$width/2), 
 			(int)rand(0,$height/2), 

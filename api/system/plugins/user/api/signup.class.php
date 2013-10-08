@@ -89,7 +89,7 @@ class api_signup extends api
 					return false;
 				}
 				
-				$f = $this->core->file->get_line_array('blacklist/password');
+				/*$f = $this->core->file->get_line_array('blacklist/password');
 				for($i=0;$i<sizeof($f);++$i)
 				{
 					if($f[$i] == $value)
@@ -99,7 +99,7 @@ class api_signup extends api
 						return false;
 						//break;
 					}
-				}
+				}*/
 				return true;
 				break;
 			case 'invite':
@@ -130,6 +130,16 @@ class api_signup extends api
 				}
 				return true;
 				break;
+			case 'captcha':
+				$c = $this->core->plugin->initPl('captcha','captcha');
+				$cap = $c->check($value,'user_signup');
+				if(!$cap)
+				{
+					$this->core->error->error('plugin_captcha_captcha',1);
+					return false;
+				}
+				return true;
+				break;
 		}
 		return false;
 	}
@@ -141,9 +151,9 @@ class api_signup extends api
 		
 		$this->input('name','surname','password','login','email','sex','birthday','invite','about','agree','captcha');
 		
-		$cap = $this->core->sanString($this->data['captcha']);
-		//$cap = text_from_rus_to_en($cap);
+		$cap = trim($this->core->sanString($this->data['captcha']));
 		$cap = strtoupper($cap);
+		
 
 		$name = trim($this->core->sanString($this->data['name']));
 		$surname = trim($this->core->sanString($this->data['surname']));
@@ -211,6 +221,8 @@ class api_signup extends api
 		if(!empty($invite))
 			if(!$this->check('invite',$invite))
 			$err_lev = 1;
+		if(!$this->check('captcha',$cap))
+		$err_lev = 1;
 		
 		if($err_lev == 0)
 		{

@@ -7,7 +7,8 @@
 	"description":"Этот модуль генерирует каптчу",
 	"confs":
 	{
-		
+		"captcha":["self"],
+		"errors":["self"]
 	},
 	"api":
 	[

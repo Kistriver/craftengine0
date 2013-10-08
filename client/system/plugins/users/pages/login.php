@@ -44,10 +44,6 @@ else
 {
 	if($_SESSION['loggedin'])$core->f->quit(403);
 	
-	//$core->api->get('captcha.set',array('type'=>'login'));
-	
-	//$core->render['sid'] = $_SESSION['sid'];
-	
 	if(!empty($_POST['email']) and !empty($_POST['password']))
 	{
 		$core->api->get('login.login',array('email'=>$_POST['email'], 'password'=>$_POST['password'],'sid'=>$_SESSION['sid']));

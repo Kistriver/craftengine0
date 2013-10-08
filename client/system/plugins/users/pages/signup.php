@@ -31,9 +31,11 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	$core->error->error("E-mail'ы не совпадают");
 	$err = 1;
 	}
+	
 	if($err==0)
 	{
 	$core->api->get('signup.signup',array(
+	'captcha'=>$_POST['captcha'],
 	'name'=>$_POST['name'],
 	'surname'=>$_POST['surname'],
 	'login'=>$_POST['login'],
@@ -57,6 +59,9 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 		$core->render['_GET'] = $_GET;
 	}
 }
+
+$core->api->get('captcha.set',array('type'=>'user_signup'));
+$core->render['cap_src'] = $core->conf->conf->core->api->url."system-scripts/captcha.php?type=user_signup&sid=".$_SESSION['sid'];
 
 $core->f->show('signup/main','users');
 ?>
