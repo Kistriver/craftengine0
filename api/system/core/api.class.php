@@ -201,7 +201,7 @@ class api
 	protected function wip()
 	{
 		$this->core->error->error('api',2);
-		return $this->json(array());
+		return $this->json(array(false));
 	}
 }
 ?>

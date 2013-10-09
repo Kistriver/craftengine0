@@ -9,6 +9,7 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	if(!isset($_POST['agree']))
 	{
 	$_POST['agree']='off';
+	$core->error->error("Вы не согласились с условиями пользовательского соглашения");
 	$err = 1;
 	}
 	if(!isset($_POST['sex']))
@@ -46,7 +47,6 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	'birthday'=>$_POST['birthday'],
 	'about'=>$_POST['about'],
 	'agree'=>$_POST['agree'],
-	'captcha'=>'',
 	'sid'=>$_SESSION['sid'],
 	));
 	if(isset($core->api->answer_decode['data'][0]))

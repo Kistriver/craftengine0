@@ -140,12 +140,58 @@ maxlength="100" placeholder="admin@kcraft.su" />
 </div>
 </div>
 
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+Пол
+</span>
+<select name="sex" class="form-control">
+<option value="male">Мужской</option>
+<option value="female">Женский</option>
+<option disabled>Кафельный</option>
+</select>
+</div>
+</div>
+<div class="col-md-3">
 
+</div>
+</div>
 
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+День рождения
+</span>
+<input name="birthday" type="text" class="form-control" 
+value="{{_POST.birthday}}" 
+maxlength="10" placeholder="31/12/1990" />
+</div>
+</div>
+<div class="col-md-3">
+(В формате ДД/ММ/ГГГГ)
+</div>
+</div>
 
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+О себе
+</span>
+<textarea style="resize: vertical; min-height: 46px;" class="form-control" name="about" rows="6"
+placeholder="
+Пару слов о себе. Но не более 1000 знаков! Желательно несколько ссылок на 
+Ваши аккаунты в других соц. сетях. Это не обязательно, но перед тем, как отправить 
+заявку, подумайте: &quot;А одобрят ли меня? Ведь фамилия у меня Иванов&quot;."
+>{{_POST.about}}</textarea>
+</div>
+</div>
+<div class="col-md-3">
 
-
-
+</div>
+</div>
 
 <div class="row">
 <div class="col-md-7 col-md-offset-1">
@@ -159,72 +205,28 @@ maxlength="100" placeholder="admin@kcraft.su" />
 </div>
 
 
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
+<div class="checkbox">
+<label>
+<input name="agree" type="checkbox" value="">
+Я согласен с условиями пользовательского соглашения
+</label>
+</div>
+</div>
+<div class="col-md-3">
 
+</div>
+</div>
 
-
-
-<table width="100%">
-<tbody>
-
-
-<tr>
-<td colspan="2">
-<hr />
-</td>
-</tr>
-
-<tr>
-<td>
-<select name="sex" style="width: 93%;" class="form-control">
-<option selected disabled>Пол</option>
-<option value="male">Мужской</option>
-<option value="female">Женский</option>
-<option disabled>Кафельный</option>
-</select>
-<font class="obligatory_star">*</font>
-</td>
-<td>
-</td>
-</tr>
-
-<tr>
-<td>
-<input type="text" value="{{_POST.birthday}}" style="width: 90%;" class="form-control" maxlength="10" name="birthday" placeholder="День рождения" />
-<font class="obligatory_star">*</font>
-</td>
-<td>
-(В формате ДД/ММ/ГГГГ)
-</td>
-</tr>
-
-
-<tr>
-<td colspan="2">
-<textarea style="width: 100%; height: 300px;" name="about" placeholder="
-Пару слов о себе. Но не более 1000 знаков! Желательно несколько ссылок на 
-Ваши аккаунты в других соц. сетях. Это не обязательно, но перед тем, как отправить 
-заявку, подумайте: &quot;А одобрят ли меня? Ведь фамилия у меня Иванов&quot;.">
-{{_POST.about}}
-</textarea>
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
-Я согласен с условиями пользовательского соглашения 
-<input type="checkbox" name="agree" id="agree" />
-<label for="agree"><span></span></label>
-</td>
-</tr>
-
-<tr>
-<td colspan="2">
+<div class="row">
+<div class="col-md-7 col-md-offset-1">
 <input type="submit" style="width: 100%;" class="btn btn-success" value="Поехали!" />
-<font style="margin: 0;" class="obligatory_star">*</font> - Поля, обязательные для заполнения
-</td>
-</tr>
+</div>
+<div class="col-md-3">
 
-</tbody>
-</table>
+</div>
+</div>
+
 </form>
 {%endblock%}

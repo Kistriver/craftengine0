@@ -20,6 +20,43 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='restore')
 	{
+		if(isset($_POST['email']) && isset($_POST['email']))
+		{
+			$err = 0;
+			
+			if(empty($_POST['email']))
+			{
+				$core->error->error("Вы не заполнили поле \"e-mail\"");
+				$err = 1;
+			}
+			if(empty($_POST['captcha']))
+			{
+				$core->error->error("Вы не ввели капчу");
+				$err = 1;
+			}
+			
+			if($err==0)
+			{
+				$core->api->get('login.restore',array(
+				'captcha'=>$_POST['captcha'],
+				'email'=>$_POST['email'],
+				'sid'=>$_SESSION['sid'],
+				));
+				if(isset($core->api->answer_decode['data'][0]))
+					if($core->api->answer_decode['data'][0]==true)
+					{
+						$core->render['MAIN']['SUCCESS'][] = "Дальнейшие инструкции по восстановлению Вы получите по e-mail";
+					}
+					else
+					{
+						$core->render['_POST'] = $_POST;
+					}
+			}
+		}
+		
+		$core->api->get('captcha.set',array('type'=>'user_pass_restore'));
+		$core->render['cap_src'] = $core->conf->conf->core->api->url."system-scripts/captcha.php?type=user_pass_restore&sid=".$_SESSION['sid'];
+		
 		$core->f->show('login/restore','users');
 		die;
 	}

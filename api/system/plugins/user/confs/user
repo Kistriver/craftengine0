@@ -1,5 +1,5 @@
 {
-	"signup_confirm":["email","admin"],
+	"signup_confirm":["email","admin","authme"],
 	"salt":
 	[
 		"KACHALOVCRAFT dfKFd.)%$2@<FM<3lo43MF:34;;\\46)",

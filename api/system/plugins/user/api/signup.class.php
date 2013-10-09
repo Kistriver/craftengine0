@@ -135,7 +135,7 @@ class api_signup extends api
 				$cap = $c->check($value,'user_signup');
 				if(!$cap)
 				{
-					$this->core->error->error('plugin_captcha_captcha',1);
+					$this->core->error->error('plugin_captcha_captcha',0);
 					return false;
 				}
 				return true;

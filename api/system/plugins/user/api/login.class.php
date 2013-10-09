@@ -179,7 +179,31 @@ class api_login extends api
 	//Восстановление аккаунта
 	protected function restore()
 	{
+		$this->input('email','captcha');
+		
+		$email = trim($this->core->sanString($this->data['email']));
+		$captcha = strtoupper(trim($this->core->sanString($this->data['captcha'])));
+		
+		$c = $this->core->plugin->initPl('captcha','captcha');
+		$cap = $c->check($captcha,'user_pass_restore');
+		if(!$cap)
+		{
+			$this->core->error->error('plugin_captcha_captcha',0);
+			return $this->json(array(false));
+		}
+		
+		$u = $this->core->plugin->initPl('user','user');
+		$get = $u->get_user($email,'email');
+		if(!$get)
+		{
+			$this->core->error->error('plugin_user_user',0);
+			return $this->json(array(false));
+		}
+		
+		//SEND MAIL
 		$this->wip();
+		
+		return $this->json(array(true));
 	}
 	
 	//launcher, client, server in other one file

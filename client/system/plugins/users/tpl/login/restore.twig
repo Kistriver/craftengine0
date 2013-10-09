@@ -5,5 +5,41 @@
 {%block header%}<li><a href="{{MAIN.ROOT_HTTP}}login">Вход</a></li><li class="active">Восстановление пароля</li>{%endblock%}
 
 {%block content%}
-Пока нереализовано. Чтобы восстановить пароль, свяжитесь с администрацией.
+<p>
+Введите e-mail, который вводили при регистрации и капчу на картинке. Нажмите на кнопку и следуйте инструкциям, 
+которые прийдут на Ваш e-mail.
+</p>
+<form method="post">
+
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<div class="input-group">
+<span class="input-group-addon">
+E-mail
+</span>
+<input name="email" type="text" class="form-control" 
+value="{{_POST.email}}" 
+maxlength="100" placeholder="admin@kcraft.su" />
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<div class="input-group">
+<span class="input-group-addon">
+<img src="{{cap_src}}" />
+</span>
+<input style="height: 68px;" maxlength="6" name="captcha" type="text" class="form-control" placeholder="ABCDEF">
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+<input type="submit" style="width: 100%;" class="btn btn-success" value="Выслать письмо" />
+</div>
+</div>
+
+</form>
 {%endblock%}
