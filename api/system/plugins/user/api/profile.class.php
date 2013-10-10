@@ -10,6 +10,13 @@ class api_profile extends api
 
 	protected function change_name()
 	{
+		if(!$_SESSION['loggedin'])
+		{
+			$this->core->error->error('server',403);
+			return $this->json(array(false));
+		}
+
+
 		$this->input('type','value');
 
 		switch($this->data['type'])

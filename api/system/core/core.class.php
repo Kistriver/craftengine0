@@ -72,6 +72,7 @@ class core
 		$this->mail();
 	}
 
+	//TODO: FIXIT
 	final function statCache($type=null, $value=null, $set=true)
 	{
 		//Set cache

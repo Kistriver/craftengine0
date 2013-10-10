@@ -20,7 +20,32 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='restore')
 	{
-		if(isset($_POST['email']) && isset($_POST['email']))
+		if($_SESSION['loggedin'])$core->f->quit(403);
+
+		if(isset($_GET['code']))
+		{
+			if(!empty($_GET['code']))
+			{
+				$core->api->get('login.restore',array(
+					'step'=>'2',
+					'code'=>$_GET['code'],
+				));
+				if(isset($core->api->answer_decode['data'][0]))
+					if($core->api->answer_decode['data'][0]==true)
+					{
+						$core->render['MAIN']['SUCCESS'][] = "Новый пароль: ".$core->api->answer_decode['data'][1];
+					}
+					else
+					{
+						$core->error->error("Код неправильный");
+					}
+			}
+			else
+			{
+				$core->error->error("Код не введён");
+			}
+		}
+		elseif(isset($_POST['email']) && isset($_POST['email']))
 		{
 			$err = 0;
 			
@@ -38,6 +63,7 @@ if(!empty($_GET['act']))
 			if($err==0)
 			{
 				$core->api->get('login.restore',array(
+				'step'=>'1',
 				'captcha'=>$_POST['captcha'],
 				'email'=>$_POST['email'],
 				'sid'=>$_SESSION['sid'],

@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/system/include.php');
 define('CE_HUB', true);
-
+//die(1);
 if(sizeof($core->plugins->list)!=0)
 foreach($core->plugins->list as $pl => $pages)
 {
@@ -68,7 +68,7 @@ foreach($core->rules as $r)
 				$_GET[$key] = $val;
 			}
 			
-			$_SERVER['SCRIPT_NAME'] = $file;//И еще некоторые надо поправить
+			$_SERVER['SCRIPT_NAME'] = $file;//TODO:И еще некоторые надо поправить
 			
 			//Меню
 			//TODO: Remake it!
@@ -87,6 +87,7 @@ foreach($core->rules as $r)
 			{
 				//require_once(dirname(__FILE__).'/system/include.php');
 				include_once(dirname(__FILE__).'/system/pages/'.$file);
+				exit();
 			}
 			//Страницы плагинов
 			elseif(sizeof($core->plugins->list)!=0)
@@ -101,6 +102,7 @@ foreach($core->rules as $r)
 						{
 							//include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
 							include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/pages/'.$file);
+							exit();
 						}
 					}
 				}
@@ -113,4 +115,7 @@ foreach($core->rules as $r)
 		}
 	}
 }
+
+
+$core->f->quit(404);
 ?>

@@ -168,12 +168,20 @@ class plugin_user_user
 	
 	public function generate_code($type, $params=array(),$mysql=true)
 	{
+		$time = time();
+
 		switch($type)
 		{
 			case 'signup':
-				$code = sha1($params['id'].md5($params['login']));
+				$code = sha1($time.$params['id'].md5($params['login']));
 				$data = $this->core->sanString(json_encode($params),'mysql');
-				if($mysql===true)$this->core->mysql->query("INSERT INTO code(type,value,data) VALUES('signup','$code','$data')");
+				if($mysql===true)$this->core->mysql->query("INSERT INTO code(type,value,data,time) VALUES('$type','$code','$data','$time')");
+				return $code;
+				break;
+			case 'restore_pass':
+				$code = sha1($params['login'].md5($params['email']).$time);
+				$data = $this->core->sanString(json_encode($params),'mysql');
+				if($mysql===true)$this->core->mysql->query("INSERT INTO code(type,value,data,time) VALUES('$type','$code','$data','$time')");
 				return $code;
 				break;
 		}
@@ -216,44 +224,44 @@ class plugin_user_user
 		
 		$time = time();
 		
-		$mode = 0;
-		$conf_confirm = $this->core->conf->conf->plugins->user->user->signup_confirm;
-		if(!in_array('email', $conf_confirm))$mode += 1;
-		if(!in_array('admin', $conf_confirm))$mode += 2;
+		$conf_confirm = $this->core->conf->plugins->user->user->signup_confirm;
+		$mode['email'] = in_array('email', $conf_confirm)?true:false;
+		$mode['admin'] = in_array('admin', $conf_confirm)?true:false;
+		$mode['authme'] = in_array('authme', $conf_confirm)?true:false;
 		
-		if($mode==2 or $mode==1 or $mode==0)
+		if(!$mode['email'] && !$mode['admin'])
+		{
+			$this->new_user(
+				$name,
+				$surname,
+				$email,
+				$password,
+				$login,
+				$sex,
+				$day,
+				$month,
+				$year,
+				null,
+				null,
+				$invite,
+				null,
+				$about
+			);
+		}
+		else
 		{
 			$this->core->mysql->query("INSERT INTO signup
 			(name, surname, email, password, login, sex, day, month, year, time, invite, about, status) VALUES
 			('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '$mode')");
 			
 			$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
-			$id = $this->core->mysql->fetch();
+			$id = $this->core->mysql->fetch($id);
 			$id = $id['id'];
 			
 			$code = $this->generate_code('signup',array('login'=>$login,'id'=>$id));
 			
-			if($mode==2 or $mode==0)
+			if($mode['email'])
 			$this->core->mail->add_waiting_list($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
-		}
-		else
-		{
-			$this->new_user(
-						$name,
-						$surname,
-						$email,
-						$password,
-						$login,
-						$sex,
-						$day,
-						$month,
-						$year,
-						null,
-						null,
-						$invite,
-						null,
-						$about
-					);
 		}
 	}
 	
@@ -333,10 +341,14 @@ class plugin_user_user
 				'$time_reg', '$about'
 			  )
 		");
-		
-		$pass_authme = md5($password);
-		$this->core->mysql->query("INSERT INTO authme(username,password) VALUES('$login','$pass_authme')","mcprimary");
-		
+
+		$conf_confirm = $this->core->conf->plugins->user->user->signup_confirm;
+		if(in_array('authme',$conf_confirm))
+		{
+			$pass_authme = md5($password);
+			$this->core->mysql->query("INSERT INTO authme(username,password) VALUES('$login','$pass_authme')","mcprimary");
+		}
+
 		//$this->email($email, 'activate', array($login, $id));
 	}
 	
@@ -457,7 +469,29 @@ class plugin_user_user
 			return true;
 		}
 		#NAMES
-		
+
+		#PASSWORDS
+		if($what=='password_gen_new')
+		{
+			$sym = '0123456789abcdef';
+			$pass = '';
+			for($i=0;$i<7;$i++)$pass .= $sym[rand(0,strlen($sym)-1)];
+
+			$pass2 = $this->password_md5($pass, false, $this->time_reg, $this->salt);
+			$this->core->mysql->query("UPDATE users SET password='$pass2' WHERE id='$this->id'");
+
+			$conf_confirm = $this->core->conf->plugins->user->user->signup_confirm;
+			if(in_array('authme',$conf_confirm))
+			{
+				$passmd5 = md5($pass);
+				$this->core->mysql->query("UPDATE authme SET password='$passmd5' WHERE username='$this->login'",'mcprimary');
+			}
+
+			$_SESSION['pass'] = $pass2;
+			return $pass;
+		}
+		#PASSWORDS
+
 		#PASSWORDS
 		if($what=='password' and $after[0]!='')
 		{
@@ -519,8 +553,13 @@ class plugin_user_user
 			$pass2 = $this->password_md5($after[0], false, $this->time_reg, $this->salt);
 			$this->core->mysql->query("UPDATE users SET password='$pass2' WHERE id='$this->id'");
 
-			$passmd5 = md5($after[0]);
-			$this->core->mysql->query("UPDATE authme SET password='$passmd5' WHERE username='$this->login'",'mcprimary');
+			$conf_confirm = $this->core->conf->plugins->user->user->signup_confirm;
+
+			if(in_array('authme',$conf_confirm))
+			{
+				$passmd5 = md5($after[0]);
+				$this->core->mysql->query("UPDATE authme SET password='$passmd5' WHERE username='$this->login'",'mcprimary');
+			}
 
 			$_SESSION['pass'] = $pass2;
 			return true;

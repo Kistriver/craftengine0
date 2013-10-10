@@ -179,31 +179,69 @@ class api_login extends api
 	//Восстановление аккаунта
 	protected function restore()
 	{
-		$this->input('email','captcha');
-		
-		$email = trim($this->core->sanString($this->data['email']));
-		$captcha = strtoupper(trim($this->core->sanString($this->data['captcha'])));
-		
-		$c = $this->core->plugin->initPl('captcha','captcha');
-		$cap = $c->check($captcha,'user_pass_restore');
-		if(!$cap)
+		if($_SESSION['loggedin'])
 		{
-			$this->core->error->error('plugin_captcha_captcha',0);
+			$this->core->error->error('server',403);
 			return $this->json(array(false));
 		}
-		
-		$u = $this->core->plugin->initPl('user','user');
-		$get = $u->get_user($email,'email');
-		if(!$get)
+
+
+		$this->input('step');
+		$step = trim($this->core->sanString($this->data['step']));
+
+		if($step==1)
 		{
-			$this->core->error->error('plugin_user_user',0);
-			return $this->json(array(false));
+			$this->input('email','captcha');
+
+			$email = trim($this->core->sanString($this->data['email']));
+			$captcha = strtoupper(trim($this->core->sanString($this->data['captcha'])));
+
+			$c = $this->core->plugin->initPl('captcha','captcha');
+			$cap = $c->check($captcha,'user_pass_restore');
+			if(!$cap)
+			{
+				$this->core->error->error('plugin_captcha_captcha',0);
+				return $this->json(array(false));
+			}
+
+			$u = $this->core->plugin->initPl('user','user');
+			$get = $u->get_user($email,'email');
+			if(!$get)
+			{
+				$this->core->error->error('plugin_user_user',0);
+				return $this->json(array(false));
+			}
+
+			$code = $u->generate_code('restore_pass',array('login'=>$u->login,'email'=>$u->email));
+			$this->core->mail->add_waiting_list($u->email, '003', array('code'=>$code,'login'=>$u->login,'email'=>$u->email));
+
+			return $this->json(array(true));
 		}
-		
-		//SEND MAIL
-		$this->wip();
-		
-		return $this->json(array(true));
+		elseif($step==2)
+		{
+			$this->input('code');
+			$code = trim($this->core->sanString($this->data['code']));
+
+			$c = $this->core->mysql->query("SELECT * FROM code WHERE type='restore_pass' AND value='$code'");
+			if($this->core->mysql->rows($c)!=0)
+			{
+				$r = $this->core->mysql->fetch($c);
+
+				$data = json_decode($r['data'],true);
+				$login = $this->core->sanString($data['login']);
+
+				$u = $this->core->plugin->initPl('user','user');
+				$u->get_user($login,'login');
+				$pass = $u->change_user($u->id, '' , 'password_gen_new');
+				$this->core->mysql->query("DELETE FROM code WHERE type='restore_pass' AND value='$code'");
+
+				return $this->json(array(true,$pass));
+			}
+			else
+			{
+				return $this->json(array(false));
+			}
+		}
 	}
 	
 	//launcher, client, server in other one file

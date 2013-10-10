@@ -5,6 +5,7 @@ $core->rules[] = array('^signup$','signup.php');
 $core->rules[] = array('^logout$','login.php', array('act'=>'logout'));
 $core->rules[] = array('^login$','login.php'/*, array('act'=>'login')*/);
 $core->rules[] = array('^login/restore$','login.php', array('act'=>'restore'));
+$core->rules[] = array('^login/restore/([a-z0-9]*)$','login.php', array('act'=>'restore','code'=>'$1'));
 $core->rules[] = array('^login/confirm$','login.php', array('act'=>'confirm'));
 $core->rules[] = array('^login/confirm/([a-z0-9]*)$','login.php', array('act'=>'confirm','code'=>'$1'));
 

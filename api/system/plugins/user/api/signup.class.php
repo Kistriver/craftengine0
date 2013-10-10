@@ -147,6 +147,13 @@ class api_signup extends api
 	//Занесение пользователя в таблицу signup
 	protected function signup()
 	{
+		if($_SESSION['loggedin'])
+		{
+			$this->core->error->error('server',403);
+			return $this->json(array(false));
+		}
+
+
 		$err_lev = 0;
 		
 		$this->input('name','surname','password','login','email','sex','birthday','invite','about','agree','captcha');
