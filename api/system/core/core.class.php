@@ -11,6 +11,7 @@ ini_set('display_errors',"1");
 ini_set('display_startup_errors',"1");
 ini_set('log_errors',"1");
 ini_set('html_errors',"0");
+error_reporting(E_ALL ^ E_NOTICE);
 
 class core
 {
@@ -72,83 +73,73 @@ class core
 		$this->mail();
 	}
 
-	//TODO: FIXIT
 	final function statCache($type=null, $value=null, $set=true)
 	{
-		//Set cache
+		$stat_file_name = dirname(__FILE__).'/cache/Stat';
 		if($set===true)
 		{
-			$file = @file_get_contents(dirname(__FILE__).'/cache/Stat');
+			$file = file_exists($stat_file_name)
+					?file_get_contents($stat_file_name):
+					"\r\n:\r\n";
 			$file_p = explode("\r\n:\r\n",$file);
 			/*
 			 * 0 - last request
-			 * 1 - request:times
-			 * 2 - error:time
+			 * 1 - error:time
 			 */
-			
-			if(sizeof($file_p)<3)
+
+			if(sizeof($file_p)<2)
 			{
 				$file_p[0] = empty($file_p[0])?'':$file_p[0];
 				$file_p[1] = empty($file_p[1])?'':$file_p[1];
-				$file_p[2] = empty($file_p[2])?'':$file_p[2];
-				
 			}
 
-			//I'm sorry about if-elseif-else construction. I'll use switch instead
-			if($type==='error')
+			switch($type)
 			{
-				if(str_replace("\r\n",'',$file_p[2]))
-				$file_p[2] = explode("\r\n",$file_p[2]);
+				case 'error':
+					if(str_replace("\r\n",'',$file_p[1]))
+						$file_p[1] = explode("\r\n",$file_p[1]);
+					$file_p[1][] = $this->cacheDataEncode($value);
+					$file_p[1] = implode("\r\n",$file_p[1]);
+					break;
 
-				$file_p[2][] = $this->cacheDataEncode($value);
+				case 'time':
+					$file_p[0] = $this->cacheDataEncode($value);
+					break;
 
-				$file_p[2] = implode("\r\n",$file_p[2]);
-			}
-			elseif($type==='request')
-			{
-				//TODO: use foreach and array keys
-			}
-			elseif($type==='time')
-			{
-				$file_p[0] = $this->cacheDataEncode($value);
-			}
-			elseif($type==='clear')
-			{
-				$file_p[0] = $this->cacheDataEncode(time());
-				$file_p[1] = "";
-				$file_p[2] = "";
+				case 'clear':
+					$file_p[0] = $this->cacheDataEncode(time());
+					$file_p[1] = "";
+					break;
 			}
 
 			$file = implode("\r\n:\r\n",$file_p);
 			file_put_contents(dirname(__FILE__).'/cache/Stat', $file);
-
 		}
-		else //Get cache
+		else
 		{
-			$file = file_get_contents(dirname(__FILE__).'/cache/Stat');
+			$file = file_exists($stat_file_name)
+				?file_get_contents($stat_file_name):
+				"\r\n:\r\n";
 			$file_p = explode("\r\n:\r\n",$file);
 
-			if($type==='error')
+			switch($type)
 			{
-				$file_p[2] = explode("\r\n",$file_p[2]);
-				foreach($file_p[2] as &$i)
-				{
-					$i = $this->cacheDataDecode($i);
-				}
+				case 'error':
+					$file_p[1] = explode("\r\n",$file_p[1]);
+					foreach($file_p[1] as &$i)
+					{
+						$i = $this->cacheDataDecode($i);
+					}
+					return $file_p[1];
+					break;
 
-				return $file_p[2];
-			}
-			elseif($type==='request')
-			{
-				//TODO: use foreach and array keys
-			}
-			elseif($type==='time')
-			{
-				return $this->cacheDataDecode($file_p[0]);
+				case 'time':
+					return $this->cacheDataDecode($file_p[0]);
+					break;
 			}
 		}
 	}
-	
+
 	/**
 	 * Сбор статистики об использовании движка. Просьба не убирать
 	 */
@@ -325,7 +316,7 @@ class core
 	 */
 	public function cacheDataDecode($data)
 	{
-		$data = base64_decode($data);
+		$data = @base64_decode($data);
 		$data = @unserialize($data);
 		
 		$da = '';
@@ -363,34 +354,20 @@ class core
 		if($san!='mysql')$var = str_replace("&amp;", "&", $var);
 		return $var;
 	}
-	
-	/**
-	 * JSON с кирилицей
-	 * 
-	 * @access public
-	 * @param $srt array
-	 * @return string 
-	 */
+
 	public function json_encode_ru($str)
 	{
-		$arr_replace_utf = array('\u0410', '\u0430','\u0411','\u0431','\u0412','\u0432',
-		'\u0413','\u0433','\u0414','\u0434','\u0415','\u0435','\u0401','\u0451','\u0416',
-		'\u0436','\u0417','\u0437','\u0418','\u0438','\u0419','\u0439','\u041a','\u043a',
-		'\u041b','\u043b','\u041c','\u043c','\u041d','\u043d','\u041e','\u043e','\u041f',
-		'\u043f','\u0420','\u0440','\u0421','\u0441','\u0422','\u0442','\u0423','\u0443',
-		'\u0424','\u0444','\u0425','\u0445','\u0426','\u0446','\u0427','\u0447','\u0428',
-		'\u0448','\u0429','\u0449','\u042a','\u044a','\u042b','\u044b','\u042c','\u044c',
-		'\u042d','\u044d','\u042e','\u044e','\u042f','\u044f');
-		$arr_replace_cyr = array('А', 'а', 'Б', 'б', 'В', 'в', 'Г', 'г', 'Д', 'д', 'Е', 'е',
-		'Ё', 'ё', 'Ж','ж','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н','О','о',
-		'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
-		'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
-		if(defined('JSON_PRETTY_PRINT'))
-		$str1 = json_encode($str, JSON_PRETTY_PRINT);
-		else
-		$str1 = json_encode($str);
-		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
-		return $str2;
+		/*if(!defined('OLDFUNJSON'))
+		{
+			define('OLDFUNJSON',true);
+			$this->error->error_php(0,'Old function JSON',__FILE__,__LINE__);
+		}*/
+		return $this->functions->json($str);
+	}
+
+	public function last_call()
+	{
+		//Определить, откуда вызвана функция
 	}
 }
 ?>

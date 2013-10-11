@@ -9,11 +9,15 @@
 	"db":
 	[
 		[
-			"site",
+			"lol",
 			"127.0.0.1",
 			"site",
 			"site",
 			"websitepass1998"
+		],
+		[
+			"site",
+			"lol"
 		],
 		[
 			"mcprimary",

@@ -11,17 +11,18 @@ class mysql
 					$result;//Результат последнего запроса
 	
 	protected		$core;
-	
+	protected       $lock = false;
+
 	public function __construct($core)
 	{
 		$this->core = $core;
-		
+
 		//Подключение БД
 		$this->connect('site');
-		
+
 		$this->core->timer->mark('mysql.class.php/__construct');
 	}
-	
+
 	/**
 	 * Подключение к БД
 	 */
@@ -32,10 +33,19 @@ class mysql
 		$mysqli->set_charset("utf8");
 		$this->db[$name] = $mysqli;
 	}
-	
+
+	public function is_connect($name)
+	{
+		if(isset($this->db[$name]))
+		if(is_object($this->db[$name]))
+		return true;
+
+		return false;
+	}
+
 	/**
 	 * Подключение к БД только по имени
-	 * 
+	 *
 	 * @access public
 	 * @param unsizable
 	 */
@@ -44,15 +54,27 @@ class mysql
 		$name = func_get_args();//Получение аргументов функции
 		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
 		{
+			$db = $this->core->conf->system->core->db[$i];
+
 			if(!in_array($this->core->conf->system->core->db[$i][0],$name))continue;
-			$this->connect_db($this->core->conf->system->core->db[$i][0], 	//Имя
-							  $this->core->conf->system->core->db[$i][1], 	//Хост
-							  $this->core->conf->system->core->db[$i][2], 	//БД
-							  $this->core->conf->system->core->db[$i][3], 	//Пользователь
-							  $this->core->conf->system->core->db[$i][4]);	//Пароль
+
+			//Rewrite databases keys
+			if(!isset($db[2]))
+			{
+				$this->connect($db[1]);
+				continue;
+			}
+
+			if($this->is_connect($db[0]))continue;
+
+			$this->connect_db($db[0], 	//Имя
+							  $db[1], 	//Хост
+							  $db[2], 	//БД
+							  $db[3], 	//Пользователь
+							  $db[4]);	//Пароль
 		}
 	}
-	
+
 	/**
 	 * Подключение всех БД
 	 */
@@ -60,36 +82,44 @@ class mysql
 	{
 		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
 		{
-			$this->connect_db($this->core->conf->system->core->db[$i][0], 
-							$this->core->conf->system->core->db[$i][1], 
-							$this->core->conf->system->core->db[$i][2], 
-							$this->core->conf->system->core->db[$i][3], 
+			$this->connect_db($this->core->conf->system->core->db[$i][0],
+							$this->core->conf->system->core->db[$i][1],
+							$this->core->conf->system->core->db[$i][2],
+							$this->core->conf->system->core->db[$i][3],
 							$this->core->conf->system->core->db[$i][4]);
 		}
 	}
-	
+
 	/**
 	 * Запрос к БД
 	 */
 	public function query($query, $name = null)
 	{
+		if($this->lock)return;
 		try
 		{
 		if(empty($name))$name = $this->core->conf->system->core->db[0][0];//Если не передано имя, использовать имя по умолчанию
+
+		if(!$this->is_connect($this->core->conf->system->core->db[0][0]))
+		{
+			$this->lock = true;
+			throw new Exception('Query abort: no connection');
+		}
+
 		if(!$this->result = $this->db[$name]->query($query))throw new Exception(mysqli_error($this->db[$name]));
-		
+
 		return $this->result;
 		}
 		catch(exception $e)
 		{
 			$tr = $e->getTrace();
-			
+
 			$this->core->error->error_php(E_USER_ERROR,$e->getMessage(),$tr[0]['file'],$tr[0]['line']);
 
 			//return false;
 		}
 	}
-	
+
 	/**
 	 * Возвращает ассоциативный массив
 	 */
@@ -99,7 +129,7 @@ class mysql
 		if(empty($result))return false;
 		return $result->fetch_array(MYSQLI_BOTH);
 	}
-	
+
 	/**
 	 * Возвращает число строк в запросе
 	 */

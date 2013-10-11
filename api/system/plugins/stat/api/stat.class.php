@@ -10,6 +10,7 @@ class api_stat extends api
 	protected function set()
 	{
 		$data = $this->data['value'];
+		$ver = $this->core->sanString($this->data['stat_ver']);
 		$ip = $this->core->sanString($this->data['server']['ip']);
 		$host = $this->core->sanString($this->data['server']['host']);
 		$port = $this->core->sanString($this->data['server']['port']);

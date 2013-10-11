@@ -6,6 +6,7 @@ ignore_user_abort(1);
 
 $core = new core();
 
+$stat['stat_ver'] = 'v1.1';
 $stat['sid'] = 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
 $stat['value'] = file_get_contents(dirname(__FILE__).'/../system/core/cache/Stat');
 

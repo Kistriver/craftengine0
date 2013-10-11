@@ -48,11 +48,19 @@ class error
 			'code'=>$code,
 			'msg'=>$msg,
 			'file'=>$file,
-			'line'=>$line
+			'line'=>$line,
+			'time'=>time()
 			)
 		);
 
-		$this->core->statCache('error',time()."-".$code."[$file:$line]$msg",true);
+		$er_j = json_encode(array(
+			'code'=>$code,
+			'msg'=>$msg,
+			'file'=>$file,
+			'line'=>$line,
+			'time'=>time()
+		));
+		$this->core->statCache('error',$er_j,true);
 	}
 	
 	//Отлов завершения работы скрипта
@@ -66,16 +74,17 @@ class error
 			|| $error['type'] == E_CORE_ERROR)
 			{
 				ob_end_clean();
-				
-				$file_fr = str_replace('/api/system/core','',dirname(__FILE__));
+				header('HTTP/1.0 200');
+				$file_fr = str_replace('/system/core','',dirname(__FILE__));
 				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
 				
 				if(!$this->core->conf->system->core->debug)$errA = 
 				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
 				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n");
-				//header('HTTP/1.0 500');
 				echo json_encode($errA);
-				if($this->core->conf->system->core->send_mail_report)
+				if($this->core->conf->system->core->send_mail_report &&
+				isset($this->core->mysql))
+				if($this->core->mysql->is_connect($this->core->conf->system->core->db[0][0]))
 				$this->core->mail->add_waiting_list(
 				$this->core->conf->system->core->admin_mail, 
 				'000', 
@@ -83,11 +92,19 @@ class error
 					'code'=>$error['type'],
 					'msg'=>$error['message'],
 					'file'=>$error['file'],
-					'line'=>$error['line']
+					'line'=>$error['line'],
+					'time'=>time()
 					)
 				);
 
-				$this->core->statCache('error',time()."-".$error['type']."[".$error['file'].":".$error['line'].$error['message'],true);
+				$er_j = json_encode(array(
+					'code'=>$error['type'],
+					'msg'=>$error['message'],
+					'file'=>$error['file'],
+					'line'=>$error['line'],
+					'time'=>time()
+				));
+				$this->core->statCache('error',$er_j,true);
 			}
 		ob_end_flush();
 	}
