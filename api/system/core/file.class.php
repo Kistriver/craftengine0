@@ -85,4 +85,3 @@ class file
 		fclose($fh);
 	}
 }
-?>

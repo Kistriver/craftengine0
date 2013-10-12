@@ -140,4 +140,3 @@ class mysql
 		return $result->num_rows;
 	}
 }
-?>

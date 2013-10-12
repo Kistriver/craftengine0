@@ -10,7 +10,7 @@ class api_stat extends api
 	protected function set()
 	{
 		$data = $this->data['value'];
-		$ver = $this->core->sanString($this->data['stat_ver']);
+		//$ver = $this->core->sanString($this->data['stat_ver']);
 		$ip = $this->core->sanString($this->data['server']['ip']);
 		$host = $this->core->sanString($this->data['server']['host']);
 		$port = $this->core->sanString($this->data['server']['port']);
@@ -25,8 +25,6 @@ class api_stat extends api
 			return $this->json(array(false));
 		}
 
-		$req = $this->core->sanString('');
-
 		$data[2] = explode("\r\n",$data[2]);
 		foreach($data[2] as &$i)
 		{
@@ -37,8 +35,8 @@ class api_stat extends api
 
 		$req_ip = $_SERVER['REMOTE_ADDR'];
 
-		$st = $this->core->mysql->query("INSERT INTO stat(time,requests,errors,version,mail,ip,host,port,req_ip)
-		VALUES('$time','$req','$err','$v','$am','$ip','$host','$port','$req_ip')");
+		$st = $this->core->mysql->query("INSERT INTO stat(time,errors,version,mail,ip,host,port,req_ip)
+		VALUES('$time','$err','$v','$am','$ip','$host','$port','$req_ip')");
 
 		if($st===false)
 		{

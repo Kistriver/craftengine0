@@ -6,6 +6,7 @@
 	"send_mail_report":true,
 	"mail_addr":"kcraft.su",
 	"upload_file_max_size":"5MB",
+	"GMT":"+0400",
 	"db":
 	[
 		[

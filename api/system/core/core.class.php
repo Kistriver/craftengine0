@@ -11,12 +11,22 @@ ini_set('display_errors',"1");
 ini_set('display_startup_errors',"1");
 ini_set('log_errors',"1");
 ini_set('html_errors',"0");
-error_reporting(E_ALL ^ E_NOTICE);
+date_default_timezone_set('GMT');
+//error_reporting(E_ALL ^ E_NOTICE);
 
 class core
 {
 	final function __construct()
 	{
+		//Подходит ли версия PHP
+		$php_min = '5.3.0';
+		if(version_compare(PHP_VERSION, $php_min) <= 0)
+		{
+			$j = array('error'=>'Your PHP version is: '.PHP_VERSION.'. But required version above: '.$php_min);
+			echo json_encode($j);
+			exit();
+		}
+
 		//Подключение модуля ядра timer
 		require_once(dirname(__FILE__)."/". "timer" .".class.php");
 		
@@ -68,7 +78,14 @@ class core
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
 		$this->timer->mark('IncludeCoreModules');
-		
+
+		if($this->functions->version_compare('0.1.6_alpha',$this->conf->system->core->version)!==0)
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible');
+			echo json_encode($j);
+			exit();
+		}
+
 		$this->issetFatalError();
 		$this->mail();
 	}
@@ -364,10 +381,4 @@ class core
 		}*/
 		return $this->functions->json($str);
 	}
-
-	public function last_call()
-	{
-		//Определить, откуда вызвана функция
-	}
 }
-?>

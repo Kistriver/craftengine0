@@ -204,4 +204,3 @@ class api
 		return $this->json(array(false));
 	}
 }
-?>

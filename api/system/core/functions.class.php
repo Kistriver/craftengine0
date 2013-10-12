@@ -14,11 +14,46 @@ class functions
 		$this->core->timer->mark('conf.class.php/__construct');
 	}
 
+	//return local time
 	public function time()
 	{
-		$time = time();
+		$time_offset = $this->core->conf->system->core->GMT;
+		$plus = $time_offset[0]=='+'?true:false;
+		$time_offset = array($time_offset[1].$time_offset[2],$time_offset[3],$time_offset[4]);
+
+		$time_offset = $time_offset[0] * 60 * 60 + $time_offset[1] * 60;
+
+		$time = $plus?time()+$time_offset:time()-$time_offset;
 
 		return $time;
+	}
+
+	//return converted local to GMT time
+	public function GMT($NGMT=null,$to=null)
+	{
+		$NGMT = empty($NGMT)?$this->time():$NGMT;
+		$time_offset = empty($to)?$this->core->conf->system->core->GMT:$to;
+		$plus = $time_offset[0]=='+'?true:false;
+		$time_offset = array($time_offset[1].$time_offset[2],$time_offset[3],$time_offset[4]);
+
+		$time_offset = $time_offset[0] * 60 * 60 + $time_offset[1] * 60;
+
+		$time = $plus?$NGMT-$time_offset:$NGMT+$time_offset;
+
+		return $time;
+	}
+
+	//return GMT if true GMT or local if not
+	public function time_date($format,$date=null,$GMT=true)
+	{
+		$date = empty($date)?
+			date($format,$GMT==true?
+				time():
+				$this->time()):
+			date($format,$GMT==true?
+						$this->GMT($date):
+						$date);
+		return $date;
 	}
 
 	/**
@@ -49,5 +84,53 @@ class functions
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}
+
+	public function last_call($offset=0,$count=1)
+	{
+		$debug = debug_backtrace(null);
+		$calls = array();
+		//Определить, откуда вызвана функция
+		for($i=0;$i<$count;$i++)
+		{
+			$d = $debug[$i+1+$offset];
+			$calls[] = $d;
+		}
+
+		return $calls;
+	}
+
+	public function version_compare($first,$sec)
+	{
+		$preg = "'^([0-9]).([0-9])(.([0-9]*)|)(_(alpha|beta|release|)|)$'i";
+		preg_match($preg,$first,$first);
+		preg_match($preg,$sec,$sec);
+
+		$vers = array('alpha'=>0,'beta'=>1,'release'=>2,
+					  'a'=>0,'b'=>1,'r'=>2);
+
+		$first[6] = (!empty($first[6]) && in_array($first[6],$vers))?$vers[$first[6]]:$vers['r'];
+		$sec[6] = (!empty($sec[6]) && in_array($sec[6],$vers))?$vers[$sec[6]]:$vers['r'];
+
+		$first[4] = empty($first[4])?0:$first[4];
+		$sec[4] = empty($sec[4])?0:$sec[4];
+
+		if($first[6]>$sec[6])return 1;
+		if($first[6]<$sec[6])return -1;
+		if($first[6]==$sec[6])
+		{
+			if($first[1]>$sec[1])return 1;
+			if($first[1]<$sec[1])return -1;
+			if($first[1]==$sec[1])
+			{
+				if($first[2]>$sec[2])return 1;
+				if($first[2]<$sec[2])return -1;
+				if($first[2]==$sec[2])
+				{
+					if($first[4]>$sec[4])return 1;
+					if($first[4]==$sec[4])return 0;
+					if($first[4]<$sec[4])return -1;
+				}
+			}
+		}
+	}
 }
-?>

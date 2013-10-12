@@ -439,4 +439,3 @@ class plugin
 		require_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
 	}
 }
-?>
