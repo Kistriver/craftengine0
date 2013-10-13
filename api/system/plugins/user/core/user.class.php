@@ -250,9 +250,13 @@ class plugin_user_user
 		}
 		else
 		{
+			$mode_sql = 0;
+			$mode_sql += !$mode['email']?1:0;
+			$mode_sql += !$mode['admin']?2:0;
+
 			$this->core->mysql->query("INSERT INTO signup
 			(name, surname, email, password, login, sex, day, month, year, time, invite, about, status) VALUES
-			('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '$mode')");
+			('$name', '$surname', '$email', '$password', '$login', '$sex', '$day', '$month', '$year', '$time', '$invite', '$about', '$mode_sql')");
 			
 			$id = $this->core->mysql->query("SELECT id FROM signup WHERE email='$email'");
 			$id = $this->core->mysql->fetch($id);

@@ -58,6 +58,9 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 		$core->render['_POST'] = $_POST;
 		$core->render['_GET'] = $_GET;
 	}
+
+	$core->render['_POST'] = $_POST;
+	$core->render['_GET'] = $_GET;
 }
 
 $core->api->get('captcha.set',array('type'=>'user_signup'));

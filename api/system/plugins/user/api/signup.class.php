@@ -185,24 +185,19 @@ class api_signup extends api
 		
 		if($agree!='on')
 			$err_lev = 1;
-		/*if($cap!=$_SESSION['captcha'])
-		{
-			$_SESSION['WARNING'][] = "Капча введена не правильно";
-			$err_lev = 1;
-		}*/
 		if(!$this->check('email',$email))
-			$err_lev = 1;
+			$err_lev = 2;
 		if($sex!='male' AND $sex!='female')
 		{
 			$this->core->error->error('plugin_user_signup',8);
-			$err_lev = 1;
+			$err_lev = 3;
 		}
 		if(!$this->check('login',$login))
-		$err_lev = 1;
+		$err_lev = 4;
 		if(strtolower($password)==strtolower($login))
 		{
 		$this->core->error->error('plugin_user_signup',9);
-		$err_lev = 1;
+		$err_lev = 5;
 		}
 		
 		$date = explode('/', $birthday);
@@ -210,27 +205,27 @@ class api_signup extends api
 		if($date[0]<=0 OR $date[0]>31)
 		{
 			$this->core->error->error('plugin_user_signup',15);
-			$err_lev = 1;
+			$err_lev = 6;
 		}
 		if($date[1]<=0 AND $date[1]>12)
 		{
 			$this->core->error->error('plugin_user_signup',15);
-			$err_lev = 1;
+			$err_lev = 7;
 		}
 		$now = date('Y', time());
 		if($date[2]<1970 AND $date[2]>($now - 90))
 		{
 			$this->core->error->error('plugin_user_signup',15);
-			$err_lev = 1;
+			$err_lev = 8;
 		}
 		if(!$this->check('password',$login))
-		$err_lev = 1;
+		$err_lev = 9;
 		if(!empty($invite))
 			if(!$this->check('invite',$invite))
-			$err_lev = 1;
+			$err_lev = 10;
 		if(!$this->check('captcha',$cap))
-		$err_lev = 1;
-		
+		$err_lev = 11;
+
 		if($err_lev == 0)
 		{
 			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
