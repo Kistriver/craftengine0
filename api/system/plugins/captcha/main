@@ -2,6 +2,7 @@
 	"author":"Kachalov",
 	"version":"1.0.0_alpha",
 	"web":"http://vk.com/craftengine",
+	"id":"3",
 	"name":"captcha",
 	"loadClass":"",
 	"description":"Этот модуль генерирует каптчу",

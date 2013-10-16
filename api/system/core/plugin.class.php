@@ -114,23 +114,23 @@ class plugin
 			foreach($this->pluginsDenied as $non)
 			if($folders!=$non)
 			{
-			if($folders!="." && $folders!=".." && is_dir($this->root.$folders))
-			if(file_exists($this->root.$folders.'/main'))
-			if(is_dir($this->root.$folders.'/core'))
-			if(is_dir($this->root.$folders.'/api'))
-			if(is_dir($this->root.$folders.'/confs'))
-			{
-				$main = $this->mainLoad($folders);
-				if(is_array($main))
-				if(!$main[0])
+				if($folders!="." && $folders!=".." && is_dir($this->root.$folders))
+				if(file_exists($this->root.$folders.'/main'))
+				if(is_dir($this->root.$folders.'/core'))
+				if(is_dir($this->root.$folders.'/api'))
+				if(is_dir($this->root.$folders.'/confs'))
 				{
-					return array(false,1);
+					$main = $this->mainLoad($folders);
+					if(is_array($main))
+					if(!$main[0])
+					{
+						return array(false,1);
+					}
+
+					$this->pluginsExist[$folders] = $main;
+					//$this->pluginsIncluded[$folders] = $main;//DELETE IT
 				}
-				
-				$this->pluginsExist[$folders] = $main;
-				//$this->pluginsIncluded[$folders] = $main;//DELETE IT
-			}
-			break;
+				break;
 			}
 		}
 		closedir($dir);
@@ -206,7 +206,7 @@ class plugin
 			
 			if($ex==0)
 			{
-				$this->off($c->name);
+				//$this->off($c->name);
 				return array(false,4);
 			}
 		}
@@ -365,7 +365,7 @@ class plugin
 				break;
 			}
 		}
-		
+
 		if($ex == 1)
 		$this->pluginsIncluded[$folder] = $config;
 		
@@ -386,7 +386,16 @@ class plugin
 				return array(false,4);
 			}
 		}
-		
+
+		$pl = &$this->pluginsIncluded[$folder];
+		if(!empty($pl->loadClass))
+		{
+			$plugin = $this->initPl($pl->name,$pl->loadClass);
+
+			if(method_exists($plugin,'OnEnable'))
+				$plugin->OnEnable();
+		}
+
 		$list = array();
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
@@ -415,7 +424,16 @@ class plugin
 				break;
 			}
 		}
-		
+
+		$pl = &$this->pluginsIncluded[$folder];
+		if(!empty($pl->loadClass))
+		{
+			$plugin = $this->initPl($pl->name,$pl->loadClass);
+
+			if(method_exists($plugin,'OnDisable'))
+			$plugin->OnDisable();
+		}
+
 		if($ex == 1)
 		unset($this->pluginsIncluded[$folder]);
 		

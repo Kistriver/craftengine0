@@ -42,7 +42,7 @@ $context = stream_context_create
 	)
 );
 
-$answer = @file_get_contents($url,false,$context);
+echo $answer = @file_get_contents($url,false,$context);
 
 $answer_decode = json_decode($answer, true);
 if(!$answer_decode)

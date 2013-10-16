@@ -42,7 +42,8 @@ if(sizeof($data['errors'])==0)
 	foreach($data['data']['all'] as $fa=>&$ca)
 	if($f==$fa AND $c['name']==$ca['name'])
 	$ca['_included_'] = true;
-	
+
+	$core->render['plugins_num'] = sizeof($data['data']['all']);
 	$core->render['plugins'] = $data['data']['all'];
 	//$core->render['pluginsWorked'] = $data['data']['included'];
 }

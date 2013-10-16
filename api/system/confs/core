@@ -1,5 +1,5 @@
 {
-	"version":"0.1.6_alpha",
+	"version":"0.1.7_alpha",
 	"admin_mail":"alex-kachalov@mail.ru",
 	"name":"Minecraft Edition",
 	"debug":true,
@@ -11,7 +11,7 @@
 	[
 		[
 			"lol",
-			"127.0.0.1",
+			"p:127.0.0.1",
 			"site",
 			"site",
 			"websitepass1998"

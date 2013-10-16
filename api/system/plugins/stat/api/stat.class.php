@@ -20,18 +20,18 @@ class api_stat extends api
 
 		$data = explode("\r\n:\r\n",$data);
 
-		if(sizeof($data)!=3)
+		if(sizeof($data)<2)
 		{
 			return $this->json(array(false));
 		}
 
-		$data[2] = explode("\r\n",$data[2]);
-		foreach($data[2] as &$i)
+		$data[1] = explode("\r\n",$data[1]);
+		foreach($data[1] as &$i)
 		{
 			$i = $this->core->cacheDataDecode($i);
 		}
-		$data[2] = implode("\r\n",$data[2]);
-		$err = $this->core->sanString($data[2]);
+		$data[1] = implode("\r\n",$data[1]);
+		$err = $this->core->sanString($data[1]);
 
 		$req_ip = $_SERVER['REMOTE_ADDR'];
 

@@ -7,5 +7,15 @@ class plugin_user_load
 		
 		$this->core->mysql->connect("mcprimary");
 	}
+
+	public function OnEnable()
+	{
+
+	}
+
+	public function OnDisable()
+	{
+
+	}
 }
 ?>

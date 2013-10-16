@@ -1,47 +1,76 @@
 {%extends "/tpl/html/main.twig"%}
 
 {%block title%}Плагины {{parent()}}{%endblock%}
-{%block header%}<li class="active">Плагины</li>{%endblock%}
+{%block header%}<li class="active">Плагины({{plugins_num}})</li>{%endblock%}
 
 {%block content%}
 {% autoescape true %}
-<hr />
 {%for plugin in plugins%}
-<div style="background-color:{%if plugin._included_%}#82FA58{%else%}#FE642E{%endif%};">
-<h2>{{plugin.name}} - {%if plugin._included_%}ON
+<div class="row alert alert-{%if plugin._included_%}success{%else%}danger{%endif%}">
+<div class="col-md-12">
+
+<div class="row">
+<div class="col-md-10">
+<h2>{{plugin.name}}</h2>
+</div>
+<div class="col-md-2">
+<h2>
+{%if plugin._included_%}
 <form action="{{MAIN.ROOT_HTTP}}plugins" method="post">
-<button title="OFF" class="btn btn-danger">
+<button style="width: 100%;" title="OFF" class="btn btn-danger">
 <input type="hidden" name="state" value="OFF" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
-OFF
+Выкл
 </button>
 </form>
-{%else%}OFF
+{%else%}
 <form action="{{MAIN.ROOT_HTTP}}plugins" method="post">
-<button title="ON" class="btn btn-success">
+<button style="width: 100%;" class="btn btn-success" title="ON">
 <input type="hidden" name="state" value="ON" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
-ON
+Вкл
 </button>
 </form>
-{%endif%}</h2>
-<p>
-{{plugin.description}}
-</p>
-Автор: {{plugin.author}}<br />
-Версия: {{plugin.version.version}}<br />
-Новые API: {{plugin.api|join(', ')}}<br />
-Требующиеся плагины: {{plugin.requires|join(', ')}}<br />
-Привилегии: {{plugin.permissions|join(', ')}}<br />
-ID в каталоге: {%if plugin.id==null%}Это сторонний плагин{%else%}{{plugin.id}}{%endif%}<br />
-Web-сайт разработчика: <a href="{{plugin.web.scheme}}://{{plugin.web.host}}{{plugin.web.path}}{{plugin.web.query}}{{plugin.web.fragment}}"><font style="color: dark;">{{plugin.web.host}}</font><font style="color: grey;">{{plugin.web.port}}</font><font style="color: grey;">{{plugin.web.path}}</font><font style="color: grey;">{{plugin.web.query}}</font><font style="color: grey;">{{plugin.web.fragment}}</font></a>
-<br />
+</h2>
+{%endif%}
 </div>
-<hr />
+</div>
+
+<div class="row">
+<div class="col-md-12">
+{{plugin.description}}
+</div>
+<div class="col-md-12">
+Автор: {{plugin.author}}
+</div>
+<div class="col-md-12">
+Версия: {{plugin.version.version}}
+</div>
+<div class="col-md-12">
+Новые модули API: {{plugin.api|join(', ')}}
+</div>
+<div class="col-md-12">
+Требующиеся плагины: {{plugin.requires|join(', ')}}
+</div>
+<div class="col-md-12">
+<!--Привилегии: {{plugin.permissions|join(', ')}}
+</div>
+<div class="col-md-12">
+ID в каталоге: {%if plugin.id==null%}Это сторонний плагин{%else%}{{plugin.id}}{%endif%}
+</div>
+<div class="col-md-12">
+-->Web-сайт разработчика: <a href="{{plugin.web.scheme}}://{{plugin.web.host}}{{plugin.web.path}}{{plugin.web.query}}{{plugin.web.fragment}}"><font style="color: dark;">{{plugin.web.host}}</font><font style="color: grey;">{{plugin.web.port}}</font><font style="color: grey;">{{plugin.web.path}}</font><font style="color: grey;">{{plugin.web.query}}</font><font style="color: grey;">{{plugin.web.fragment}}</font></a>
+</div>
+</div>
+
+</div>
+</div>
 {%endfor%}
+
 {% endautoescape %}
-Привилегии:<br />
+<!--Привилегии:<br />
 core - имеет доступ к ядру и изменению его компонентов<br />
 plugins - имеет доступ к плагинам и изменению их компонентов<br />
 unshutable - категорически не рекомендуется отключать, т.к. могут возникнуть проблемы с повторным подключением<br />
+-->
 {%endblock%}

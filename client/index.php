@@ -37,6 +37,7 @@ elseif(preg_match("'^((files|other|style)/)'", $uri))
 	exit();
 }
 
+header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
 foreach($core->rules as $r)
 {

@@ -79,7 +79,7 @@ class core
 		}
 		$this->timer->mark('IncludeCoreModules');
 
-		if($this->functions->version_compare('0.1.6_alpha',$this->conf->system->core->version)!==0)
+		if($this->functions->version_compare('0.1.7_alpha',$this->conf->system->core->version)!==0)
 		{
 			$j = array('error'=>'Core conf file doesn\'t compatible');
 			echo json_encode($j);
@@ -264,7 +264,7 @@ class core
 			$status = 'NO';
 		}
 		
-		$expm = '{"error":"This framework has some exploits, so it\'s been blocked until cover exploits"}';
+		$expm = '{"error":"This framework has some exploits, so it\'s been blocked until cover exploits. Last update: '.(time() - $time).'sec ago."}';
 		
 		if($time<time()-$updatetime)
 		{
