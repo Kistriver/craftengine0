@@ -15,7 +15,7 @@ class mail
 	
 	public function __construct($core)
 	{
-		$this->core = $core;
+		$this->core = &$core;
 		
 		$this->core->timer->mark('mail.class.php/__construct');
 	}
@@ -98,9 +98,9 @@ class mail
 	}
 	
 	//Получения листа ожидания писем на отправку
-	public function get_waiting_list()
+	public function get_waiting_list($limit=20)
 	{
-		$r = $this->core->mysql->query("SELECT * FROM mail WHERE status='1' LIMIT 0,20");
+		$r = $this->core->mysql->query("SELECT * FROM mail WHERE status='1' LIMIT 0,".$limit);
 		for($i=0;$i<$this->core->mysql->rows($r);$i++)
 		{
 			$m = $this->core->mysql->fetch($r);

@@ -16,11 +16,7 @@ class timer
 	
 	public function __construct($core)
 	{
-		$this->start();
-		
-		$this->core = $core;
-		
-		
+		$this->core = &$core;
 	}
 	
 	public function startMark()
@@ -33,14 +29,14 @@ class timer
 		/* TODO: конец метки array('name','startTime','endTime') */
 	}
 	
-	public function start()
+	public function start($time=null)
 	{
-		$this->start = microtime(true);
+		$this->start = empty($time)?microtime(true):$time;
 	}
 	
-	public function stop()
+	public function stop($time=null)
 	{
-		$this->stop = microtime(true);
+		$this->stop = empty($time)?microtime(true):$time;
 	}
 	
 	public function mark($name)

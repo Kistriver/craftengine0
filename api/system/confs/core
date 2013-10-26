@@ -1,5 +1,5 @@
 {
-	"version":"0.1.7_alpha",
+	"version":"0.2.0_alpha",
 	"admin_mail":"alex-kachalov@mail.ru",
 	"name":"Minecraft Edition",
 	"debug":true,
@@ -10,15 +10,11 @@
 	"db":
 	[
 		[
-			"lol",
-			"p:127.0.0.1",
 			"site",
+			"p:127.0.0.1",
+			"kcraft_main",
 			"site",
 			"websitepass1998"
-		],
-		[
-			"site",
-			"lol"
 		],
 		[
 			"mcprimary",

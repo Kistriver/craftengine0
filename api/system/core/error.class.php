@@ -13,7 +13,7 @@ class error
 	
 	public function __construct($core)
 	{
-		$this->core = $core;
+		$this->core = &$core;
 		
 		error_reporting(E_ALL);
 		
@@ -37,7 +37,7 @@ class error
 		//FIXME: might replace other system/core and it will be epic fail
 		$file_fr = str_replace('/system/core','',dirname(__FILE__));
 		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
-		
+
 		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine',3);
 		else $this->error[] = array('engine',3,array($code,$msg,$file,$line));
 		if($this->core->conf->system->core->send_mail_report)
@@ -104,6 +104,7 @@ class error
 					'line'=>$error['line'],
 					'time'=>time()
 				));
+
 				$this->core->statCache('error',$er_j,true);
 			}
 		ob_end_flush();

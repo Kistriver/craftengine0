@@ -12,12 +12,28 @@ ini_set('display_startup_errors',"1");
 ini_set('log_errors',"1");
 ini_set('html_errors',"0");
 date_default_timezone_set('GMT');
-//error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE);
 
 class core
 {
-	final function __construct()
+	public $core_confs;
+	public  $api;
+	public $sid;
+
+	final function __construct($confs=array())
 	{
+		$this->core_confs = $confs;
+		$this->sid = isset($this->core_confs['api'])?
+					(isset($_POST['sid'])?
+						$_POST['sid']:
+						(isset($_GET['sid'])?
+							$_GET['sid']:
+							'')
+					):
+					false;
+
+		$start = isset($this->core_confs['start_time'])?$this->core_confs['start_time']:microtime(true);
+
 		//Подходит ли версия PHP
 		$php_min = '5.3.0';
 		if(version_compare(PHP_VERSION, $php_min) <= 0)
@@ -26,14 +42,6 @@ class core
 			echo json_encode($j);
 			exit();
 		}
-
-		//Подключение модуля ядра timer
-		require_once(dirname(__FILE__)."/". "timer" .".class.php");
-		
-		//Вызов модуля
-		$this->timer = new timer($this);
-		
-		$this->timer->start();
 		
 		ob_start();
 		
@@ -58,8 +66,8 @@ class core
 		
 		if(!defined('CORECALLONCE'))
 		define('CORECALLONCE', true);
-		
-		$includes = array(//'timer', 		//Подсчёт времени выполнения скрипта	//ALREADY INCLUDED
+
+		$includes = array(  'timer', 		//Подсчёт времени выполнения скрипта
 							'functions',	//Функции
 							'file',			//Файлы
 							'conf',			//Конфигурации
@@ -68,7 +76,7 @@ class core
 							'mail',			//Мыло
 							'plugin',		//Плагинридер
 						);
-		
+
 		for($i=0;$i<sizeof($includes);$i++)
 		{
 			//Подключение модулей ядра
@@ -77,9 +85,11 @@ class core
 			//Вызов модулей
 			$this->$includes[$i] = new $includes[$i]($this);
 		}
+
+		$this->timer->start($start);
 		$this->timer->mark('IncludeCoreModules');
 
-		if($this->functions->version_compare('0.1.7_alpha',$this->conf->system->core->version)!==0)
+		if($this->functions->version_compare('0.2.0_alpha',$this->conf->system->core->version)!==0)
 		{
 			$j = array('error'=>'Core conf file doesn\'t compatible');
 			echo json_encode($j);
@@ -88,11 +98,19 @@ class core
 
 		$this->issetFatalError();
 		$this->mail();
+
+		if(isset($this->core_confs['api']['module'],$this->core_confs['api']['method']))
+		{
+			require_once(dirname(__FILE__)."/api.class.php");
+			$this->api = new api($this,$this->core_confs['api']['module'],$this->core_confs['api']['method']);
+		}
 	}
 
 	final function statCache($type=null, $value=null, $set=true)
 	{
-		$stat_file_name = dirname(__FILE__).'/cache/Stat';
+		$stat_file_name = empty($this->core->core_confs['cache']['root'])?
+						dirname(__FILE__).'/cache/Stat':
+						$this->core->core_confs['cache']['root'].'/Stat';
 		if($set===true)
 		{
 			$file = file_exists($stat_file_name)
@@ -130,7 +148,7 @@ class core
 			}
 
 			$file = implode("\r\n:\r\n",$file_p);
-			file_put_contents(dirname(__FILE__).'/cache/Stat', $file);
+			file_put_contents($stat_file_name, $file);
 		}
 		else
 		{
@@ -164,7 +182,9 @@ class core
 	{
 		$this->about();
 		$updatetime = 60 * 60 * 12;
-		$file = dirname(__FILE__).'/cache/Stat';
+		$file = empty($this->core->core_confs['cache']['root'])?
+			dirname(__FILE__).'/cache/Stat':
+			$this->core->core_confs['cache']['root'].'/Stat';
 
 		if(file_exists($file))
 		{
@@ -175,16 +195,27 @@ class core
 			$time = time();
 			$this->statCache('clear',$time,true);
 		}
-		
-		$ft = file_exists(dirname(__FILE__).'/cache/StatLock')?file_get_contents(dirname(__FILE__).'/cache/StatLock'):0;
-		
+
+
+		$fsl = empty($this->core->core_confs['cache']['root'])?
+			dirname(__FILE__).'/cache/StatLock':
+			$this->core->core_confs['cache']['root'].'/StatLock';
+
+
+		$ft = file_exists($fsl)?file_get_contents($fsl):0;
+
 		if($time<time()-$updatetime && (int)$ft<time()-60)
 		{
-			file_put_contents(dirname(__FILE__).'/cache/StatLock',time());
+			file_put_contents($fsl,time());
 			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
 			stream_set_timeout($answer, 0, 10 * 1000);
-			fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/stat.php HTTP/1.0\r\n\r\n");
-			fread($answer, 1024);
+			$req = "GET ".$this->conf->system->core->http_root."system-scripts/stat.php HTTP/1.0\r\n";
+			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
+			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
+			$req .= "Connection: Close\r\n\r\n";
+			fwrite($answer, $req);
+			$a=fread($answer, 2048);
+			//print_r($a);
 			
 			if($answer)$this->stat = true;
 			else $this->stat = false;
@@ -229,7 +260,9 @@ class core
 	public function issetFatalError()
 	{
 		$updatetime = 60 * 10;
-		$file = dirname(__FILE__).'/cache/LastExploitRequest';
+		$file = empty($this->core->core_confs['cache']['root'])?
+			dirname(__FILE__).'/cache/LastExploitRequest':
+			$this->core->core_confs['cache']['root'].'/LastExploitRequest';
 		
 		if(file_exists($file))
 		{
@@ -248,7 +281,7 @@ class core
 		{
 			$time = null;
 		}
-		
+
 		$time = trim($time);
 		
 		if(!empty($time))
@@ -270,7 +303,11 @@ class core
 		{
 			$answer = fsockopen("stat.kcraft.su", 80);
 			stream_set_timeout($answer, 2);
-			fwrite($answer, "GET /system-scripts/exploit.php HTTP/1.0\r\n\r\n");
+			$req = "GET /system-scripts/exploit.php HTTP/1.0\r\n";
+			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
+			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
+			$req .= "Connection: Close\r\n\r\n";
+			fwrite($answer, $req);
 			$ans = fread($answer, 1024);
 			$ans = explode("\r\n", $ans);
 			
@@ -294,14 +331,22 @@ class core
 
 	public function mail()
 	{
-		$mt = file_exists(dirname(__FILE__).'/cache/MailLock')?file_get_contents(dirname(__FILE__).'/cache/MailLock'):0;
+		$fml = empty($this->core->core_confs['cache']['root'])?
+			dirname(__FILE__).'/cache/MailLock':
+			$this->core->core_confs['cache']['root'].'/MailLock';
+
+		$mt = file_exists($fml)?file_get_contents($fml):0;
 		
-		if($mt<time()-6)
+		if($mt<time()-60)
 		{
-			file_put_contents(dirname(__FILE__).'/cache/MailLock',time());
+			file_put_contents($fml,time());
 			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
-			stream_set_timeout($answer, 0, 10 * 1000);
-			fwrite($answer, "GET ".$this->conf->system->core->http_root."system-scripts/mail.php HTTP/1.0\r\n\r\n");
+			stream_set_timeout($answer, 0, 2 * 1000);
+			$req = "GET /system-scripts/mail.php HTTP/1.0\r\n";
+			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
+			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
+			$req .= "Connection: Close\r\n\r\n";
+			fwrite($answer, $req);
 			fread($answer, 1024);
 		}
 		

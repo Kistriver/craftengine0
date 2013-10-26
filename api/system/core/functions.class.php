@@ -9,8 +9,8 @@ class functions
 {
 	public function __construct($core)
 	{
-		$this->core = $core;
-		
+		$this->core = &$core;
+
 		$this->core->timer->mark('conf.class.php/__construct');
 	}
 
@@ -132,5 +132,45 @@ class functions
 				}
 			}
 		}
+	}
+
+	public function start_session(&$sid)
+	{
+		//Создание сессии
+		$sid_err = 0;
+		if(empty($sid))
+		{
+			session_start();
+			session_regenerate_id();
+			$sid = session_id();
+			$sid_err = 1;
+		}
+		else
+		{
+			session_id($sid);
+			session_start();
+
+			if(!isset($_SESSION['ip']))
+				$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+
+			if($_SERVER['REMOTE_ADDR']!=$_SESSION['ip'])
+				$sid_err = 2;
+		}
+
+		if($sid_err!=0)
+		{
+			switch($sid_err)
+			{
+				case 1:
+					$sid = session_id();
+					$this->core->error->error('api',3);
+					break;
+				case 2:
+					$this->core->error->error('engine',4);
+					break;
+			}
+			return false;
+		}
+		return true;
 	}
 }

@@ -17,9 +17,15 @@ class plugin
 	
 	public function __construct($core)
 	{
-		$this->core = $core;
-		$this->root = dirname(__FILE__).'/../plugins/';
-		
+		$this->core = &$core;
+
+		$this->root = empty($this->core->core_confs['plugins']['root'])?
+						dirname(__FILE__).'/../plugins/':
+						$this->core->core_confs['plugins']['root'];
+
+		if($this->core->sid!==false)$this->core->functions->start_session($this->core->sid);
+		else session_start();
+
 		if(method_exists($core,'stat'))
 		{
 			$this->core->stat();

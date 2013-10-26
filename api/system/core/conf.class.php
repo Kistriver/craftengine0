@@ -13,7 +13,7 @@ class conf
 	
 	public function __construct($core)
 	{
-		$this->core = $core;
+		$this->core = &$core;
 		
 		$this->system = new stdClass();
 		$this->plugins = new stdClass();
@@ -33,12 +33,12 @@ class conf
 		switch($type)
 		{
 			case 'core':
-				$root = '/../confs/';
-				
-				if(!file_exists(dirname(__FILE__).$root.$params['name']))
+				$root = $this->core->file->root;
+
+				if(!file_exists($root.$params['name']))
 				return false;
 				
-				$conf = $this->core->file->get_all_file($root.$params['name']);
+				$conf = $this->core->file->get_all_file($params['name']);
 				$conf = json_decode($conf, true);
 				//print_r(json_last_error());echo JSON_ERROR_SYNTAX."<-".$params['name'];
 				$conf = (object)$conf;
@@ -52,12 +52,16 @@ class conf
 				break;
 			
 			case 'pluginConf':
-				$root = '/../plugins/'.$params['folder'].'/main';
+				$pr = empty($this->core->core_confs['plugins']['root'])?
+					dirname(__FILE__).'/../plugins/':
+					$this->core->core_confs['plugins']['root'];
+
+				$root = $pr.$params['folder'].'/main';
 				
-				if(!file_exists(dirname(__FILE__).$root))
+				if(!file_exists($root))
 				return false;
 				
-				$conf = $this->core->file->get_all_file($root);
+				$conf = $this->core->file->get_all_file($root,false);
 				$conf = json_decode($conf, true);
 				$conf = (object)$conf;
 				
@@ -69,12 +73,16 @@ class conf
 				return true;
 				break;
 			case 'plugin':
-				$root = '/../plugins/'.$params['folder'].'/confs/';
+				$pr = empty($this->core->core_confs['plugins']['root'])?
+					dirname(__FILE__).'/../plugins/':
+					$this->core->core_confs['plugins']['root'];
+
+				$root = $pr.$params['folder'].'/confs/';
 				
-				if(!file_exists(dirname(__FILE__).$root.$params['conf']))
+				if(!file_exists($root.$params['conf']))
 				return false;
 				
-				$conf = $this->core->file->get_all_file($root.$params['conf']);
+				$conf = $this->core->file->get_all_file($root.$params['conf'],false);
 				$conf = json_decode($conf, true);
 				$conf = (object)$conf;
 				

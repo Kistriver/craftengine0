@@ -2,9 +2,10 @@
 class api
 {
 	public $core;
-	public $url='http://api.localhost/';
+	public $url='http://localhost/api/';
 	public $answer;
 	public $answer_decode;
+	public $api_ver = 4;
 	
 	public function __construct($core)
 	{
@@ -22,11 +23,12 @@ class api
 			$key = $keys[$i];
 			$post[$key] = $data[$key];
 		}
-		$post['sid'] = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
+		//$post['sid'] = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		//$post['sid'] = $_SESSION['sid'];
+		$sid = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		
 		$post = $this->core->f->json_encode_ru($post);
-		$url = $this->url . '?method=' . $method/* . '&data=' . rawurlencode($post)*/;
+		$url = $this->url . '?v=' . $this->api_ver . '&method=' . $method . '&sid=' . $sid/* . '&data=' . rawurlencode($post)*/;
 		
 		$data = http_build_query
 		(
@@ -88,24 +90,40 @@ class api
 			if($cc->core->detailed_req===true)
 			{
 				$times = array();
-				foreach($this->answer_decode['runtime'][1] as $t)
+
+				$runs = $this->answer_decode['runtime'][1];
+				$runs[] = array('Other',$this->answer_decode['runtime'][2]);
+				foreach($runs as $t)
 				{
 					$prec = 0;
 					if($t[1]==0)
 					$prec = 0;
 					else
 					$prec = round($t[1]/$this->answer_decode['runtime'][0]*100,1);
-					
-					$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms ($prec%)";
+
+					$color = '#00FF00';
+					if($prec>5)$color = '#40FF00';
+					if($prec>10)$color = '#80FF00';
+					if($prec>15)$color = '#BFFF00';
+					if($prec>20)$color = '#FFFF00';
+					if($prec>25)$color = '#FFBF00';
+					if($prec>30)$color = '#FF8000';
+					if($prec>35)$color = '#FF4000';
+					if($prec>40)$color = '#FF0000';
+
+					$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms<!-- ($prec%)-->"
+						.'<div style="float:right; background-color: '.$color.'; min-width:'.$prec*4 .'px">&nbsp;</div>
+						<!--<div style="float:right; background-color:grey; width:'.(100-$prec)*4 .'px;">&nbsp;</div>-->
+						<div style="float:right;">'.$prec.'%</div>';
 				}
 				
-				if($this->answer_decode['runtime'][2]==0)
+				/*if($this->answer_decode['runtime'][2]==0)
 				$prec = 0;
 				else
 				$prec = round($this->answer_decode['runtime'][2]/$this->answer_decode['runtime'][0]*100,1);
 				
 				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
-				
+				*/
 				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
 			}
 			//$this->core->render['MAIN']['INFO'][] = "$method: ". $this->answer_decode['runtime'][0]*1000 ." ms";

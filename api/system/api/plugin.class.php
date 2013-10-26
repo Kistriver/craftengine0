@@ -4,10 +4,10 @@ class api_plugin extends api
 	public function init()
 	{
 		//FIXME: IT'S SEEMS TO BE DANGEROUS
-		$this->functions['act']='function';
-		$this->functions['list']='list_of_plugins';
-		$this->functions['on']='on_plugin';
-		$this->functions['off']='off_plugin';
+		#$this->functions['act']='function';
+		//$this->functions['list']='list_of_plugins';
+		//$this->functions['on']='on_plugin';
+		//$this->functions['off']='off_plugin';
 	}
 	
 	protected function list_of_plugins()

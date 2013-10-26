@@ -1,6 +1,17 @@
 <?php
 require_once(dirname(__FILE__)."/../system/core/core.class.php");
-$core = new core();
+
+include_once(dirname(__FILE__)."/../system/include.php");
+if(!isset($core_confs))
+$core_confs = array
+(
+	'confs'=>array('root'=>''),
+	'cache'=>array('root'=>''),
+	'tpl'=>array('root'=>''),
+	'plugins'=>array('root'=>''),
+);
+
+$core = new core($core_confs);
 
 $time = time();
 $time_was = $core->sanString($_GET['time']);

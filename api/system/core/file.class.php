@@ -13,8 +13,10 @@ class file
 	
 	public function __construct($core)
 	{
-		$this->core = $core;
-		$this->root = dirname(__FILE__).'/../confs/';
+		$this->core = &$core;
+		$this->root = empty($this->core->core_confs['confs']['root'])?
+							dirname(__FILE__).'/../confs/':
+							$this->core->core_confs['confs']['root'];
 		$this->core->timer->mark('file.class.php/__construct');
 	}
 	
@@ -34,7 +36,7 @@ class file
 		fclose($fp);
 	}
 	
-	public function get_all_file($file)
+	public function get_all_file($file,$root=true)
 	{
 		/*$fp = fopen($this->root.$file, "r"); // Открываем файл в режиме чтения
 		$arr='';
@@ -50,13 +52,16 @@ class file
 		else return false;
 		fclose($fp);*/
 
-		$f = file_get_contents($this->root.$file, false);
+		$r = $root===true?$this->root:'';
+
+		$f = file_get_contents($r.$file, false);
 		return $f;
 	}
 	
-	public function set_file($file,$content)
+	public function set_file($file,$content,$root=true)
 	{
-		file_put_contents($this->root.$file, $content);
+		$r = $root===true?$this->root:'';
+		file_put_contents($r.$file, $content);
 	}
 	
 	public function write_a_p($file, $text)

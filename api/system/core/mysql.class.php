@@ -15,7 +15,7 @@ class mysql
 
 	public function __construct($core)
 	{
-		$this->core = $core;
+		$this->core = &$core;
 
 		//Подключение БД
 		$this->connect('site');

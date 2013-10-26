@@ -1,12 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/system/include.php');
 define('CE_HUB', true);
-//die(1);
-if(sizeof($core->plugins->list)!=0)
-foreach($core->plugins->list as $pl => $pages)
-{
-	include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
-}
 
 $uri = isset($_GET['uri'])?$_GET['uri']:null;
 $hr = $core->conf->conf->core->tpl->root_http;
@@ -18,7 +12,7 @@ elseif(preg_match("'^((system)/)'", $uri))
 {
 	$core->f->quit(403);
 }
-elseif(preg_match("'^((files|other|style)/)'", $uri))
+elseif(preg_match("'^((files|other|style|api)/)'", $uri))
 {
 	if(file_exists(dirname(__FILE__).'/'.$uri))
 	{
@@ -35,6 +29,12 @@ elseif(preg_match("'^((files|other|style)/)'", $uri))
 	}
 	
 	exit();
+}
+
+if(sizeof($core->plugins->list)!=0)
+foreach($core->plugins->list as $pl => $pages)
+{
+	include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
 }
 
 header('Content-type: text/html; charset=utf-8;');

@@ -9,6 +9,7 @@ class api
 {
 	public	$data_json,			//Информация в JSON формате
 			$data,				//Информация в массиве
+			$sid,
 			$returned;			//Сгенерированный ответ
 	protected $core;				//Ядро
 	
@@ -35,6 +36,7 @@ class api
 		}
 		
 		$this->core = &$core;
+		$this->sid = &$this->core->sid;
 		
 		if(!empty($module) AND !empty($function))
 		{
@@ -95,61 +97,16 @@ class api
 		//Получение информации и её декодирование
 		$this->data_json = isset($_POST['data'])? $_POST['data'] : (isset($_GET['data'])?$_GET['data']:"{}");
 		$this->data = json_decode($this->data_json, true);
-		
-		//Создание сессии
-		$sid_err = 0;
-		if(empty($this->data['sid']))
+		$this->data['sid'] = &$this->sid;
+
+
+		foreach($this->core->error->error as $er)
 		{
-			session_start();
-			session_regenerate_id();
-			$this->data['sid'] = session_id();
-			$sid_err = 1;
-			
-			/*session_start();
-			$this->data['sid'] = session_id();*/
-		}
-		else
-		{			
-			//$s = session_id($this->data['sid']);
-			session_id($this->data['sid']);
-			//if(empty($s))session_start();
-			session_start();
-			
-			if(!isset($_SESSION['ip']))
-			$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-			
-			if($_SERVER['REMOTE_ADDR']!=$_SESSION['ip'])
-			$sid_err = 2;
-		}
-		
-		if($sid_err!=0)
-		{
-			switch($sid_err)
+			if($er[0]=='api' && $er[1]==3)
 			{
-				case 1:
-					$this->data['sid'] = session_id();
-					$this->core->error->error('api',3);
-					break;
-				case 2:
-					$this->core->error->error('engine',4);
-					break;
+				echo $this->json();
+				exit();
 			}
-			echo $this->json();
-			die();
-		}
-		
-		//Авторизирован ли пользователь
-		if(isset($_SESSION['id']) AND isset($_SESSION['login']))
-		{
-			if($_SESSION['id']!='' AND $_SESSION['login']!='')
-			$_SESSION['loggedin'] = true;
-		}
-		else
-		$_SESSION['loggedin'] = false;
-		
-		if(!$_SESSION['loggedin'])
-		{
-			$_SESSION['id'] = '';
 		}
 	}
 	
@@ -170,7 +127,7 @@ class api
 		
 		$r_a = array(
 				'data'=>$data,
-				'sid'=>$this->data['sid'],
+				'sid'=>$this->sid,
 				'errors'=>$this->core->error->error,
 				'runtime'=>array(
 								$this->core->timer->display('all'),

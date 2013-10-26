@@ -4,10 +4,20 @@ require_once(dirname(__FILE__)."/../system/core/core.class.php");
 set_time_limit(0);
 ignore_user_abort(1);
 
-$core = new core();
+include_once(dirname(__FILE__)."/../system/include.php");
+if(!isset($core_confs))
+$core_confs = array
+(
+	'confs'=>array('root'=>''),
+	'cache'=>array('root'=>''),
+	'tpl'=>array('root'=>''),
+	'plugins'=>array('root'=>''),
+);
+
+$core = new core($core_confs);
 
 $stat['stat_ver'] = 'v1.1';
-$stat['sid'] = 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
+$sid = 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
 $stat['value'] = file_get_contents(dirname(__FILE__).'/../system/core/cache/Stat');
 
 $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
@@ -19,7 +29,7 @@ $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
 
 $stat = $core->json_encode_ru($stat);
 
-$url = 'http://stat.kcraft.su:80/index.php?method=stat.set';
+$url = 'http://stat.kcraft.su:80/index.php?method=stat.set&sid='.$sid;
 
 $data = http_build_query
 (
@@ -36,7 +46,8 @@ $context = stream_context_create
 		'http' => array
 		(
 			'method' => 'POST',
-			'header' => 'Content-Type: application/x-www-form-urlencoded',
+			'header' => 'Content-Type: application/x-www-form-urlencoded'.PHP_EOL.
+						'User-agent: CraftEngine('.$core->conf->system->core->version.')',
 			'content' => $data,
 		)
 	)
