@@ -276,7 +276,7 @@ class api_user extends api
 			if($status==1 OR $status==3)
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
-			//NOT WORK//$this->core->mail->add_waiting_list($r['email'], '004', array($r['login'],true));
+			//NOT WORK//$this->core->mail->addWaitingList($r['email'], '004', array($r['login'],true));
 			return $this->json(array(true));
 		}
 		elseif($confirm==='false')
@@ -298,7 +298,7 @@ class api_user extends api
 														VALUES('$editor','$r[id]','$type','$time','$data')");
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
-			//$this->core->mail->add_waiting_list($r['email'], 'reg_confirm', array($r['login'],false));
+			//$this->core->mail->addWaitingList($r['email'], 'reg_confirm', array($r['login'],false));
 			
 			return $this->json(array(true));
 		}
@@ -317,7 +317,7 @@ class api_user extends api
 			$code = $user->generate_code('signup',array('login'=>$r['login'],'id'=>$r['id']),false);
 
 
-			$this->core->mail->add_waiting_list($r['email'], '002', array('login'=>$r['login'], 'id'=>$r['id'], 'code'=>$code));
+			$this->core->mail->addWaitingList($r['email'], '002', array('login'=>$r['login'], 'id'=>$r['id'], 'code'=>$code));
 		}
 		else
 		{

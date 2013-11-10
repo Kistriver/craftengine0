@@ -213,7 +213,7 @@ class api_login extends api
 			}
 
 			$code = $u->generate_code('restore_pass',array('login'=>$u->login,'email'=>$u->email));
-			$this->core->mail->add_waiting_list($u->email, '003', array('code'=>$code,'login'=>$u->login,'email'=>$u->email));
+			$this->core->mail->addWaitingList($u->email, '003', array('code'=>$code,'login'=>$u->login,'email'=>$u->email));
 
 			return $this->json(array(true));
 		}

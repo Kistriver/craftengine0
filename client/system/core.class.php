@@ -14,6 +14,8 @@ class core
 	
 	public function __construct()
 	{
+		$this->core = &$this;
+
 		$ver = 'v1.4';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
@@ -93,6 +95,8 @@ class core
 			//die('Fatal Twig error: ' . $e->getMessage());
 			$this->core->f->quit(500,'can\'t load Twig');
 		}
+
+		if($this->core->conf->conf->core->core->tech==true)$this->core->f->quit(403,'Technical works');
 		
 		$this->plugins = new plugin($this);
 	}

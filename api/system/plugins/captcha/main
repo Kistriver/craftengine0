@@ -4,6 +4,7 @@
 	"web":"http://vk.com/craftengine",
 	"id":"3",
 	"name":"captcha",
+	"title":"Капча",
 	"loadClass":"",
 	"description":"Этот модуль генерирует каптчу",
 	"confs":

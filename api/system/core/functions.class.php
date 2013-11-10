@@ -11,7 +11,7 @@ class functions
 	{
 		$this->core = &$core;
 
-		$this->core->timer->mark('conf.class.php/__construct');
+		//$this->core->timer->mark('conf.class.php/__construct');
 	}
 
 	//return local time
@@ -44,7 +44,7 @@ class functions
 	}
 
 	//return GMT if true GMT or local if not
-	public function time_date($format,$date=null,$GMT=true)
+	public function timeToDate($format,$date=null,$GMT=true)
 	{
 		$date = empty($date)?
 			date($format,$GMT==true?
@@ -60,7 +60,7 @@ class functions
 	 * JSON с кирилицей
 	 *
 	 * @access public
-	 * @param $srt array
+	 * @param $str array
 	 * @return string
 	 */
 	public function json($str)
@@ -77,15 +77,12 @@ class functions
 			'Ё', 'ё', 'Ж','ж','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н','О','о',
 			'П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ч','ч','Ш','ш',
 			'Щ','щ','Ъ','ъ','Ы','ы','Ь','ь','Э','э','Ю','ю','Я','я');
-		if(defined('JSON_PRETTY_PRINT'))
-			$str1 = json_encode($str, JSON_PRETTY_PRINT);
-		else
-			$str1 = json_encode($str);
+		$str1 = json_encode($str, JSON_PRETTY_PRINT);
 		$str2 = str_replace($arr_replace_utf,$arr_replace_cyr,$str1);
 		return $str2;
 	}
 
-	public function last_call($offset=0,$count=1)
+	public function lastCall($offset=0,$count=1)
 	{
 		$debug = debug_backtrace(null);
 		$calls = array();
@@ -99,7 +96,7 @@ class functions
 		return $calls;
 	}
 
-	public function version_compare($first,$sec)
+	public function versionCompare($first,$sec)
 	{
 		$preg = "'^([0-9]).([0-9])(.([0-9]*)|)(_(alpha|beta|release|)|)$'i";
 		preg_match($preg,$first,$first);
@@ -134,8 +131,12 @@ class functions
 		}
 	}
 
-	public function start_session(&$sid)
+	public function startSession(&$sid)
 	{
+		//if(!empty($this->core->core_confs['sid']))$sid=$this->core->core_confs['sid'];
+
+		$old = empty($_COOKIE['PHPSESSID'])?null:$_COOKIE['PHPSESSID'];
+
 		//Создание сессии
 		$sid_err = 0;
 		if(empty($sid))
@@ -153,9 +154,12 @@ class functions
 			if(!isset($_SESSION['ip']))
 				$_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
 
-			if($_SERVER['REMOTE_ADDR']!=$_SESSION['ip'])
-				$sid_err = 2;
+			//if($_SERVER['REMOTE_ADDR']!=$_SESSION['ip'])
+				//$sid_err = 2;
 		}
+
+		//FIXME: сделать некостыльное решение
+		if(!empty($old)){setcookie("PHPSESSID", session_id(), time()-3600,'/');setcookie("PHPSESSID", $old, time()+3600,'/');}
 
 		if($sid_err!=0)
 		{
@@ -172,5 +176,22 @@ class functions
 			return false;
 		}
 		return true;
+	}
+
+	public function sysScript($file, $to=2, $params=array())
+	{
+		$host = empty($params['host'])?$this->core->conf->system->core->system_scripts[0]:$params['host'];
+		$port = empty($params['port'])?$this->core->conf->system->core->system_scripts[1]:$params['port'];
+		$root = empty($params['path'])?$this->core->conf->system->core->system_scripts[2]:$params['path'];
+
+		$answer = fsockopen($host, $port);
+		stream_set_timeout($answer, 0, $to * 1000);
+		$req = "GET ".$root."system-scripts/".$file." HTTP/1.0\r\n";
+		$req .= "User-agent: CraftEngine(".$this->core->conf->system->core->version.")\r\n";
+		$req .= "Host: ".$host."\r\n";
+		$req .= "Connection: Close\r\n\r\n";
+		fwrite($answer, $req);
+		return $answer;
+		//fread($answer, 1024);
 	}
 }

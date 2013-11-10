@@ -1,19 +1,19 @@
 {
 	"api":
 	{
-		"url":"http://api.kcraft.su/",
-		"files":"http://api.kcraft.su/files/"
+		"url":"http://test.kcraft.su/api/",
+		"files":"http://test.kcraft.su/api/files/"
 	},
 	"core":
 	{
-		"tech":"0",
+		"tech":false,
 		"admin_ip":["127.0.0.1"],
 		"errors":
 		{
 			"api":true,
 			"client":true
 		},
-		"detailed_req":false
+		"detailed_req":true
 	},
 	"twig":
 	{
@@ -23,12 +23,12 @@
 	},
 	"tpl":
 	{
-		"client_name":"KachalovCRAFT NET",
-		"root":"/",
-		"root_http":"/",
+		"client_name":"CRAFTEngine Client",
+		"root":"/client/",
+		"root_http":"/client/",
 		"client_host":"http://localhost/",
-		"client_keywords":"KachalovCRAFT NET, Minecraft",
-		"client_desc":"Look at my site, my site is amazing! Give it a lick..."
+		"client_keywords":"KachalovCRAFT NET, CRAFTEngine",
+		"client_desc":"CRAFTEngine"
 	},
 	"menu":
 	[

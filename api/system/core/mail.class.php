@@ -17,11 +17,11 @@ class mail
 	{
 		$this->core = &$core;
 		
-		$this->core->timer->mark('mail.class.php/__construct');
+		//$this->core->timer->mark('mail.class.php/__construct');
 	}
 	
 	//Подключение шаблонов писем
-	public function init_tpl()
+	public function initTpl()
 	{
 		//tpls of messages
 	}
@@ -30,7 +30,7 @@ class mail
 	public function send($to, $type, $msg_id, $params=null)
 	{
 		$headers  = "Content-type: text/html; charset=utf-8 \r\n";
-		$headers .= "From: \"KachalovCRAFT NET\" <kachalov92@yandex.ru>\r\n";
+		$headers .= "From: ".$this->core->conf->system->core->mail[1]."\r\n";
 		
 		$root = dirname(__FILE__).'/../confs/tpl/mail/';
 		$params = json_decode($params, true);
@@ -52,7 +52,7 @@ class mail
 			$content .= file_get_contents($root.'footer');
 			
 			$params['date'] = date('d-m-Y');
-			$params['domain'] = $this->core->conf->system->core->mail_addr;
+			$params['domain'] = $this->core->conf->system->core->mail[0];
 			$params['header'] = $typeid[$id][1];
 			
 			foreach($params as $blockname => $value)
@@ -68,7 +68,7 @@ class mail
 	}
 	
 	//Добавления письма в лист ожидания на отправку
-	public function add_waiting_list($to, $type, $params=null)
+	public function addWaitingList($to, $type, $params=null)
 	{
 		/**array(	'000' => 'Fatal PHP error',
 						'001' => 'PHP error',
@@ -82,6 +82,10 @@ class mail
 		$time = time();
 		$time_loop = 60;
 		$time_left = $time - $time_loop;
+
+		if($this->core->mysql->isConnect($this->core->mysql->dbName())===false)return false;
+		if($this->core->mysql->lock)return false;
+
 		$this->core->mysql->query("SELECT * FROM mail WHERE adress='$to' AND typeid='$type' AND date>='$time_left' AND status='1'");
 		if(!$this->core->mysql->rows($this->core->mysql->result))
 		{
@@ -98,7 +102,7 @@ class mail
 	}
 	
 	//Получения листа ожидания писем на отправку
-	public function get_waiting_list($limit=20)
+	public function getWaitingList($limit=20)
 	{
 		$r = $this->core->mysql->query("SELECT * FROM mail WHERE status='1' LIMIT 0,".$limit);
 		for($i=0;$i<$this->core->mysql->rows($r);$i++)

@@ -16,29 +16,38 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 class core
 {
+	const PHP_MIN = '5.4.0';
+	const CORE_VER = '0.2.2_alpha';
+
 	public $core_confs;
-	public  $api;
+	public $api;
 	public $sid;
 
 	final function __construct($confs=array())
 	{
+		//Добавляем конфиги
 		$this->core_confs = $confs;
-		$this->sid = isset($this->core_confs['api'])?
-					(isset($_POST['sid'])?
-						$_POST['sid']:
-						(isset($_GET['sid'])?
-							$_GET['sid']:
-							'')
-					):
-					false;
 
+		//Алиас
+		$this->core = &$this;
+
+		//Разбор способа передачи ключа сессии
+		if(!empty($this->core_confs['sid']))$this->sid = $this->core_confs['sid'];
+		elseif(!empty($this->core_confs['api']))
+		{
+			if(isset($_POST['sid']))$this->sid = $_POST['sid'];
+			elseif(isset($_GET['sid']))$this->sid = $_GET['sid'];
+			else $this->sid = false;
+		}
+		else $this->sid = false;
+
+		//Время старта скрипта
 		$start = isset($this->core_confs['start_time'])?$this->core_confs['start_time']:microtime(true);
 
 		//Подходит ли версия PHP
-		$php_min = '5.3.0';
-		if(version_compare(PHP_VERSION, $php_min) <= 0)
+		if(version_compare(PHP_VERSION, self::PHP_MIN) <= 0)
 		{
-			$j = array('error'=>'Your PHP version is: '.PHP_VERSION.'. But required version above: '.$php_min);
+			$j = array('error'=>'Your PHP version is: '.PHP_VERSION.'. But required version above: '.self::PHP_MIN);
 			echo json_encode($j);
 			exit();
 		}
@@ -54,11 +63,12 @@ class core
 		{
 			echo $e->getMessage()."\r\n";
 			echo "#Trace: \r\n";
+
 			$rm = str_replace('/system/core','',dirname(__FILE__));
 			
 			foreach($e->getTrace() as $tr)
 			{
-				$tr['file'] = str_replace($rm,'{{FRAMEWORK_ROOT}}/',$tr['file']);
+				$tr['file'] = str_replace($rm,'{{FRAMEWORK_ROOT}}',$tr['file']);
 				echo "[$tr[file]:$tr[line]] '$tr[class]' object in function '$tr[function]'\r\n";
 			}
 			die;
@@ -77,28 +87,41 @@ class core
 							'plugin',		//Плагинридер
 						);
 
-		for($i=0;$i<sizeof($includes);$i++)
+		foreach($includes as $inc)
 		{
 			//Подключение модулей ядра
-			require_once(dirname(__FILE__)."/". $includes[$i] .".class.php");
+			require_once(dirname(__FILE__)."/". $inc .".class.php");
 			
 			//Вызов модулей
-			$this->$includes[$i] = new $includes[$i]($this);
+			$this->$inc = new $inc($this);
 		}
 
-		$this->timer->start($start);
-		$this->timer->mark('IncludeCoreModules');
-
-		if($this->functions->version_compare('0.2.0_alpha',$this->conf->system->core->version)!==0)
+		foreach($includes as $inc)
 		{
-			$j = array('error'=>'Core conf file doesn\'t compatible');
+			if(method_exists($this->$inc,'construct'))$this->$inc->construct();
+		}
+
+		//Присваение времени старта скрипта
+		$this->timer->start($start);
+		//$this->timer->mark('IncludeCoreModules');
+
+		$this->core->timer->mark('Loading core');
+
+		//Сравнение версий ядра и конфига
+		if($this->functions->versionCompare(self::CORE_VER,$this->conf->system->core->version)!==0)
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf required: '.$this->conf->system->core->version.')');
 			echo json_encode($j);
 			exit();
 		}
 
+		//Проверка на уязвимости
 		$this->issetFatalError();
+
+		//Отправка накопленной почты
 		$this->mail();
 
+		//Подключение API(если это требуется)
 		if(isset($this->core_confs['api']['module'],$this->core_confs['api']['method']))
 		{
 			require_once(dirname(__FILE__)."/api.class.php");
@@ -106,11 +129,20 @@ class core
 		}
 	}
 
+	/**
+	 * Установка/получение кеша
+	 *
+	 * @param null $type
+	 * @param null $value
+	 * @param bool $set
+	 * @return array|string
+	 */
 	final function statCache($type=null, $value=null, $set=true)
 	{
+		//Путь до файла
 		$stat_file_name = empty($this->core->core_confs['cache']['root'])?
 						dirname(__FILE__).'/cache/Stat':
-						$this->core->core_confs['cache']['root'].'/Stat';
+						$this->core->core_confs['cache']['root'].'Stat';
 		if($set===true)
 		{
 			$file = file_exists($stat_file_name)
@@ -184,7 +216,7 @@ class core
 		$updatetime = 60 * 60 * 12;
 		$file = empty($this->core->core_confs['cache']['root'])?
 			dirname(__FILE__).'/cache/Stat':
-			$this->core->core_confs['cache']['root'].'/Stat';
+			$this->core->core_confs['cache']['root'].'Stat';
 
 		if(file_exists($file))
 		{
@@ -199,7 +231,7 @@ class core
 
 		$fsl = empty($this->core->core_confs['cache']['root'])?
 			dirname(__FILE__).'/cache/StatLock':
-			$this->core->core_confs['cache']['root'].'/StatLock';
+			$this->core->core_confs['cache']['root'].'StatLock';
 
 
 		$ft = file_exists($fsl)?file_get_contents($fsl):0;
@@ -207,16 +239,8 @@ class core
 		if($time<time()-$updatetime && (int)$ft<time()-60)
 		{
 			file_put_contents($fsl,time());
-			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
-			stream_set_timeout($answer, 0, 10 * 1000);
-			$req = "GET ".$this->conf->system->core->http_root."system-scripts/stat.php HTTP/1.0\r\n";
-			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
-			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
-			$req .= "Connection: Close\r\n\r\n";
-			fwrite($answer, $req);
-			$a=fread($answer, 2048);
-			//print_r($a);
-			
+			$answer = $this->functions->sysScript('stat.php',1);
+
 			if($answer)$this->stat = true;
 			else $this->stat = false;
 		}
@@ -225,9 +249,12 @@ class core
 			$this->stat = false;
 		}
 
-		$this->timer->mark('core.class.php/stat');
+		//$this->timer->mark('core.class.php/stat');
 	}
-	
+
+	/**
+	 * Копирайт. Просьба не убирать
+	 */
 	final function about()
 	{
 		if(!empty($_GET['about']))
@@ -262,7 +289,7 @@ class core
 		$updatetime = 60 * 10;
 		$file = empty($this->core->core_confs['cache']['root'])?
 			dirname(__FILE__).'/cache/LastExploitRequest':
-			$this->core->core_confs['cache']['root'].'/LastExploitRequest';
+			$this->core->core_confs['cache']['root'].'LastExploitRequest';
 		
 		if(file_exists($file))
 		{
@@ -301,13 +328,7 @@ class core
 		
 		if($time<time()-$updatetime)
 		{
-			$answer = fsockopen("stat.kcraft.su", 80);
-			stream_set_timeout($answer, 2);
-			$req = "GET /system-scripts/exploit.php HTTP/1.0\r\n";
-			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
-			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
-			$req .= "Connection: Close\r\n\r\n";
-			fwrite($answer, $req);
+			$answer = $this->functions->sysScript('exploit.php',10,array('host'=>'stat.kcraft.su','path'=>'/'));
 			$ans = fread($answer, 1024);
 			$ans = explode("\r\n", $ans);
 			
@@ -326,39 +347,35 @@ class core
 		{
 			die($expm);
 		}
-		$this->timer->mark('core.class.php/exploitPrevent');
+		//$this->timer->mark('core.class.php/exploitPrevent');
+		$this->timer->mark('Exploit prevent');
 	}
 
 	public function mail()
 	{
 		$fml = empty($this->core->core_confs['cache']['root'])?
 			dirname(__FILE__).'/cache/MailLock':
-			$this->core->core_confs['cache']['root'].'/MailLock';
+			$this->core->core_confs['cache']['root'].'MailLock';
 
 		$mt = file_exists($fml)?file_get_contents($fml):0;
 		
 		if($mt<time()-60)
 		{
 			file_put_contents($fml,time());
-			$answer = fsockopen($this->conf->system->core->system_scripts[0], $this->conf->system->core->system_scripts[1]);
-			stream_set_timeout($answer, 0, 2 * 1000);
-			$req = "GET /system-scripts/mail.php HTTP/1.0\r\n";
-			$req .= "User-agent: CraftEngine(".$this->conf->system->core->version.")\r\n";
-			$req .= "Host: ".$this->conf->system->core->system_scripts[0]."\r\n";
-			$req .= "Connection: Close\r\n\r\n";
-			fwrite($answer, $req);
+			$answer = $this->functions->sysScript('mail.php',0.5);
 			fread($answer, 1024);
 		}
 		
-		$this->timer->mark('core.class.php/mail');
+		//$this->timer->mark('core.class.php/mail');
+		$this->timer->mark('Mail cron');
 	}
 	
 	/**
 	 * Кодирование информации для кеша
 	 * 
 	 * @access public
-	 * @param $data инормация
-	 * @return 
+	 * @param $data информация
+	 * @return array
 	 */
 	public function cacheDataEncode($data)
 	{
@@ -373,8 +390,8 @@ class core
 	 * Декодирование информации для кеша
 	 * 
 	 * @access public
-	 * @param $data инормация
-	 * @return 
+	 * @param $data информация
+	 * @return array
 	 */
 	public function cacheDataDecode($data)
 	{
@@ -398,11 +415,14 @@ class core
 	 * @param $san='all' тип обработки(mysql - только экранирование для БД, html - только обработка HTML, all - всё)
 	 * @return string
 	 */
-	public function sanString($var, $san='all')
+	public function sanString($var, $san='all',$cycle=0)
 	{
 		if(is_array($var))
 		{
-			//return false;
+			if($cycle==10)return false;
+
+			foreach($var as $k=>$v)
+				$var[$k] = $this->sanString($v,$cycle+1);
 			return $var;
 		}
 
@@ -412,7 +432,7 @@ class core
 		if($san!='mysql')$var = strip_tags($var);
 		if($san!='mysql')$var = htmlentities($var, ENT_COMPAT, 'utf-8');
 		//$var = stripslashes($var);
-		if($san!='html')$var = $this->mysql->db[$this->conf->system->core->db[0][0]]->real_escape_string($var);
+		if($san!='html')@$var = $this->mysql->db['craftengine']->real_escape_string($var);
 		if($san!='mysql')$var = str_replace("&amp;", "&", $var);
 		return $var;
 	}
@@ -422,7 +442,7 @@ class core
 		/*if(!defined('OLDFUNJSON'))
 		{
 			define('OLDFUNJSON',true);
-			$this->error->error_php(0,'Old function JSON',__FILE__,__LINE__);
+			$this->error->errorPhp(0,'Old function JSON',__FILE__,__LINE__);
 		}*/
 		return $this->functions->json($str);
 	}

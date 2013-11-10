@@ -3,6 +3,7 @@
 	"version":"1.0.0_alpha",
 	"web":"http://vk.com/craftengine",
 	"name":"user",
+	"title":"Пользователи",
 	"loadClass":"load",
 	"description":"Этот модуль предназначен для добавления пользователей на сайт",
 	"confs":

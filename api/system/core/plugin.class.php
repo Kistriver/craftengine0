@@ -19,14 +19,16 @@ class plugin
 	{
 		$this->core = &$core;
 
-		$this->root = empty($this->core->core_confs['plugins']['root'])?
-						dirname(__FILE__).'/../plugins/':
-						$this->core->core_confs['plugins']['root'];
+		$this->root = $this->core->core_confs['root'].'plugins/';
+	}
 
-		if($this->core->sid!==false)$this->core->functions->start_session($this->core->sid);
+	public function construct()
+	{
+		if($this->core->sid!==false)$this->core->functions->startSession($this->core->sid);
 		else session_start();
+		//var_dump($this->core->sid);
 
-		if(method_exists($core,'stat'))
+		if(method_exists($this->core,'stat'))
 		{
 			$this->core->stat();
 			if(!isset($this->core->stat))
@@ -38,19 +40,19 @@ class plugin
 		{
 			die;
 		}
-		
+
 		$this->pluginsList();
-		$this->core->timer->mark('plugin.class.php/pluginsList');
+		//$this->core->timer->mark('plugin.class.php/pluginsList');
 		$this->pluginsInclude();
-		$this->core->timer->mark('plugin.class.php/pluginsInclude');
-		
+		//$this->core->timer->mark('plugin.class.php/pluginsInclude');
+
 		if(!empty($_GET['about']))die('CRAFTEngine Framework by Alexey Kachalov');
-		
+
 		ksort($this->pluginsExist,SORT_STRING);
 		ksort($this->pluginsIncluded,SORT_STRING);
 		ksort($this->pluginsLoaded,SORT_STRING);
-		
-		$this->core->timer->mark('plugin.class.php/__construct');
+
+		//$this->core->timer->mark('plugin.class.php/__construct');
 	}
 	
 	/**
@@ -61,7 +63,7 @@ class plugin
 	 */
 	public function mainLoad($folder)
 	{
-		$main = $this->core->conf->load_conf('pluginConf',array('folder'=>$folder,'write'=>false));
+		$main = $this->core->conf->loadConf('pluginConf',array('folder'=>$folder,'write'=>false));
 		
 		/*if(isset($main->name,$main->version,$main->web,$main->id,$main->author,
 		$main->loadClass,$main->confs,$main->api,$main->requires,$main->permissions))*/
@@ -70,7 +72,8 @@ class plugin
 		{
 			return array(false,1);
 		}
-		
+
+		if(!isset($main->title))$main->title = $main->name;
 		if(!isset($main->web))$main->web = '';
 		if(!isset($main->loadClass))$main->loadClass = '';
 		if(!isset($main->confs))$main->confs = array();
@@ -223,19 +226,19 @@ class plugin
 			switch($p[0])
 			{
 				case 'self':
-					$selfConf = $this->core->conf->load_conf('plugin',array('write'=>true,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
+					$selfConf = $this->core->conf->loadConf('plugin',array('write'=>true,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
 					break;
 				
 				/* //FIXME: IT'S VERY DANGEROUS
 				case 'core':
-					$coreConf = $this->core->conf->load_conf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
+					$coreConf = $this->core->conf->loadConf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$main->name,'conf'=>$c));
 					if(!$coreConf)break;
 					$this->core->conf->system->{$c} = $this->merge($this->core->conf->system->{$c},$coreConf,$p[1]);
 					break;
 				*/
 				
 				case 'plugin':
-					$pluginConf = $this->core->conf->load_conf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$p[1],'conf'=>$c));
+					$pluginConf = $this->core->conf->loadConf('plugin',array('write'=>false,'folder'=>$folder,'name'=>$p[1],'conf'=>$c));
 					if(!$pluginConf)break;
 					$this->core->conf->plugins->$p[1]->$p[2] = $this->merge($this->core->conf->plugins->$p[1]->$p[2],$pluginConf,$p[3]);
 					break;
@@ -326,7 +329,7 @@ class plugin
 	 */
 	public function pluginsInclude()
 	{
-		$inc = $this->core->conf->load_conf('core',array('name'=>'plugins','write'=>true));
+		$inc = $this->core->conf->loadConf('core',array('name'=>'plugins','write'=>true));
 		if(!$inc)
 		{
 			return false;
@@ -357,6 +360,7 @@ class plugin
 	 * 
 	 * @access public
 	 * @param $name имя плагина
+	 * @return array
 	 */
 	public function on($name)
 	{
@@ -408,7 +412,7 @@ class plugin
 			$list[] = $c->name;
 		}
 		
-		$this->core->file->set_file('plugins',json_encode($list/*, JSON_PRETTY_PRINT*/));
+		$this->core->file->writeFromString('confs/plugins',json_encode($list, JSON_PRETTY_PRINT));
 	}
 	
 	/**
@@ -449,7 +453,7 @@ class plugin
 			$list[] = $c->name;
 		}
 		
-		$this->core->file->set_file('plugins',json_encode($list/*, JSON_PRETTY_PRINT*/));
+		$this->core->file->writeFromString('confs/plugins',json_encode($list, JSON_PRETTY_PRINT));
 	}
 	
 	/**

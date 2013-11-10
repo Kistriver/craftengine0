@@ -265,7 +265,7 @@ class plugin_user_user
 			$code = $this->generate_code('signup',array('login'=>$login,'id'=>$id));
 			
 			if($mode['email'])
-			$this->core->mail->add_waiting_list($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
+			$this->core->mail->addWaitingList($email, '002', array('login'=>$login, 'id'=>$id, 'code'=>$code));
 		}
 	}
 	

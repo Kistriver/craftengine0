@@ -17,7 +17,8 @@
 <span class="input-group-addon">
 Логин пригласившего
 </span>
-<input name="invite" type="text" class="form-control" 
+<input name="invite" type="text" class="form-control"
+{%if _GET.invited is defined %}disabled="disabled"{%endif%}
 value="{%if _POST.invite is defined %}{{_POST.invite}}{%else%}{{_GET.invited}}{%endif%}" 
 maxlength="30" placeholder="Этот пользователь должен быть зарегистрирован" />
 </div>

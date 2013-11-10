@@ -1,9 +1,9 @@
 {
-	"signup_confirm":["email","authme"],
+	"signup_confirm":["email"],
 	"salt":
 	[
-		"KACHALOVCRAFT dfKFd.)%$2@<FM<3lo43MF:34;;\\46)",
-		"!@#Vle;&;,bsk:SLOLdms)-?>DEKlsewLnens"
+		"salt",
+		"salt"
 	],
 	"ranks":
 	{

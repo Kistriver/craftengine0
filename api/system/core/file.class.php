@@ -14,79 +14,152 @@ class file
 	public function __construct($core)
 	{
 		$this->core = &$core;
-		$this->root = empty($this->core->core_confs['confs']['root'])?
+		/*$this->root = empty($this->core->core_confs['confs']['root'])?
 							dirname(__FILE__).'/../confs/':
-							$this->core->core_confs['confs']['root'];
-		$this->core->timer->mark('file.class.php/__construct');
-	}
-	
-	public function get_line_array($file)
-	{
-		$fp = fopen($this->root.$file, "r"); // Открываем файл в режиме чтения
-		if ($fp)
-		{
-		while (!feof($fp))
-		{
-		$mytext = trim(fgets($fp, 1024));
-		$arr[] = $mytext;
-		}
-		return $arr;
-		}
-		else return false;
-		fclose($fp);
-	}
-	
-	public function get_all_file($file,$root=true)
-	{
-		/*$fp = fopen($this->root.$file, "r"); // Открываем файл в режиме чтения
-		$arr='';
-		if ($fp)
-		{
-		while (!feof($fp))
-		{
-		$mytext = fgets($fp, 1024);
-		$arr = $arr.$mytext;
-		}
-		return $arr;
-		}
-		else return false;
-		fclose($fp);*/
+							$this->core->core_confs['confs']['root'];*/
 
-		$r = $root===true?$this->root:'';
+		$this->root = $this->core->core_confs['root'].'';
 
-		$f = file_get_contents($r.$file, false);
-		return $f;
+		//$this->core->timer->mark('file.class.php/__construct');
 	}
-	
-	public function set_file($file,$content,$root=true)
+
+	public function readAsArray($file)
 	{
-		$r = $root===true?$this->root:'';
-		file_put_contents($r.$file, $content);
-	}
-	
-	public function write_a_p($file, $text)
-	{
-		$text = $text."\r\n";
-		$fh = fopen($this->root.$file, 'a+');
-		fseek($fh, 0 ,SEEK_END);
-		if(flock($fh, LOCK_EX))
+		$file = $this->root.$file;
+
+		if(!is_readable($file))return false;
+
+		$fo = fopen($file, "rb");
+
+		if($fo===false)return false;
+
+		$r = array();
+
+		while(!feof($fo))
 		{
-			fwrite($fh, $text);
-			flock($fh, LOCK_UN);
+			$get = fgets($fo, 2048);
+			$r[] = $get;
 		}
-		fclose($fh);
+		fclose($fo);
+
+		return (array)$r;
 	}
-	
-	public function write_w($file, $text)
+
+	public function readAsString($file)
 	{
-		$text = $text."\r\n";
-		$fh = fopen($this->root.$file, 'w');
-		fseek($fh, 0 ,SEEK_END);
-		if(flock($fh, LOCK_EX))
+		$file = $this->root.$file;
+
+		if(!is_readable($file))return false;
+
+		$r = file_get_contents($file,false);
+
+		if($r===false)return false;
+
+		return (string)$r;
+	}
+
+	public function writeFromArray($file, $array, $mode='zero',$bin=true)
+	{
+		$file = $this->root.$file;
+
+		if(!is_writable($file))return false;
+
+		$flag = '';
+
+		switch($mode)
 		{
-			fwrite($fh, $text);
-			flock($fh, LOCK_UN);
+			case 'zero':
+			case 'all':
+				$flag .= 'w';
+				break;
+
+			case 'end':
+				$flag .= 'a';
+				break;
+
+			case 'begin':
+				$flag .= 'x';
+				break;
+
+			default:
+				return false;
+				break;
 		}
-		fclose($fh);
+
+		if($bin===true)$flag .= 'b';
+		elseif($bin===false)$flag .= 't';
+		else return false;
+
+
+		$fo = fopen($file, $flag);
+
+		if($fo===false)return false;
+
+		fseek($fo, 0 ,SEEK_END);
+		if(flock($fo, LOCK_EX))
+		{
+			foreach($array as $line)
+			{
+				fwrite($fo, $line);
+			}
+			flock($fo, LOCK_UN);
+		}
+		else
+		{
+			return false;
+		}
+		fclose($fo);
+		return true;
+	}
+
+	public function writeFromString($file, $string, $mode='zero',$bin=true)
+	{
+		$file = $this->root.$file;
+
+		if(!is_writable($file))return false;
+
+		$flag = '';
+
+		switch($mode)
+		{
+			case 'zero':
+			case 'all':
+				$flag .= 'w';
+				break;
+
+			case 'end':
+				$flag .= 'a';
+				break;
+
+			case 'begin':
+				$flag .= 'x';
+				break;
+
+			default:
+				return false;
+				break;
+		}
+
+		if($bin===true)$flag .= 'b';
+		elseif($bin===false)$flag .= 't';
+		else return false;
+
+
+		$fo = fopen($file, $flag);
+
+		if($fo===false)return false;
+
+		fseek($fo, 0 ,SEEK_END);
+		if(flock($fo, LOCK_EX))
+		{
+			fwrite($fo, $string);
+			flock($fo, LOCK_UN);
+		}
+		else
+		{
+			return false;
+		}
+		fclose($fo);
+		return true;
 	}
 }

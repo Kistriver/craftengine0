@@ -17,15 +17,13 @@ class api
 	public $functions = array(
 	   #'act'=>'func',
 	);
-	
+
 	/**
 	 * Инициализация ядра и API
-	 * 
-	 * @access public
-	 * @param object $core[optional] объект ядра, передаётся только дочерним классам API
-	 * @param $module[optional] модуль, который надо подключить
-	 * @param $functions[optional] функция, которую надо вызвать
-	 * @return void
+	 *
+	 * @param object $core объект ядра, передаётся только дочерним классам API
+	 * @param string $module модуль, который надо подключить
+	 * @param string $function функция, которую надо вызвать
 	 */
 	public function __construct($core=null,$module=null,$function=null)
 	{
@@ -61,9 +59,9 @@ class api
 				}
 				
 				if(empty($plugin))
-				require_once(dirname(__FILE__)."/../api/".$module.".class.php");
+				require_once($this->core->plugin->root."/../api/".$module.".class.php");
 				else
-				require_once(dirname(__FILE__)."/../plugins/".$plugin."/api/".$module.".class.php");
+				require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
 				
 				$cl_n = "api_" . $module;
 				$class = new $cl_n($core);
@@ -85,10 +83,10 @@ class api
 		else
 		{
 			if(method_exists($this,'init'))$this->init();//Если есть метод init, вызвать его
-			$f = $this->initalize();//Вызвать инициализацию ядра API
-			if($f==false)$this->json();//Если неинициализировано, отобразить ошибку
+			$this->initalize();//Вызвать инициализацию ядра API
 		}
-		$this->core->timer->mark('api.class.php/__construct');
+		//$this->core->timer->mark('api.class.php/__construct');
+		$this->core->timer->mark('Loading API core');
 	}
 	
 	//Инициализация ядра API

@@ -1,14 +1,9 @@
 <?php
-require_once(dirname(__FILE__)."/../system/core/core.class.php");
-
 include_once(dirname(__FILE__)."/../system/include.php");
 if(!isset($core_confs))
 $core_confs = array
 (
-	'confs'=>array('root'=>''),
-	'cache'=>array('root'=>''),
-	'tpl'=>array('root'=>''),
-	'plugins'=>array('root'=>''),
+	'root'=>dirname(__FILE__).'/../system/',
 );
 
 $core = new core($core_confs);

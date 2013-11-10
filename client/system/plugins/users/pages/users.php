@@ -10,9 +10,9 @@ if(isset($_GET['act']))
 		//$core->render['type'] = 'user';
 		
 		if(!empty($_GET['id']))
-		$core->api->get('user.get',array('type'=>'id','value'=>$_GET['id'],'sid'=>$_SESSION['sid']));
+		$core->api->get('user.get',array('type'=>'id','value'=>$_GET['id']));
 		elseif(!empty($_GET['login']))
-		$core->api->get('user.get',array('type'=>'login','value'=>$_GET['login'],'sid'=>$_SESSION['sid']));
+		$core->api->get('user.get',array('type'=>'login','value'=>$_GET['login']));
 		else
 		$core->f->quit(404);
 		
@@ -43,11 +43,11 @@ if(isset($_GET['act']))
 			elseif($_POST['vote']=='minus')$con = 'false';
 			elseif($_POST['vote']=='mail')$con = 'mail';
 			else return;
-			$core->api->get('user.confirm',array('login'=>$_POST['user'],'confirm'=>$con,'sid'=>$_SESSION['sid']));
+			$core->api->get('user.confirm',array('login'=>$_POST['user'],'confirm'=>$con));
 		}
 		
 		$type = ($act=='all')?'':'signup';
-		$core->api->get('user.list',array('page'=>$_GET['page'],'type'=>$type,'sid'=>$_SESSION['sid']));
+		$core->api->get('user.list',array('page'=>$_GET['page'],'type'=>$type));
 		$data = $core->api->answer_decode;
 		
 		if(isset($data['data'][0]))

@@ -75,28 +75,6 @@ class plugin_user_rank
 				return $done;
 			}
 		}
-		#$CONFS = ARRAY(
-		#
-		#'example'=>Array(array('Main Administrator', 'Journalist'), '0'/*vip*/, '10'/*warnings*/),
-		#'delete_wall_post'=>Array(array('Main Administrator', 'Administrator', 'Moderator'), '0'/*vip*/, '5'/*warnings*/),
-		#'edit_wall_post'=>Array(array('Main Administrator', 'Administrator', 'Moderator'), '0'/*vip*/, '5'/*warnings*/),
-		#'write_new_art'=>Array(array('Main Administrator', 'Administrator', 'Journalist'), '0'/*vip*/, '5'/*warnings*/),
-		#'edit_art'=>Array(array('Main Administrator', 'Administrator', 'Journalist'), '0'/*vip*/, '5'/*warnings*/),
-		#'delete_art'=>Array(array('Main Administrator', 'Administrator', 'Journalist'), '0'/*vip*/, '0'/*warnings*/),
-		#'admin_panel'=>Array(array('Main Administrator'), '0'/*vip*/, '5'/*warnings*/),
-		#
-		#);
-		/*$f = new file();
-		$perm = $f->get_line_array("rank.conf");
-		for($i=0;$i<sizeof($perm);$i++)
-		{
-			$array = explode(':',$perm[$i]);//name:group1,group2,group3:vip:warnings(|%)
-			if($array[0]==$subj)
-			{
-				$done = array(explode(',',$array[1]),$array[2],$array[3]);
-				return $done;
-			}
-		}*/
 	}
 	
 	private function access($rank_name_en, $subj)

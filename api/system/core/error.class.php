@@ -18,30 +18,33 @@ class error
 		error_reporting(E_ALL);
 		
 		//Объявление обработчиков ошибок
-		set_error_handler(array($this,'error_php'));
-		register_shutdown_function(array($this, 'fatal_error_php'));
+		set_error_handler(array($this,'errorPhp'));
+		register_shutdown_function(array($this, 'fatalErrorPhp'));
 		
-		$this->core->timer->mark('error.class.php/__construct');
+		//$this->core->timer->mark('error.class.php/__construct');
 	}
 	
 	//Добавление ошибки
 	public function error($err_mod,$err_no)
 	{
-		$err = $this->error_make($err_mod,$err_no);
+		$err = $this->errorMake($err_mod,$err_no);
 		if($err)$this->error[] = $err;
 	}
 	
 	//Добавление ошибки PHP
-	public function error_php($code,$msg,$file,$line)
+	public function errorPhp($code,$msg,$file,$line)
 	{
+		$file = str_replace('\\','/',$file);
 		//FIXME: might replace other system/core and it will be epic fail
 		$file_fr = str_replace('/system/core','',dirname(__FILE__));
 		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
 
-		if(!$this->core->conf->system->core->debug)$this->error[] = $this->error_make('engine',3);
+		if(!@$this->core->conf->system->core->debug)$this->error[] = $this->errorMake('engine',3);
 		else $this->error[] = array('engine',3,array($code,$msg,$file,$line));
-		if($this->core->conf->system->core->send_mail_report)
-		$this->core->mail->add_waiting_list(
+
+		//if(isset($this->core->mysql,$this->core->mail))
+		if(@$this->core->conf->system->core->send_mail_report && $this->core->mysql->isConnect(@$this->core->mysql->dbName()))
+		$this->core->mail->addWaitingList(
 		$this->core->conf->system->core->admin_mail, 
 		'001', 
 		array(
@@ -64,8 +67,11 @@ class error
 	}
 	
 	//Отлов завершения работы скрипта
-	public function fatal_error_php()
+	public function fatalErrorPhp()
 	{
+		$debug = isset($this->core->conf->system->core->debug)?$this->core->conf->system->core->debug:true;
+		$mr = isset($this->core->conf->system->core->send_mail_report)?$this->core->conf->system->core->send_mail_report:true;
+
 		$error = error_get_last();
 		if (isset($error))//Если фатальная ошибка, то обработка этой ошибки
 			if($error['type'] == E_ERROR
@@ -75,17 +81,18 @@ class error
 			{
 				ob_end_clean();
 				header('HTTP/1.0 200');
+				$error['file'] = str_replace('\\','/',$error['file']);
 				$file_fr = str_replace('/system/core','',dirname(__FILE__));
 				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
 				
-				if(!$this->core->conf->system->core->debug)$errA = 
+				if(!$debug)$errA =
 				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
 				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n");
 				echo json_encode($errA);
 				if($this->core->conf->system->core->send_mail_report &&
-				isset($this->core->mysql))
-				if($this->core->mysql->is_connect($this->core->conf->system->core->db[0][0]))
-				$this->core->mail->add_waiting_list(
+				isset($this->core->mail))
+				if($this->core->mysql->isConnect($this->core->mysql->dbName()))
+				$this->core->mail->addWaitingList(
 				$this->core->conf->system->core->admin_mail, 
 				'000', 
 				array(
@@ -111,7 +118,7 @@ class error
 	}
 	
 	//Создание ошибки
-	public function error_make($err_mod,$err_no)
+	public function errorMake($err_mod,$err_no)
 	{
 		if(!preg_match("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-]*)$'is", $err_mod))
 		{
@@ -129,10 +136,10 @@ class error
 			list($pl, $mod) = explode(':',preg_replace("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-]*)$'is",'$1:$2', $err_mod));
 			
 			if(!isset($this->core->conf->plugins->{$pl}))
-			return $this->error_make('engine',1);
+			return $this->errorMake('engine',1);
 			
 			if(!isset($this->core->conf->plugins->{$pl}->errors))
-			return $this->error_make('engine',1);
+			return $this->errorMake('engine',1);
 			
 			if(!isset($this->core->conf->plugins->{$pl}->errors->$mod))
 			return $this->error('engine',1);

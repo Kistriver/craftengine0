@@ -80,7 +80,7 @@ class api_profile extends api
 				$this->json(array(false));
 				
 				$this->json(array("http://".$this->core->conf->system->core->system_scripts[0].":".
-				$this->core->conf->system->core->system_scripts[1].$this->core->conf->system->core->http_root.
+				$this->core->conf->system->core->system_scripts[1].$this->core->conf->system->core->system_scripts[2].
 				"system-scripts/"."upload.php?hash=$hash&time=$time"));
 				break;
 		}

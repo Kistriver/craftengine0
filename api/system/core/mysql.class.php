@@ -7,40 +7,80 @@
  */
 class mysql
 {
+	const DB_NAME = 'craftengine';
+
 	public			$db							= array(),//Объекты БД
 					$result;//Результат последнего запроса
 	
 	protected		$core;
-	protected       $lock = false;
+	public			$lock = false;
 
 	public function __construct($core)
 	{
 		$this->core = &$core;
 
-		//Подключение БД
-		$this->connect('site');
+		//$this->core->timer->mark('mysql.class.php/__construct');
+	}
 
-		$this->core->timer->mark('mysql.class.php/__construct');
+	public function construct()
+	{
+		//Подключение БД
+		if(empty($this->core->conf->system->core->db[self::DB_NAME]))
+		{
+			$j = array('error'=>'DB with name \''.self::DB_NAME.'\' not found');
+			echo json_encode($j);
+			exit();
+		}
+
+		$this->connect(self::DB_NAME);
+	}
+
+	public function dbName()
+	{
+		return self::DB_NAME;
 	}
 
 	/**
 	 * Подключение к БД
 	 */
-	public function connect_db($name, $host, $db, $user, $pass)
+	public function connectDb($name, $host, $db, $user, $pass)
 	{
 		$mysqli = new mysqli($host,$user,$pass,$db);
-		if($mysqli->connect_errno) trigger_error($mysqli->connect_errno, E_USER_ERROR);
-		$mysqli->set_charset("utf8");
-		$this->db[$name] = $mysqli;
+		if($mysqli->connect_errno)
+		{
+			//trigger_error($mysqli->connect_errno, E_USER_ERROR);
+			$this->db[$name] = false;
+			return false;
+		}
+		else
+		{
+			$mysqli->set_charset("utf8");
+			$this->db[$name] = $mysqli;
+			return true;
+		}
 	}
 
-	public function is_connect($name)
+	public function isConnect($name)
 	{
 		if(isset($this->db[$name]))
-		if(is_object($this->db[$name]))
-		return true;
-
-		return false;
+		{
+			if($this->db[$name]===false)
+			{
+				return false;
+			}
+			elseif(is_object($this->db[$name]))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -52,41 +92,35 @@ class mysql
 	public function connect()
 	{
 		$name = func_get_args();//Получение аргументов функции
-		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
+		foreach($this->core->conf->system->core->db as $n=>$i)
 		{
-			$db = $this->core->conf->system->core->db[$i];
-
-			if(!in_array($this->core->conf->system->core->db[$i][0],$name))continue;
+			if(!in_array($n,$name))continue;
 
 			//Rewrite databases keys
-			if(!isset($db[2]))
+			if(!empty($i['alias']))
 			{
-				$this->connect($db[1]);
+				$this->connect($i['alias']);
+				$this->db[$n] = &$this->db[$i['alias']];
+
+				/*unset($this->core);
+				print_r($this);die;*/
 				continue;
 			}
 
-			if($this->is_connect($db[0]))continue;
+			if($this->isConnect($n))continue;
 
-			$this->connect_db($db[0], 	//Имя
-							  $db[1], 	//Хост
-							  $db[2], 	//БД
-							  $db[3], 	//Пользователь
-							  $db[4]);	//Пароль
+			$this->connectDb($n, $i['host'], $i['db'], $i['user'], $i['pass']);
 		}
 	}
 
 	/**
 	 * Подключение всех БД
 	 */
-	public function connect_all()
+	public function connectAll()
 	{
-		for($i=0;$i<sizeof($this->core->conf->system->core->db);$i++)
+		foreach($this->core->conf->system->core->db as $name=>$i)
 		{
-			$this->connect_db($this->core->conf->system->core->db[$i][0],
-							$this->core->conf->system->core->db[$i][1],
-							$this->core->conf->system->core->db[$i][2],
-							$this->core->conf->system->core->db[$i][3],
-							$this->core->conf->system->core->db[$i][4]);
+			$this->connectDb($name, $i['host'], $i['db'], $i['user'], $i['pass']);
 		}
 	}
 
@@ -98,9 +132,9 @@ class mysql
 		if($this->lock)return;
 		try
 		{
-		if(empty($name))$name = $this->core->conf->system->core->db[0][0];//Если не передано имя, использовать имя по умолчанию
+		if(empty($name))$name = self::DB_NAME;//Если не передано имя, использовать имя по умолчанию
 
-		if(!$this->is_connect($this->core->conf->system->core->db[0][0]))
+		if(!$this->isConnect($name))
 		{
 			$this->lock = true;
 			throw new Exception('Query abort: no connection');
@@ -114,7 +148,7 @@ class mysql
 		{
 			$tr = $e->getTrace();
 
-			$this->core->error->error_php(E_USER_ERROR,$e->getMessage(),$tr[0]['file'],$tr[0]['line']);
+			$this->core->error->errorPhp(E_USER_ERROR,$e->getMessage(),$tr[0]['file'],$tr[0]['line']);
 
 			//return false;
 		}

@@ -4,6 +4,7 @@
 	"web":"http://vk.com/craftengine",
 	"id":"2",
 	"name":"article",
+	"title":"Статьи",
 	"loadClass":"",
 	"description":"Этот модуль позволяет писать и публиковать статьи",
 	"confs":

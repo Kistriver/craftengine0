@@ -18,6 +18,7 @@ class api
 		
 		$keys = array_keys($data);
 		$_data = $data;
+		$post = array();
 		for($i=0;$i<sizeof($data);$i++)
 		{
 			$key = $keys[$i];
@@ -117,16 +118,9 @@ class api
 						<div style="float:right;">'.$prec.'%</div>';
 				}
 				
-				/*if($this->answer_decode['runtime'][2]==0)
-				$prec = 0;
-				else
-				$prec = round($this->answer_decode['runtime'][2]/$this->answer_decode['runtime'][0]*100,1);
-				
-				$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Other: ". $this->answer_decode['runtime'][2]*1000 ."ms ($prec%)";
-				*/
-				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)');
+				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)'
+					.'<br />Request:<pre style="max-height: 300px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 300px;overflow: scroll;">'."\r\n".$this->answer.'</pre>');
 			}
-			//$this->core->render['MAIN']['INFO'][] = "$method: ". $this->answer_decode['runtime'][0]*1000 ." ms";
 		}
 		
 		return $this->answer_decode;

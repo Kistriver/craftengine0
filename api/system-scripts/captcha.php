@@ -1,17 +1,12 @@
 <?php
-require_once(dirname(__FILE__)."/../system/core/core.class.php");
-
 include_once(dirname(__FILE__)."/../system/include.php");
 if(!isset($core_confs))
-$core_confs = array
-(
-	'confs'=>array('root'=>''),
-	'cache'=>array('root'=>''),
-	'tpl'=>array('root'=>''),
-	'plugins'=>array('root'=>''),
-);
+	$core_confs = array
+	(
+		'root'=>dirname(__FILE__).'/../system/',
+	);
 $sid = $_GET['sid'];
-session_id($sid);
+$core_confs['sid'] = $sid;
 $core = new core($core_confs);
 
 //if(empty($_GET['sid']))die(json_encode(array(false,'sid not get')));

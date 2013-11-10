@@ -13,18 +13,15 @@ if(isset($_GET['method']))
 	if(!isset($core_confs))
 	$core_confs = array
 	(
-		'confs'=>array('root'=>''),
-		'cache'=>array('root'=>''),
-		'tpl'=>array('root'=>''),
-		'plugins'=>array('root'=>''),
+		'root'=>dirname(__FILE__).'/system/',
 	);//Добавить такое и в system-scripts
 
 	$core_confs['api'] = array('module'=>$m_f[0],'method'=>$m_f[1]);
 	$core_confs['start_time'] = $start;
 
-	require_once(dirname(__FILE__)."/system/core/core.class.php");
+	//require_once(dirname(__FILE__)."/system/core/core.class.php");
 	$core = new core($core_confs);
-	
+
 	//require_once(dirname(__FILE__)."/system/core/api.class.php");
 	//$api = new api($core,$m_f[0],$m_f[1]);
 	$api = $core->api;

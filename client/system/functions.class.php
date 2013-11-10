@@ -51,6 +51,26 @@ class functions
 			die;
 		}
 	}
+
+	public function sanString($var,$cycle=0)
+	{
+		if(is_array($var))
+		{
+			if($cycle==10)return false;
+
+			foreach($var as $k=>$v)
+			$var[$k] = $this->sanString($v,$cycle+1);
+			return $var;
+		}
+
+		$var_before = Array("<", ">");
+		$var_after = Array("&lt;", "&gt;");
+		$var = str_replace($var_before, $var_after, $var);
+		$var = strip_tags($var);
+		$var = htmlentities($var, ENT_COMPAT, 'utf-8');
+		$var = str_replace("&amp;", "&", $var);
+		return $var;
+	}
 	
 	public function show($tpl,$plugin=null)
 	{
@@ -59,7 +79,9 @@ class functions
 			$path = (!empty($plugin)?'plugins/'.$plugin.'/tpl':'tpl').'/';
 			$template = $this->core->twig->loadTemplate($path.$tpl.'.twig');
 			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
-			$this->core->render['_GET'] = $_GET;
+			$this->core->render['_GET'] = $this->sanString($_GET);
+			$this->core->render['_POST'] = $this->sanString($_POST);
+			$this->core->render['MAIN']['MENU'] = $this->core->conf->conf->core->menu;
 			echo $template->render($this->core->render);
 		}
 		catch (Exception $e)

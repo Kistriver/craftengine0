@@ -5,6 +5,7 @@
  * @access public
  * @see http://kcraft.su/
  */
+
 class conf
 {
 	public $plugins;
@@ -17,28 +18,37 @@ class conf
 		
 		$this->system = new stdClass();
 		$this->plugins = new stdClass();
-		
-		$this->load_conf('core',array('name'=>'core','write'=>true));
-		
+	}
+
+	public function construct()
+	{
+		$this->loadConf('core',array('name'=>'core','write'=>true));
+
 		define('CORE_ADMIN_MAIL', $this->system->core->admin_mail);
-		
-		$this->load_conf('core',array('name'=>'api','write'=>true));
-		$this->load_conf('core',array('name'=>'errors','write'=>true));
-		
-		$this->core->timer->mark('conf.class.php/__construct');
+		if($this->system->core->tech===true)
+		{
+			$j = array('error'=>'Technical works');
+			echo json_encode($j);
+			exit();
+		}
+
+		$this->loadConf('core',array('name'=>'api','write'=>true));
+		$this->loadConf('core',array('name'=>'errors','write'=>true));
+
+		//$this->core->timer->mark('conf.class.php/__construct');
 	}
 	
-	public function load_conf($type,$params=array())
+	public function loadConf($type,$params=array())
 	{
 		switch($type)
 		{
 			case 'core':
-				$root = $this->core->file->root;
+				$file = 'confs/'.$params['name'];
 
-				if(!file_exists($root.$params['name']))
-				return false;
-				
-				$conf = $this->core->file->get_all_file($params['name']);
+				$conf = $this->core->file->readAsString($file);
+
+				if($conf===false)return false;
+
 				$conf = json_decode($conf, true);
 				//print_r(json_last_error());echo JSON_ERROR_SYNTAX."<-".$params['name'];
 				$conf = (object)$conf;
@@ -52,16 +62,12 @@ class conf
 				break;
 			
 			case 'pluginConf':
-				$pr = empty($this->core->core_confs['plugins']['root'])?
-					dirname(__FILE__).'/../plugins/':
-					$this->core->core_confs['plugins']['root'];
+				$file = 'plugins/'.$params['folder'].'/main';
+				
+				$conf = $this->core->file->readAsString($file);
 
-				$root = $pr.$params['folder'].'/main';
-				
-				if(!file_exists($root))
-				return false;
-				
-				$conf = $this->core->file->get_all_file($root,false);
+				if($conf===false)return false;
+
 				$conf = json_decode($conf, true);
 				$conf = (object)$conf;
 				
@@ -73,16 +79,12 @@ class conf
 				return true;
 				break;
 			case 'plugin':
-				$pr = empty($this->core->core_confs['plugins']['root'])?
-					dirname(__FILE__).'/../plugins/':
-					$this->core->core_confs['plugins']['root'];
+				$file = 'plugins/'.$params['folder'].'/confs/'.$params['conf'];
+				
+				$conf = $this->core->file->readAsString($file);
 
-				$root = $pr.$params['folder'].'/confs/';
-				
-				if(!file_exists($root.$params['conf']))
-				return false;
-				
-				$conf = $this->core->file->get_all_file($root.$params['conf'],false);
+				if($conf===false)return false;
+
 				$conf = json_decode($conf, true);
 				$conf = (object)$conf;
 				
