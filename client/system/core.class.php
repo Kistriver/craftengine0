@@ -16,7 +16,7 @@ class core
 	{
 		$this->core = &$this;
 
-		$ver = 'v1.4';
+		$ver = 'v1.5';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{
