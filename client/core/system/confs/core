@@ -1,0 +1,40 @@
+{
+	"api":
+	{
+		"url":"http://test.kcraft.su/api/",
+		"files":"http://test.kcraft.su/api/files/"
+	},
+	"core":
+	{
+		"tech":false,
+		"admin_ip":["127.0.0.1"],
+		"errors":
+		{
+			"api":true,
+			"client":true
+		},
+		"detailed_req":true
+	},
+	"twig":
+	{
+		"cache":true,
+		"reload":true,
+		"escape":false
+	},
+	"tpl":
+	{
+		"client_name":"CRAFTEngine Client",
+		"root":"/client/",
+		"root_http":"/client/",
+		"client_host":"http://localhost/",
+		"client_keywords":"KachalovCRAFT NET, CRAFTEngine",
+		"client_desc":"CRAFTEngine"
+	},
+	"menu":
+	[
+		"menu",
+		"vk",
+		"monitoring",
+		"ads"
+	]
+}

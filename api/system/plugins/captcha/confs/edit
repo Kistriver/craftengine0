@@ -1,0 +1,8 @@
+{
+	"captcha":
+		{
+			"length":{type:"text","value":"Количество символов"},
+            "rand_lines":"Количество \"мусора\"",
+            "font":{"type":"select","value":{"minecraft.ttf":"По умолчанию"}}
+		}
+}

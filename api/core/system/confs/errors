@@ -1,0 +1,32 @@
+{
+	"server":
+	{
+		"403":"Доступ запрещён",
+		"404":"Страница не найдена"
+	},
+	
+	"engine":
+	{
+		"0":"Неизвестный тип",
+		"1":"Ошибка при создании ошибки",
+		"2":"Ошибка при создании ошибки",
+		"3":"ошибка PHP парсера",
+		"4":"Попытка хака",
+		"5":"Exploit discovered"
+	},
+		
+	"mysql":
+	{
+		"5":"non-object"
+	},
+	
+	"api":
+	{
+		"0":"Unexpected module",
+		"1":"Unexpected function",
+		"2":"Not implemented yet",
+		"3":"Sid not get",
+		"4":"Unexpected method",
+		"5":"Not all parameters"
+	}
+}

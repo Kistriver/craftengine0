@@ -1,0 +1,1 @@
+Перейдите по ссылке: <a href="http://{$domain}/login/restore/{$code}">{$code}</a>

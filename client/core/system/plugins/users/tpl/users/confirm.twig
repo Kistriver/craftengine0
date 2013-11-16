@@ -1,0 +1,101 @@
+{%extends "/tpl/html/main.twig"%}
+
+{%block title%}Пользователи{{parent()}}{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}users">Пользователи</a></li><li class="active">Подтверждение пользователей</li>{%endblock%}
+
+{%block content%}
+<table width="100%">
+<tbody>
+<tr>
+<th>
+Имя
+</th>
+<th>
+Логин
+</th>
+<th>
+ДР
+</th>
+<th>
+Приглашение:Confirm
+</th>
+</tr>
+
+<tr>
+<th>
+Фамилия
+</th>
+<th>
+e-mail
+</th>
+<th>
+Пол
+</th>
+<th>
+О себе
+</th>
+</tr>
+
+{%for user in users%}
+<tr>
+<td>
+{{user.name}}
+</td>
+<td>
+{{user.login}}
+</td>
+<td>
+{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} ({{"now"|date("Y")-user.bd.2}})
+</td>
+<td>
+{{user.invite}}:{{user.status}}
+</td>
+</tr>
+
+<tr>
+<td>
+{{user.surname}}
+</td>
+<td>
+{{user.email}}
+</td>
+<td>
+{%if user.sex==1%}Мужской{%else%}Женский{%endif%}
+</td>
+<td colspan="3">
+{{user.about}}
+</td>
+</tr>
+
+<tr>
+<td colspan="6">
+<div align="center" style="font-size: 25px;">
+<form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
+<input type="hidden" name="vote" value="plus" />
+<input type="hidden" name="user" value="{{user.login}}" />
+<button title="" class="btn btn-success" style="">
++
+</button>
+</form>
+<form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
+<input type="hidden" name="vote" value="minus" />
+<input type="hidden" name="user" value="{{user.login}}" />
+<button title="" class="btn btn-danger" style="">
+-
+</button>
+</form>
+<form method="post" action="{{MAIN.ROOT_HTTP}}users/confirm">
+<input type="hidden" name="vote" value="mail" />
+<input type="hidden" name="user" value="{{user.login}}" />
+<button title="" class="btn btn-info" style="">
+mail
+</button>
+</form>
+</div>
+<hr />
+</td>
+</tr>
+{%endfor%}
+</tbody>
+</table>
+{%endblock%}

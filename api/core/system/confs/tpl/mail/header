@@ -1,0 +1,66 @@
+<html>
+<head>   
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">   	   
+</head>
+<body>
+<table bgcolor="#DDDDDD" width="100%">
+<tbody>
+<tr>
+<td>
+<table style="margin: 15px auto;" align="center" border="0" cellpadding="0" cellspacing="0" width="603">
+<tbody>
+<tr>
+<td style="border-bottom: 3px solid #DDD" bgcolor="#FFFFFF" height="113px">
+<table align="center" bgcolor="#cadff2" border="0" cellpadding="0" cellspacing="0" height="93" width="583">
+<tbody>
+<tr>
+<td>
+<table background="logo" border="0" cellpadding="0" cellspacing="0" height="93" width="100%">
+<tbody>
+<tr>
+<td rowspan="2">
+<a href="http://kcraft.su/" target="_blank"><h1>KachalovCRAFT</h1></a></td>
+<td style="padding-right:10px" align="right" height="50" width="150">
+<a href="https://www.facebook.com/groups/kachalovcraft/" target="_blank"><img src="//af19.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;3&amp;mode=attachment&amp;bs=14868&amp;bl=2590&amp;ct=image%2fpng&amp;cn=facebook.png&amp;cte=base64" height="28" width="29"></a>&nbsp;<a href="https://twitter.com/KachalovCRAFT" target="_blank"><img src="//af12.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;4&amp;mode=attachment&amp;bs=17689&amp;bl=2556&amp;ct=image%2fpng&amp;cn=twitter.png&amp;cte=base64" height="28" width="29"></a>&nbsp;<a href="http://vk.com/kachalovcraft" target="_blank"><img src="//af8.mail.ru/cgi-bin/readmsg?id=13630881670000000767;0;5&amp;mode=attachment&amp;bs=20482&amp;bl=2601&amp;ct=image%2fpng&amp;cn=vkontakte.png&amp;cte=base64" height="28" width="29"></a></td>
+</tr>
+<tr>
+<td style="color:#FFF;font-weight:bold;padding-right:10px" align="right" width="150">
+<strong>{$date}</strong></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 3px solid #DDD" bgcolor="#FFFFFF" height="45">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
+<tr>
+<td>
+&nbsp;</td>
+<td style="color:#434343;font-size:16px;font-family:Verdana, Geneva, sans-serif" align="center">
+{$header}</td>
+<td>
+&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td>
+</td>						
+</tr>
+<tr>
+<td style="border-bottom: 3px solid #DDD;padding:15px;font-size:12px;font-family:Verdana, Geneva, sans-serif;color:#434343" bgcolor="#FFFFFF">
+<p>
+<!--<strong>Здравствуйте, дорогой подписчик!</strong><br>
+<br>-->

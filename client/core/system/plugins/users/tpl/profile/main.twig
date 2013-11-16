@@ -1,0 +1,118 @@
+{%extends "/tpl/html/main.twig"%}
+
+{%block title%}Настройки {{parent()}}{%endblock%}
+{%block header%}<li class="active">Настройки</li>{%endblock%}
+
+{%block content%}
+<ul class="nav nav-tabs">
+<li{%if _GET.type=='main'%} class="active"{%endif%}><a href="{{MAIN.ROOT_HTTP}}profile/main">Общее</a></li>
+<li{%if _GET.type=='private'%} class="active"{%endif%}><a href="{{MAIN.ROOT_HTTP}}profile/private">Приватность</a></li>
+<li{%if _GET.type=='security'%} class="active"{%endif%}><a href="{{MAIN.ROOT_HTTP}}profile/security">Безопасность</a></li>
+</ul>
+
+{%if _GET.type=='main'%}
+<div class="page-header">
+<h1>
+Паспорт
+</h1>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+<div class="row">
+<div class="col-md-9">
+
+<div class="row">
+<div class="col-md-3">
+Имя
+</div>
+<div class="col-md-9">
+<input type="text" disabled class="form-control" value="*****" />
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-3">
+Фамилия
+</div>
+<div class="col-md-9">
+<input type="text" disabled class="form-control" value="*****" />
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-3">
+Ник
+</div>
+<div class="col-md-9">
+<input type="text" name="nickname" class="form-control" value="{{SYS.NICKNAME}}" />
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-3">
+Аватара
+</div>
+<div class="col-md-9">
+<input class="form-control" type="file" name="icon" />
+</div>
+</div>
+
+</div>
+<div class="col-md-3">
+<img src="{{icon_src}}" style="width:170px; height:170px;" />
+</div>
+</div>
+
+
+<div class="row">
+<div class="col-md-12">
+<input type="submit" style="width: 100%;" class="btn btn-success" value="Переименоваться" />
+</div>
+
+</div>
+</form>
+{%elseif _GET.type=='private'%}
+<h2>Пока данный функционал неосуществлён!</h2> <font style="color: white;">Азазазазазз</font>
+{%elseif _GET.type=='security'%}
+<div class="page-header">
+<h1>
+Пароль
+</h1>
+</div>
+
+<form method="post">
+<div class="row">
+
+<div class="col-md-6">
+Новый пароль
+</div>
+<div class="col-md-6">
+<input type="password" name="password" class="form-control" value="" />
+</div>
+
+<div class="col-md-6">
+Повторите новый пароль
+</div>
+<div class="col-md-6">
+<input type="password" name="password_r" class="form-control" value="" />
+</div>
+
+<div class="col-md-6">
+Старый пароль
+</div>
+<div class="col-md-6">
+<input type="password" name="password_old" class="form-control" value="" />
+</div>
+
+</div>
+<div class="row">
+
+<div class="col-md-12">
+<input type="submit" style="width: 100%;" class="btn btn-danger" value="Сменить пароль" />
+</div>
+
+</div>
+</form>
+{%endif%}
+
+{%endblock%}

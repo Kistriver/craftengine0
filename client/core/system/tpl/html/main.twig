@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html style="height: 100%;">
+<!--Attention! If you have psychiatric disorder, don't watch the code below-->
+<head>
+<!--Ослик реально бесит-->
+<!--[if IE]>
+<meta http-equiv="refresh" content="0;url=http://www.mozilla.org/ru/firefox/fx/" />
+<![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{{MAIN.KEYWORDS}}" />
+<meta name="description" content="{{MAIN.DESC}}" />
+<meta name="author" lang="ru" content="Алексей Качалов" />
+<meta name="document-state" content="Dynamic" />
+<link rel="image_src" href="{{MAIN.ROOT}}style/img/main/logo.png" />
+<!--/* INCLUDED CSS */-->
+{%block css%}{%endblock%}
+<!--cosmo,cyborg,flatly,spacelab,united-->
+<link href="{{MAIN.ROOT}}style/bootstrap/css/cosmo.css" rel="stylesheet" media="screen">
+
+<!--/* INCLUDED JS */-->
+{%block js%}{%endblock%}
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{MAIN.ROOT}}style/bootstrap/js/bootstrap.js"></script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+(w[c] = w[c] || []).push(function() {
+try {
+w.yaCounter20286013 = new Ya.Metrika({id:20286013,
+webvisor:true,
+clickmap:true,
+trackLinks:true,
+accurateTrackBounce:true});
+} catch(e) { }
+});
+
+var n = d.getElementsByTagName("script")[0],
+s = d.createElement("script"),
+f = function () { n.parentNode.insertBefore(s, n); };
+s.type = "text/javascript";
+s.async = true;
+s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+if (w.opera == "[object Opera]") {
+d.addEventListener("DOMContentLoaded", f, false);
+} else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/20286013" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<link rel="shortcut icon" href="{{MAIN.ROOT}}style/img/main/favicon.ico"/>
+<title>
+{%block title%} &#8212; {{MAIN.TITLE}}{%endblock%}
+</title>
+</head>
+<body style="height: 100%; margin: 0px; padding: 0px;">
+
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="{{MAIN.ROOT_HTTP}}">{{MAIN.NAME}}</a>
+</div>
+
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+<ul class="nav navbar-nav">
+{%if SYS.LOGGEDIN==false%}<li><a href="{{MAIN.ROOT_HTTP}}signup">Регистрация</a></li>{%endif%}
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">Меню <b class="caret"></b></a>
+<ul class="dropdown-menu">
+{%for menu in NAVMENU%}
+<li><a href="{{MAIN.ROOT_HTTP}}{{menu['1']}}">{{menu['0']}}</a></li>
+{%endfor%}
+</ul>
+</li>
+</ul>
+<form class="navbar-form navbar-left" role="search">
+<div class="form-group">
+<input type="text" class="form-control" placeholder="Поиск">
+</div>
+<button type="submit" class="btn btn-success">Поехали</button>
+</form>
+<ul class="nav navbar-nav navbar-right">
+{%if SYS.LOGGEDIN==false%}
+<li class="dropdown">
+<a href="{{MAIN.ROOT_HTTP}}login" class="dropdown-toggle" data-toggle="dropdown">Вход <b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li>
+
+
+<form method="post" action="{{MAIN.ROOT_HTTP}}login">
+
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<input name="email" maxlength="100" type="text" class="form-control" placeholder="Адрес электронной почты">
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<input name="password" maxlength="100" type="password" class="form-control" placeholder="Пароль">
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<input type="submit" style="width: 100%;" class="btn btn-success" value="Есть контакт!" />
+</div>
+</div>
+</form>
+
+
+
+
+</li>
+</ul>
+</li>
+{%else%}
+<li class="dropdown">
+<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{SYS.LOGIN}} <b class="caret"></b></a>
+<ul class="dropdown-menu">
+<li><a href="{{MAIN.ROOT_HTTP}}profile">Настройки</a></li>
+<li><a href="{{MAIN.ROOT_HTTP}}logout">Выход</a></li>
+</ul>
+</li>
+{%endif%}
+</ul>
+</div>
+</nav>
+<br /><br />
+
+<center>
+<div id="myCarousel" class="carousel slide">
+<div class="carousel-inner">
+
+<div class="active item">
+<div class="carousel-caption" style="border-radius: 6px; background:url('{{MAIN.ROOT}}style/img/main/dark1.png');">
+<h4>Сервера Minecraft</h4>
+<p>Имеется несколько серверов Minecraft с <del>блэк джэком и ..</del> экономикой</p>
+</div>
+<img src="{{MAIN.ROOT}}style/img/index/3.png" style="height:275px;" />
+</div>
+
+<div class="item">
+<img src="http://phpontwikkelaar.net/img/phppng.png" style="height:275px" />
+<div class="carousel-caption" style="border-radius: 6px; background:url('{{MAIN.ROOT}}style/img/main/dark1.png');">
+<h4>Собственный фреймворк</h4>
+<p>Наш фреймворк легко расширяем и не имеет аналогов</p>
+</div>
+</div>
+
+<div class="item">
+<img src="http://cs418222.vk.me/v418222634/825f/Td0Z5NabsQ4.jpg" style="height:275px" />
+<div class="carousel-caption" style="border-radius: 6px; background:url('{{MAIN.ROOT}}style/img/main/dark1.png');">
+<h4>Перспектива развития</h4>
+<p>Наш проект радует Вас с 2011 года</p>
+</div>
+</div>
+
+</div>
+<a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-right"></span></a>
+<a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-left"></span></a>
+</div>
+</center>
+
+<div style="margin: 0px; padding: 30px 45px 0;">
+<div class="row">
+
+<div class="col-md-3" style="/*background: #F0F0FA;*/">
+{%for menu in MAIN.MENU%}
+{%include "/tpl/html/menus/" ~ menu ~ ".twig"%}
+{%endfor%}
+</div>
+
+<div class="col-md-9" style="background: #FAFAF0;">
+<h1><ol class="breadcrumb">{%block header%}<li><a href="#root">Root</a></li><li class="active">Untitled</li>{%endblock%}</ol></h1>
+
+{%for error in MAIN.ERRORS%}
+<div class="alert alert-danger">
+{{error}}<br />
+</div>
+{%endfor%}
+{%for success in MAIN.SUCCESS%}
+<div class="alert alert-success">
+{{success}}<br />
+</div>
+{%endfor%}
+{%for info in MAIN.INFO%}
+<div class="alert alert-info">
+{{info}}<br />
+</div>
+{%endfor%}
+
+{%block content%}MAIN PAGE{%endblock%}
+</div>
+
+</div>
+</div>
+
+<div style="position: relative; clear:both; padding-top:20px; background: #FAF0F0; font-size: 12px;">
+<p style="margin: 15px;"><b>CRAFTEngine</b> является товарным знаком <b>KachalovCRAFT</b>. Все права защищены.</p>
+<div class="row" style="margin: 0px;">
+<div class="col-md-1"></div>
+<div class="col-md-2" style="">
+<b>Что такое CRAFTEngine?</b><br />
+
+Политика управления версиями<br />
+Долгосрочная поддержка<br />
+Политика безопасности<br />
+Лицензия<br />
+</div>
+<div class="col-md-2" style="">
+
+<b>Начало работы</b><br />
+
+Скачать<br />
+Карта сайта<br />
+Дистрибутивы<br />
+Компоненты<br />
+Быстрый тур<br /><br />
+</div>
+<div class="col-md-2" style="">
+<b>Услуги</b><br />
+
+Наши услуги<br />
+Старт нового проекта<br />
+Поддержка<br />
+Обратная связь<br />
+</div>
+<div class="col-md-2" style="">
+<b>Узнать больше о CRAFTEngine</b><br />
+
+Компоненты<br />
+Ссылки<br />
+Индекс<br />
+CMS<br />
+Документация CRAFTEngine<br />
+Контрибуция<br />
+Переговоры<br />
+</div>
+<div class="col-md-2" style="">
+<b>О проекте</b><br />
+
+Участники<br />
+Товарный знак и логотип политики<br />
+Логотип<br />
+</div>
+<div class="col-md-1"></div>
+</div>
+
+
+<div class="row" style="margin: 0px;">
+<div class="col-md-4 col-md-offset-4">
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.ru"><img alt="Лицензия Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br />Произведение «<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">CRAFTEngine</span>» созданное автором по имени <a xmlns:cc="http://creativecommons.org/ns#" href="http://kcraft.su/" property="cc:attributionName" rel="cc:attributionURL">Alexey Kachalov</a>, публикуется на условиях <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/deed.ru">лицензии Creative Commons «Attribution-NonCommercial-ShareAlike» («Атрибуция — Некоммерческое использование — На тех же условиях») 3.0 Непортированная</a>.<br />Основано на произведении с <a xmlns:dct="http://purl.org/dc/terms/" href="http://kcraft.su/" rel="dct:source">http://kcraft.su/</a>.<br />Разрешения, выходящие за рамки данной лицензии, могут быть доступны на странице <a xmlns:cc="http://creativecommons.org/ns#" href="http://kcraft.su/" rel="cc:morePermissions">http://kcraft.su/</a>.
+</center>
+</div>
+</div>
+<br /><br />
+</div>
+
+</body>
+</html>
+<!--My congratulations! It's the end of the website code! Get cookies from kitchen XD-->
