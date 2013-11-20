@@ -1,4 +1,9 @@
 <?php
+/*
+ * TODO: редактирование конфигов
+ * TODO: переделать меню
+ * TODO: возможность выбора тем
+ */
 //header('Content-Type: charset=utf-8');
 //require_once(dirname(__FILE__).'/functions.class.php');
 //require_once(dirname(__FILE__).'/conf.class.php');

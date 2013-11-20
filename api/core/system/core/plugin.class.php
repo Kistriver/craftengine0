@@ -1,4 +1,9 @@
 <?php
+/*
+ * TODO: Из нескольких версий одного плагина включать самую свежею
+ * TODO: Проработать вид возвращаемых ошибок
+ * TODO: Редактирование конфигов(предоставить API)
+ */
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
@@ -53,6 +58,7 @@ class plugin
 		ksort($this->pluginsLoaded,SORT_STRING);
 
 		//$this->core->timer->mark('plugin.class.php/__construct');
+		//print_r($this->getEditConfs('captcha'));
 	}
 	
 	/**
@@ -63,8 +69,9 @@ class plugin
 	 */
 	public function mainLoad($folder)
 	{
-		$main = $this->core->conf->loadConf('pluginConf',array('folder'=>$folder,'write'=>false));
-		
+		//$main = $this->core->conf->loadConf('pluginConf',array('folder'=>$folder,'write'=>false));
+		$main = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'conf'=>'../main'));
+
 		/*if(isset($main->name,$main->version,$main->web,$main->id,$main->author,
 		$main->loadClass,$main->confs,$main->api,$main->requires,$main->permissions))*/
 		if(isset($main->name,$main->version,$main->author))
@@ -265,7 +272,7 @@ class plugin
 	 * @param $class[optional]
 	 * @return object boolean
 	 */
-	public function initPl($name,$class='main')
+	public function initPl($name,$class='main',$class_dir='')
 	{
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
@@ -281,7 +288,7 @@ class plugin
 		
 		if($ex == 1)
 		{
-			$fi = $this->root.$folder.'/core/'.$class.'.class.php';
+			$fi = $this->root.$folder.'/core/'.$class_dir.$class.'.class.php';
 			if(file_exists($fi))
 			require_once($fi);
 			
@@ -335,7 +342,7 @@ class plugin
 		}
 		
 		$inc = $this->core->conf->system->plugins;
-		
+
 		//Есть ли такие плагины, какие нужно подключить
 		foreach((object)$inc as $pl)
 		{
@@ -464,5 +471,60 @@ class plugin
 	public function lib($lib)
 	{
 		require_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
+	}
+
+	public function getEditConfs($plugin)
+	{
+		$folder = '';
+		foreach($this->pluginsIncluded as $f=>$c)
+		{
+			if($c->name==$plugin)
+			{
+				$folder = $f;
+				break;
+			}
+		}
+
+		$config = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>'edit'));
+		$edit = array();
+
+		foreach((array)$config as $file=>$mask)
+		{
+			$c = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>$file));
+			$edit[$file] = $this->getEditConfsMask($mask,(array)$c);
+		}
+
+		return $edit;
+	}
+
+	private function getEditConfsMask($mask,$array)
+	{
+		if(is_array($array))
+		{
+			$r = array();
+			foreach($array as $key=>$value)
+			{
+				if(isset($mask[$key]))
+				$r[$key] = $this->getEditConfsMask($mask[$key],$value);
+			}
+
+			return $r;
+		}
+		else
+		{
+			/*switch($mask['type'])
+			{
+				case 'text':
+					$array['desc'] = $mask['desc'];
+					$array['type'] =
+					break;
+			}*/
+			if(!is_array($mask))
+				$mask = array('type'=>'text','desc'=>$mask);
+
+			$r = $mask;
+			$r['value'] = $array;
+			return $r;
+		}
 	}
 }

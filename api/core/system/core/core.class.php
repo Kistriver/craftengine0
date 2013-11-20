@@ -1,4 +1,5 @@
 <?php
+//TODO: РЕОРГАНИЗАЦИЯ КОДА!!! ПРИВАТНЫЕ СВОЙСТВА, ДРУГАЯ ЗАГРУЗКА КОНФИГОВ, УРОВЕНЬ ВАЖНОСТИ БД
 /**
  * @package core
  * @copyright Alexey Kachalov <alex-kachalov@mail.ru>
@@ -17,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.3_alpha';
+	const CORE_VER = '0.2.4a2_alpha';
 
 	public $core_confs;
 	public $api;
@@ -108,7 +109,34 @@ class core
 		$this->core->timer->mark('Loading core');
 
 		//Сравнение версий ядра и конфига
-		if($this->functions->versionCompare(self::CORE_VER,$this->conf->system->core->version)!==0)
+		/*if($this->functions->versionCompare(self::CORE_VER,$this->conf->system->core->version)!==0)
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
+			echo json_encode($j);
+			exit();
+		}*/
+
+		//FIXME: VERY LARGE TIME OF RUN
+		$ver['req'] = $this->functions->versionParse($this->conf->system->core->version);
+		$ver['cur'] = $this->functions->versionParse(self::CORE_VER);
+		if(
+			$ver['req']['product']!==$ver['cur']['product'] ||
+			$ver['req']['major']!==$ver['cur']['major'] ||
+			$ver['req']['minor']!==$ver['cur']['minor'] ||
+			$ver['req']['update']!==$ver['cur']['update']
+		)
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
+			echo json_encode($j);
+			exit();
+		}
+		if($ver['req']['status']>$ver['cur']['status'])
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
+			echo json_encode($j);
+			exit();
+		}
+		if($ver['req']['fix']>$ver['cur']['fix'])
 		{
 			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
 			echo json_encode($j);
@@ -269,7 +297,7 @@ class core
 					die('Alexey Kachalov <alex-kachalov@mail.ru>');
 					break;
 				case 'version':
-					die($this->conf->system->core->version);
+					die(self::CORE_VER);
 					break;
 				case 'edition':
 					die($this->conf->system->core->name);
@@ -414,6 +442,7 @@ class core
 	 * @access public
 	 * @param $var переменная
 	 * @param $san='all' тип обработки(mysql - только экранирование для БД, html - только обработка HTML, all - всё)
+	 * @param $cycle=0
 	 * @return string
 	 */
 	public function sanString($var, $san='all',$cycle=0)

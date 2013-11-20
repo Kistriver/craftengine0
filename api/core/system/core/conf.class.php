@@ -61,7 +61,7 @@ class conf
 				return true;
 				break;
 			
-			case 'pluginConf':
+			/*case 'pluginConf':
 				$file = 'plugins/'.$params['folder'].'/main';
 				
 				$conf = $this->core->file->readAsString($file);
@@ -97,6 +97,27 @@ class conf
 				else
 				return $conf;
 				
+				return true;
+				break;*/
+			case 'plugin':
+				$file = 'plugins/'.$params['folder'].'/confs/'.$params['conf'];
+
+				$conf = $this->core->file->readAsString($file);
+
+				if($conf===false)return false;
+
+				$conf = json_decode($conf, true);
+				$conf = (object)$conf;
+
+				if($params['write'])
+				{
+					if(!isset($this->plugins->$params['name']))
+						$this->plugins->$params['name'] = new stdClass();
+					$this->plugins->$params['name']->$params['conf'] = $conf;
+				}
+				else
+					return $conf;
+
 				return true;
 				break;
 		}

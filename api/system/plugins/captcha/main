@@ -10,7 +10,8 @@
 	"confs":
 	{
 		"captcha":["self"],
-		"errors":["self"]
+		"errors":["self"],
+		"edit":["self"]
 	},
 	"api":
 	[
