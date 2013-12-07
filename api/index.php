@@ -4,9 +4,11 @@ if(isset($_GET['method']))
 	$start = microtime(true);
 	header('Access-Control-Allow-Origin: *');
 	header('Content-type: application/json; charset=utf-8');
-	
+
 	$m_f = $_GET['method'];
-	if(!preg_match('/^[a-z_-]{1,25}\.[a-z0-9_-]{1,25}$/',$m_f))
+	$post = empty($_GET['post'])?$_SERVER['REQUEST_METHOD']:$_GET['post'];
+	$code = empty($_GET['status_code'])?null:$_GET['status_code'];
+	if(!preg_match('/^[a-z_-]{1,25}\.[a-zA-Z0-9_-]{1,25}$/',$m_f))
 	{
 		$j = array('error'=>'Method error: doesn\'t exists');
 		echo json_encode($j);
@@ -21,7 +23,7 @@ if(isset($_GET['method']))
 		'root'=>dirname(__FILE__).'/system/',
 	);
 
-	$core_confs['api'] = array('module'=>$m_f[0],'method'=>$m_f[1]);
+	$core_confs['api'] = array('module'=>$m_f[0],'method'=>$m_f[1],'type'=>$post,'code'=>$code);
 	$core_confs['start_time'] = $start;
 
 	$core = new core($core_confs);
@@ -41,9 +43,9 @@ else
 <style type="text/css">
 body
 {
-	color: #333333; 
-	background: #e7e7e8; 
-	font-size: 14px; 
+	color: #333333;
+	background: #e7e7e8;
+	font-size: 14px;
 	font-family: Arial;
 }
 body a { color: #0088cc; text-decoration: none; }
@@ -64,7 +66,7 @@ left = 30;
 
 </head>
 <body onLoad = 'startTime()'>
-<img src="http://cs407316.vk.me/v407316634/8ee1/apRK3iePh4c.jpg" 
+<img src="http://cs407316.vk.me/v407316634/8ee1/apRK3iePh4c.jpg"
 style="
 position: fixed; 
 opacity: 0.25;

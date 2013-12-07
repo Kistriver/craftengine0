@@ -1,0 +1,26 @@
+{%extends "/tpl/html/main.twig"%}
+
+{%block title%}Конфигурация плагина {{edit_plugin}} {{parent()}}{%endblock%}
+{%block header%}
+<li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+<li><a href="{{MAIN.ROOT_HTTP}}admin/plugins/list">Плагины</a></li>
+<li class="active">{{_GET.plugin}}</li>
+{%endblock%}
+
+{%block content%}
+{%if conf!=false%}
+<form method="post" name="config">
+{%for file, conf in conf%}
+<h3>
+{{file}}
+</h3>
+{%set nameOfField = "config["~file~"]"%}
+{%include "/tpl/admin/api_plugins_config/conf_instance.twig"%}
+<hr />
+{%endfor%}
+<input class="btn btn-success" type="submit" value="Сохранить" />
+</form>
+{%else%}
+Конфигурации недоступны
+{%endif%}
+{%endblock%}

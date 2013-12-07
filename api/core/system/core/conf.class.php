@@ -52,7 +52,9 @@ class conf
 				$conf = json_decode($conf, true);
 				//print_r(json_last_error());echo JSON_ERROR_SYNTAX."<-".$params['name'];
 				$conf = (object)$conf;
-				
+
+				$this->core->timer->mark('Получение конфига('.$type.', '.$params['name'].')');
+
 				if($params['write'])
 				$this->system->$params['name'] = $conf;
 				else
@@ -108,6 +110,8 @@ class conf
 
 				$conf = json_decode($conf, true);
 				$conf = (object)$conf;
+
+				$this->core->timer->mark('Получение конфига('.$type.', '.$params['folder'].', '.$params['conf'].')');
 
 				if($params['write'])
 				{

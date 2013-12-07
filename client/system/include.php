@@ -11,7 +11,9 @@ $core = new core($core_confs);
 ////========================REWRITE RULES ZONE========================////
 $core->rules[] = array(array('^index$','^$'),'index.php');
 
-$core->rules[] = array('^plugins$','plugins.php');
+$core->rules[] = array('^admin$','admin/index.php');
+$core->rules[] = array('^admin/plugins(/list|)$','admin/api_plugins_list.php');
+$core->rules[] = array('^admin/plugins/edit/(.*)$','admin/api_plugins_config.php',array('plugin'=>'$1'));
 ////========================REWRITE RULES ZONE========================////
 
 //$core->render['MAIN']['INFO'][] = 'Инфа';

@@ -1,1 +1,5 @@
-["article","captcha","user"]
+[
+    "article",
+    "user",
+    "captcha"
+]

@@ -28,6 +28,8 @@ if(!empty($_GET['act']))
 		$a = array('<b>','</b>','<i>','</i>','<s>','</s>','<u>','</u>','<a href="','">Link</a>');
 		$post['article'] = str_replace($b,$a,$post['article']);
 
+		$post['article'] = preg_replace("'^(.*)\[craftcut(|=(.*))\](.*)$'is","$1$4",$post['article']);
+
 		$core->render['post'] = $post;
 		
 		$core->f->show('articles/post','articles');
@@ -60,6 +62,8 @@ if(!empty($_GET['act']))
 			$b = array('[b]','[/b]','[i]','[/i]','[s]','[/s]','[u]','[/u]','[url]','[/url]');
 			$a = array('<b>','</b>','<i>','</i>','<s>','</s>','<u>','</u>','<a href="','">Link</a>');
 			$post['article'] = str_replace($b,$a,$post['article']);
+
+			$post['article'] = preg_replace("'^(.*)\[craftcut(|=(.*))\](.*)$'is","$1$3",$post['article']);
 
 			$posts[] = $post;
 		}

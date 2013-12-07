@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.4a2_alpha';
+	const CORE_VER = '0.2.4a3_alpha';
 
 	public $core_confs;
 	public $api;
@@ -102,11 +102,11 @@ class core
 			if(method_exists($this->$inc,'construct'))$this->$inc->construct();
 		}
 
-		//Присваение времени старта скрипта
+		//Присвоение времени старта скрипта
 		$this->timer->start($start);
 		//$this->timer->mark('IncludeCoreModules');
 
-		$this->core->timer->mark('Loading core');
+		$this->core->timer->mark('Загрузка модулей ядра');
 
 		//Сравнение версий ядра и конфига
 		/*if($this->functions->versionCompare(self::CORE_VER,$this->conf->system->core->version)!==0)
@@ -142,6 +142,8 @@ class core
 			echo json_encode($j);
 			exit();
 		}
+
+		$this->core->timer->mark('Сравнение версий');
 
 		//Проверка на уязвимости
 		$this->issetFatalError();
@@ -278,6 +280,7 @@ class core
 		}
 
 		//$this->timer->mark('core.class.php/stat');
+		$this->core->timer->mark('Сбор статистики');
 	}
 
 	/**
@@ -377,7 +380,7 @@ class core
 			die($expm);
 		}
 		//$this->timer->mark('core.class.php/exploitPrevent');
-		$this->timer->mark('Exploit prevent');
+		$this->core->timer->mark('Проверка на наличие эксплоитов');
 	}
 
 	public function mail()
@@ -396,7 +399,7 @@ class core
 		}
 		
 		//$this->timer->mark('core.class.php/mail');
-		$this->timer->mark('Mail cron');
+		$this->core->timer->mark('Отправка почты');
 	}
 	
 	/**

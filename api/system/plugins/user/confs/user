@@ -30,25 +30,25 @@
 	"length":
 	{
 		"name":
-			{
-				"min":2,
-				"max":25
-			},
+        {
+            "min":2,
+            "max":25
+        },
 		"surname":
-			{
-				"min":5,
-				"max":35
-			},
+        {
+            "min":5,
+            "max":35
+        },
 		"nickname":
-			{
-				"min":4,
-				"max":30
-			},
+        {
+            "min":4,
+            "max":30
+        },
 		"password":
-			{
-				"min":6,
-				"max":100
-			}
+        {
+            "min":6,
+            "max":100
+        }
 	},
 	"preg":
 	{

@@ -24,7 +24,7 @@ class core
 		$this->core_confs = $core_confs;
 		if(empty($this->core_confs['root']))$this->core_confs['root'] = dirname(__FILE__).'/';
 
-		$ver = 'v1.6';
+		$ver = 'v1.7';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{

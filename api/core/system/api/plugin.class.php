@@ -52,6 +52,8 @@ class api_plugin extends api
 		$plugin = $this->core->sanString($this->data['name']);
 		
 		$this->core->plugin->on($plugin);
+
+		return $this->json(array(true));
 	}
 	
 	protected function off_plugin()
@@ -71,5 +73,7 @@ class api_plugin extends api
 		$plugin = $this->core->sanString($this->data['name']);
 		
 		$this->core->plugin->off($plugin);
+
+		return $this->json(array(true));
 	}
 }

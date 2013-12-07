@@ -86,7 +86,7 @@ class functions
 		}
 		catch (Exception $e)
 		{
-			die('Fatal Twig error: ' . $e->getMessage());
+			$this->quit(500,'Fatal Twig error: ' . $e->getMessage());
 		}
 	}
 }

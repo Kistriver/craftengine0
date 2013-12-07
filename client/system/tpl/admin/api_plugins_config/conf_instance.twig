@@ -1,0 +1,24 @@
+{%autoescape true%}
+{%for name,conf in conf%}
+{%set nameOfFieldReal = nameOfField%}
+{%set nameOfField = nameOfField~"["~name~"]"%}
+{%if conf['type'] is defined and conf['desc'] is defined  and conf['value'] is defined and conf|length == 3%}
+
+{%if conf['type'][0]=='text'%}
+{{conf['desc']}}: <input type="text" name="{{nameOfField}}" value="{{conf['value']}}" /><br />
+{%elseif conf['type'][0]=='select'%}
+{{conf['desc']}}:
+<select name="{{nameOfField}}">
+{%for option, desc in conf['type'][1]%}
+<option value="{{option}}">{{desc}}</option>
+{%endfor%}
+</select>
+<br />
+{%endif%}
+
+{%else%}
+{%include "/tpl/admin/api_plugins_config/conf_instance.twig"%}
+{%endif%}
+{%set nameOfField = nameOfFieldReal%}
+{%endfor%}
+{%endautoescape%}

@@ -1,5 +1,5 @@
 {
-	"length":6,
-	"rand_lines":10,
-	"font":"minecraft.ttf"
+    "length": "6",
+    "rand_lines": "10",
+    "font": "minecraft.ttf"
 }

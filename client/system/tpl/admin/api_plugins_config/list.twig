@@ -1,0 +1,76 @@
+{%extends "/tpl/html/main.twig"%}
+
+{%block title%}Список плагинов {{parent()}}{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li><li class="active">Плагины({{plugins_num}})</li>{%endblock%}
+
+{%block content%}
+    {%autoescape true%}
+    {%for plugin in plugins%}
+        <div class="row alert alert-{%if plugin._included_%}success{%else%}danger{%endif%}">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-10">
+                        <h2><a href="{{MAIN.ROOT_HTTP}}admin/plugins/edit/{{plugin.name}}">{{plugin.title}}</a></h2>
+                    </div>
+                    <div class="col-md-2">
+                        <h2>
+                            {%if plugin._included_%}
+                            <form action="{{MAIN.ROOT_HTTP}}admin/plugins/list" method="post">
+                                <button style="width: 100%;" title="OFF" class="btn btn-danger">
+                                    <input type="hidden" name="state" value="OFF" />
+                                    <input type="hidden" name="name" value="{{plugin.name}}" />
+                                    Выкл
+                                </button>
+                            </form>
+                            {%else%}
+                            <form action="{{MAIN.ROOT_HTTP}}admin/plugins/list" method="post">
+                                <button style="width: 100%;" class="btn btn-success" title="ON">
+                                    <input type="hidden" name="state" value="ON" />
+                                    <input type="hidden" name="name" value="{{plugin.name}}" />
+                                    Вкл
+                                </button>
+                            </form>
+                        </h2>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        {{plugin.description}}
+                    </div>
+                    <div class="col-md-12">
+                        Автор: {{plugin.author}}
+                    </div>
+                    <div class="col-md-12">
+                        Версия: {{plugin.version.version}}
+                    </div>
+                    <div class="col-md-12">
+                        Новые модули API: {{plugin.api|join(', ')}}
+                    </div>
+                    <div class="col-md-12">
+                        Требующиеся плагины: {{plugin.requires|join(', ')}}
+                    </div>
+                    <div class="col-md-12">
+                        <!--Привилегии: {{plugin.permissions|join(', ')}}
+</div>
+<div class="col-md-12">
+ID в каталоге: {%if plugin.id==null%}Это сторонний плагин{%else%}{{plugin.id}}{%endif%}
+</div>
+<div class="col-md-12">
+-->Web-сайт разработчика: <a href="{{plugin.web.scheme}}://{{plugin.web.host}}{{plugin.web.path}}{{plugin.web.query}}{{plugin.web.fragment}}"><font style="color: dark;">{{plugin.web.host}}</font><font style="color: grey;">{{plugin.web.port}}</font><font style="color: grey;">{{plugin.web.path}}</font><font style="color: grey;">{{plugin.web.query}}</font><font style="color: grey;">{{plugin.web.fragment}}</font></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {%endfor%}
+
+    {%endautoescape%}
+    <!--Привилегии:<br />
+    core - имеет доступ к ядру и изменению его компонентов<br />
+    plugins - имеет доступ к плагинам и изменению их компонентов<br />
+    unshutable - категорически не рекомендуется отключать, т.к. могут возникнуть проблемы с повторным подключением<br />
+    -->
+{%endblock%}

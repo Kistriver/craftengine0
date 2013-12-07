@@ -25,7 +25,7 @@ class plugin_captcha_captcha
 		$c = array_rand($symbols, $this->conf->captcha->length);
 		
 		$ca = '';
-		foreach($c as $c)
+		foreach((array)$c as $c)
 		{
 			$ca .= $symbols[$c];
 		}

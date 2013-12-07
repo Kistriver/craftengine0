@@ -42,8 +42,9 @@ class error
 		if(!@$this->core->conf->system->core->debug)$this->error[] = $this->errorMake('engine',3);
 		else $this->error[] = array('engine',3,array($code,$msg,$file,$line));
 
+		$mysql = $this->core->mysql;
 		//if(isset($this->core->mysql,$this->core->mail))
-		if(@$this->core->conf->system->core->send_mail_report && $this->core->mysql->isConnect(@$this->core->mysql->dbName()))
+		if(@$this->core->conf->system->core->send_mail_report && $this->core->mysql->isConnect($mysql::DB_NAME))
 		$this->core->mail->addWaitingList(
 		$this->core->conf->system->core->admin_mail, 
 		'001', 
@@ -80,7 +81,7 @@ class error
 			|| $error['type'] == E_CORE_ERROR)
 			{
 				ob_end_clean();
-				header('HTTP/1.0 200');
+				header('HTTP/1.0 500');
 				$error['file'] = str_replace('\\','/',$error['file']);
 				$file_fr = str_replace('/system/core','',dirname(__FILE__));
 				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);

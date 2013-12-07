@@ -1,8 +1,8 @@
 {
 	"captcha":
 		{
-			"length":{"type":"text","desc":"Количество символов"},
+			"length":{"type":["text"],"desc":"Количество символов"},
             "rand_lines":"Количество \"мусора\"",
-            "font":{"type":"select","desc":{"minecraft.ttf":"По умолчанию"}}
+            "font":{"type":["select",{"minecraft.ttf":"Minecraft Style"}],"desc":"Шрифт по умолчанию"}
 		}
 }

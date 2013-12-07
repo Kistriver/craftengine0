@@ -77,6 +77,7 @@ class plugin
 		if(isset($main->name,$main->version,$main->author))
 		{}else
 		{
+			$this->core->timer->mark('Подключение плагина '.@$main->name.' #1 не все параметры конфига');
 			return array(false,1);
 		}
 
@@ -90,6 +91,7 @@ class plugin
 		$main->version = $this->core->functions->versionParse($main->version);
 		if($main->version===false)
 		{
+			$this->core->timer->mark('Подключение плагина '.$main->name.' #2 непрвильный формат версии');
 			return array(false,2);
 		}
 
@@ -102,7 +104,8 @@ class plugin
 									$ver['product'][$main->version['product']];
 		
 		$main->web = parse_url($main->web);
-		
+
+		$this->core->timer->mark('Подключение плагина '.$main->name);
 		return $main;
 	}
 	
@@ -140,6 +143,7 @@ class plugin
 					if(is_array($main))
 					if(!$main[0])
 					{
+						$this->core->timer->mark('Поиск плагинов #1 найден мусор');
 						return array(false,1);
 					}
 
@@ -149,6 +153,7 @@ class plugin
 			}
 		}
 		closedir($dir);
+		$this->core->timer->mark('Поиск плагинов');
 		return array(true);
 	}
 	
@@ -295,6 +300,7 @@ class plugin
 			if(class_exists('plugin_'.$config->name.'_'.$class))
 			{
 				$cl = 'plugin_'.$config->name.'_'.$class;
+				$this->core->timer->mark('Инициализация класса '.$class.' плагина '.$name);
 				return new $cl($this->core);
 			}
 			else
@@ -470,7 +476,8 @@ class plugin
 	 */
 	public function lib($lib)
 	{
-		require_once(dirname(__FILE__).'/../libs/'.$lib.'.php');
+		require_once($this->core->core_confs['root'].'libs/'.$lib.'.php');
+		$this->core->timer->mark('Подключение библиотеки '.$lib);
 	}
 
 	public function getEditConfs($plugin)
@@ -484,6 +491,8 @@ class plugin
 				break;
 			}
 		}
+
+		if(empty($folder))return false;
 
 		$config = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>'edit'));
 		$edit = array();
@@ -520,11 +529,71 @@ class plugin
 					break;
 			}*/
 			if(!is_array($mask))
-				$mask = array('type'=>'text','desc'=>$mask);
+				$mask = array('type'=>array('text'),'desc'=>$mask);
 
 			$r = $mask;
 			$r['value'] = $array;
 			return $r;
 		}
+	}
+
+	public function setEditConfs($plugin,$config)
+	{
+		$folder = '';
+		foreach($this->pluginsIncluded as $f=>$c)
+		{
+			if($c->name==$plugin)
+			{
+				$folder = $f;
+				break;
+			}
+		}
+
+		if(empty($folder))return false;
+
+		$main = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>'edit'));
+		/*$edit = array();
+
+		foreach((array)$main as $file=>$mask)
+		{
+			$c = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>$file));
+			$edit[$file] = $this->getEditConfsMask($mask,(array)$c);
+		}*/
+
+		foreach($config as $file=>$edit)
+		{
+			$c = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>$file));
+			$f = $this->setEditConfsMask((array)$c,(array)$main->{$file},(array)$edit);
+
+			//return $f;
+
+			if($f==false)return false;
+
+			$file_addr = 'plugins/'.$folder.'/confs/'.$file;
+			if($this->core->file->writeFromString($file_addr, $this->core->functions->json($f)))
+				return true;
+			else
+				return false;
+		}
+	}
+
+	private function setEditConfsMask($main,$mask,$edit)
+	{//print_r($main);print_r($mask);print_r($edit);die;
+		foreach($main as $key=>&$val)
+		{
+			if(!isset($mask[$key]))continue;
+			if(!isset($edit[$key]))continue;
+
+			if(is_array($main[$key]))
+			{
+				$val = $this->setEditConfsMask($val,$mask[$key],$edit[$key]);
+			}
+			else
+			{
+				$main[$key] = $edit[$key];
+			}
+		}
+
+		return $main;
 	}
 }

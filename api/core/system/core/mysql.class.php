@@ -35,10 +35,10 @@ class mysql
 		$this->connect(self::DB_NAME);
 	}
 
-	public function dbName()
+	/*public function dbName()
 	{
 		return self::DB_NAME;
-	}
+	}*/
 
 	/**
 	 * Подключение к БД
@@ -50,12 +50,14 @@ class mysql
 		{
 			//trigger_error($mysqli->connect_errno, E_USER_ERROR);
 			$this->db[$name] = false;
+			$this->core->timer->mark('Подключение к БД');
 			return false;
 		}
 		else
 		{
 			$mysqli->set_charset("utf8");
 			$this->db[$name] = $mysqli;
+			$this->core->timer->mark('Подключение к БД');
 			return true;
 		}
 	}
@@ -141,6 +143,8 @@ class mysql
 		}
 
 		if(!$this->result = $this->db[$name]->query($query))throw new Exception(mysqli_error($this->db[$name]));
+
+		$this->core->timer->mark('SQL запрос');
 
 		return $this->result;
 		}

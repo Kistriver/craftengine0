@@ -59,7 +59,7 @@ class api
 				}
 				
 				if(empty($plugin))
-				require_once($this->core->plugin->root."/../api/".$module.".class.php");
+				require_once(dirname(__FILE__)."/../api/".$module.".class.php");
 				else
 				require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
 				
@@ -75,7 +75,12 @@ class api
 				else
 				{
 					$func = $class->functions[$function];
+
+					$type = strtoupper($this->core->core_confs['api']['type']);
+					$type_arr = array('GET','POST','PUT','DELETE');
+					$this->method = in_array($type,$type_arr)?$type:'GET';
 					$class->method($func);
+					if(!empty($this->core->core_confs['api']['code']))header('HTTP/1.0 '.$this->core->core_confs['api']['code']);
 					echo $class->returned;
 				}
 			}
@@ -86,7 +91,7 @@ class api
 			$this->initalize();//Вызвать инициализацию ядра API
 		}
 		//$this->core->timer->mark('api.class.php/__construct');
-		$this->core->timer->mark('Loading API core');
+		$this->core->timer->mark('Подключение модуля API');
 	}
 	
 	//Инициализация ядра API
