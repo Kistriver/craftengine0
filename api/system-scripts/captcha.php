@@ -5,7 +5,7 @@ if(!isset($core_confs))
 	(
 		'root'=>dirname(__FILE__).'/../system/',
 	);
-$sid = $_GET['sid'];
+$sid = empty($_GET['sid'])?'':$_GET['sid'];
 $core_confs['sid'] = $sid;
 $core = new core($core_confs);
 
@@ -13,7 +13,7 @@ $core = new core($core_confs);
 //if(empty($_GET['type']))die(json_encode(array(false,'type not get')));
 
 //$sid = $_GET['sid'];
-$type = $_GET['type'];
+$type = empty($_GET['type'])?'':$_GET['type'];
 
 /*session_id($sid);
 session_start();*/

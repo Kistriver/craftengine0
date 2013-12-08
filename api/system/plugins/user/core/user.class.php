@@ -1,4 +1,5 @@
 <?php
+//TODO: whitelist or blacklist of mail addresses
 class plugin_user_user
 {
 	public	$id,						//Айди

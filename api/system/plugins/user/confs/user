@@ -54,15 +54,15 @@
 	{
 		"mail":
 			[
-				"mail.ru",
-				"gmail.com",
-				"yandex.ru",
-				"bk.ru",
-				"inbox.ru",
-				"list.ru",
-				"live.ru",
-				"hotmail.com",
-				"yahoo.com"
+				"mail\\.ru",
+				"gmail\\.com",
+				"yandex\\.ru",
+				"bk\\.ru",
+				"inbox\\.ru",
+				"list\\.ru",
+				"live\\.ru",
+				"hotmail\\.com",
+				"yahoo\\.com"
 			]
 	}
 }

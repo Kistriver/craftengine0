@@ -175,8 +175,7 @@ class api_user extends api
 				if($is)$err = 0;
 				break;
 			default:
-				//FIXME: $this->core->error->error(/*unexpected type*/);
-				$this->core->error->error('server', 403);
+				$this->core->error->error('server', 404);
 				return $this->json(array(false));
 				break;
 		}

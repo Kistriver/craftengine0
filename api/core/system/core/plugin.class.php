@@ -2,7 +2,6 @@
 /*
  * TODO: Из нескольких версий одного плагина включать самую свежею
  * TODO: Проработать вид возвращаемых ошибок
- * TODO: Редактирование конфигов(предоставить API)
  */
 /**
  * @package core
@@ -29,9 +28,21 @@ class plugin
 
 	public function construct()
 	{
-		if($this->core->sid!==false)$this->core->functions->startSession($this->core->sid);
-		else session_start();
-		//var_dump($this->core->sid);
+		if($this->core->sid!==false && !preg_match("'^[a-zA-Z0-9-]{1,32}$'is",$this->core->sid))
+		{
+			$this->core->error->error('api',3);
+		}
+		elseif($this->core->sid!==false)
+		{
+			$this->core->functions->startSession($this->core->sid);
+		}
+		else
+		{
+			session_start();
+			$this->core->error->error('api',3);
+		}
+
+		$this->core->sid = session_id();
 
 		if(method_exists($this->core,'stat'))
 		{

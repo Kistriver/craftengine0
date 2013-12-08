@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.4a3_alpha';
+	const CORE_VER = '0.2.4a4_alpha';
 
 	public $core_confs;
 	public $api;
@@ -40,6 +40,7 @@ class core
 			elseif(isset($_GET['sid']))$this->sid = $_GET['sid'];
 			else $this->sid = false;
 		}
+		elseif(!empty($_COOKIE['PHPSESSID']))$this->sid = $_COOKIE['PHPSESSID'];
 		else $this->sid = false;
 
 		//Время старта скрипта
