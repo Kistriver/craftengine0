@@ -18,7 +18,7 @@ $stat['value'] = file_get_contents(dirname(__FILE__).'/../system/core/cache/Stat
 $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
 	'host'=>$_SERVER['SERVER_NAME'],
 	'port'=>$_SERVER['SERVER_PORT'],
-	'version'=>$core->conf->system->core->version,
+	'version'=>$core::CORE_VER,
 	'admin_mail'=>$core->conf->system->core->admin_mail
 );
 

@@ -129,11 +129,11 @@ class api
 		$marks = array();
 
 		$debug = array();
-		if($this->core->conf->system->core->debug)
+		/*if($this->core->conf->system->core->debug)
 		foreach($this->core->functions->lastCall(0,0) as $i)
 		{
 			$debug[] = array('file'=>$i['file'],'line'=>$i['line'],'function'=>$i['function']);
-		}
+		}*/
 		
 		$r_a = array(
 				'data'=>$data,

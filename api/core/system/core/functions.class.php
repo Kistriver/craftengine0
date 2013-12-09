@@ -221,6 +221,7 @@ class functions
 		}
 
 		//FIXME: сделать некостыльное решение
+		//FIXME: сделать некостыльное решение
 		if(!empty($old)){setcookie("PHPSESSID", session_id(), time()-3600,'/');setcookie("PHPSESSID", $old, time()+3600,'/');}
 
 		if($sid_err!=0)

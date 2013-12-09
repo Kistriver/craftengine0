@@ -12,8 +12,6 @@ class api_captcha extends api
 		$this->input('type');
 		$c = $this->core->plugin->initPl('captcha','captcha');
 
-		if(!isset($_SESSION['captcha'][$this->data['type']]))return $this->json(array(false));
-
 		$c->generate($this->data['type']);
 		
 		return $this->json(array(true));

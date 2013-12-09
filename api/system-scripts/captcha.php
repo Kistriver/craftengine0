@@ -18,6 +18,12 @@ $type = empty($_GET['type'])?'':$_GET['type'];
 /*session_id($sid);
 session_start();*/
 
+if(!isset($_SESSION['captcha'][$type]))
+{
+	echo json_encode(array("error"=>"Unexpected type"));
+	exit;
+}
+
 $c = $core->plugin->initPl('captcha','captcha');
 
 header('Content-type: image/png');

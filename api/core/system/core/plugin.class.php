@@ -30,6 +30,8 @@ class plugin
 	{
 		if($this->core->sid!==false && !preg_match("'^[a-zA-Z0-9-]{1,32}$'is",$this->core->sid))
 		{
+			unset($_COOKIE['PHPSESSID']);
+			session_start();
 			$this->core->error->error('api',3);
 		}
 		elseif($this->core->sid!==false)
