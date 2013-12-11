@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__)."/../core/system/core/core.class.php");
+require_once(dirname(__FILE__)."/../core/core.class.php");
 
 $core_confs = array
 (

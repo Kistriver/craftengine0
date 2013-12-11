@@ -1,4 +1,4 @@
-{%extends "/tpl/html/main.twig"%}
+{%extends SYS.BASE~"main.twig"%}
 
 {%block title%}Главная {{parent()}}{%endblock%}
 {%block header%}<li class="active">Главная</li>{%endblock%}
@@ -32,7 +32,7 @@
 </div>
 <div class="row">
 <div class="col-md-3">
-<img alt="" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/index/3.png" style="width: 170px;" />
+<img alt="" src="{{MAIN.ROOT}}style/{{MAIN.THEME}}/img/index/3.png" style="width: 170px;" />
 </div>
 <div class="col-md-9">
 <p align="justify">
@@ -58,7 +58,7 @@
 </p>
 </div>
 <div class="col-md-3">
-<img alt="" src="{{MAIN.ROOT}}tpl/{{MAIN.V}}/img/index/4.png" style="width: 160px;" />
+<img alt="" src="{{MAIN.ROOT}}style/{{MAIN.THEME}}/img/index/4.png" style="width: 160px;" />
 </div>
 </div>
 <p style="float: right;">

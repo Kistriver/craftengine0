@@ -1,6 +1,7 @@
-{%extends "/tpl/errors/main.twig"%}
+{%extends SYS.BASE~"main.twig"%}
 
-{%block header%}403 - ACCESS DENIED{%endblock%}
+{%block title%}403 - ACCESS DENIED {{parent()}}{%endblock%}
+{%block header%}<li class="active">403 - ACCESS DENIED</li>{%endblock%}
 {%block content%}
 <p>
 <img src='http://kotomail.ru/sites/kotomail.ru/files/images/20111612194953.jpg' />

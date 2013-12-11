@@ -1,13 +1,13 @@
 {
 	"api":
 	{
-		"url":"http://test.kcraft.su/api/",
-		"files":"http://test.kcraft.su/api/files/"
+		"url":"",
+		"files":""
 	},
 	"core":
 	{
 		"tech":false,
-		"admin_ip":["127.0.0.1"],
+		"admin_ip":["127.0.0.1","192.168.1.1","178.140.61.70"],
 		"errors":
 		{
 			"api":true,
@@ -17,17 +17,18 @@
 	},
 	"twig":
 	{
-		"cache":true,
+		"cache":false,
 		"reload":true,
 		"escape":false
 	},
 	"tpl":
 	{
+	    "theme":"default",
 		"client_name":"CRAFTEngine Client",
 		"root":"/client/",
 		"root_http":"/client/",
 		"client_host":"http://localhost/",
-		"client_keywords":"KachalovCRAFT NET, CRAFTEngine",
+		"client_keywords":"CRAFTEngine",
 		"client_desc":"CRAFTEngine"
 	},
 	"menu":

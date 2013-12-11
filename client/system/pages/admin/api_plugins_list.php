@@ -1,7 +1,7 @@
 <?php
 if(!defined('CE_HUB'))die('403');
 
-$core->api->get('plugin.list');
+$core->api->get('system.pluginList');
 $data = $core->api->answer_decode;
 
 if(isset($data['data'][0]))
@@ -28,10 +28,10 @@ if(isset($data['data'][0]))
 
 if(!empty($_POST['state']) AND !empty($_POST['name']))
 {
-	$state = $_POST['state']=='ON'?'on':'off';
-	$core->api->get('plugin.'.$state,array('name'=>$_POST['name'],'sid'=>$_SESSION['sid']));
+	$state = $_POST['state']=='ON'?'On':'Off';
+	$core->api->get('system.plugin'.$state,array('name'=>$_POST['name'],'sid'=>$_SESSION['sid']));
 
-	$core->api->get('plugin.list',array('sid'=>$_SESSION['sid']));
+	$core->api->get('system.pluginList',array('sid'=>$_SESSION['sid']));
 }
 
 $data = $core->api->answer_decode;

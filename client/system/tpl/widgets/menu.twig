@@ -1,0 +1,14 @@
+{%extends SYS.TPL ~ "widgets/menus.twig"%}
+
+{%block header%}Меню{%endblock%}
+
+{%block content%}
+<ul class="nav nav-pills nav-stacked">
+{%for menu in NAVMENU%}
+<li {%if menu['2']!=false%}class="active"{%endif%}>
+<a href="{{MAIN.ROOT_HTTP}}{{menu['1']}}">{{menu['0']}}
+{%if menu['3']!=false%}<span class="badge pull-right">{{menu['3']}}</span>{%endif%}
+</a></li>
+{%endfor%}
+</ul>
+{%endblock%}

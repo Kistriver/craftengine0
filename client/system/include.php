@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__).'/../core/system/core.class.php');
+require_once(dirname(__FILE__).'/../core/core.class.php');
 
 $core_confs = array(
 	'root'=>dirname(__FILE__).'/',
@@ -14,6 +14,7 @@ $core->rules[] = array(array('^index$','^$'),'index.php');
 $core->rules[] = array('^admin$','admin/index.php');
 $core->rules[] = array('^admin/plugins(/list|)$','admin/api_plugins_list.php');
 $core->rules[] = array('^admin/plugins/edit/(.*)$','admin/api_plugins_config.php',array('plugin'=>'$1'));
+$core->rules[] = array('^admin/settings$','admin/client_settings.php');
 ////========================REWRITE RULES ZONE========================////
 
 //$core->render['MAIN']['INFO'][] = 'Инфа';

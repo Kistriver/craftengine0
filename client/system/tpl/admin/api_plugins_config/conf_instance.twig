@@ -5,10 +5,10 @@
 {%if conf['type'] is defined and conf['desc'] is defined  and conf['value'] is defined and conf|length == 3%}
 
 {%if conf['type'][0]=='text'%}
-{{conf['desc']}}: <input type="text" name="{{nameOfField}}" value="{{conf['value']}}" /><br />
+{{conf['desc']}}: <input type="text" name="{{nameOfField}}" value="{{conf['value']}}" class="form-control" /><br />
 {%elseif conf['type'][0]=='select'%}
 {{conf['desc']}}:
-<select name="{{nameOfField}}">
+<select name="{{nameOfField}}" class="form-control">
 {%for option, desc in conf['type'][1]%}
 <option value="{{option}}">{{desc}}</option>
 {%endfor%}

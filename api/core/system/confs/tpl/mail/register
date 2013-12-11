@@ -1,3 +1,0 @@
-Login:{$login}<br />
-ID:{$id}<br />
-<a href="http://{$domain}/login/confirm/{$code}">{$code}</a>

@@ -1,0 +1,32 @@
+{%extends SYS.BASE~"main.twig"%}
+
+{%block title%}Конфигурация плагина {{edit_plugin}} {{parent()}}{%endblock%}
+{%block header%}
+<li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+<li class="active">Настройки клиента</li>
+{%endblock%}
+
+{%block content%}
+{%autoescape true%}
+<form method="post">
+<h3>API</h3>
+Адрес API: <input type="text" name="api[adress]" value="{{config.core.api.url}}" class="form-control" /><br />
+Адрес загруженных файлов: <input type="text" name="api[adressFile]" value="{{config.core.api.files}}" class="form-control" /><br />
+Отображение ошибок: <input type="text" name="api[errors]" value="{%if config.core.core.errors.api==true%}true{%else%}false{%endif%}" class="form-control" /><br />
+Дебаг запроса: <input type="text" name="api[debug]" value="{%if config.core.core.detailed_req==true%}true{%else%}false{%endif%}" class="form-control" /><br />
+<hr />
+
+<h3>TPL</h3>
+Кэшировать страницы: <input type="text" name="tpl[cache]" value="{%if config.core.twig.cache==true%}true{%else%}false{%endif%}" class="form-control" /><br />
+Перегружать кэшированные страницы: <input type="text" name="tpl[cacheReload]" value="{%if config.core.twig.reload==true%}true{%else%}false{%endif%}" class="form-control" /><br />
+Оформление: <input type="text" name="tpl[theme]" value="{{config.core.tpl.theme}}" class="form-control" /><br />
+Заголовок: <input type="text" name="tpl[clientName]" value="{{config.core.tpl.client_name}}" class="form-control" /><br />
+Корень сайта: <input type="text" name="tpl[root]" value="{{config.core.tpl.root}}" class="form-control" /><br />
+Ключевые слова: <input type="text" name="tpl[keywords]" value="{{config.core.tpl.client_keywords}}" class="form-control" /><br />
+Описание: <input type="text" name="tpl[desc]" value="{{config.core.tpl.client_desc}}" class="form-control" /><br />
+<hr />
+
+<input class="btn btn-success" type="submit" value="Сохранить" />
+</form>
+{%endautoescape%}
+{%endblock%}

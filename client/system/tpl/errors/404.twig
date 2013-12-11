@@ -1,6 +1,7 @@
-{%extends "/tpl/errors/main.twig"%}
+{%extends SYS.BASE~"main.twig"%}
 
-{%block header%}404 - NOT FOUND{%endblock%}
+{%block title%}404 - NOT FOUND {{parent()}}{%endblock%}
+{%block header%}<li class="active">404 - NOT FOUND</li>{%endblock%}
 {%block content%}
 <p>
 <img src='http://farm8.staticflickr.com/7172/6508022985_b7862b580a_o.jpg' />

@@ -6,7 +6,7 @@ $uri = isset($_GET['uri'])?$_GET['uri']:null;
 $hr = $core->conf->conf->core->tpl->root_http;
 if(substr($uri, 0, strlen($hr))==$hr)$uri = substr($uri, strlen($hr));
 
-if(preg_match("'\.\.'", $uri))die('Hack attempt');
+if(preg_match("'\.\.'", $uri))$core->f->quit(403, 'Hack attempt');
 
 elseif(preg_match("'^((system)/)'", $uri))
 {

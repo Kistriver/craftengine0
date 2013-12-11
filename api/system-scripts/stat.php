@@ -12,7 +12,7 @@ $core_confs = array
 $core = new core($core_confs);
 
 $stat['stat_ver'] = 'v1.1';
-$sid = 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
+$sid = 'CRAFTENGINE';//= 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
 $stat['value'] = file_get_contents(dirname(__FILE__).'/../system/core/cache/Stat');
 
 $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
