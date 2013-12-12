@@ -323,5 +323,7 @@ class api_user extends api
 			$this->core->error->error('server', 404);//replace
 			return $this->json(array(false));
 		}
+
+		return $this->json(array(true));
 	}
 }

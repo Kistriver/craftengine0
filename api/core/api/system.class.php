@@ -12,8 +12,22 @@ class api_system extends api
 		$this->functions['pluginOff']='off_plugin';
 	}
 
+	private function admin()
+	{
+		if(in_array($_SERVER['REMOTE_ADDR'],$this->core->conf->system->core->admin_ip))
+		{
+			return true;
+		}
+		else
+		{
+			$this->core->error->error('server', 403);
+			return false;
+		}
+	}
+
 	protected function getEditConfs()
 	{
+		if(!$this->admin())return $this->json(array(false));
 		$this->input('plugin');
 		$plugin = $this->core->sanString($this->data['plugin']);
 		$c = $this->core->plugin->getEditConfs($plugin);
@@ -25,6 +39,7 @@ class api_system extends api
 
 	protected function setEditConfs()
 	{
+		if(!$this->admin())return $this->json(array(false));
 		$this->input('plugin','config');
 
 		$plugin = $this->data['plugin'];
@@ -43,19 +58,7 @@ class api_system extends api
 
 	protected function list_of_plugins()
 	{
-		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
-			if($c->name=='user')
-				if(!$_SESSION['loggedin'] AND true==false)
-				{
-					$ex = 1;
-					return $this->json(array(false));
-				}
-
-		if(!isset($ex))
-			if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
-			{
-				return $this->json(array(false));
-			}
+		if(!$this->admin())return $this->json(array(false));
 
 		//AND IF YOU HAVE PERMISSIONS
 		return $this->json(array(
@@ -67,18 +70,8 @@ class api_system extends api
 
 	protected function on_plugin()
 	{
+		if(!$this->admin())return $this->json(array(false));
 		$this->input('name');
-		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
-			if($c->name=='user')
-				if(!$_SESSION['loggedin'] AND true==false)
-				{
-					return $this->json(array(false));
-				}
-				else
-					if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
-					{
-						return $this->json(array(false));
-					}
 
 		$plugin = $this->core->sanString($this->data['name']);
 
@@ -89,17 +82,7 @@ class api_system extends api
 
 	protected function off_plugin()
 	{
-		foreach($this->core->plugin->pluginsIncluded as $f=>$c)
-			if($c->name=='user')
-				if(!$_SESSION['loggedin'] AND true==false)
-				{
-					return $this->json(array(false));
-				}
-				else
-					if($_SERVER['REMOTE_ADDR']!='192.168.1.1' AND true==false)
-					{
-						return $this->json(array(false));
-					}
+		if(!$this->admin())return $this->json(array(false));
 
 		$plugin = $this->core->sanString($this->data['name']);
 

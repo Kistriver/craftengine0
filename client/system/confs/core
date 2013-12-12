@@ -1,41 +1,39 @@
 {
-	"api":
-	{
-		"url":"",
-		"files":""
-	},
-	"core":
-	{
-		"tech":false,
-		"admin_ip":["127.0.0.1","192.168.1.1","178.140.61.70"],
-		"errors":
-		{
-			"api":true,
-			"client":true
-		},
-		"detailed_req":false
-	},
-	"twig":
-	{
-		"cache":false,
-		"reload":true,
-		"escape":false
-	},
-	"tpl":
-	{
-	    "theme":"default",
-		"client_name":"CRAFTEngine Client",
-		"root":"/client/",
-		"root_http":"/client/",
-		"client_host":"http://localhost/",
-		"client_keywords":"CRAFTEngine",
-		"client_desc":"CRAFTEngine"
-	},
-	"menu":
-	[
-		"menu",
-		"vk",
-		"monitoring",
-		"ads"
-	]
+    "api": {
+        "url": "http:\/\/test.kcraft.su\/api\/",
+        "files": "http:\/\/test.kcraft.su\/api\/files\/"
+    },
+    "core": {
+        "tech": false,
+        "admin_ip": [
+            "127.0.0.1",
+            "192.168.1.1",
+            "178.140.61.70"
+        ],
+        "errors": {
+            "api": true,
+            "client": true
+        },
+        "detailed_req": false
+    },
+    "twig": {
+        "cache": true,
+        "reload": true,
+        "escape": false
+    },
+    "tpl": {
+        "theme": "default",
+        "client_name": "CRAFTEngine Client",
+        "root": "\/client\/",
+        "root_http": "\/client\/",
+        "client_host": "http:\/\/localhost\/",
+        "client_keywords": "CRAFTEngine",
+        "client_desc": "CRAFTEngine"
+    },
+    "menu": [
+        "menu",
+        "vk",
+        "monitoring",
+        "ads"
+    ]
 }

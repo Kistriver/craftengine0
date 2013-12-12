@@ -17,25 +17,25 @@ elseif(preg_match("'^((files|other|style|api)/)'", $uri))
 	if(file_exists(dirname(__FILE__).'/'.$uri))
 	{
 		if(preg_match("'(.css)$'", $uri))
-		header('Content-type: text/css; charset=utf-8;');
+			header('Content-type: text/css; charset=utf-8;');
 		else
-		header('Content-type: '.mime_content_type(dirname(__FILE__).'/'.$uri).'; charset=utf-8;');
-		
+			header('Content-type: '.mime_content_type(dirname(__FILE__).'/'.$uri).'; charset=utf-8;');
+
 		echo file_get_contents(dirname(__FILE__).'/'.$uri);
 	}
 	else
 	{
 		$core->f->quit(404);
 	}
-	
+
 	exit();
 }
 
 if(sizeof($core->plugins->list)!=0)
-foreach($core->plugins->list as $pl => $pages)
-{
-	include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
-}
+	foreach($core->plugins->list as $pl => $pages)
+	{
+		include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
+	}
 
 header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
@@ -44,7 +44,8 @@ foreach($core->rules as $r)
 	$rews = $r[0];
 	$file = $r[1];
 	$get = isset($r[2])?$r[2]:array();
-	
+	$adv_par = isset($r[3])?$r[3]:array();
+
 	if(!is_array($rews))
 	{
 		$rews1 = $rews;
@@ -52,7 +53,7 @@ foreach($core->rules as $r)
 		$rews[0] = $rews1;
 		unset($rews1);
 	}
-	
+
 	//Проходимся по всем правилам
 	foreach($rews as $rew)
 	{
@@ -65,26 +66,45 @@ foreach($core->rules as $r)
 				{
 					$val = preg_replace("'([^\\\\]{0,1})\\$".$i."'", $match[$i], $val);
 				}
-				
+
 				$_GET[$key] = $val;
 			}
-			
+
 			$_SERVER['SCRIPT_NAME'] = $file;//TODO:И еще некоторые надо поправить
-			
+
 			//Меню
 			//TODO: Remake it!
 			$s = explode('/',$_SERVER['SCRIPT_NAME']);
 			if(sizeof($core->render['NAVMENU'])!=0)
-			foreach($core->render['NAVMENU'] as &$m)
-			{
-				if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))
+				foreach($core->render['NAVMENU'] as &$m)
 				{
-					$m[2] = true;
+					if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))
+					{
+						$m[2] = true;
+					}
 				}
+
+			//Если указан плагин
+			if(!empty($adv_par['plugin']))
+			{
+				if(!isset($core->plugins->list[$adv_par['plugin']]))
+				{
+					$core->f->quit(404);
+				}
+
+				foreach($core->plugins->list[$adv_par['plugin']]['pages'] as $pag)
+				{
+					if($pag==$file)
+					{
+						include_once(dirname(__FILE__).'/system/plugins/'.$adv_par['plugin'].'/pages/'.$file);
+						exit();
+					}
+				}
+
+				$core->f->quit(404);
 			}
-			
 			//Стандартные страницы
-			if(file_exists(dirname(__FILE__).'/system/pages/'.$file))
+			elseif(file_exists(dirname(__FILE__).'/system/pages/'.$file))
 			{
 				//require_once(dirname(__FILE__).'/system/include.php');
 				include_once(dirname(__FILE__).'/system/pages/'.$file);

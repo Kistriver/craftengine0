@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.4a6_alpha';
+	const CORE_VER = '0.2.4a7_alpha';
 
 	public $core_confs;
 	public $api;
@@ -29,14 +29,14 @@ class core
 		//Добавляем конфиги
 		$this->core_confs = $confs;
 
-		if(empty($this->core_confs['root']))
+		//Алиас
+		$this->core = &$this;
+
+		if(empty($this->core->core_confs['root']))
 		{
 			echo('Core parameter \'root\' not found');
 			exit();
 		}
-
-		//Алиас
-		$this->core = &$this;
 
 		//Разбор способа передачи ключа сессии
 		if(!empty($this->core_confs['sid']))$this->sid = $this->core_confs['sid'];
@@ -407,12 +407,12 @@ class core
 		if($mt<time()-60)
 		{
 			file_put_contents($fml,time());
-			$answer = $this->functions->sysScript('mail.php',0.5);
+			$answer = $this->functions->sysScript('mail.php',1);
 			fread($answer, 1024);
 		}
 		
 		//$this->timer->mark('core.class.php/mail');
-		$this->core->timer->mark('Отправка почты');
+		$this->core->timer->mark('Отправка почты ('. (60-(time()-$mt)) .'sec)');
 	}
 	
 	/**

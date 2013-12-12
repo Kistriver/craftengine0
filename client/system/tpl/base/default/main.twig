@@ -16,6 +16,7 @@
 {%block css%}{%endblock%}
 <!--cosmo,cyborg,flatly,spacelab,united-->
 <link href="{{MAIN.ROOT}}style/{{MAIN.THEME}}/bootstrap/css/cosmo.css" rel="stylesheet" media="screen">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
 
 <!--/* INCLUDED JS */-->
 {%block js%}{%endblock%}
@@ -54,7 +55,7 @@ d.addEventListener("DOMContentLoaded", f, false);
 {%block title%} &#8212; {{MAIN.TITLE}}{%endblock%}
 </title>
 </head>
-<body style="height: 100%; margin: 0px; padding: 0px;">
+<body style="height: 100%; margin: 0px; padding: 0px; background-color: #cdcdcd;">
 
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -138,7 +139,7 @@ d.addEventListener("DOMContentLoaded", f, false);
 
 <center>
 <div id="myCarousel" class="carousel slide">
-<div class="carousel-inner">
+<div class="carousel-inner" style="max-width: 1200px; margin: auto;">
 
 <div class="active item">
 <div class="carousel-caption" style="border-radius: 6px; background:url('{{MAIN.ROOT}}style/{{MAIN.THEME}}/img/main/dark1.png');">
@@ -165,13 +166,13 @@ d.addEventListener("DOMContentLoaded", f, false);
 </div>
 
 </div>
-<a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-right"></span></a>
-<a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-left"></span></a>
+<a class="carousel-control left" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+<a class="carousel-control right" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 </center>
 
 <div style="margin: 0px; padding: 30px 45px 0;">
-<div class="row">
+<div class="row" style="max-width: 1200px; margin: auto;">
 
 <div class="col-md-3" style="/*background: #F0F0FA;*/">
 {%for menu in MAIN.MENU%}

@@ -32,7 +32,7 @@ class mail
 		$headers  = "Content-type: text/html; charset=utf-8 \r\n";
 		$headers .= "From: ".$this->core->conf->system->core->mail[1]."\r\n";
 		
-		$root = dirname(__FILE__).'/../confs/tpl/mail/';
+		$root = $this->core->core_confs['root'].'/confs/tpl/mail/';
 		$params = json_decode($params, true);
 		
 		$typeid = array(

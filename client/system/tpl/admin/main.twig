@@ -4,16 +4,21 @@
 {%block header%}<li class="active">Админ панель</li>{%endblock%}
 
 {%block content%}
-<h3>Плагины</h3>
-<a href="{{MAIN.ROOT_HTTP}}admin/plugins/list">Список плагинов</a><br />
+<h3><span class="glyphicon glyphicon-cloud"></span> API</h3>
+<span class=" glyphicon glyphicon-list"></span>
+<a href="{{MAIN.ROOT_HTTP}}admin/api/plugins">Плагины</a><br />
+<span class="glyphicon glyphicon-wrench"></span>
+<ka href="{{MAIN.ROOT_HTTP}}admin/api/settings">Настройка ядра</ka><br />
+<span class=" glyphicon glyphicon-tasks"></span>
+<ka href="{{MAIN.ROOT_HTTP}}admin/api/counter">Статистика запросов</ka><br />
 
-<!--<h3>Ядро API</h3>
-<a href="{{MAIN.ROOT_HTTP}}admin">Настройка</a><br />-->
-
-<h3>Ядро клиента</h3>
-<a href="{{MAIN.ROOT_HTTP}}admin/settings">Настройка</a><br />
-
-<!--<h3>Статистика</h3>
-<a href="{{MAIN.ROOT_HTTP}}admin">Просмотр</a><br />
-<a href="{{MAIN.ROOT_HTTP}}admin">Настройка</a><br />-->
+<h3><span class="glyphicon glyphicon-user"></span> Клиент</h3>
+<span class=" glyphicon glyphicon-list"></span>
+<ka href="{{MAIN.ROOT_HTTP}}admin/client/plugins">Плагины</ka><br />
+<span class=" glyphicon glyphicon-th-large"></span>
+<ka href="{{MAIN.ROOT_HTTP}}admin/client/widgets">Виджеты</ka><br />
+<span class="glyphicon glyphicon-wrench"></span>
+<a href="{{MAIN.ROOT_HTTP}}admin/client/settings">Настройки ядра</a><br />
+<span class=" glyphicon glyphicon-screenshot"></span>
+<ka href="{{MAIN.ROOT_HTTP}}admin/clients/counter">Просмотры</ka><br />
 {%endblock%}

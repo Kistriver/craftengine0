@@ -1,0 +1,41 @@
+{%extends SYS.BASE~"main.twig"%}
+
+{%block title%}Вход{{parent()}}{%endblock%}
+
+{%block header%}<li class="active">Документация</li>{%endblock%}
+
+{%block content%}
+    <ul>
+        <li>
+            API
+            <ul>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/api/core">Ядро</a>
+                </li>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/api/input">Взаимодействие</a>
+                </li>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/api/plugins">Плагины</a>
+                </li>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/api/functions">Функции</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Клиент
+            <ul>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/client/core">Ядро</a>
+                </li>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/client/plugins">Плагины</a>
+                </li>
+                <li>
+                    <a href="{{MAIN.ROOT}}docs/client/functions">Функции</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+{%endblock%}

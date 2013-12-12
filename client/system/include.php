@@ -12,9 +12,9 @@ $core = new core($core_confs);
 $core->rules[] = array(array('^index$','^$'),'index.php');
 
 $core->rules[] = array('^admin$','admin/index.php');
-$core->rules[] = array('^admin/plugins(/list|)$','admin/api_plugins_list.php');
-$core->rules[] = array('^admin/plugins/edit/(.*)$','admin/api_plugins_config.php',array('plugin'=>'$1'));
-$core->rules[] = array('^admin/settings$','admin/client_settings.php');
+$core->rules[] = array('^admin/api/plugins$','admin/api_plugins_list.php');
+$core->rules[] = array('^admin/api/plugins/edit/(.*)$','admin/api_plugins_config.php',array('plugin'=>'$1'));
+$core->rules[] = array('^admin/client/settings$','admin/client_settings.php');
 ////========================REWRITE RULES ZONE========================////
 
 //$core->render['MAIN']['INFO'][] = 'Инфа';

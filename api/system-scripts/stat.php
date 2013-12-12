@@ -13,7 +13,7 @@ $core = new core($core_confs);
 
 $stat['stat_ver'] = 'v1.1';
 $sid = 'CRAFTENGINE';//= 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
-$stat['value'] = file_get_contents(dirname(__FILE__).'/../system/core/cache/Stat');
+$stat['value'] = file_get_contents(dirname(__FILE__).'/../system/cache/Stat');
 
 $stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
 	'host'=>$_SERVER['SERVER_NAME'],
@@ -64,5 +64,5 @@ if(!empty($answer_decode['data'][0]))
 	}
 }
 
-if(file_exists(dirname(__FILE__).'/../system/core/cache/StatLock'))unlink(dirname(__FILE__).'/../system/core/cache/StatLock');
+if(file_exists(dirname(__FILE__).'/../system/cache/StatLock'))unlink(dirname(__FILE__).'/../system/cache/StatLock');
 ?>

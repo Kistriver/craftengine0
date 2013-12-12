@@ -1,7 +1,8 @@
 {%extends SYS.BASE~"main.twig"%}
 
 {%block title%}Список плагинов {{parent()}}{%endblock%}
-{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li><li class="active">Плагины({{plugins_num}})</li>{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+    <li>API</li><li class="active">Плагины({{plugins_num}})</li>{%endblock%}
 
 {%block content%}
 {%autoescape true%}
@@ -11,24 +12,24 @@
 
 <div class="row">
 <div class="col-md-10">
-<h2><a href="{{MAIN.ROOT_HTTP}}admin/plugins/edit/{{plugin.name}}">{{plugin.title}}</a></h2>
+<h2><a href="{{MAIN.ROOT_HTTP}}admin/api/plugins/edit/{{plugin.name}}">{{plugin.title}}</a></h2>
 </div>
 <div class="col-md-2">
 <h2>
 {%if plugin._included_%}
-<form action="{{MAIN.ROOT_HTTP}}admin/plugins/list" method="post">
+<form method="post">
 <button style="width: 100%;" title="OFF" class="btn btn-danger">
 <input type="hidden" name="state" value="OFF" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
-Выкл
+<span class=" glyphicon glyphicon-remove"></span>
 </button>
 </form>
 {%else%}
-<form action="{{MAIN.ROOT_HTTP}}admin/plugins/list" method="post">
+<form method="post">
 <button style="width: 100%;" class="btn btn-success" title="ON">
 <input type="hidden" name="state" value="ON" />
 <input type="hidden" name="name" value="{{plugin.name}}" />
-Вкл
+    <span class=" glyphicon glyphicon-ok"></span>
 </button>
 </form>
 </h2>

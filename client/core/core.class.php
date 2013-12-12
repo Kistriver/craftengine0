@@ -22,7 +22,7 @@ class core
 			die("Missed core parameter 'root'");
 		}//$this->core_confs['root'] = dirname(__FILE__).'/';
 
-		$ver = 'v1.8';
+		$ver = 'v1.9';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{

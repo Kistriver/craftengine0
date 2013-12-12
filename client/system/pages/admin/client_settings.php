@@ -8,11 +8,11 @@ if(sizeof($_POST)!=0)
 
 	$cc->api->url = $_POST['api']['adress'];
 	$cc->api->files = $_POST['api']['adressFile'];
-	$cc->core->errors->api = $_POST['api']['errors']=='true'?true:false;
-	$cc->core->detailed_req = $_POST['api']['debug']=='true'?true:false;
+	$cc->core->errors->api = empty($_POST['api']['errors'])?false:($_POST['api']['errors']=='on'?true:false);
+	$cc->core->detailed_req = empty($_POST['api']['debug'])?false:($_POST['api']['debug']=='on'?true:false);
 
-	$cc->twig->cache = $_POST['tpl']['cache']=='true'?true:false;
-	$cc->twig->reload = $_POST['tpl']['cacheReload']=='true'?true:false;
+	$cc->twig->cache = empty($_POST['tpl']['cache'])?false:($_POST['tpl']['cache']=='on'?true:false);
+	$cc->twig->reload = empty($_POST['tpl']['cacheReload'])?false:($_POST['tpl']['cacheReload']=='on'?true:false);
 	$cc->tpl->theme = $_POST['tpl']['theme'];
 	$cc->tpl->client_name = $_POST['tpl']['clientName'];
 	$cc->tpl->root = $cc->tpl->root_http = $_POST['tpl']['root'];
