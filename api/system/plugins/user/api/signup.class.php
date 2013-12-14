@@ -218,7 +218,7 @@ class api_signup extends api
 			$this->core->error->error('plugin_user_signup',15);
 			$err_lev = 8;
 		}
-		if(!$this->check('password',$login))
+		if(!$this->check('password',$password))
 		$err_lev = 9;
 		if(!empty($invite))
 			if(!$this->check('invite',$invite))

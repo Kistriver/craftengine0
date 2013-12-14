@@ -2,7 +2,6 @@
 /*
  * TODO: редактирование конфигов
  * TODO: переделать меню
- * TODO: возможность выбора тем
  */
 require_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
 

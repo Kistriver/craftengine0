@@ -1,8 +1,7 @@
 {
 	"modules":
 	[
-		"system",
-		"plugin"
+		"system"
 	],
 	"plugins":[]
 }

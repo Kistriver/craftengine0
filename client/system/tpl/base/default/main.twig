@@ -55,7 +55,17 @@ d.addEventListener("DOMContentLoaded", f, false);
 {%block title%} &#8212; {{MAIN.TITLE}}{%endblock%}
 </title>
 </head>
-<body style="height: 100%; margin: 0px; padding: 0px; background-color: #cdcdcd;">
+<body style="height: 100%; margin: 0px; padding: 0px; background-color:#cecece;
+{*{% if date("H")==23 %}
+#cfb1a3
+{% elseif date("H")<=5 or date("H")==24 %}
+#24100c
+{% elseif date("H")>5 and date("H")<10 %}
+#faffbd
+{% elseif date("H")>=11 %}
+#cecece
+{% endif %};*}
+">
 
 
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

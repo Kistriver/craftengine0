@@ -99,11 +99,11 @@ class functions
 				break;
 
 			case 'success':
-				$core->render['MAIN']['SUCCESS'][] = $value;
+				$this->core->render['MAIN']['SUCCESS'][] = $value;
 				break;
 
 			case 'info':
-				$core->render['MAIN']['INFO'][] = $value;
+				$this->core->render['MAIN']['INFO'][] = $value;
 				break;
 
 			default:
