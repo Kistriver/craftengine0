@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
@@ -16,8 +17,8 @@ class conf
 	{
 		$this->core = &$core;
 		
-		$this->system = new stdClass();
-		$this->plugins = new stdClass();
+		$this->system = new \stdClass();
+		$this->plugins = new \stdClass();
 	}
 
 	public function construct()
@@ -93,7 +94,7 @@ class conf
 				if($params['write'])
 				{
 					if(!isset($this->plugins->$params['name']))
-					$this->plugins->$params['name'] = new stdClass();
+					$this->plugins->$params['name'] = new \stdClass();
 					$this->plugins->$params['name']->$params['conf'] = $conf;
 				}
 				else
@@ -116,7 +117,7 @@ class conf
 				if($params['write'])
 				{
 					if(!isset($this->plugins->$params['name']))
-						$this->plugins->$params['name'] = new stdClass();
+						$this->plugins->$params['name'] = new \stdClass();
 					$this->plugins->$params['name']->$params['conf'] = $conf;
 				}
 				else

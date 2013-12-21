@@ -21,7 +21,7 @@ class core
 			die("Missed core parameter 'root'");
 		}//$this->core_confs['root'] = dirname(__FILE__).'/';
 
-		$ver = 'v1.9';
+		$ver = 'v2.0';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{
@@ -90,9 +90,12 @@ class core
 			),
 			'SYS' => array(
 				'CORE_VER'=>$ver,
-				'BASE'=>'tpl/base/'.$ccc->theme.'/',
+				'BASE'=>'themes/'.$ccc->theme.'/tpl/base/',
+				'BASE_TPL'=>$ccc->columns.'_column.twig',
+				//'BASE'=>'tpl/base/'.$ccc->theme.'/',
 				'PLUGIN'=>'plugins/',
 				'TPL'=>'tpl/',
+				'NOHEADER'=>false,
 			),
 		);
 		

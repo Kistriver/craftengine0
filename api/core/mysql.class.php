@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
@@ -45,7 +46,7 @@ class mysql
 	 */
 	public function connectDb($name, $host, $db, $user, $pass)
 	{
-		$mysqli = new mysqli($host,$user,$pass,$db);
+		$mysqli = new \mysqli($host,$user,$pass,$db);
 		if($mysqli->connect_errno)
 		{
 			//trigger_error($mysqli->connect_errno, E_USER_ERROR);
@@ -139,10 +140,10 @@ class mysql
 		if(!$this->isConnect($name))
 		{
 			$this->lock = true;
-			throw new Exception('Query abort: no connection');
+			throw new \Exception('Query abort: no connection');
 		}
 
-		if(!$this->result = $this->db[$name]->query($query))throw new Exception(mysqli_error($this->db[$name]));
+		if(!$this->result = $this->db[$name]->query($query))throw new \Exception(mysqli_error($this->db[$name]));
 
 		$this->core->timer->mark('SQL запрос');
 

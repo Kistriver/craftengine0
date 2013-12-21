@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine;
 if(isset($_GET['method']))
 {
 	$start = microtime(true);
@@ -26,7 +27,7 @@ if(isset($_GET['method']))
 	$core_confs['api'] = array('module'=>$m_f[0],'method'=>$m_f[1],'type'=>$post,'code'=>$code);
 	$core_confs['start_time'] = $start;
 
-	$core = new core($core_confs);
+	$core = new core\core($core_confs);
 	$api = $core->api;
 }
 else

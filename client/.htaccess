@@ -21,7 +21,7 @@ Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 RewriteEngine on
 
 RewriteRule ^api/(.*)$ api/$1 [L,QSA]
-RewriteRule ^style/(.*)$ style/$1 [L,QSA]
+#RewriteRule ^style/(.*)$ style/$1 [L,QSA]
 RewriteRule ^other/(.*)$ other/$1 [L,QSA]
 RewriteRule ^files/(.*)$ files/$1 [L,QSA]
 RewriteRule ^(.*)$ index.php?uri=$1 [L,QSA]

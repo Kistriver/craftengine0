@@ -1,5 +1,6 @@
 <?php
-class api_profile extends api
+namespace CRAFTEngine\api\user;
+class profile extends \CRAFTEngine\core\api
 {
 	public function init()
 	{

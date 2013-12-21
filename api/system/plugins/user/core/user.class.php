@@ -1,6 +1,7 @@
 <?php
+namespace CRAFTEngine\plugins\user;
 //TODO: whitelist or blacklist of mail addresses
-class plugin_user_user
+class user
 {
 	public	$id,						//Айди
 			$name,						//Имя

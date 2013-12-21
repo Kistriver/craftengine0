@@ -1,5 +1,6 @@
 <?php
-class plugin_user_rank
+namespace CRAFTEngine\plugins\user;
+class rank
 {
 	public $core;//Ядро
 	public $rank;//Ранк

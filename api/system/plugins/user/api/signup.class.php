@@ -1,5 +1,6 @@
 <?php
-class api_signup extends api
+namespace CRAFTEngine\api\user;
+class signup extends \CRAFTEngine\core\api
 {
 	public function init()
 	{

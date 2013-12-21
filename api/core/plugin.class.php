@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /*
  * TODO: Из нескольких версий одного плагина включать самую свежею
  * TODO: Проработать вид возвращаемых ошибок
@@ -310,9 +311,9 @@ class plugin
 			if(file_exists($fi))
 			require_once($fi);
 			
-			if(class_exists('plugin_'.$config->name.'_'.$class))
+			if(class_exists('\CRAFTEngine\plugins\\'.$config->name.'\\'.$class))
 			{
-				$cl = 'plugin_'.$config->name.'_'.$class;
+				$cl = '\CRAFTEngine\plugins\\'.$config->name.'\\'.$class;
 				$this->core->timer->mark('Инициализация класса '.$class.' плагина '.$name);
 				return new $cl($this->core);
 			}
@@ -608,5 +609,30 @@ class plugin
 		}
 
 		return $main;
+	}
+
+	public function makeEvent($id,$plugin,$addInfo)
+	{
+		$ex = false;
+		foreach($this->pluginsIncluded as $f=>$c)
+		{
+			if($c->name==$plugin)
+			{
+				$ex = true;
+				break;
+			}
+		}
+
+		if(!$ex)return array(false,0);
+
+		foreach($this->pluginsIncluded as $f=>$c)
+		{
+			$pl = $this->initPl($c->name,$c->loadClass);
+
+			if(method_exists($pl,'registerPluginEvent'))
+				$addInfo = $pl->registerPluginEvent($id,$plugin,$addInfo);
+		}
+
+		return $addInfo;
 	}
 }

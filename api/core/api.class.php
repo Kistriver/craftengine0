@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
@@ -29,8 +30,9 @@ class api
 	{
 		if(empty($core))
 		{
-			require_once(dirname(__FILE__)."/core.class.php");
-			$core = new core();
+			exit('Empty core resource');
+			//require_once(dirname(__FILE__)."/core.class.php");
+			//$core = new core();
 		}
 		
 		$this->core = &$core;
@@ -63,7 +65,8 @@ class api
 				else
 				require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
 				
-				$cl_n = "api_" . $module;
+				//$cl_n = "api_" . $module;
+				$cl_n = '\CRAFTEngine\api\\'.$plugin.'\\'.$module;
 				$class = new $cl_n($core);
 				//$class->init();
 				

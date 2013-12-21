@@ -1,5 +1,6 @@
 <?php
-class plugin_captcha_captcha
+namespace CRAFTEngine\plugins\captcha;
+class captcha
 {
 	public function __construct($core)
 	{

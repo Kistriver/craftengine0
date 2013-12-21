@@ -1,4 +1,4 @@
-{%extends SYS.BASE~"main.twig"%}
+{%extends SYS.BASE~SYS.BASE_TPL%}
 
 {%block title%}Главная {{parent()}}{%endblock%}
 {%block header%}<li class="active">Главная</li>{%endblock%}
@@ -6,7 +6,7 @@
 {%block content%}
 <h3>Documentation</h3>
 <p>
-<a href="{{MAIN.ROOT}}docs">Здеся :з</a>
+<a href="http://kcraft.su/docs">Здеся :з</a>
 </p>
 
 <h3>Changelog</h3>
@@ -186,6 +186,19 @@
 [FIX]		Устанена проблема с почтовыми письмами
 [SYS]		Добавлена защита модуля system по IP
 [USR][FIX]	Исправлены иконки
+[FIX]		Исправлена проблема с проверкой пароля в плагине user
+[USR][FIX]	Исправлена функция msg
+[USR]		Незначительно изменён дизайн
+
+[###]		0.2.5a1_alpha
+[USR][ETC]	Версия клиента v2.0
+[USR]		Упрощена установка тем
+[USR][FIX]	Исправлена проблема с mime_content_type
+[USR][FIX]	Подвал пижат к низу страницы
+[USR]		Изменено немного оформление
+[USR]		Добавлена кастомная функция mime_content_type
+[USR]		Изменен алгоритм написания реврайтов в ЧПУ
+[SYS]		Добавлена возможность создания событий плагинов с передачей информации для модификации
 </pre>
 </p>
 {%endblock%}

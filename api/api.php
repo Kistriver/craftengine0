@@ -1,0 +1,1 @@
+<? //will be later(it's index.php)

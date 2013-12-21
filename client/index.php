@@ -12,16 +12,29 @@ elseif(preg_match("'^((system)/)'", $uri))
 {
 	$core->f->quit(403);
 }
-elseif(preg_match("'^((files|other|style|api)/)'", $uri))
+/*elseif(preg_match("'^((files|other|api)/)'", $uri))
 {
 	if(file_exists(dirname(__FILE__).'/'.$uri))
 	{
-		if(preg_match("'(.css)$'", $uri))
-			header('Content-type: text/css; charset=utf-8;');
-		else
-			header('Content-type: '.mime_content_type(dirname(__FILE__).'/'.$uri).'; charset=utf-8;');
+		header('Content-type: '.$core->f->mime_content_type(dirname(__FILE__).'/'.$uri).';');
 
 		echo file_get_contents(dirname(__FILE__).'/'.$uri);
+	}
+	else
+	{
+		$core->f->quit(404);
+	}
+
+	exit();
+}*/
+elseif(preg_match("'^((style)/)'", $uri))
+{
+	$cur_uri = preg_replace("'^style/(.*?)'",'$1', $uri);
+	if(file_exists(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri))
+	{
+		header('Content-type: '.$core->f->mime_content_type(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri).';'/* charset=utf-8;'*/);
+
+		echo file_get_contents(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri);
 	}
 	else
 	{
@@ -41,10 +54,12 @@ header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
 foreach($core->rules as $r)
 {
-	$rews = $r[0];
-	$file = $r[1];
-	$get = isset($r[2])?$r[2]:array();
-	$adv_par = isset($r[3])?$r[3]:array();
+	$rews = $r['preg'];
+	$file = $r['page'];
+	$get = isset($r['get'])?$r['get']:array();
+	$preg_flags = isset($r['preg_flags'])?$r['preg_flags']:'';
+	$flags = isset($r['flags'])?$r['flags']:'';
+	$from_plugin = isset($r['plugin'])?$r['plugin']:null;
 
 	if(!is_array($rews))
 	{
@@ -57,7 +72,7 @@ foreach($core->rules as $r)
 	//Проходимся по всем правилам
 	foreach($rews as $rew)
 	{
-		if(preg_match("'$rew'", $uri, $match) || $rew==$file)
+		if(preg_match("'$rew'$preg_flags", $uri, $match) || $rew==$file)
 		{
 			//Создаём _GET переменные
 			foreach($get as $key=>$val)
@@ -85,18 +100,18 @@ foreach($core->rules as $r)
 				}
 
 			//Если указан плагин
-			if(!empty($adv_par['plugin']))
+			if($from_plugin!=null)
 			{
-				if(!isset($core->plugins->list[$adv_par['plugin']]))
+				if(!isset($core->plugins->list[$from_plugin]))
 				{
 					$core->f->quit(404);
 				}
 
-				foreach($core->plugins->list[$adv_par['plugin']]['pages'] as $pag)
+				foreach($core->plugins->list[$from_plugin]['pages'] as $pag)
 				{
 					if($pag==$file)
 					{
-						include_once(dirname(__FILE__).'/system/plugins/'.$adv_par['plugin'].'/pages/'.$file);
+						include_once(dirname(__FILE__).'/system/plugins/'.$from_plugin.'/pages/'.$file);
 						exit();
 					}
 				}

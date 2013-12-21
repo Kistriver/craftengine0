@@ -23,6 +23,7 @@
     },
     "tpl": {
         "theme": "default",
+        "columns": "left",
         "client_name": "CRAFTEngine Client",
         "root": "\/client\/",
         "root_http": "\/client\/",

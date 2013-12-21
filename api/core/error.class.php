@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
@@ -85,14 +86,16 @@ class error
 				$error['file'] = str_replace('\\','/',$error['file']);
 				$file_fr = str_replace('/system/core','',dirname(__FILE__));
 				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
-				
+
+				$mysql = $this->core->mysql;
+
 				if(!$debug)$errA =
 				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
 				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n");
 				echo json_encode($errA);
 				if($this->core->conf->system->core->send_mail_report &&
 				isset($this->core->mail))
-				if($this->core->mysql->isConnect($this->core->mysql->dbName()))
+				if($this->core->mysql->isConnect($mysql::DB_NAME))
 				$this->core->mail->addWaitingList(
 				$this->core->conf->system->core->admin_mail, 
 				'000', 

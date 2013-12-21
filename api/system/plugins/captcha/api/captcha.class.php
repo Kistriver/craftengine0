@@ -1,5 +1,6 @@
 <?php
-class api_captcha extends api
+namespace CRAFTEngine\api\captcha;
+class captcha extends \CRAFTEngine\core\api
 {
 	public function init()
 	{

@@ -1,5 +1,6 @@
 <?php
-class plugin_user_load
+namespace CRAFTEngine\plugins\user;
+class load
 {
 	public function __construct($core)
 	{
@@ -35,6 +36,11 @@ class plugin_user_load
 	public function OnDisable()
 	{
 
+	}
+
+	public function registerPluginEvent($id,$plugin,$addInfo)
+	{
+		return $addInfo;
 	}
 }
 ?>

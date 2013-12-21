@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 //TODO: РЕОРГАНИЗАЦИЯ КОДА!!! ПРИВАТНЫЕ СВОЙСТВА, ДРУГАЯ ЗАГРУЗКА КОНФИГОВ, УРОВЕНЬ ВАЖНОСТИ БД
 /**
  * @package core
@@ -18,7 +19,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.4a7_alpha';
+	const CORE_VER = '0.2.5a1_alpha';
 
 	public $core_confs;
 	public $api;
@@ -61,13 +62,13 @@ class core
 		}
 		
 		ob_start();
-		
+
 		try
 		{
 			if(defined('CORECALLONCE'))
-			throw new Exception("CORE MAY BE CALLED ONLY ONCE", 1);
+			throw new \Exception("CORE MAY BE CALLED ONLY ONCE", 1);
 		}
-		catch(Exception $e)
+		catch(\Exception $e)
 		{
 			echo $e->getMessage()."\r\n";
 			echo "#Trace: \r\n";
@@ -99,9 +100,11 @@ class core
 		{
 			//Подключение модулей ядра
 			require_once(dirname(__FILE__)."/". $inc .".class.php");
-			
+
 			//Вызов модулей
-			$this->$inc = new $inc($this);
+			//$this->$inc = new $inc($this);
+			$name = '\CRAFTEngine\core\\'.$inc;
+			$this->$inc = new $name($this);
 		}
 
 		foreach($includes as $inc)

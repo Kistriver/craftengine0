@@ -1,5 +1,6 @@
 <?php
-class api_article extends api
+namespace CRAFTEngine\api\article;
+class article extends \CRAFTEngine\core\api
 {
 	public function init()
 	{

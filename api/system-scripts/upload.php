@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 include_once(dirname(__FILE__)."/../system/include.php");
 if(!isset($core_confs))
 $core_confs = array

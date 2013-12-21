@@ -1,23 +1,23 @@
 <?php
 
-$core->rules[] = array('^signup$','signup.php');
+$core->rules[] = array('preg'=>'^signup$','page'=>'signup.php','plugin'=>'users');
 
-$core->rules[] = array('^logout$','login.php', array('act'=>'logout'));
-$core->rules[] = array('^login$','login.php'/*, array('act'=>'login')*/);
-$core->rules[] = array('^login/restore$','login.php', array('act'=>'restore'));
-$core->rules[] = array('^login/restore/([a-z0-9]*)$','login.php', array('act'=>'restore','code'=>'$1'));
-$core->rules[] = array('^login/confirm$','login.php', array('act'=>'confirm'));
-$core->rules[] = array('^login/confirm/([a-z0-9]*)$','login.php', array('act'=>'confirm','code'=>'$1'));
+$core->rules[] = array('preg'=>'^logout$','page'=>'login.php','get'=>array('act'=>'logout'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^login$','page'=>'login.php'/*,'get'=>array('act'=>'login')*/,'plugin'=>'users');
+$core->rules[] = array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^login/restore/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'restore','code'=>'$1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^login/confirm$','page'=>'login.php','get'=>array('act'=>'confirm'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^login/confirm/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'confirm','code'=>'$1'),'plugin'=>'users');
 
-$core->rules[] = array('^users$','users.php', array('act'=>'all','page'=>'1'));
-$core->rules[] = array('^users/page-([0-9]*)$','users.php', array('act'=>'all','page'=>'$1'));
-$core->rules[] = array('^users/id([0-9]*)$','users.php', array('act'=>'user','page'=>'$1'));
-$core->rules[] = array('^users/confirm$','users.php', array('act'=>'confirm','page'=>'1'));
-$core->rules[] = array('^users/confirm/page-([0-9]*)$','users.php', array('act'=>'confirm','page'=>'$1'));
-$core->rules[] = array('^users/([A-Za-z0-9_]*)$','users.php', array('act'=>'user','login'=>'$1'));
+$core->rules[] = array('preg'=>'^users$','page'=>'users.php','get'=>array('act'=>'all','page'=>'1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','page'=>'$1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^users/confirm$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^users/confirm/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'$1'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users');
 
-$core->rules[] = array('^profile(|\/)$','profile.php', array('type'=>'main'));
-$core->rules[] = array('^profile/([A-Za-z_]*)$','profile.php', array('type'=>'$1'));
+$core->rules[] = array('preg'=>'^profile(|\/)$','page'=>'profile.php','get'=>array('type'=>'main'),'plugin'=>'users');
+$core->rules[] = array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users');
 
 function appointment($rank)
 {

@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\core;
 /**
  * @package core
  * @author Alexey Kachalov <alex-kachalov@mail.ru>
