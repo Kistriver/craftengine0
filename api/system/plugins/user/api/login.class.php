@@ -45,7 +45,7 @@ class login extends \CRAFTEngine\core\api
 							//$this->core->mysql->query("UPDATE login SET time_login='$time_now' WHERE id='$user->id'");
 							
 							$this->core->plugin->lib('browser.class');
-							$browser = new Browser();
+							$browser = new \Browser();
 							$bro = $browser->getBrowser() . " " . $browser->getVersion();
 							$platform = $browser->getPlatform();
 							$id = $user->id;
@@ -69,7 +69,7 @@ class login extends \CRAFTEngine\core\api
 						$this->core->error->error('plugin_user_login',0);
 						
 						$this->core->plugin->lib('browser.class');
-						$browser = new Browser();
+						$browser = new \Browser();
 						$bro = $browser->getBrowser() . " " . $browser->getVersion();
 						$platform = $browser->getPlatform();
 						$id = $user->id;

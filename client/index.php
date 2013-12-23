@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\core;
 require_once(dirname(__FILE__).'/system/include.php');
 define('CE_HUB', true);
 
@@ -27,6 +28,21 @@ elseif(preg_match("'^((system)/)'", $uri))
 
 	exit();
 }*/
+elseif(preg_match("'^style/([^/].*?)/package.png$'", $uri))
+{
+	$cur_uri = preg_replace("'^style/([^/].*?)/package.png$'",'$1', $uri);
+	if(file_exists(dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png'))
+	{
+		header('Content-type: image/png;');
+		echo file_get_contents(dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png');
+	}
+	else
+	{
+		$core->f->quit(404);
+	}
+
+	exit();
+}
 elseif(preg_match("'^((style)/)'", $uri))
 {
 	$cur_uri = preg_replace("'^style/(.*?)'",'$1', $uri);
@@ -52,7 +68,7 @@ if(sizeof($core->plugins->list)!=0)
 
 header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
-foreach($core->rules as $r)
+foreach($core->plugins->getRules() as $r)
 {
 	$rews = $r['preg'];
 	$file = $r['page'];

@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\plugins\articles;
 if(!defined('CE_HUB'))die('403');
 
 if(!empty($_GET['act']))
@@ -78,8 +79,12 @@ if(!empty($_GET['act']))
 		if(!empty($_POST['title']) AND !empty($_POST['article']))
 		{
 			if(empty($_POST['tags']))$_POST['tags'] = '';
+
+			$tags = explode(',',$_POST['tags']);
+			foreach($tags as &$t)$t = trim($t);
+			$tags = implode(',',$tags);
 			
-			$core->api->get('article.new',array('title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$_POST['tags']));
+			$core->api->get('article.new',array('title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
 			$data = $core->api->answer_decode;
 			
 		}
@@ -121,8 +126,12 @@ if(!empty($_GET['act']))
 		if(!empty($_POST['title']) AND !empty($_POST['article']))
 		{
 			if(empty($_POST['tags']))$_POST['tags'] = '';
+
+			$tags = explode(',',$_POST['tags']);
+			foreach($tags as &$t)$t = trim($t);
+			$tags = implode(',',$tags);
 			
-			$core->api->get('article.edit',array('id'=>$_GET['post_id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$_POST['tags']));
+			$core->api->get('article.edit',array('id'=>$_GET['post_id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
 			$data = $core->api->answer_decode;
 			
 			if(isset($data['data'][0]))

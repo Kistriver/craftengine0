@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\plugins\core;
 if(!defined('CE_HUB'))die('403');
 require_once(dirname(__FILE__).'/include.php');
 
@@ -20,6 +21,7 @@ if(sizeof($_POST)!=0)
 	$cc->tpl->client_desc = $_POST['tpl']['desc'];
 
 	$core->conf->set('core',$cc);
+	header('Location: '.$core->render['MAIN']['ROOT'].'admin/client/settings');
 }
 
 $cc = $core->conf->get('core');

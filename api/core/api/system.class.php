@@ -1,5 +1,6 @@
 <?php
-class api_system extends api
+namespace CRAFTEngine\api;
+class system extends \CRAFTEngine\core\api
 {
 	public function init()
 	{

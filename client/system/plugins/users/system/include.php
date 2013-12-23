@@ -1,23 +1,33 @@
 <?php
+namespace CRAFTEngine\client\plugins\users;
+$core->plugins->newRule(array('preg'=>'^signup$','page'=>'signup.php','plugin'=>'users'));
 
-$core->rules[] = array('preg'=>'^signup$','page'=>'signup.php','plugin'=>'users');
+$core->plugins->newRule(array('preg'=>'^logout$','page'=>'login.php','get'=>array('act'=>'logout'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^login$','page'=>'login.php'/*,'get'=>array('act'=>'login')*/,'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^login/restore/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'restore','code'=>'$1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^login/confirm$','page'=>'login.php','get'=>array('act'=>'confirm'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^login/confirm/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'confirm','code'=>'$1'),'plugin'=>'users'));
 
-$core->rules[] = array('preg'=>'^logout$','page'=>'login.php','get'=>array('act'=>'logout'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^login$','page'=>'login.php'/*,'get'=>array('act'=>'login')*/,'plugin'=>'users');
-$core->rules[] = array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^login/restore/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'restore','code'=>'$1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^login/confirm$','page'=>'login.php','get'=>array('act'=>'confirm'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^login/confirm/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'confirm','code'=>'$1'),'plugin'=>'users');
+$core->plugins->newRule(array('preg'=>'^users$','page'=>'users.php','get'=>array('act'=>'all','page'=>'1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','page'=>'$1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^users/confirm$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>array('^users/confirm/page-([0-9]*)$','^admin/other/users/confirm/page-([0-9]*)$'),'page'=>'users.php','get'=>array('act'=>'confirm','page'=>'$1'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 
-$core->rules[] = array('preg'=>'^users$','page'=>'users.php','get'=>array('act'=>'all','page'=>'1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','page'=>'$1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^users/confirm$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^users/confirm/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'$1'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users');
+$core->plugins->newRule(array('preg'=>'^profile(|\/)$','page'=>'profile.php','get'=>array('type'=>'main'),'plugin'=>'users'));
+$core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));
 
-$core->rules[] = array('preg'=>'^profile(|\/)$','page'=>'profile.php','get'=>array('type'=>'main'),'plugin'=>'users');
-$core->rules[] = array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users');
+function RegisterPluginEvent($id,$plugin,$info)
+{
+	if($id=='admin_menu_render' && $plugin=='admin')
+	{
+		$info['other'][] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+	}
+	return $info;
+}
+
 
 function appointment($rank)
 {

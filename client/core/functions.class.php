@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\core;
 class functions
 {
 	public $core;
@@ -183,6 +184,34 @@ class functions
 		else {
 			return 'application/octet-stream';
 		}
+	}
+
+	public function getThemesList()
+	{
+		$themes = array();
+		$root = $this->core->core_confs['root'].'themes/';
+		$dir = opendir($root);
+		while($folders = readdir($dir))
+		{
+			if($folders!="." && $folders!=".." && is_dir($root.$folders))
+				if(file_exists($root.$folders.'/main.json'))
+					if(is_dir($root.$folders.'/styles'))
+						if(is_dir($root.$folders.'/tpl'))
+						{
+							$main = $this->core->conf->get('../themes/'.$folders.'/main');
+
+							if($main!==null)
+							$themes[$folders] = array(
+								'author'=>isset($main->author)?$main->author:'',
+								'web'=>isset($main->web)?$main->web:'',
+								'title'=>isset($main->title)?$main->title:'',
+								'description'=>isset($main->description)?$main->description:'',
+								'folder'=>$folders,
+							);
+						}
+		}
+		closedir($dir);
+		return $themes;
 	}
 }
 ?>

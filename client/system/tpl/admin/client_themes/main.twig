@@ -1,0 +1,48 @@
+{%extends SYS.BASE~SYS.BASE_TPL%}
+
+{%block title%}Офрмление клиента {{parent()}}{%endblock%}
+{%block header%}
+    <li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+    <li>Клиент</li><li class="active">Оформление</li>
+{%endblock%}
+
+{%block content%}
+    {%autoescape true%}
+    <!--<form method="post">
+       <h3>Основное</h3>
+
+        <input class="btn btn-success" type="submit" value="Сохранить" />
+    </form>
+        <hr />-->
+
+        <h3>Темы</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>Картинка</th>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Описание</th>
+                <th>Сайт</th>
+                <th></th>
+            </tr>
+            {% for theme in themes %}
+                <tr class="rowlink">
+                    <td><img style="max-height: 220px;" src="{{ MAIN.ROOT }}style/{{theme.folder}}/package.png" /></td>
+                    <td>{{ theme.title }}</td>
+                    <td>{{ theme.author }}</td>
+                    <td>{{ theme.description }}</td>
+                    <td>{{ theme.web }}</td>
+                    <td>
+                        <form method="post">
+                            <button class="btn btn-xs btn-{% if MAIN.THEME==theme.folder %}info{% else %}success{% endif %}" title="{% if MAIN.THEME==theme.folder %}select{% else %}selected{% endif %}">
+                                <input type="hidden" name="tpl[theme]" value="{{theme.folder}}" />
+                                <span class=" glyphicon glyphicon-ok"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <hr />
+    {%endautoescape%}
+{%endblock%}

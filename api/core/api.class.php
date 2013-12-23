@@ -61,14 +61,21 @@ class api
 				}
 				
 				if(empty($plugin))
-				require_once(dirname(__FILE__)."/api/".$module.".class.php");
+				{
+					require_once(dirname(__FILE__)."/api/".$module.".class.php");
+
+					$cl_n = '\CRAFTEngine\api\\'.$module;
+					$class = new $cl_n($core);
+				}
 				else
-				require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
-				
-				//$cl_n = "api_" . $module;
-				$cl_n = '\CRAFTEngine\api\\'.$plugin.'\\'.$module;
-				$class = new $cl_n($core);
-				//$class->init();
+				{
+					require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
+
+					//$cl_n = "api_" . $module;
+					$cl_n = '\CRAFTEngine\api\\'.$plugin.'\\'.$module;
+					$class = new $cl_n($core);
+					//$class->init();
+				}
 				
 				if(!isset($class->functions[$function]))
 				{
@@ -130,13 +137,6 @@ class api
 		$marks = $this->core->timer->display('marks');
 		else
 		$marks = array();
-
-		$debug = array();
-		/*if($this->core->conf->system->core->debug)
-		foreach($this->core->functions->lastCall(0,0) as $i)
-		{
-			$debug[] = array('file'=>$i['file'],'line'=>$i['line'],'function'=>$i['function']);
-		}*/
 		
 		$r_a = array(
 				'data'=>$data,
@@ -147,7 +147,6 @@ class api
 								$marks,
 								$this->core->timer->display('other'),
 								),
-				'debug'=>$debug,
 		);
 		$this->returned = $this->core->json_encode_ru($r_a);
 		return $this->returned;

@@ -4,21 +4,29 @@
 {%block header%}<li class="active">Админ панель</li>{%endblock%}
 
 {%block content%}
-<h3><span class="glyphicon glyphicon-cloud"></span> API</h3>
-<span class=" glyphicon glyphicon-list"></span>
-<a href="{{MAIN.ROOT_HTTP}}admin/api/plugins">Плагины</a><br />
-<span class="glyphicon glyphicon-wrench"></span>
-<ka href="{{MAIN.ROOT_HTTP}}admin/api/settings">Настройка ядра</ka><br />
-<span class=" glyphicon glyphicon-tasks"></span>
-<ka href="{{MAIN.ROOT_HTTP}}admin/api/counter">Статистика запросов</ka><br />
+<div class="alert alert-warning">
+    Неправильно сконфигурированные настройки могут привести к неработоспособности всего движка или
+    его отдельных модулей
+</div>
+
+<h3><span class="glyphicon glyphicon-globe"></span> API</h3>
+{% for item in admin_menu.api %}
+{% if item.icon!=false %}<span class="glyphicon glyphicon-{{ item.icon }}"></span>{% endif %}
+{% if item.href!=false %}<a href="{{MAIN.ROOT_HTTP}}admin/api/{{ item.href }}">{% endif %} {{ item.value }}{% if item.href!=false %}</a>{% endif %}
+<br />
+{% endfor %}
 
 <h3><span class="glyphicon glyphicon-user"></span> Клиент</h3>
-<span class=" glyphicon glyphicon-list"></span>
-<ka href="{{MAIN.ROOT_HTTP}}admin/client/plugins">Плагины</ka><br />
-<span class=" glyphicon glyphicon-th-large"></span>
-<ka href="{{MAIN.ROOT_HTTP}}admin/client/widgets">Виджеты</ka><br />
-<span class="glyphicon glyphicon-wrench"></span>
-<a href="{{MAIN.ROOT_HTTP}}admin/client/settings">Настройки ядра</a><br />
-<span class=" glyphicon glyphicon-screenshot"></span>
-<ka href="{{MAIN.ROOT_HTTP}}admin/clients/counter">Просмотры</ka><br />
+{% for item in admin_menu.client %}
+{% if item.icon!=false %}<span class="glyphicon glyphicon-{{ item.icon }}"></span>{% endif %}
+{% if item.href!=false %}<a href="{{MAIN.ROOT_HTTP}}admin/client/{{ item.href }}">{% endif %} {{ item.value }}{% if item.href!=false %}</a>{% endif %}
+<br />
+{% endfor %}
+
+<h3><span class="glyphicon glyphicon-road"></span> Другое</h3>
+{% for item in admin_menu.other %}
+{% if item.icon!=false %}<span class="glyphicon glyphicon-{{ item.icon }}"></span>{% endif %}
+{% if item.href!=false %}<a href="{{MAIN.ROOT_HTTP}}admin/other/{{ item.href }}">{% endif %} {{ item.value }}{% if item.href!=false %}</a>{% endif %}
+<br />
+{% endfor %}
 {%endblock%}

@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\core;
 class api
 {
 	public $core;
@@ -29,7 +30,7 @@ class api
 		$sid = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		
 		$post = $this->core->f->json_encode_ru($post);
-		$url = $this->url . '?v=' . $this->api_ver . '&method=' . $method . '&sid=' . $sid . '&post=' . $post_method;
+		$url = $this->url . '?v=' . $this->api_ver . '&status_code=200&method=' . $method . '&sid=' . $sid . '&post=' . $post_method;
 		
 		$data = http_build_query
 		(
@@ -118,16 +119,7 @@ class api
 						<div style="float:right;">'.$prec.'%</div>';
 				}
 
-				$deb = '';
-				$deb_num = 0;
-				foreach($this->answer_decode['debug'] as $i)
-				{
-					$deb_num++;
-					$deb .= '#'.$deb_num.' ['.$i['file'].':'.$i['line'].'] '.$i['function']."<br />\n";
-				}
-
 				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)'
-					.'<br />Stack: <br />'.$deb
 					.'<br />Request:<pre style="max-height: 300px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 300px;overflow: scroll;">'."\r\n".$this->answer.'</pre>');
 			}
 		}

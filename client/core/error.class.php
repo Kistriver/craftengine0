@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\core;
 class error
 {
 	public $core;

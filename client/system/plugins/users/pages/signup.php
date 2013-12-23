@@ -1,4 +1,5 @@
 <?php
+namespace CRAFTEngine\client\plugins\users;
 if(!defined('CE_HUB'))die('403');
 
 if($_SESSION['loggedin'])$core->f->quit(403);

@@ -101,6 +101,7 @@ class plugin
 		if(!isset($main->confs))$main->confs = array();
 		if(!isset($main->api))$main->api = array();
 		if(!isset($main->requires))$main->requires = array();
+		if(!isset($main->since))$main->since = '0.0.1a0_alpha';
 
 		$main->version = $this->core->functions->versionParse($main->version);
 		if($main->version===false)
@@ -363,6 +364,8 @@ class plugin
 		
 		$inc = $this->core->conf->system->plugins;
 
+		$core = $this->core;
+
 		//Есть ли такие плагины, какие нужно подключить
 		foreach((object)$inc as $pl)
 		{
@@ -370,6 +373,7 @@ class plugin
 			{
 				if($c->name==$pl)
 				{
+					if($this->core->functions->versionCompare($c->since,$core::CORE_VER)<=0)
 					$this->pluginsIncluded[$f] = $c;
 				}
 			}
@@ -494,6 +498,12 @@ class plugin
 		$this->core->timer->mark('Подключение библиотеки '.$lib);
 	}
 
+	/**
+	 * Получение конфигов плагина для редактирования
+	 *
+	 * @param $plugin
+	 * @return array|bool
+	 */
 	public function getEditConfs($plugin)
 	{
 		$folder = '';
@@ -551,6 +561,13 @@ class plugin
 		}
 	}
 
+	/**
+	 * Обновление конфигов плагина
+	 *
+	 * @param $plugin
+	 * @param $config
+	 * @return bool
+	 */
 	public function setEditConfs($plugin,$config)
 	{
 		$folder = '';
@@ -611,9 +628,17 @@ class plugin
 		return $main;
 	}
 
+	/**
+	 * Создаём события для плагина $plugin с ID события $id
+	 *
+	 * @param $id
+	 * @param $plugin
+	 * @param $addInfo
+	 * @return mixed
+	 */
 	public function makeEvent($id,$plugin,$addInfo)
 	{
-		$ex = false;
+		/*$ex = false;
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
 			if($c->name==$plugin)
@@ -623,7 +648,7 @@ class plugin
 			}
 		}
 
-		if(!$ex)return array(false,0);
+		if(!$ex)return array(false,0);*/
 
 		foreach($this->pluginsIncluded as $f=>$c)
 		{

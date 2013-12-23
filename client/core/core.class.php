@@ -1,4 +1,6 @@
 <?php
+namespace CRAFTEngine\client\core;
+ini_set('display_errors',1);error_reporting(E_ALL);
 /*
  * TODO: редактирование конфигов
  * TODO: переделать меню
@@ -21,7 +23,7 @@ class core
 			die("Missed core parameter 'root'");
 		}//$this->core_confs['root'] = dirname(__FILE__).'/';
 
-		$ver = 'v2.0';
+		$ver = 'v2.1';
 		if(!empty($_GET['getinfo']))
 		switch($_GET['getinfo'])
 		{
@@ -48,11 +50,6 @@ class core
 			header('HTTP/1.1 500');
 			die('Your PHP version is: '.PHP_VERSION.'. But required version above: '.$php_min);
 		}
-		
-		/*$this->f = new functions($this);
-		$this->conf = new conf($this);
-		$this->error = new error($this);
-		$this->api = new api($this);*/
 
 		$inc = array(
 			array('/functions.class.php','functions','f'),
@@ -65,7 +62,8 @@ class core
 		foreach($inc as $inc)
 		{
 			require_once(dirname(__FILE__).$inc[0]);
-			$this->{$inc[2]} = new $inc[1]($this);
+			$inc_cl = 'CRAFTEngine\client\core\\'.$inc[1];
+			$this->{$inc[2]} = new $inc_cl($this);
 		}
 
 		$cc = $this->conf->get('core');
@@ -101,15 +99,15 @@ class core
 		
 		try
 		{
-			Twig_Autoloader::register(true);
-			$loader = new Twig_Loader_Filesystem($this->core_confs['root']);
+			\Twig_Autoloader::register(true);
+			$loader = new \Twig_Loader_Filesystem($this->core_confs['root']);
 			
 			if($cc->twig->cache==true)
 			$t_cache = $this->core_confs['root'].'tmp';
 			else
 			$t_cache = false;
 			
-			$twig = new Twig_Environment
+			$twig = new \Twig_Environment
 			(
 				$loader,
 				array(

@@ -1,7 +1,10 @@
 <?php
+namespace CRAFTEngine\client\core;
 class plugin
 {
 	public $list = array();
+
+	private $rules = array();
 	
 	public function __construct($core)
 	{
@@ -21,6 +24,28 @@ class plugin
 				}
 			}
 		}
+	}
+
+	public function makeEvent($id,$plugin,$addInfo)
+	{
+		foreach($this->list as $plug=>$pages)
+		{
+			$fun = '\CRAFTEngine\client\plugins\\'.$plug.'\RegisterPluginEvent';
+			if(function_exists($fun))
+				$addInfo = $fun($id,$plugin,$addInfo);
+		}
+
+		return $addInfo;
+	}
+
+	public function newRule($array)
+	{
+		$this->rules[] = $array;
+	}
+
+	public function getRules()
+	{
+		return $this->rules;
 	}
 }
 ?>

@@ -82,7 +82,10 @@ class error
 			|| $error['type'] == E_CORE_ERROR)
 			{
 				ob_end_clean();
-				header('HTTP/1.0 500');
+
+				if(empty($this->core->core_confs['api']['code']))header('HTTP/1.0 500');
+				else header('HTTP/1.0 '.$this->core->core_confs['api']['code']);
+
 				$error['file'] = str_replace('\\','/',$error['file']);
 				$file_fr = str_replace('/system/core','',dirname(__FILE__));
 				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
@@ -91,7 +94,7 @@ class error
 
 				if(!$debug)$errA =
 				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
-				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]<br />\r\n");
+				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]\r\n");
 				echo json_encode($errA);
 				if($this->core->conf->system->core->send_mail_report &&
 				isset($this->core->mail))
