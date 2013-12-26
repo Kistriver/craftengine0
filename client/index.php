@@ -31,7 +31,8 @@ elseif(preg_match("'^((system)/)'", $uri))
 elseif(preg_match("'^style/([^/].*?)/package.png$'", $uri))
 {
 	$cur_uri = preg_replace("'^style/([^/].*?)/package.png$'",'$1', $uri);
-	if(file_exists(dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png'))
+	$file = dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png';
+	if(file_exists($file))
 	{
 		header('Content-type: image/png;');
 		echo file_get_contents(dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png');
@@ -46,11 +47,12 @@ elseif(preg_match("'^style/([^/].*?)/package.png$'", $uri))
 elseif(preg_match("'^((style)/)'", $uri))
 {
 	$cur_uri = preg_replace("'^style/(.*?)'",'$1', $uri);
-	if(file_exists(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri))
+	$file = dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri;
+	if(file_exists($file) && !is_dir($file))
 	{
-		header('Content-type: '.$core->f->mime_content_type(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri).';'/* charset=utf-8;'*/);
+		header('Content-type: '.$core->f->mime_content_type($file).';'/* charset=utf-8;'*/);
 
-		echo file_get_contents(dirname(__FILE__).'/system/themes/'.$core->render['MAIN']['THEME'].'/styles/'.$cur_uri);
+		echo file_get_contents($file);
 	}
 	else
 	{
@@ -63,6 +65,7 @@ elseif(preg_match("'^((style)/)'", $uri))
 if(sizeof($core->plugins->list)!=0)
 	foreach($core->plugins->list as $pl => $pages)
 	{
+		if(file_exists(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php'))
 		include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
 	}
 
@@ -131,7 +134,6 @@ foreach($core->plugins->getRules() as $r)
 						exit();
 					}
 				}
-
 				$core->f->quit(404);
 			}
 			//Стандартные страницы

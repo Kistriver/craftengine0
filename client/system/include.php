@@ -19,12 +19,13 @@ $core->plugins->newRule(array(
 	'plugin'=>null,
 ));
 
-$core->plugins->newRule(array('preg'=>'^admin$','page'=>'admin/index.php'));
+/*$core->plugins->newRule(array('preg'=>'^admin$','page'=>'admin/index.php'));
 
-$core->plugins->newRule(array('preg'=>'^admin/api/plugins$','page'=>'admin/api_plugins_list.php'));
-$core->plugins->newRule(array('preg'=>'^admin/api/plugins/edit/(.*)$','page'=>'admin/api_plugins_config.php','get'=>array('plugin'=>'$1')));
+$core->plugins->newRule(array('preg'=>'^admin/api/plugins$','page'=>'admin/api/plugins_list.php'));
+$core->plugins->newRule(array('preg'=>'^admin/api/plugins/edit/(.*)$','page'=>'admin/api/plugins_config.php','get'=>array('plugin'=>'$1')));
 
-$core->plugins->newRule(array('preg'=>'^admin/client/settings$','page'=>'admin/client_settings.php'));
-$core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'admin/client_themes.php'));
+$core->plugins->newRule(array('preg'=>'^admin/client/pages$','page'=>'admin/client/pages.php'));
+$core->plugins->newRule(array('preg'=>'^admin/client/settings$','page'=>'admin/client/settings.php'));
+$core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'admin/client/themes.php'));*/
 ////========================REWRITE RULES ZONE========================////
 ?>

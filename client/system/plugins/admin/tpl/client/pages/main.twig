@@ -1,0 +1,23 @@
+{%extends SYS.BASE~SYS.BASE_TPL%}
+
+{%block title%}Управление страницами {{parent()}}{%endblock%}
+{%block header%}
+    <li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+    <li>Клиент</li><li class="active">Управление страницами</li>
+{%endblock%}
+
+{% block js %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ MAIN.ROOT }}style/ckeditor/ckeditor.js"></script>
+{% endblock %}
+
+{%block content%}
+    <textarea id="editor1" name="txt" cols="100" rows="20"><?php echo $txt[0]['text'] ?></textarea>
+    <script type="text/javascript">
+        var ckeditor1 = CKEDITOR.replace( 'editor1' );
+        AjexFileManager.init({
+            returnTo: 'ckeditor',
+            editor: ckeditor1
+        });
+    </script>
+{%endblock%}

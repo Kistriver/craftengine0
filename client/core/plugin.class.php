@@ -11,6 +11,7 @@ class plugin
 		$this->core = $core;
 		
 		$pl = (array)$this->core->conf->get('plugins');
+		$pl[] = 'admin';
 		
 		if(sizeof($pl)!=0)
 		{
@@ -19,7 +20,6 @@ class plugin
 				if(file_exists($this->core->core_confs['root'].'/plugins/'.$p))
 				{
 					$pag = (array)$this->core->conf->get('../plugins/'.$p.'/confs/pages');
-					
 					$this->list[$p] = array('pages'=>$pag);
 				}
 			}
@@ -46,6 +46,16 @@ class plugin
 	public function getRules()
 	{
 		return $this->rules;
+	}
+
+	public function coreLib($lib)
+	{
+		require_once(dirname(__FILE__).'/libs/'.$lib.'.php');
+	}
+
+	public function lib($lib)
+	{
+		require_once($this->core->core_confs['root'].'/libs/'.$lib.'.php');
 	}
 }
 ?>

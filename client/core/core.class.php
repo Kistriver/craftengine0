@@ -1,12 +1,9 @@
 <?php
 namespace CRAFTEngine\client\core;
-ini_set('display_errors',1);error_reporting(E_ALL);
 /*
  * TODO: редактирование конфигов
  * TODO: переделать меню
  */
-require_once(dirname(__FILE__).'/libs/Twig/Autoloader.php');
-
 class core
 {
 	public $render = array();
@@ -25,6 +22,8 @@ class core
 
 		$ver = 'v2.1';
 		if(!empty($_GET['getinfo']))
+		{
+		//header('Content-type: text/plain; charset=utf-8;');
 		switch($_GET['getinfo'])
 		{
 			case 'author':
@@ -42,6 +41,7 @@ class core
 			default:
 				die("usage: ?getinfo=(author|core|contact|version)");
 				break;
+		}
 		}
 		
 		$php_min = '5.4.0';
@@ -96,6 +96,8 @@ class core
 				'NOHEADER'=>false,
 			),
 		);
+
+		$this->core->plugins->coreLib('Twig/Autoloader');
 		
 		try
 		{
@@ -118,7 +120,7 @@ class core
 			);
 			$this->twig = $twig;
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
 			//die('Fatal Twig error: ' . $e->getMessage());
 			$this->core->f->quit(500,'can\'t load Twig');

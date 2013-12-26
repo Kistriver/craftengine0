@@ -17,7 +17,7 @@
         "detailed_req": false
     },
     "twig": {
-        "cache": true,
+        "cache": false,
         "reload": true,
         "escape": false
     },

@@ -9,9 +9,18 @@ $core->plugins->newRule(array('preg'=>'^articles/edit/([0-9]*)-([0-9]*)$','page'
 
 function RegisterPluginEvent($id,$plugin,$info)
 {
-	if($id=='admin_menu_render' && $plugin=='admin')
+	switch($id.'_'.$plugin)
 	{
-		$info['other'][] = array('icon'=>'plus','value'=>'Подтверждение новых статей','href'=>'articles/confirm/page-1');
+		case 'admin_menu_render_admin':
+			if(in_array($_SESSION['rank_main'],array(1,2,3)))$info['other']['articles_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых статей','href'=>'articles/confirm/page-1');
+			break;
+
+		case 'admin_access_admin':
+			if(preg_match("'^other/artilces/confirm/'i",$info[1]) && $_SESSION['rank_main']<5)
+			{
+				$info[0] = false;
+			}
+			break;
 	}
 	return $info;
 }

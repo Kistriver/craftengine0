@@ -21,11 +21,40 @@ $core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.
 
 function RegisterPluginEvent($id,$plugin,$info)
 {
-	if($id=='admin_menu_render' && $plugin=='admin')
+	switch($id.'_'.$plugin)
 	{
-		$info['other'][] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+		case 'admin_menu_render_admin':
+			if(in_array($_SESSION['rank_main'],array(1,2,3)))$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+			if($_SESSION['rank_main']<1)unset($info['api'],$info['client']);
+			break;
+
+		case 'admin_access_admin':
+			if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]) && $_SESSION['rank_main']<1)
+			{
+				$info[0] = false;
+			}
+			if($info[1]=='' && $_SESSION['rank_main']<1)
+			{
+				$info[0] = false;
+			}
+			break;
 	}
 	return $info;
+
+
+	/*if($id=='admin_menu_render' && $plugin=='admin')
+	{
+		$info['other'][] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+		if($_SESSION['rank_main']<1)unset($info['api'],$info['client']);
+	}
+	elseif($id=='admin_access' && $plugin=='admin')
+	{echo $info[1];
+		if(preg_match("'^(client|api)/'i",$info[1]) && $_SESSION['rank_main']<1)
+		{
+			$info[0] = false;
+		}
+	}
+	return $info;*/
 }
 
 

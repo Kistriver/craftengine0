@@ -1,4 +1,6 @@
-<?php exit('Haven\'t done yet!');
+<?php
+namespace CRAFTEngine;
+exit('Haven\'t done yet!');
 $start = microtime(true);
 
 include_once(dirname(__FILE__)."/include.php");
@@ -20,7 +22,7 @@ $password = $core->conf->system->core->db['craftengine']['pass'];
 ini_set('display_errors',1);error_reporting(E_ALL);
 
 // Autoloading (composer is preferred, but for this example let's just do this)
-require_once($core_confs['core'].'/libs/OAuth2/Autoloader.php');
+$core->plugin->coreLib('OAuth2Server/src/OAuth2/Autoloader');
 \OAuth2\Autoloader::register();
 
 // $dsn is the Data Source Name for your database, for exmaple "mysql:dbname=my_oauth2_db;host=localhost"

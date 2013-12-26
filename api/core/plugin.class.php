@@ -499,6 +499,18 @@ class plugin
 	}
 
 	/**
+	 * Подключение независимых библиотек в папке libs
+	 *
+	 * @access public
+	 * @param $lib имя файла
+	 */
+	public function coreLib($lib)
+	{
+		require_once(dirname(__FILE__).'/libs/'.$lib.'.php');
+		$this->core->timer->mark('Подключение библиотеки '.$lib);
+	}
+
+	/**
 	 * Получение конфигов плагина для редактирования
 	 *
 	 * @param $plugin
