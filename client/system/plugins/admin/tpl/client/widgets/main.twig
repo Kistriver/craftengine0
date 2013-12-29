@@ -1,0 +1,92 @@
+{%extends SYS.BASE~SYS.BASE_TPL%}
+
+{%block title%}Виджеты {{parent()}}{%endblock%}
+{%block header%}
+    <li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+    <li>Клиент</li><li class="active">Виджеты</li>
+{%endblock%}
+
+{%block content%}
+    {%autoescape true%}
+    <h3>Виджеты</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Картинка</th>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Описание</th>
+            <th>Сайт</th>
+            <th></th>
+        </tr>
+        {% for w in widgets_order %}
+            <tr class="rowlink">
+                <td><img style="max-height: 220px;" src="" /></td>
+                <td>{{ w.title }}</td>
+                <td>{{ w.author }}</td>
+                <td>{{ w.description }}</td>
+                <td>{{ w.web }}</td>
+                <td>
+                    <div>
+                        <form method="post">
+                            <button class="btn btn-xs btn-info" title="UP">
+                                <input type="hidden" name="type" value="up" />
+                                <input type="hidden" name="widget" value="{{w.folder}}" />
+                                <span class="glyphicon glyphicon-chevron-up"></span>
+                            </button>
+                        </form>
+                        <form method="post">
+                        <button class="btn btn-xs btn-info" title="DOWN">
+                            <input type="hidden" name="type" value="down" />
+                            <input type="hidden" name="widget" value="{{w.folder}}" />
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <hr />
+
+    <h3>Неактивные виджеты</h3>
+    <table class="table table-striped">
+        <tr>
+            <th>Картинка</th>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Описание</th>
+            <th>Сайт</th>
+            <th></th>
+        </tr>
+        {% for w in widgets %}
+            <tr class="rowlink">
+                <td><img style="max-height: 220px;" src="" /></td>
+                <td>{{ w.title }}</td>
+                <td>{{ w.author }}</td>
+                <td>{{ w.description }}</td>
+                <td>{{ w.web }}</td>
+                <td>
+                    <div>
+                        <form method="post">
+                        {% if w.active==false %}
+                            <button class="btn btn-xs btn-success" title="ENABLE">
+                                <input type="hidden" name="type" value="enable" />
+                                <input type="hidden" name="widget" value="{{w.folder}}" />
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        {% else %}
+                            <button class="btn btn-xs btn-danger" title="DISABLE">
+                                <input type="hidden" name="type" value="disable" />
+                                <input type="hidden" name="widget" value="{{w.folder}}" />
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        {% endif %}
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <hr />
+    {%endautoescape%}
+{%endblock%}

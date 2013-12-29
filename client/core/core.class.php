@@ -4,6 +4,13 @@ namespace CRAFTEngine\client\core;
  * TODO: редактирование конфигов
  * TODO: переделать меню
  */
+ini_set('display_errors',"1");
+ini_set('display_startup_errors',"1");
+ini_set('log_errors',"1");
+ini_set('html_errors',"0");
+date_default_timezone_set('GMT');
+error_reporting(E_ALL ^ E_NOTICE);
+
 class core
 {
 	public $render = array();
@@ -18,9 +25,9 @@ class core
 		{
 			header('HTTP/1.1 500');
 			die("Missed core parameter 'root'");
-		}//$this->core_confs['root'] = dirname(__FILE__).'/';
+		}
 
-		$ver = 'v2.2';
+		$ver = 'v2.3';
 		if(!empty($_GET['getinfo']))
 		{
 		//header('Content-type: text/plain; charset=utf-8;');
@@ -57,13 +64,19 @@ class core
 			array('/api.class.php','api','api'),
 			array('/error.class.php','error','error'),
 			array('/plugin.class.php','plugin','plugins'),
+			array('/widget.class.php','widget','widgets'),
 		);
 
-		foreach($inc as $inc)
+		foreach($inc as $i)
 		{
-			require_once(dirname(__FILE__).$inc[0]);
-			$inc_cl = 'CRAFTEngine\client\core\\'.$inc[1];
-			$this->{$inc[2]} = new $inc_cl($this);
+			require_once(dirname(__FILE__).$i[0]);
+			$inc_cl = 'CRAFTEngine\client\core\\'.$i[1];
+			$this->{$i[2]} = new $inc_cl($this);
+		}
+
+		foreach($inc as $i)
+		{
+			if(method_exists($this->{$i[2]},'construct'))$this->{$i[2]}->construct();
 		}
 
 		$cc = $this->conf->get('core');
@@ -89,8 +102,7 @@ class core
 			'SYS' => array(
 				'CORE_VER'=>$ver,
 				'BASE'=>'themes/'.$ccc->theme.'/tpl/base/',
-				'BASE_TPL'=>$ccc->columns.'_column.twig',
-				//'BASE'=>'tpl/base/'.$ccc->theme.'/',
+				'BASE_TPL'=>$ccc->columns.'.twig',
 				'PLUGIN'=>'plugins/',
 				'TPL'=>'tpl/',
 				'NOHEADER'=>false,

@@ -34,14 +34,14 @@ class conf
 		$dtype = '.'.$type;
 		if(!is_writable($this->folder.$file.$dtype))
 		{
-			return false;
+			return falsed;
 		}
 
 		$content = json_encode($content, JSON_PRETTY_PRINT);
 		
 		$w = file_put_contents($this->folder.$file.$dtype,$content);
-		
-		if($w===true)
+
+		if($w!==false)
 		{
 			$this->conf->$file = $content;
 			return true;

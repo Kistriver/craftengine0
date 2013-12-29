@@ -4,6 +4,9 @@ if(!defined('CE_HUB'))die('403');
 
 if(isset($_GET['act']))
 {
+	$LC = '\CRAFTEngine\client\plugins\users\\'.$core->plugins->list['users']['loadClass'];
+	$LC = new $LC($core);
+
 	$act = $_GET['act'];
 	$core->render['type'] = $act;
 	if($act=='user')
@@ -25,13 +28,13 @@ if(isset($_GET['act']))
 
 		foreach($data['data']['rank'] as &$r)
 		{
-			$r = appointment($r)?appointment($r):'Undefined';
+			$r = $LC->appointment($r)?$LC->appointment($r):'Undefined';
 			//$r = 'Undefined';
 		}
 		
 		//$data['data']['rank'] = implode(', ',$data['data']['rank']);
 		//$data['data']['appointment'] = 'Undefined';
-		$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
+		$data['data']['appointment'] = $LC->appointment($data['data']['rank_main'])?$LC->appointment($data['data']['rank_main']):'Undefined';
 		
 		$core->render['user'] = $data['data'];
 		$core->render['icon_src'] = $core->conf->conf->core->api->files.'users/avatars/id'.$data['data']['id'].'.'.$data['data']['avatar_format'];
@@ -60,7 +63,7 @@ if(isset($_GET['act']))
 		for($i=0;$i<sizeof($data['data']);$i++)
 		{
 			$user = &$data['data'][$i];
-			$user['appointment'] = appointment($user['rank_main'])?appointment($user['rank_main']):'Undefined';
+			$user['appointment'] = $LC->appointment($user['rank_main'])?$LC->appointment($user['rank_main']):'Undefined';
 			//$user['appointment'] = 'Undefined';
 		}
 		$core->render['users'] = $data['data'];

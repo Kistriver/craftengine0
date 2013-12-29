@@ -213,5 +213,32 @@ class functions
 		closedir($dir);
 		return $themes;
 	}
+
+	public function pathBuilder($path)
+	{
+		$path = str_replace('\\','/',$path);
+		$path_array = explode('/',$path);
+
+		for($i=0;$i<sizeof($path_array);$i++)
+		{
+			$prev = isset($path_array[$i-1])?$path_array[$i-1]:null;
+			$now = $path_array[$i];
+			$next = isset($path_array[$i+1])?$path_array[$i+1]:null;
+			if($now=='..')
+			{
+				if($prev!==null && $prev!=='')unset($path_array[$i-1]);
+				unset($path_array[$i]);
+
+				$path_array = explode('/',implode('/',$path_array));
+				$i=0;
+			}
+		}
+
+		$path = implode('/',$path_array);
+
+		$path = str_replace('//','/',$path);
+
+		return $path;
+	}
 }
 ?>

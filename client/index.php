@@ -1,7 +1,38 @@
 <?php
 namespace CRAFTEngine\client\core;
-require_once(dirname(__FILE__).'/system/include.php');
 define('CE_HUB', true);
+
+
+require_once(dirname(__FILE__).'/core/core.class.php');
+
+$core_confs = array(
+	'root'=>dirname(__FILE__).'/system/',
+);
+
+session_start();
+$core = new core($core_confs);
+
+////========================REWRITE RULES ZONE========================////
+$core->plugins->newRule(array(
+	'preg'=>array('^index$','^$'),
+	'preg_flags'=>'',
+	'flags'=>'',
+	'get'=>array(),
+	'page'=>'index.php',
+	'plugin'=>null,
+));
+
+/*$core->plugins->newRule(array('preg'=>'^admin$','page'=>'admin/index.php'));
+
+$core->plugins->newRule(array('preg'=>'^admin/api/plugins$','page'=>'admin/api/plugins_list.php'));
+$core->plugins->newRule(array('preg'=>'^admin/api/plugins/edit/(.*)$','page'=>'admin/api/plugins_config.php','get'=>array('plugin'=>'$1')));
+
+$core->plugins->newRule(array('preg'=>'^admin/client/pages$','page'=>'admin/client/pages.php'));
+$core->plugins->newRule(array('preg'=>'^admin/client/settings$','page'=>'admin/client/settings.php'));
+$core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'admin/client/themes.php'));*/
+////========================REWRITE RULES ZONE========================////
+
+
 
 $uri = isset($_GET['uri'])?$_GET['uri']:null;
 $hr = $core->conf->conf->core->tpl->root_http;
@@ -62,11 +93,19 @@ elseif(preg_match("'^((style)/)'", $uri))
 	exit();
 }
 
-if(sizeof($core->plugins->list)!=0)
+/*if(sizeof($core->plugins->list)!=0)
 	foreach($core->plugins->list as $pl => $pages)
 	{
 		if(file_exists(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php'))
 		include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
+	}*/
+if(sizeof($core->plugins->list)!=0)
+	foreach($core->plugins->list as $pl => $inf)
+	{
+		$cl = '\CRAFTEngine\client\plugins\\'.$pl.'\\'.$inf['loadClass'];
+		$class = new $cl($core);
+		if(method_exists($class,'construct'))
+			$class->construct();
 	}
 
 header('Content-type: text/html; charset=utf-8;');
@@ -126,15 +165,8 @@ foreach($core->plugins->getRules() as $r)
 					$core->f->quit(404);
 				}
 
-				foreach($core->plugins->list[$from_plugin]['pages'] as $pag)
-				{
-					if($pag==$file)
-					{
-						include_once(dirname(__FILE__).'/system/plugins/'.$from_plugin.'/pages/'.$file);
-						exit();
-					}
-				}
-				$core->f->quit(404);
+				include_once(dirname(__FILE__).'/system/plugins/'.$from_plugin.'/pages/'.$file);
+				exit();
 			}
 			//Стандартные страницы
 			elseif(file_exists(dirname(__FILE__).'/system/pages/'.$file))

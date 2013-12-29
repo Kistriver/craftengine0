@@ -27,7 +27,7 @@ class api
 		}
 		//$post['sid'] = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		//$post['sid'] = $_SESSION['sid'];
-		$sid = session_id().'php';//!empty($_SESSION['sid'])?$_SESSION['sid']:'';
+		$sid = $_SESSION['sid'] = session_id().'php';//!empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		
 		$post = $this->core->f->json_encode_ru($post);
 		//$url = $this->url . '?v=' . $this->api_ver . '&status_code=200&method=' . $method . '&sid=' . $sid . '&post=' . $post_method;

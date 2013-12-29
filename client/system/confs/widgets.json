@@ -1,0 +1,14 @@
+{
+    "active": [
+        "monitoring",
+        "ads",
+        "vk_group",
+        "menu"
+    ],
+    "order": [
+        "menu",
+        "vk_group",
+        "monitoring",
+        "ads"
+    ]
+}

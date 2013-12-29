@@ -1,1 +1,9 @@
-["api/plugins_config.php","api/plugins_list.php","index.php","client/pages.php","client/settings.php","client/themes.php"]
+[
+    "api/plugins_config.php",
+    "api/plugins_list.php",
+    "index.php",
+    "client/pages.php",
+    "client/settings.php",
+    "client/themes.php",
+    "client/widgets.php"
+]

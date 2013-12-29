@@ -224,14 +224,8 @@ class plugin
 		{
 			if($f==$folder AND $c->name==$main->name)
 			{
-				if($this->core->functions->versionCompare($c->versionSrc,$main->versionSrc)>=0)
-				{
-					return array(false,3);
-				}
-				else
-				{
-					unset($this->pluginsLoaded[$f]);
-				}
+				echo($this->core->functions->json(array('error'=>"Two similar plugins found. Plugin: {$main->name}. Folder: $f. Abort.")));
+				exit;
 			}
 		}
 		
