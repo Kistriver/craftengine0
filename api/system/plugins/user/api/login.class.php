@@ -57,7 +57,7 @@ class login extends \CRAFTEngine\core\api
 							
 							//$time_end = time() + 60*60*24*7;
 							//setcookie('cache_sessid', sha1($user->cache), $time_end, '/', $_SERVER['SERVER_REQUIRE'], false/*true*/);
-							return $this->json(array(false));
+							return (array(false));
 						}
 						else
 						{
@@ -94,7 +94,7 @@ class login extends \CRAFTEngine\core\api
 		}
 		else
 		$this->core->error->error('server',403);
-		return $this->json(array(false));
+		return (array(false));
 	}
 	
 	//Деавторизация пользователя
@@ -109,7 +109,7 @@ class login extends \CRAFTEngine\core\api
 		
 		$returned = array();
 		
-		return $this->json($returned);
+		return ($returned);
 	}
 	
 	//Активация аккаунта с помощью email
@@ -156,24 +156,24 @@ class login extends \CRAFTEngine\core\api
 					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='$code'");
 					$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 					
-					return $this->json(array(true));
+					return (array(true));
 				}
 				//mail - 1, admin - 2
 				elseif($status==0 OR $status==1)
 				{
 					$this->core->mysql->query("UPDATE signup SET status='1' WHERE id='$id' AND login='$login'");
 					$this->core->mysql->query("DELETE FROM code WHERE type='signup' AND value='$code'");
-					return $this->json(array(true));
+					return (array(true));
 				}
 			}
 			else
 			{
-				return $this->json(array(false));
+				return (array(false));
 			}
 		}
 		else
 		{
-			return $this->json(array(false));
+			return (array(false));
 		}
 	}
 	
@@ -183,7 +183,7 @@ class login extends \CRAFTEngine\core\api
 		if($_SESSION['loggedin'])
 		{
 			$this->core->error->error('server',403);
-			return $this->json(array(false));
+			return (array(false));
 		}
 
 
@@ -202,7 +202,7 @@ class login extends \CRAFTEngine\core\api
 			if(!$cap)
 			{
 				$this->core->error->error('plugin_captcha_captcha',0);
-				return $this->json(array(false));
+				return (array(false));
 			}
 
 			$u = $this->core->plugin->initPl('user','user');
@@ -210,13 +210,13 @@ class login extends \CRAFTEngine\core\api
 			if(!$get)
 			{
 				$this->core->error->error('plugin_user_user',0);
-				return $this->json(array(false));
+				return (array(false));
 			}
 
 			$code = $u->generate_code('restore_pass',array('login'=>$u->login,'email'=>$u->email));
 			$this->core->mail->addWaitingList($u->email, '003', array('code'=>$code,'login'=>$u->login,'email'=>$u->email));
 
-			return $this->json(array(true));
+			return (array(true));
 		}
 		elseif($step==2)
 		{
@@ -236,11 +236,11 @@ class login extends \CRAFTEngine\core\api
 				$pass = $u->change_user($u->id, '' , 'password_gen_new');
 				$this->core->mysql->query("DELETE FROM code WHERE type='restore_pass' AND value='$code'");
 
-				return $this->json(array(true,$pass));
+				return (array(true,$pass));
 			}
 			else
 			{
-				return $this->json(array(false));
+				return (array(false));
 			}
 		}
 	}

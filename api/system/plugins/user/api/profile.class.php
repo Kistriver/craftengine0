@@ -14,7 +14,7 @@ class profile extends \CRAFTEngine\core\api
 		if(!$_SESSION['loggedin'])
 		{
 			$this->core->error->error('server',403);
-			return $this->json(array(false));
+			return (array(false));
 		}
 
 
@@ -37,11 +37,11 @@ class profile extends \CRAFTEngine\core\api
 
 				if($s!==true)
 				{
-					$this->json(array(false));
+					return (array(false));
 				}
 				else
 				{
-					$this->json(array(true));
+					return (array(true));
 				}
 				break;
 
@@ -57,32 +57,40 @@ class profile extends \CRAFTEngine\core\api
 
 				if($s!==true)
 				{
-					$this->json(array(false));
+					return (array(false));
 				}
 				else
 				{
-					$this->json(array(true));
+					return (array(true));
 				}
 				break;
 			
 			case 'icon':
 				/*$name = time();
 				if(file_put_contents(dirname(__FILE__).'/../../../../files/'.$name,$value))
-				return $this->json(array($name));
+				return (array($name));
 				else*/
-				
+
+				$this->input('format');
+
 				$time = time();
 				$hash = sha1(microtime(true));
 				$ip = $_SERVER['REMOTE_ADDR'];
-				$type = 1;
+				$type = 'user_user_avatar';
+				$user = $_SESSION['id'];
+				$format = $this->data['format'];
+				$params = $this->core->sanString($this->core->functions->json(array(
+					'name'=>'users/avatars/id'.$user,
+					'formats'=>array('png','jpg','jpeg','bmp'),
+				)),'mysql');
 				
-				if(!$this->core->mysql->query("INSERT INTO upload_sid(hash,time,ip,type) 
-														VALUES('$hash','$time','$ip','$type')"))
-				$this->json(array(false));
-				
-				$this->json(array("http://".$this->core->conf->system->core->system_scripts[0].":".
+				if(!$this->core->mysql->query("INSERT INTO uploads(hash,time,ip,type,params)
+														VALUES('$hash','$time','$ip','$type','$params')"))
+				return (array(false));
+
+				return (array("http://".$this->core->conf->system->core->system_scripts[0].":".
 				$this->core->conf->system->core->system_scripts[1].$this->core->conf->system->core->system_scripts[2].
-				"system-scripts/"."upload.php?hash=$hash&time=$time"));
+				"system-scripts/"."upload.php?hash=$hash&time=$time&format=$format&type=$type&sid=".session_id()));
 				break;
 		}
 	}

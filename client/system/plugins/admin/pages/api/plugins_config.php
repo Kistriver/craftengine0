@@ -11,7 +11,7 @@ if(sizeof($_POST)!=0)
 	{
 		$config = $_POST['config'];
 
-		$ans = $core->api->get('system.setEditConfs',array('plugin'=>$_GET['plugin'],'config'=>$config));
+		$ans = $core->api->get('system/system/setEditConfs',array('plugin'=>$_GET['plugin'],'config'=>$config));
 		//TODO: FIX IT
 		if(sizeof($ans['data'])==0)$core->error->error('Конфигурация не изменена');
 		//elseif(sizeof($ans['data'])==1 || $ans['data'][0]===false)$core->error->error('Конфигурация не изменена');
@@ -19,7 +19,7 @@ if(sizeof($_POST)!=0)
 	}
 }
 
-$conf = $core->api->get('system.getEditConfs',array('plugin'=>$_GET['plugin']));
+$conf = $core->api->get('system/system/getEditConfs',array('plugin'=>$_GET['plugin']));
 
 if(sizeof($conf['data'])==0 || (isset($conf['data'][0]) && $conf['data'][0]===false))$core->f->quit(404);
 

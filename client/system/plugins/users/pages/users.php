@@ -11,9 +11,9 @@ if(isset($_GET['act']))
 		//$core->render['type'] = 'user';
 		
 		if(!empty($_GET['id']))
-		$core->api->get('user.get',array('type'=>'id','value'=>$_GET['id']));
+		$core->api->get('user/user/get',array('type'=>'id','value'=>$_GET['id']));
 		elseif(!empty($_GET['login']))
-		$core->api->get('user.get',array('type'=>'login','value'=>$_GET['login']));
+		$core->api->get('user/user/get',array('type'=>'login','value'=>$_GET['login']));
 		else
 		$core->f->quit(404);
 		
@@ -34,6 +34,7 @@ if(isset($_GET['act']))
 		$data['data']['appointment'] = appointment($data['data']['rank_main'])?appointment($data['data']['rank_main']):'Undefined';
 		
 		$core->render['user'] = $data['data'];
+		$core->render['icon_src'] = $core->conf->conf->core->api->files.'users/avatars/id'.$data['data']['id'].'.'.$data['data']['avatar_format'];
 	}
 	elseif($act=='all' or $act=='confirm')
 	{
@@ -44,11 +45,11 @@ if(isset($_GET['act']))
 			elseif($_POST['vote']=='minus')$con = 'false';
 			elseif($_POST['vote']=='mail')$con = 'mail';
 			else return;
-			$core->api->get('user.confirm',array('login'=>$_POST['user'],'confirm'=>$con));
+			$core->api->get('user/user/confirm',array('login'=>$_POST['user'],'confirm'=>$con));
 		}
 		
 		$type = ($act=='all')?'':'signup';
-		$core->api->get('user.list',array('page'=>$_GET['page'],'type'=>$type));
+		$core->api->get('user/user/list',array('page'=>$_GET['page'],'type'=>$type));
 		$data = $core->api->answer_decode;
 		
 		if(isset($data['data'][0]))

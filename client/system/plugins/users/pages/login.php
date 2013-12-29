@@ -9,7 +9,7 @@ if(!empty($_GET['act']))
 	{
 		if($_SESSION['loggedin'])
 		{
-		$core->api->get('login.logout',array('sid'=>$_SESSION['sid']));
+		$core->api->get('user/login/logout',array('sid'=>$_SESSION['sid']));
 		setcookie("authed", "", 0,'/');
 		//session_destroy();
 		header('Location: index');
@@ -27,7 +27,7 @@ if(!empty($_GET['act']))
 		{
 			if(!empty($_GET['code']))
 			{
-				$core->api->get('login.restore',array(
+				$core->api->get('user/login/restore',array(
 					'step'=>'2',
 					'code'=>$_GET['code'],
 				));
@@ -63,7 +63,7 @@ if(!empty($_GET['act']))
 			
 			if($err==0)
 			{
-				$core->api->get('login.restore',array(
+				$core->api->get('user/login/restore',array(
 				'step'=>'1',
 				'captcha'=>$_POST['captcha'],
 				'email'=>$_POST['email'],
@@ -81,7 +81,7 @@ if(!empty($_GET['act']))
 			}
 		}
 		
-		$core->api->get('captcha.set',array('type'=>'user_pass_restore'));
+		$core->api->get('captcha/captcha/set',array('type'=>'user_pass_restore'));
 		$core->render['cap_src'] = $core->conf->conf->core->api->url."system-scripts/captcha.php?type=user_pass_restore&sid=".$_SESSION['sid'];
 		
 		$core->f->show('login/restore','users');
@@ -92,7 +92,7 @@ if(!empty($_GET['act']))
 		if(!empty($_GET['code']) OR !empty($_POST['code']))
 		{
 			$code = !empty($_POST['code'])?$_POST['code']:$_GET['code'];
-			$core->api->get('login.activate',array('code'=>$code));
+			$core->api->get('user/login/activate',array('code'=>$code));
 			if($core->api->answer_decode['data'][0]===true)
 			{
 				$core->render['MAIN']['SUCCESS'][] = 'Код активации принят';
@@ -110,12 +110,12 @@ else
 	
 	if(!empty($_POST['email']) and !empty($_POST['password']))
 	{
-		$core->api->get('login.login',array('email'=>$_POST['email'], 'password'=>$_POST['password'],'sid'=>$_SESSION['sid']));
+		$core->api->get('user/login/login',array('email'=>$_POST['email'], 'password'=>$_POST['password'],'sid'=>$_SESSION['sid']));
 		$data = $core->api->answer_decode;
 		
 		if(sizeof($data['errors'])==0)
 		{
-			$core->api->get('user.loggedin',array('sid'=>$_SESSION['sid']));
+			$core->api->get('user/user/loggedin',array('sid'=>$_SESSION['sid']));
 			$loggedin = $core->api->answer_decode;
 			setcookie("authed", $loggedin['data']['id'].':'.$loggedin['data']['auth'], time()+36000,'/');
 			header('Location: users/'.$loggedin['data']['login']);

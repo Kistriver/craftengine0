@@ -19,6 +19,7 @@ class user
 			$time_fail,					//Время последнего провала при входе
 			$time_logout,				//Время последнего выхода
 			$totaltime,					//Всего времени онлайн
+			$avatar_format,
 			$pass,						//Пароль от сайта
 			$carma = Array('plus'=>0,'minus'=>0),//Карма пользователя [-][+]
 			//$carma_from = Array(),		//Карма другим пользователям [-][+]
@@ -112,6 +113,7 @@ class user
 		$this->email = $result['email'];
 		$this->time_reg = $result['time_reg'];
 		$this->time_login = $result2['time'];
+		$this->avatar_format = $result['avatar_format'];
 		//$this->time_fail = $result['time_fail'];
 		//$this->time_logout = $result['time_logout'];
 		$this->totaltime = $result['totaltime'];
@@ -142,7 +144,8 @@ class user
 		$_SESSION['login'] = $this->login;
 		$_SESSION['rank'] = $this->rank;
 		$_SESSION['rank_main'] = $this->rank_main;
-		
+		$_SESSION['avatar_format'] = $this->avatar_format;
+
 		$time = time();
 		$_SESSION['auth_time'] = $time;
 		$_SESSION['auth'] = sha1($time.$this->pass.md5($this->salt));

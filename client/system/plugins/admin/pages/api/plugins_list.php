@@ -3,15 +3,15 @@ namespace CRAFTEngine\client\plugins\admin;
 if(!defined('CE_HUB'))die('403');
 require_once(dirname(__FILE__) . '/../../system/includeAdmin.php');
 
-$core->api->get('system.pluginList');
+$core->api->get('system/system/pluginList');
 $data = $core->api->answer_decode;
 
 if(!empty($_POST['state']) AND !empty($_POST['name']))
 {
 	$state = $_POST['state']=='ON'?'On':'Off';
-	$core->api->get('system.plugin'.$state,array('name'=>$_POST['name'],'sid'=>$_SESSION['sid']));
+	$core->api->get('system/system/plugin'.$state,array('name'=>$_POST['name'],'sid'=>$_SESSION['sid']));
 
-	$core->api->get('system.pluginList',array('sid'=>$_SESSION['sid']));
+	$core->api->get('system/system/pluginList',array('sid'=>$_SESSION['sid']));
 }
 
 $data = $core->api->answer_decode;

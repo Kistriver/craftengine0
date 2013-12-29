@@ -13,11 +13,13 @@ $_GET['type'] = $type;
 
 if($type=='main')
 {
+	$core->render['icon_src'] = $core->conf->conf->core->api->files.'users/avatars/id'.$_SESSION['id'].'.'.$_SESSION['avatar_format'];
+
 	if(!empty($_POST['nickname']))
 	{
 		$nick = $_POST['nickname'];
 
-		$core->api->get('profile.change',array('type'=>'nickname','value'=>$nick));
+		$core->api->get('user/profile/change',array('type'=>'nickname','value'=>$nick));
 		$ans = $core->api->answer_decode['data'][0];
 		if($ans===true)
 		{
@@ -28,13 +30,16 @@ if($type=='main')
 	if(!empty($_FILES['icon']['size']))
 	{
 		$file = file_get_contents($_FILES['icon']['tmp_name']);
+
+		$name_orig = explode('.',$_FILES['icon']['name']);
+		$format = strtolower(array_pop($name_orig));
 		
-		$core->api->get('profile.change',array('type'=>'icon','value'=>'icon'));
+		$core->api->get('user/profile/change',array('type'=>'icon','value'=>'icon','format'=>$format));
 		if(!empty($core->api->answer_decode['data'][0]))
 		$ans = $core->api->answer_decode['data'][0];
 		else
 		$ans = false;
-		
+
 		if($ans!=false)
 		{
 			$params = array('http' => array(
@@ -49,8 +54,11 @@ if($type=='main')
 				$response = @stream_get_contents($remote);
 			}
 			$a = json_decode($response,true);
-			$core->render['icon_src'] = $core->conf->conf->core->api->files.$a[1];
-			$core->render['MAIN']['SUCCESS'][] = 'Аватарка обновлена';
+			$core->f->msg('success','Аватарка обновлена');
+		}
+		else
+		{
+			$core->f->msg('error','Аватарка не обновлена');
 		}
 	}
 }
@@ -71,7 +79,7 @@ elseif($type=='security')
 			$pass = $_POST['password'];
 			$pass_old = $_POST['password_old'];
 
-			$core->api->get('profile.change',array('type'=>'pass','value'=>$pass, 'value_old'=>$pass_old));
+			$core->api->get('user/profile/change',array('type'=>'pass','value'=>$pass, 'value_old'=>$pass_old));
 			$ans = $core->api->answer_decode['data'][0];
 			if($ans===true)
 			{

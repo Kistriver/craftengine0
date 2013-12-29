@@ -6,7 +6,7 @@ class api
 	public $url='http://localhost/api/';
 	public $answer;
 	public $answer_decode;
-	public $api_ver = 4;
+	public $api_ver = 5;
 	
 	public function __construct($core)
 	{
@@ -16,7 +16,7 @@ class api
 	public function get($method, $data=array(), $post_method="GET")
 	{
 		static $repeat_req = 0;
-		
+
 		$keys = array_keys($data);
 		$_data = $data;
 		$post = array();
@@ -27,11 +27,12 @@ class api
 		}
 		//$post['sid'] = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		//$post['sid'] = $_SESSION['sid'];
-		$sid = !empty($_SESSION['sid'])?$_SESSION['sid']:'';
+		$sid = session_id().'php';//!empty($_SESSION['sid'])?$_SESSION['sid']:'';
 		
 		$post = $this->core->f->json_encode_ru($post);
-		$url = $this->url . '?v=' . $this->api_ver . '&status_code=200&method=' . $method . '&sid=' . $sid . '&post=' . $post_method;
-		
+		//$url = $this->url . '?v=' . $this->api_ver . '&status_code=200&method=' . $method . '&sid=' . $sid . '&post=' . $post_method;
+		$url = "{$this->url}v$this->api_ver/$method/$sid/?status_code=200&post=$post_method";
+
 		$data = http_build_query
 		(
 			array
@@ -58,12 +59,16 @@ class api
 		
 		if(!$this->answer)
 		{
-			$this->core->f->quit(500,'<br />Service unavaliable('. $method .')<br />url: '.$url.'<br />data: '.$post);
+			$this->core->f->msg(/*500*/'error','<pre>Service unavaliable('. $method .')<br />url: '.$url.'<br />data: '.$post.'</pre>');
+			header('HTTP/1.0 500');
+			return false;
 		}
 		$this->answer_decode = json_decode($this->answer, true);
 		if(!$this->answer_decode)
 		{
-			$this->core->f->quit(500,'<pre>Unavaliable data format('. $method .")\r\n".$this->answer.'</pre>');
+			$this->core->f->msg(/*500*/'error','<pre>Unavaliable data format('. $method .")\r\n".$this->answer.'</pre>');
+			header('HTTP/1.0 500');
+			return false;
 		}
 		
 		if(!empty($this->answer_decode['error']))
@@ -119,8 +124,8 @@ class api
 						<div style="float:right;">'.$prec.'%</div>';
 				}
 
-				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms <br />('."<br />". implode("<br />", $times) .'<br />)'
-					.'<br />Request:<pre style="max-height: 300px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 300px;overflow: scroll;">'."\r\n".$this->answer.'</pre>');
+				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms: <br />'."<div style=\"max-height: 200px;overflow: scroll;\">". implode("<br />", $times) .'</div>'
+					.'<br />Request:<pre style="max-height: 200px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 200px;overflow: scroll;">'."\r\n".$this->answer.'</pre>');
 			}
 		}
 		

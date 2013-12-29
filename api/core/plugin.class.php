@@ -102,7 +102,9 @@ class plugin
 		if(!isset($main->api))$main->api = array();
 		if(!isset($main->requires))$main->requires = array();
 		if(!isset($main->since))$main->since = '0.0.1a0_alpha';
+		if(!isset($main->folder))$folder;
 
+		$main->versionSrc = $main->version;
 		$main->version = $this->core->functions->versionParse($main->version);
 		if($main->version===false)
 		{
@@ -222,7 +224,14 @@ class plugin
 		{
 			if($f==$folder AND $c->name==$main->name)
 			{
-				return array(false,3);
+				if($this->core->functions->versionCompare($c->versionSrc,$main->versionSrc)>=0)
+				{
+					return array(false,3);
+				}
+				else
+				{
+					unset($this->pluginsLoaded[$f]);
+				}
 			}
 		}
 		
@@ -280,6 +289,8 @@ class plugin
 		
 		if(!empty($main->loadClass))
 		$this->initPl($main->name,$main->loadClass);
+
+		$this->pluginsLoaded[$folder] = $main;
 		
 		return array(true);
 	}
@@ -608,8 +619,6 @@ class plugin
 			$c = $this->core->conf->loadConf('plugin',array('folder'=>$folder,'write'=>false,'name'=>$plugin,'conf'=>$file));
 			$f = $this->setEditConfsMask((array)$c,(array)$main->{$file},(array)$edit);
 
-			//return $f;
-
 			if($f==false)return false;
 
 			$file_addr = 'plugins/'.$folder.'/confs/'.$file;
@@ -621,7 +630,7 @@ class plugin
 	}
 
 	private function setEditConfsMask($main,$mask,$edit)
-	{//print_r($main);print_r($mask);print_r($edit);die;
+	{
 		foreach($main as $key=>&$val)
 		{
 			if(!isset($mask[$key]))continue;
@@ -650,18 +659,6 @@ class plugin
 	 */
 	public function makeEvent($id,$plugin,$addInfo)
 	{
-		/*$ex = false;
-		foreach($this->pluginsIncluded as $f=>$c)
-		{
-			if($c->name==$plugin)
-			{
-				$ex = true;
-				break;
-			}
-		}
-
-		if(!$ex)return array(false,0);*/
-
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
 			$pl = $this->initPl($c->name,$c->loadClass);

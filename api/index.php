@@ -1,5 +1,5 @@
 <?php
-namespace CRAFTEngine;
+/*namespace CRAFTEngine;
 if(isset($_GET['method']))
 {
 	$start = microtime(true);
@@ -9,7 +9,7 @@ if(isset($_GET['method']))
 	$m_f = $_GET['method'];
 	$post = empty($_GET['post'])?$_SERVER['REQUEST_METHOD']:$_GET['post'];
 	$code = empty($_GET['status_code'])?null:$_GET['status_code'];
-	if(!preg_match('/^[a-z_-]{1,25}\.[a-zA-Z0-9_-]{1,25}$/',$m_f))
+	if(!preg_match('/^([a-zA-Z0-9-]*)\.([a-z_-]{1,25})\.(.*?)$/',$m_f))
 	{
 		$j = array('error'=>'Method error: doesn\'t exists');
 		echo json_encode($j);
@@ -24,7 +24,7 @@ if(isset($_GET['method']))
 		'root'=>dirname(__FILE__).'/system/',
 	);
 
-	$core_confs['api'] = array('module'=>$m_f[0],'method'=>$m_f[1],'type'=>$post,'code'=>$code);
+	$core_confs['api'] = array('plugin'=>$m_f[0],'module'=>$m_f[1],'method'=>$m_f[2],'type'=>$post,'code'=>$code);
 	$core_confs['start_time'] = $start;
 
 	$core = new core\core($core_confs);
@@ -33,11 +33,10 @@ if(isset($_GET['method']))
 else
 {
 	//header('Content-type: text/html; charset=utf-8');
-	?><!DOCTYPE html>
+	*/?><!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="shortcut icon" href="http://kcraft.su/php/tpl/pc/img/main/favicon.ico">
 <meta name="robots" content="noindex,nofollow">
 <meta http-equiv="refresh" content="30; url=http://api.kcraft.su/help.php">
 <title>CRAFTEngine API</title>
@@ -80,10 +79,10 @@ z-index: -1;
 ">
 <div>
 <h1>API</h1>
-<p>Чтобы воспользоваться <b>CRAFTEngine API</b> нужно прочитать <a href="http://api.kcraft.su/help.php">документацию</a>.<br />
+<p>Чтобы воспользоваться <b>CRAFTEngine APIv5</b> нужно прочитать <a href="http://api.kcraft.su/help.php">документацию</a>.<br />
 	Вы будете автоматически перенаправлены через <span id="time">30</span> секунд.</p>
 </div>
 </body>
 </html><?php
-}
+//}
 ?>

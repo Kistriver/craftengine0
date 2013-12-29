@@ -36,7 +36,7 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	
 	if($err==0)
 	{
-	$core->api->get('signup.signup',array(
+	$core->api->get('user/signup/signup',array(
 	'captcha'=>$_POST['captcha'],
 	'name'=>$_POST['name'],
 	'surname'=>$_POST['surname'],
@@ -64,7 +64,7 @@ if(isset($_POST['login']) and isset($_POST['pass']))
 	$core->render['_GET'] = $_GET;
 }
 
-$core->api->get('captcha.set',array('type'=>'user_signup'));
+$core->api->get('captcha/captcha/set',array('type'=>'user_signup'));
 $core->render['cap_src'] = $core->conf->conf->core->api->url."system-scripts/captcha.php?type=user_signup&sid=".$_SESSION['sid'];
 
 $core->f->show('signup/main','users');

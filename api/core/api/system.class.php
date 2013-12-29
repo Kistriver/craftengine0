@@ -28,41 +28,41 @@ class system extends \CRAFTEngine\core\api
 
 	protected function getEditConfs()
 	{
-		if(!$this->admin())return $this->json(array(false));
+		if(!$this->admin())return (array(false));
 		$this->input('plugin');
 		$plugin = $this->core->sanString($this->data['plugin']);
 		$c = $this->core->plugin->getEditConfs($plugin);
 
-		if($c===false)return $this->json(array(false));
+		if($c===false)return (array(false));
 
-		return $this->json($c);
+		return ($c);
 	}
 
 	protected function setEditConfs()
 	{
-		if(!$this->admin())return $this->json(array(false));
+		if(!$this->admin())return (array(false));
 		$this->input('plugin','config');
 
 		$plugin = $this->data['plugin'];
 		$config = $this->data['config'];
 		foreach($config as $f=>$v)
-		if(preg_match("'\.\.'is",$f))return $this->json(array(false));
+		if(preg_match("'\.\.'is",$f))return (array(false));
 
 		$c = $this->core->plugin->setEditConfs($plugin,$config);
 
-		if($c===false)return $this->json(array(false));
+		if($c===false)return (array(false));
 
 		//return $this->wip();
-		return $this->json(array(true));
-		return $this->json($c);
+		return (array(true));
+		return ($c);
 	}
 
 	protected function list_of_plugins()
 	{
-		if(!$this->admin())return $this->json(array(false));
+		if(!$this->admin())return (array(false));
 
 		//AND IF YOU HAVE PERMISSIONS
-		return $this->json(array(
+		return (array(
 			'all'=>$this->core->plugin->pluginsExist,
 			'included'=>$this->core->plugin->pluginsIncluded,
 			'loaded'=>$this->core->plugin->pluginsLoaded,
@@ -71,24 +71,24 @@ class system extends \CRAFTEngine\core\api
 
 	protected function on_plugin()
 	{
-		if(!$this->admin())return $this->json(array(false));
+		if(!$this->admin())return (array(false));
 		$this->input('name');
 
 		$plugin = $this->core->sanString($this->data['name']);
 
 		$this->core->plugin->on($plugin);
 
-		return $this->json(array(true));
+		return (array(true));
 	}
 
 	protected function off_plugin()
 	{
-		if(!$this->admin())return $this->json(array(false));
+		if(!$this->admin())return (array(false));
 
 		$plugin = $this->core->sanString($this->data['name']);
 
 		$this->core->plugin->off($plugin);
 
-		return $this->json(array(true));
+		return (array(true));
 	}
 }

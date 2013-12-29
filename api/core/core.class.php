@@ -19,7 +19,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.2.5a2_alpha';
+	const CORE_VER = '0.2.5a3_alpha';
 
 	public $core_confs;
 	public $api;
@@ -165,7 +165,7 @@ class core
 		if(isset($this->core_confs['api']['module'],$this->core_confs['api']['method']))
 		{
 			require_once(dirname(__FILE__)."/api.class.php");
-			$this->api = new api($this,$this->core_confs['api']['module'],$this->core_confs['api']['method']);
+			$this->api = new api(array('core'=>$this,'plugin'=>$this->core_confs['api']['plugin'],'module'=>$this->core_confs['api']['module'],'method'=>$this->core_confs['api']['method']));
 		}
 	}
 

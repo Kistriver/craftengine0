@@ -25,11 +25,11 @@ class article extends \CRAFTEngine\core\api
 		$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 		$r = $rank->init($_SESSION['id'], 'article_show_unpublished');
 		
-		if(!$r and $type=='unpublished'){$this->core->error->error('server',403);return $this->json(array(false));}
+		if(!$r and $type=='unpublished'){$this->core->error->error('server',403);return (array(false));}
 		$access = 0;
 		if($r)$access++;
 		if($type=='unpublished')$access++;
-		
+
 		if($access==2)
 		$num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM articles_new WHERE time<='$time' and status='1'"));
 		else
@@ -42,38 +42,38 @@ class article extends \CRAFTEngine\core\api
 		$cl=0;
 		if($page>$pages){$cl=1;$this->core->error->error('server',404);}
 		if($page<1){$cl=1;$this->core->error->error('server',404);}
-		if($cl==1)return $this->json(array(false));
-		
+		if($cl==1)return (array(false));
+
 		$from_post = ($page - 1)*$limit;
 		if($access==2)
 		$result = $this->core->mysql->query("SELECT * FROM articles_new WHERE time<='$time' and status='1' ORDER BY time DESC LIMIT $from_post,$limit");
 		else
 		$result = $this->core->mysql->query("SELECT * FROM articles WHERE time<='$time' and status='1' ORDER BY time DESC LIMIT $from_post,$limit");
 		$rows = $this->core->mysql->rows($result);
-		
+
 		$posts = array();
 		for($i=0; $i<$rows; ++$i)
 		{
 			$results = $this->core->mysql->fetch($result);
-			
+
 			//$num_msg = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(id) FROM wall_art WHERE id='$results[id]' and status='0'"));
 			//$results['num_msg'] = $num_msg[0];
-			
+
 			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
 			$results['user'] = $user->login;
-			
-			
+
+
 			$results['edited'] = $rank->init($_SESSION['id'], 'article_edit')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'article_delete')? 1:0;
 			if($access==2)$results['times'] = 0;
-			
+
 			if($access==2)
 			$status = $this->art_status($results['status'],'unpublished');
 			else
 			$status = $this->art_status($results['status']);
-			
+
 			$posts[] = array(
 						'author_id'		=>	$results['userid'],
 						'author_login'	=>	$results['user'],
@@ -88,13 +88,13 @@ class article extends \CRAFTEngine\core\api
 						'tags'			=>	explode(',',$results['tags']),
 			);
 		}
-        
+
 		if(sizeof($posts)==0)$pages = 0;
 		$returned = array('posts'=> $posts, 'pages'=>$pages);
-		
-		return $this->json($returned);
+
+		return ($returned);
 	}
-	
+
 	//Получение одной статьи, установка просмотра++
 	protected function post()
 	{
@@ -105,7 +105,7 @@ class article extends \CRAFTEngine\core\api
 		if($this->core->mysql->rows($res))
 		{
 			$results = $this->core->mysql->fetch($res);
-			
+
 			$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 			$user->get_user($results['user']);
 			$results['userid'] = $results['user'];
@@ -119,13 +119,13 @@ class article extends \CRAFTEngine\core\api
 					$_SESSION['tmp']['art'][$id]['times'] = time();
 					$results['times']++;
 			}
-			
+
 			$status = $this->art_status($results['status']);
-			
+
 			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
 			$results['edited'] = $rank->init($_SESSION['id'], 'edit_art')? 1:0;
 			$results['deleted'] = $rank->init($_SESSION['id'], 'delete_art')? 1:0;
-			
+
 			if($status=='publish')
 			$post = array(
 									'author_id'		=>	$results['userid'],
@@ -150,12 +150,12 @@ class article extends \CRAFTEngine\core\api
 		else
 		{
 			$this->core->error->error('server',404);
-			return $this->json(array(false));
+			return (array(false));
 		}
-		
-		return $this->json($post);
+
+		return ($post);
 	}
-	
+
 	//Добавление новой статьи во временную таблицу
 	protected function new_post()
 	{
@@ -183,32 +183,32 @@ class article extends \CRAFTEngine\core\api
 						else
 						{
 							$this->core->error->error('plugin_article_article',0);
-							return $this->json(array(false));
+							return (array(false));
 						}
 					}
-					
+
 					if(mb_strlen($title, 'UTF-8')<=64 OR mb_strlen($body, 'UTF-8')<=5000)
 					{
 						$tags = explode(',', $tags);
 						//$tags = explode(';', $tags);
 						for($i=0;$i<sizeof($tags);$i++)$tags[$i] = trim($tags[$i]);
 						$tags = implode(',', $tags);
-						
+
 						$this->core->mysql->query("INSERT INTO articles_new(user, title, article, time, tags, status) VALUES('$user', '$title', '$body', '$time', '$tags', '1')");
-						
+
 						$r = $this->core->mysql->query("SELECT * FROM articles_new WHERE user='$user' and title='$title' and time='$time'");
 						if($this->core->mysql->rows($r)!=1)
 						{
 							$this->core->error->error('plugin_article_article',1);
-							return $this->json(array(false));
+							return (array(false));
 						}
 						$r = $this->core->mysql->fetch($r);
-						
+
 						$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];
 						$r['user'] = $user->login;
-						
+
 						//$r = $this->core->mysql->fetch($r);
 						$post = array(
 									'author_login'	=>	$r['user'],
@@ -219,7 +219,7 @@ class article extends \CRAFTEngine\core\api
 									'article'		=>	$r['article'],
 									'tags'			=>	explode(',',$r['tags']),
 						);
-						return $this->json($post);
+						return ($post);
 					}
 					else
 					{
@@ -240,9 +240,9 @@ class article extends \CRAFTEngine\core\api
 		{
 			$this->core->error->error('server',403);
 		}
-		return $this->json(array(false));
+		return (array(false));
 	}
-	
+
 	//Подтверждение или удаление статьи во временной таблице
 	protected function confirm_new_post()
 	{
@@ -256,7 +256,7 @@ class article extends \CRAFTEngine\core\api
 				$art_id = $this->core->SanString($this->data['id']);
 				$confirm = $this->core->SanString($this->data['confirm']);
 				$time = time();
-				
+
 				$res = $this->core->mysql->query("SELECT * FROM articles_new WHERE id='$art_id'");
 				if($this->core->mysql->rows($res)==1)
 				{
@@ -266,24 +266,24 @@ class article extends \CRAFTEngine\core\api
 						if($confirm)
 						{
 							$type = 1;//Adding into main article table
-							
+
 							foreach($art as &$i)
 							$i = $this->core->SanString($i, 'mysql');
-							
+
 							$this->core->mysql->query("INSERT INTO articles(user, title, article, time, tags, times, status) VALUES('$art[user]', '$art[title]', '$art[article]', '$art[time]', '$art[tags]', '0', '1')");
 							$this->core->mysql->query("UPDATE articles_new SET status='2' WHERE id='$art_id'");
 							$this->core->mysql->query("SELECT * FROM articles WHERE time='$art[time]' and user='$art[user]' and title='$art[title]'");
 							$art_new = $this->core->mysql->fetch();
 							$this->core->mysql->query("INSERT INTO articles_history(editor, time, type, article) VALUES('$userid', '$time', '$type', '$art_new[id]')");
-							return $this->json(array('status'=>'added','id'=>$art_new['id']));
+							return (array('status'=>'added','id'=>$art_new['id']));
 						}
 						else
 						{
 							$type = 2;//Delete article
-							
+
 							$this->core->mysql->query("UPDATE articles_new SET status='0' WHERE id='$art_id'");
 							$this->core->mysql->query("INSERT INTO articles_history(editor, time, type, article) VALUES('$userid', '$time', '$type', '$art_id')");
-							return $this->json(array('status'=>'deleted'));
+							return (array('status'=>'deleted'));
 						}
 					}
 					else
@@ -305,16 +305,16 @@ class article extends \CRAFTEngine\core\api
 		{
 			$this->core->error->error('server',403);
 		}
-		return $this->json();
+		return array();
 	}
-	
+
 	//Редактирование статьи в основной таблице
 	protected function edit_post()
 	{
 		if($_SESSION['loggedin'])
 		{
 			$rank = $this->core->plugin->initPl('user','rank');//new rank($this->core);
-			
+
 			$user = $_SESSION['id'];
 			$post_id = (int)$this->core->SanString($this->data['id']);
 			$art_own = $this->core->mysql->fetch($this->core->mysql->query("SELECT * FROM articles WHERE id='$post_id'"));
@@ -340,39 +340,39 @@ class article extends \CRAFTEngine\core\api
 							return;
 						}
 					}
-					
+
 					if(mb_strlen($title, 'UTF-8')<=64 OR mb_strlen($body, 'UTF-8')<=5000)
 					{
 						$art_is = $this->core->mysql->query("SELECT * FROM articles WHERE id='$post_id'");
 						if($this->core->mysql->rows($art_is)!=1)
 						{
 							$this->core->error->error('server',403);
-							return $this->json();
+							return array();
 						}
-						
+
 						$this->core->mysql->query("UPDATE articles SET title='$title', article='$body', time='$time', tags='$tags' WHERE id='$post_id'");
-						
+
 						$r = $this->core->mysql->query("SELECT * FROM articles WHERE user='$user' and title='$title' and time='$time'");
 						if($this->core->mysql->rows($r)!=1)
 						{
 							$this->core->error->error('plugin_article_article',1);
-							return $this->json();
+							return array();
 						}
-						
+
 						$type = 3;
 						$art_is = $this->core->mysql->fetch($art_is);
 						$art = $this->core->json_encode_ru(array('title'=>$art_is['title'],'art'=>$art_is['article'],'time'=>$art_is['time'],'tags'=>$art_is['tags']));
 						$art = $this->core->SanString($art, 'mysql');
-						
+
 						$time_now = time();
 						$this->core->mysql->query("INSERT INTO articles_history(editor, data, time, type, article) VALUES('$user', '$art', '$time_now', '$type', '$post_id')");
-						
+
 						$r = $this->core->mysql->fetch($r);
 						$user = $this->core->plugin->initPl('user','user');//new user($this->core);
 						$user->get_user($r['user']);
 						$r['userid'] = $r['user'];
 						$r['user'] = $user->login;
-						
+
 						//$r = $this->core->mysql->fetch($r);
 						$post = array(
 									'author_login'	=>	$r['user'],
@@ -383,7 +383,7 @@ class article extends \CRAFTEngine\core\api
 									'article'		=>	$r['article'],
 									'tags'			=>	explode(',',$r['tags']),
 						);
-						return $this->json($post);
+						return ($post);
 					}
 					else
 					{
@@ -404,11 +404,11 @@ class article extends \CRAFTEngine\core\api
 		{
 			$this->core->error->error('server',403);
 		}
-		
+
 		$post = array(false);
-		return $this->json($post);
+		return ($post);
 	}
-	
+
 	//Изменение статуса статьи в основной таблице
 	protected function status()
 	{
@@ -417,9 +417,9 @@ class article extends \CRAFTEngine\core\api
 			$rank = $this->core->plugin->initPl('user','rank');//new rank();
 			$target = (int)sanString($this->data['target']);
 			$type = sanString($this->data['type']);
-			
+
 			$r = mysql_num_rows(queryMysql("SELECT id FROM articles WHERE id='$target'"));
-			
+
 			if($r==1)
 			{
 				switch($type)
@@ -434,7 +434,7 @@ class article extends \CRAFTEngine\core\api
 						$this->error('server',403);
 					}
 					break;
-					
+
 					case 'publish':
 					if($rank->init($_SESSION['id'], 'publish_art'))
 					{
@@ -445,7 +445,7 @@ class article extends \CRAFTEngine\core\api
 						$this->error('server',403);
 					}
 					break;
-					
+
 					case 'delete':
 					if($rank->init($_SESSION['id'], 'delete_art'))
 					{
@@ -463,10 +463,10 @@ class article extends \CRAFTEngine\core\api
 		{
 			$this->error('server',403);
 		}
-		
+
 		$status = array(
 		);
-		return $this->json($status);
+		return ($status);
 	}
 	
 	//Получение статуса статьи(для методов)

@@ -2,7 +2,8 @@
 	"server":
 	{
 		"403":"Доступ запрещён",
-		"404":"Страница не найдена"
+		"404":"Страница не найдена",
+		"500":"Ошибка на сервере"
 	},
 	
 	"engine":
@@ -27,6 +28,7 @@
 		"2":"Not implemented yet",
 		"3":"Sid not get",
 		"4":"Unexpected method",
-		"5":"Not all parameters"
+		"5":"Not all parameters",
+		"6":"Unexpected plugin"
 	}
 }

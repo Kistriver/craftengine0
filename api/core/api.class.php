@@ -26,60 +26,82 @@ class api
 	 * @param string $module модуль, который надо подключить
 	 * @param string $function функция, которую надо вызвать
 	 */
-	public function __construct($core=null,$module=null,$function=null)
+	public function __construct($core_confs/*$core=null,$module=null,$function=null*/)
 	{
-		if(empty($core))
+		$this->core_confs = $core_confs;
+		if(!isset($core_confs['core']))
 		{
 			exit('Empty core resource');
-			//require_once(dirname(__FILE__)."/core.class.php");
-			//$core = new core();
 		}
-		
-		$this->core = &$core;
+
+		$format = isset($core_confs['format'])?$core_confs['format']:'json';
+
+		$module = isset($core_confs['module'])?$core_confs['module']:null;
+		$function = isset($core_confs['method'])?$core_confs['method']:null;
+		$plugin = isset($core_confs['plugin'])?$core_confs['plugin']:false;
+
+		$this->core = &$core_confs['core'];
 		$this->sid = &$this->core->sid;
 		
 		if(!empty($module) AND !empty($function))
 		{
-			$mod = $core->conf->system->api->modules;
-			$pl = $core->conf->system->api->plugins;
+			$mod = $this->core->conf->system->api->modules;
+			//$pl = $this->core->conf->system->api->plugins;
 			
 			$modules = in_array($module,$mod);
 			if(empty($modules) or is_array($modules))
 			{
-				$core->error->error('api',0);
+				$this->core->error->error('api',0);
 				echo $this->json();
 			}
 			else
 			{
-				$plugin = null;
+				/*$plugin = null;
 				foreach($pl as $n=>$p)
 				{
 					if(array_search($module,$p)!==false)
 					{
-						$plugin = $n;
+						$plugin = $this->core->plugin->pluginsLoaded[$n];
+						$plugin_folder = $n;
+					}
+				}*/
+				$plugin_folder = null;
+				foreach($this->core->plugin->pluginsLoaded as $n=>$p)
+				{
+					if($p->name==$plugin)
+					{
+						$plugin_folder = $n;
+						$plugin = $this->core->plugin->pluginsLoaded[$n];
 					}
 				}
+
+				if($plugin_folder===null && !in_array($plugin,array('system')))
+				{
+					$this->core->error->error('api',6);
+					echo $this->json();
+					exit;
+				}
 				
-				if(empty($plugin))
+				if(empty($plugin_folder))
 				{
 					require_once(dirname(__FILE__)."/api/".$module.".class.php");
 
 					$cl_n = '\CRAFTEngine\api\\'.$module;
-					$class = new $cl_n($core);
+					$class = new $cl_n(array('core'=>$this->core));
 				}
 				else
 				{
-					require_once($this->core->plugin->root.$plugin."/api/".$module.".class.php");
+					require_once($this->core->plugin->root.$plugin_folder."/api/".$module.".class.php");
 
 					//$cl_n = "api_" . $module;
-					$cl_n = '\CRAFTEngine\api\\'.$plugin.'\\'.$module;
-					$class = new $cl_n($core);
+					$cl_n = '\CRAFTEngine\api\\'.$plugin->name.'\\'.$module;
+					$class = new $cl_n(array('core'=>$this->core));
 					//$class->init();
 				}
 				
 				if(!isset($class->functions[$function]))
 				{
-					$core->error->error('api',0);
+					$this->core->error->error('api',0);
 					echo $this->json();
 				}
 				else
@@ -89,9 +111,12 @@ class api
 					$type = strtoupper($this->core->core_confs['api']['type']);
 					$type_arr = array('GET','POST','PUT','DELETE');
 					$this->method = in_array($type,$type_arr)?$type:'GET';
-					$class->method($func);
+					$return = $class->method($func);
 					if(!empty($this->core->core_confs['api']['code']))header('HTTP/1.0 '.$this->core->core_confs['api']['code']);
-					echo $class->returned;
+
+					//ob_end_clean();
+					echo $this->json($return);
+					//ob_end_flush();
 				}
 			}
 		}
@@ -160,7 +185,7 @@ class api
 			if(!isset($this->data[$arg]))
 			{
 				$this->core->error->error('api',5);
-				echo $this->json($args);
+				echo ($args);
 				exit;
 			}
 		}
@@ -170,6 +195,6 @@ class api
 	protected function wip()
 	{
 		$this->core->error->error('api',2);
-		return $this->json(array(false));
+		return (array(false));
 	}
 }

@@ -40,6 +40,18 @@ class load
 
 	public function registerPluginEvent($id,$plugin,$addInfo)
 	{
+		switch($id.'_'.$plugin)
+		{
+			case 'upload_complete_core':
+				if($addInfo['type']=='user_user_avatar')
+				{
+					$format = $this->core->sanString($addInfo['format']);
+					$id = $_SESSION['id'];
+					$this->core->mysql->query("UPDATE users SET avatar_format='$format' WHERE id='$id'");
+				}
+				break;
+		}
+
 		return $addInfo;
 	}
 }

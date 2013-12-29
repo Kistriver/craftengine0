@@ -15,7 +15,7 @@ class captcha extends \CRAFTEngine\core\api
 
 		$c->generate($this->data['type']);
 		
-		return $this->json(array(true));
+		return (array(true));
 	}
 }
 ?>

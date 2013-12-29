@@ -26,9 +26,10 @@ class user extends \CRAFTEngine\core\api
 				'rank' => $_SESSION['rank'],
 				'rank_main' => $_SESSION['rank_main'],
 				'auth' => $_SESSION['auth'],
+				'avatar_format' => $_SESSION['avatar_format'],
 			);
 			
-			return $this->json($ses);
+			return ($ses);
 		}
 		else
 		{
@@ -57,15 +58,16 @@ class user extends \CRAFTEngine\core\api
 					'rank' => $_SESSION['rank'],
 					'rank_main' => $_SESSION['rank_main'],
 					'auth' => $_SESSION['auth'],
+					'avatar_format' => $_SESSION['avatar_format'],
 					);
 					
-					return $this->json($ses);
+					return ($ses);
 				}
-				return $this->json(array(false));
+				return (array(false));
 			}
 			else
 			
-			return $this->json(array(false));
+			return (array(false));
 		}
 	}
 	
@@ -83,7 +85,7 @@ class user extends \CRAFTEngine\core\api
 			if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 			{
 				$this->core->error->error('server', 403);
-				return $this->json(array(false));
+				return (array(false));
 			}
 			
 			$users_num = $this->core->mysql->fetch($this->core->mysql->query("SELECT COUNT(*) FROM signup"));
@@ -100,7 +102,7 @@ class user extends \CRAFTEngine\core\api
 		if($page<1 or ($page>$pages and $pages!=0))
 		{
 			$this->core->error->error('server', 404);
-			return $this->json(array(false));
+			return (array(false));
 		}
 		
 		$offset = ($page-1) * $limit;
@@ -129,7 +131,7 @@ class user extends \CRAFTEngine\core\api
 				$users[] = $inf;
 			}
 			
-			return $this->json($users);
+			return ($users);
 		}
 		else
 		{
@@ -151,7 +153,7 @@ class user extends \CRAFTEngine\core\api
 				$users[] = $arinf;
 			}
 			
-			return $this->json($users);
+			return ($users);
 		}
 	}
 	
@@ -177,14 +179,14 @@ class user extends \CRAFTEngine\core\api
 				break;
 			default:
 				$this->core->error->error('server', 404);
-				return $this->json(array(false));
+				return (array(false));
 				break;
 		}
 		
 		if($err == 1)
 		{
 			$this->core->error->error('server', 404);
-			return $this->json(array(false));
+			return (array(false));
 		}
 		
 		$u['login'] = $user->login;
@@ -195,8 +197,9 @@ class user extends \CRAFTEngine\core\api
 		$u['bd'] = $user->birthday;
 		$u['sex'] = $user->sex;
 		$u['last_login'] = $user->time_login;
-		
-		return $this->json($u);
+		$u['avatar_format'] = $user->avatar_format;
+
+		return ($u);
 	}
 	
 	protected function confirm_new_user()
@@ -207,7 +210,7 @@ class user extends \CRAFTEngine\core\api
 		if(!$rank->init($_SESSION['id'], 'user_confirm_new'))
 		{
 			$this->core->error->error('server', 403);
-			return $this->json(array(false));
+			return (array(false));
 		}
 		
 		$login = $this->core->sanString($this->data['login']);
@@ -219,7 +222,7 @@ class user extends \CRAFTEngine\core\api
 			if($this->core->mysql->rows($q)!=1)
 			{
 				$this->core->error->error('server', 404);//replace
-				return $this->json(array(false));
+				return (array(false));
 			}
 			
 			$r = $this->core->mysql->fetch($q);
@@ -229,7 +232,7 @@ class user extends \CRAFTEngine\core\api
 			if($status==0 OR $status==2)
 			{
 				$this->core->mysql->query("UPDATE signup SET status='2' WHERE id='$signid' AND login='$login'");
-				//return $this->json(array(true));
+				//return (array(true));
 			}
 			elseif($status==1 OR $status==3)
 			{
@@ -251,14 +254,14 @@ class user extends \CRAFTEngine\core\api
 					$r['time'],
 					$r['about']
 				);
-				//return $this->json(array(true));
+				//return (array(true));
 			}
 			
 			$q = $this->core->mysql->query("SELECT * FROM users WHERE login='$login'");
 			if($this->core->mysql->rows($q)!=1 AND ($status!=0 AND $status!=2))
 			{
 				$this->core->error->error('server', 404);//replace
-				return $this->json(array(false));
+				return (array(false));
 			}
 			
 			$id = $this->core->mysql->fetch($q);
@@ -277,7 +280,7 @@ class user extends \CRAFTEngine\core\api
 			$this->core->mysql->query("DELETE FROM signup WHERE login='$login'");
 			
 			//NOT WORK//$this->core->mail->addWaitingList($r['email'], '004', array($r['login'],true));
-			return $this->json(array(true));
+			return (array(true));
 		}
 		elseif($confirm==='false')
 		{
@@ -285,7 +288,7 @@ class user extends \CRAFTEngine\core\api
 			if($this->core->mysql->rows($q)!=1)
 			{
 				$this->core->error->error('server', 404);//replace
-				return $this->json(array(false));
+				return (array(false));
 			}
 			
 			$r = $this->core->mysql->fetch($q);
@@ -300,7 +303,7 @@ class user extends \CRAFTEngine\core\api
 			
 			//$this->core->mail->addWaitingList($r['email'], 'reg_confirm', array($r['login'],false));
 			
-			return $this->json(array(true));
+			return (array(true));
 		}
 		elseif($confirm==='mail')
 		{
@@ -308,7 +311,7 @@ class user extends \CRAFTEngine\core\api
 			if($this->core->mysql->rows($q)!=1)
 			{
 				$this->core->error->error('server', 404);//replace
-				return $this->json(array(false));
+				return (array(false));
 			}
 
 			$r = $this->core->mysql->fetch($q);
@@ -322,9 +325,9 @@ class user extends \CRAFTEngine\core\api
 		else
 		{
 			$this->core->error->error('server', 404);//replace
-			return $this->json(array(false));
+			return (array(false));
 		}
 
-		return $this->json(array(true));
+		return (array(true));
 	}
 }

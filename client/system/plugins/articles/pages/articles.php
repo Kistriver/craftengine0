@@ -8,7 +8,7 @@ if(!empty($_GET['act']))
 	
 	if($act=='post' AND !empty($_GET['user_id']) AND !empty($_GET['post_id']))
 	{
-		$core->api->get('article.post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id']));
+		$core->api->get('article/article/post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id']));
 		$data = $core->api->answer_decode;
 		
 		if(isset($data['data'][0]))
@@ -37,7 +37,7 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='posts')
 	{
-		$core->api->get('article.posts',array('page'=>$_GET['page']));
+		$core->api->get('article/article/posts',array('page'=>$_GET['page']));
 		
 		$data = $core->api->answer_decode;
 		
@@ -84,7 +84,7 @@ if(!empty($_GET['act']))
 			foreach($tags as &$t)$t = trim($t);
 			$tags = implode(',',$tags);
 			
-			$core->api->get('article.new',array('title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
+			$core->api->get('article/article/new',array('title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
 			$data = $core->api->answer_decode;
 			
 		}
@@ -98,12 +98,12 @@ if(!empty($_GET['act']))
 			if($_POST['vote']=='plus')$con = true;
 			elseif($_POST['vote']=='minus')$con = false;
 			else return;
-			$core->api->get('article.confirm_new',array('id'=>$_POST['id'],'confirm'=>$con));
+			$core->api->get('article/article/confirm_new',array('id'=>$_POST['id'],'confirm'=>$con));
 		}
 		
 		
 		$page = (!empty($_GET['page']) AND $_GET['page']>0)?$_GET['page']:'1';
-		$core->api->get('article.posts',array('page'=>$page,'type'=>'unpublished'));
+		$core->api->get('article/article/posts',array('page'=>$page,'type'=>'unpublished'));
 		$data = $core->api->answer_decode;
 		//print_r($data);
 		
@@ -131,7 +131,7 @@ if(!empty($_GET['act']))
 			foreach($tags as &$t)$t = trim($t);
 			$tags = implode(',',$tags);
 			
-			$core->api->get('article.edit',array('id'=>$_GET['post_id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
+			$core->api->get('article/article/edit',array('id'=>$_GET['post_id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
 			$data = $core->api->answer_decode;
 			
 			if(isset($data['data'][0]))
@@ -145,7 +145,7 @@ if(!empty($_GET['act']))
 		
 		if($err_up==false)
 		{
-			$core->api->get('article.post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id']));
+			$core->api->get('article/article/post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id']));
 			$data = $core->api->answer_decode;
 			
 			if(isset($data['data'][0]))

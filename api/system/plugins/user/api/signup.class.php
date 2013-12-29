@@ -18,8 +18,8 @@ class signup extends \CRAFTEngine\core\api
 		$type = $this->core->sanString($this->data['type']);
 		$value = $this->core->sanString($this->data['value']);
 		$r = $this->check($type, $value);
-		if($r)return $this->json(array(true));
-		else return $this->json(array(false));
+		if($r)return (array(true));
+		else return (array(false));
 	}
 	
 	//Проверка полей для программы
@@ -151,7 +151,7 @@ class signup extends \CRAFTEngine\core\api
 		if($_SESSION['loggedin'])
 		{
 			$this->core->error->error('server',403);
-			return $this->json(array(false));
+			return (array(false));
 		}
 
 
@@ -243,9 +243,9 @@ class signup extends \CRAFTEngine\core\api
 			$invite,
 			$about
 			);
-			return $this->json(array(true));
+			return (array(true));
 		}
-		return $this->json(array(false));
+		return (array(false));
 	}
 }
 ?>

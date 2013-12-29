@@ -74,7 +74,7 @@ function appointment($rank)
 	return isset($appointments[$rank]) ? $appointments[$rank]:false;
 }
 
-$core->api->get('user.loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
+$core->api->get('user/user/loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
 $loggedin = $core->api->answer_decode;
 if(isset($loggedin['errors']))
 {
@@ -101,7 +101,8 @@ if(isset($loggedin['errors']))
 		$_SESSION['login'] = $core->render['SYS']['LOGIN'] = $loggedin['data']['login'];
 		$_SESSION['rank'] = $core->render['SYS']['RANK'] = $loggedin['data']['rank'];
 		$_SESSION['rank_main'] = $core->render['SYS']['RANK_MAIN'] = $loggedin['data']['rank_main'];
-		
+		$_SESSION['avatar_format'] = $core->render['SYS']['AVATAR_FORMAT'] = $loggedin['data']['avatar_format'];
+
 		
 		$core->render['SYS']['APPOINTMENT'] = appointment($_SESSION['rank_main'])?appointment($_SESSION['rank_main']):'Undefined';
 	}
@@ -113,6 +114,7 @@ if(isset($loggedin['errors']))
 		$_SESSION['login'] = '';
 		$_SESSION['rank'] = '';
 		$_SESSION['rank_main'] = '';
+		$_SESSION['avatar_format'] = '';
 	}
 }
 
