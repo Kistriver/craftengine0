@@ -9,7 +9,7 @@ class conf
 	public function __construct($core)
 	{
 		$this->core = $core;
-		$this->folder = $this->core->core_confs['root'].'confs/';
+		$this->folder = $this->core->getCoreConfs()['root'].'confs/';
 		$this->conf = new \stdClass();
 	}
 	

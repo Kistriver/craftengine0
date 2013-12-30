@@ -2,5 +2,6 @@
     "author":"Kachalov",
     "web":"http://vk.com/craftengine",
     "title":"Реклама",
+    "loadClass":"load",
     "description":"Рекламный блок"
 }

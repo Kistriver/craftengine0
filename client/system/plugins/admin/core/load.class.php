@@ -19,4 +19,30 @@ class load
 		$this->core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'client/themes.php','plugin'=>'admin'));
 		$this->core->plugins->newRule(array('preg'=>'^admin/client/widgets$','page'=>'client/widgets.php','plugin'=>'admin'));
 	}
+
+	public function  RegisterPluginEvent($id,$plugin,$info)
+	{
+		switch($id.'_'.$plugin)
+		{
+			case 'render_widget_menu':
+				//FIXME: After logout(plugins users) it stays in menu until get this page
+				if($this->access()!==false)
+				$info[] = array('Админка','admin');
+				break;
+		}
+		return $info;
+	}
+
+	public function access()
+	{
+		$cc = $this->core->conf->get('core');
+		$access = false;
+		$page = preg_replace("'^admin(/|)(.*?)$'i",'$2',$this->core->uri);
+
+		if(in_array($_SERVER['REMOTE_ADDR'],$cc->core->admin_ip))$access = true;
+
+		list($access,) = $this->core->plugins->makeEvent('admin_access','admin',array($access,$page));
+
+		return $access;
+	}
 }

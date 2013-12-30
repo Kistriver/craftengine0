@@ -48,6 +48,7 @@ class functions
 		}
 		else
 		{
+			header('HTTP/1.1 '.$allow[$key]);
 			echo "Exit with code: $code. Info: $msg";
 			die;
 		}
@@ -82,7 +83,6 @@ class functions
 			$this->core->render['MAIN']['ERRORS'] = $this->core->error->error();
 			$this->core->render['_GET'] = $this->sanString($_GET);
 			$this->core->render['_POST'] = $this->sanString($_POST);
-			$this->core->render['MAIN']['MENU'] = $this->core->conf->conf->core->menu;
 			echo $template->render($this->core->render);
 		}
 		catch (Exception $e)
@@ -189,7 +189,7 @@ class functions
 	public function getThemesList()
 	{
 		$themes = array();
-		$root = $this->core->core_confs['root'].'themes/';
+		$root = $this->core->getCoreConfs()['root'].'themes/';
 		$dir = opendir($root);
 		while($folders = readdir($dir))
 		{

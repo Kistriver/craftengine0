@@ -2,11 +2,11 @@
 namespace CRAFTEngine\client\core;
 define('CE_HUB', true);
 
-
 require_once(dirname(__FILE__).'/core/core.class.php');
 
 $core_confs = array(
 	'root'=>dirname(__FILE__).'/system/',
+	'uri'=>$_GET['uri'],
 );
 
 session_start();
@@ -22,6 +22,8 @@ $core->plugins->newRule(array(
 	'plugin'=>null,
 ));
 
+$uri = &$core->uri;
+
 /*$core->plugins->newRule(array('preg'=>'^admin$','page'=>'admin/index.php'));
 
 $core->plugins->newRule(array('preg'=>'^admin/api/plugins$','page'=>'admin/api/plugins_list.php'));
@@ -34,16 +36,16 @@ $core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'admin/cli
 
 
 
-$uri = isset($_GET['uri'])?$_GET['uri']:null;
+/*$uri = isset($_GET['uri'])?$_GET['uri']:null;
 $hr = $core->conf->conf->core->tpl->root_http;
 if(substr($uri, 0, strlen($hr))==$hr)$uri = substr($uri, strlen($hr));
 
 if(preg_match("'\.\.'", $uri))$core->f->quit(403, 'Hack attempt');
-
 elseif(preg_match("'^((system)/)'", $uri))
 {
 	$core->f->quit(403);
-}
+}*/
+
 /*elseif(preg_match("'^((files|other|api)/)'", $uri))
 {
 	if(file_exists(dirname(__FILE__).'/'.$uri))
@@ -59,7 +61,7 @@ elseif(preg_match("'^((system)/)'", $uri))
 
 	exit();
 }*/
-elseif(preg_match("'^style/([^/].*?)/package.png$'", $uri))
+/*else*/if(preg_match("'^style/([^/].*?)/package.png$'", $uri))
 {
 	$cur_uri = preg_replace("'^style/([^/].*?)/package.png$'",'$1', $uri);
 	$file = dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png';
@@ -93,20 +95,22 @@ elseif(preg_match("'^((style)/)'", $uri))
 	exit();
 }
 
-/*if(sizeof($core->plugins->list)!=0)
-	foreach($core->plugins->list as $pl => $pages)
+/*if(sizeof($core->plugins->getList())!=0)
+	foreach($core->plugins->getList() as $pl => $pages)
 	{
 		if(file_exists(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php'))
 		include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
 	}*/
-if(sizeof($core->plugins->list)!=0)
-	foreach($core->plugins->list as $pl => $inf)
+if(sizeof($core->plugins->getList())!=0)
+	foreach($core->plugins->getList() as $pl => $inf)
 	{
 		$cl = '\CRAFTEngine\client\plugins\\'.$pl.'\\'.$inf['loadClass'];
 		$class = new $cl($core);
 		if(method_exists($class,'construct'))
 			$class->construct();
 	}
+
+$core->widgets->construct_man();
 
 header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
@@ -145,22 +149,10 @@ foreach($core->plugins->getRules() as $r)
 
 			$_SERVER['SCRIPT_NAME'] = $file;//TODO:И еще некоторые надо поправить
 
-			//Меню
-			//TODO: Remake it!
-			$s = explode('/',$_SERVER['SCRIPT_NAME']);
-			if(sizeof($core->render['NAVMENU'])!=0)
-				foreach($core->render['NAVMENU'] as &$m)
-				{
-					if($m[1].'.php'==$s[sizeof($s)-1] or ($m[1]=='' AND $s[sizeof($s)-1]=='index.php'))
-					{
-						$m[2] = true;
-					}
-				}
-
 			//Если указан плагин
 			if($from_plugin!=null)
 			{
-				if(!isset($core->plugins->list[$from_plugin]))
+				if(!isset($core->plugins->getList()[$from_plugin]))
 				{
 					$core->f->quit(404);
 				}
@@ -176,10 +168,10 @@ foreach($core->plugins->getRules() as $r)
 				exit();
 			}
 			//Страницы плагинов
-			elseif(sizeof($core->plugins->list)!=0)
+			elseif(sizeof($core->plugins->getList())!=0)
 			{
 				//Проходимся по списку плагинов
-				foreach ($core->plugins->list as $pl => $pags)
+				foreach ($core->plugins->getList() as $pl => $pags)
 				{
 					//И по их страницам
 					foreach($pags['pages'] as $pag)

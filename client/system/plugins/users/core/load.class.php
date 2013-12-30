@@ -52,29 +52,6 @@ class load
 				$_SESSION['avatar_format'] = '';
 			}
 		}
-
-		$this->core->render['MAIN']['MENU'] = $this->core->conf->conf->core->menu;
-
-		if($_SESSION['loggedin'])
-		{
-			$this->core->render['NAVMENU'] = array(
-				array('Главная',''),
-				array('Новости','articles',false/*,'+42'*/),
-				array('Пользователи','users'),
-				array('Настройки','profile'),
-				array('Выход','logout'),
-			);
-		}
-		else
-		{
-			$this->core->render['NAVMENU'] = array(
-				array('Главная',''),
-				array('Новости','articles'),
-				array('Пользователи','users'),
-				array('Регистрация','signup'),
-				array('Вход','login'),
-			);
-		}
 	}
 
 	public function rules()
@@ -116,6 +93,21 @@ class load
 				if($info[1]=='' && $_SESSION['rank_main']<1)
 				{
 					$info[0] = false;
+				}
+				break;
+
+			case 'render_widget_menu':
+				if($_SESSION['loggedin'])
+				{
+					$info[] = array('Пользователи','users');
+					$info[] = array('Настройки','profile');
+					$info[] = array('Выход','logout');
+				}
+				else
+				{
+					$info[] = array('Пользователи','users');
+					$info[] = array('Регистрация','signup');
+					$info[] = array('Вход','login');
 				}
 				break;
 		}

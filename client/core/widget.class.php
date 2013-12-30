@@ -21,28 +21,42 @@ class widget
 					$this->order[$w] = $this->list[$w];
 
 					if(!empty($this->list[$w]['loadClass']))
-					require_once($this->core->core_confs['root'].'widgets/core/'.$w.'/'.$this->list[$w]['loadClass'].'.class.php');
+					require_once($this->core->getCoreConfs()['root'].'widgets/'.$w.'/core/'.$this->list[$w]['loadClass'].'.class.php');
 				}
+			}
+		}
+	}
+
+	public function construct_man()
+	{
+		if(sizeof($this->order)!=0)
+		{
+			foreach($this->order as $key=>$inf)
+			{
+				$class = '\CRAFTEngine\client\widgets\\'.$inf['folder'].'\\'.$inf['loadClass'];
+				$w = new $class($this->core);
+
+				$w->render();
 			}
 		}
 	}
 
 	public function makeEvent($id,$wid,$addInfo)
 	{
-		foreach($this->list as $plug=>$pages)
-		{
-			$fun = '\CRAFTEngine\client\plugins\\'.$wid.'\RegisterWidgetEvent';
-			if(function_exists($fun))
-				$addInfo = $fun($id,$wid,$addInfo);
-		}
+		$addInfo = $this->core->plugins->makeEvent($id,'widget_'.$wid,$addInfo);
 
 		return $addInfo;
+	}
+
+	public function getList()
+	{
+		return $this->order;
 	}
 
 	public function widgetsList()
 	{
 		$themes = array();
-		$root = $this->core->core_confs['root'].'widgets/';
+		$root = $this->core->getCoreConfs()['root'].'widgets/';
 		$dir = opendir($root);
 		while($folders = readdir($dir))
 		{

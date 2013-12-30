@@ -37,7 +37,7 @@ class error
 
 	public function error_php($code,$msg,$file,$line)
 	{
-		$file_fr = str_replace('/system','',$this->core->core_confs['root']);
+		$file_fr = str_replace('/system','',$this->core->getCoreConfs()['root']);
 		$file = str_replace($file_fr,'{{CLIENT_ROOT}}/',$file);
 
 		$this->error("[$file:$line]$msg #client-$code");

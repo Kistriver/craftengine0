@@ -14,7 +14,7 @@
             "api": true,
             "client": true
         },
-        "GMT": "+0400",
+        "GMT":"+0400",
         "detailed_req": false
     },
     "twig": {
@@ -31,11 +31,5 @@
         "client_host": "http:\/\/localhost\/",
         "client_keywords": "CRAFTEngine",
         "client_desc": "CRAFTEngine"
-    },
-    "menu": [
-        "menu",
-        "vk",
-        "monitoring",
-        "ads"
-    ]
+    }
 }

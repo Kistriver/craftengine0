@@ -14,8 +14,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	public $render = array();
-	public $rules = array();
-	
+	private $core_confs = array();
+
 	public function __construct($core_confs=array())
 	{
 		$this->core = &$this;
@@ -74,13 +74,18 @@ class core
 			$this->{$i[2]} = new $inc_cl($this);
 		}
 
-		foreach($inc as $i)
-		{
-			if(method_exists($this->{$i[2]},'construct'))$this->{$i[2]}->construct();
-		}
-
 		$cc = $this->conf->get('core');
 		$this->api->url = $cc->api->url;
+
+		$this->uri = isset($this->core_confs['uri'])?$this->core_confs['uri']:null;
+		$hr = $this->core->conf->conf->core->tpl->root_http;
+		if(substr($this->uri, 0, strlen($hr))==$hr)$this->uri = substr($this->uri, strlen($hr));
+
+		if(preg_match("'\.\.'", $this->uri))$this->core->f->quit(403, 'Hack attempt');
+		elseif(preg_match("'^((system)/)'", $this->uri))
+		{
+			$this->core->f->quit(403);
+		}
 		
 		$ccc = $cc->tpl;
 		//TODO: Lower layout
@@ -104,10 +109,18 @@ class core
 				'BASE'=>'themes/'.$ccc->theme.'/tpl/base/',
 				'BASE_TPL'=>$ccc->columns.'.twig',
 				'PLUGIN'=>'plugins/',
+				'WIDGET'=>'widgets/',
+				'BASE_WIDGET'=>'themes/'.$ccc->theme.'/tpl/widget.twig',
+				'WIDGETS'=>array(),
 				'TPL'=>'tpl/',
 				'NOHEADER'=>false,
 			),
 		);
+
+		foreach($inc as $i)
+		{
+			if(method_exists($this->{$i[2]},'construct'))$this->{$i[2]}->construct();
+		}
 
 		$this->core->plugins->coreLib('Twig/Autoloader');
 		
@@ -141,6 +154,11 @@ class core
 		if($this->core->conf->conf->core->core->tech==true)$this->core->f->quit(403,'Technical works');
 		
 		//$this->plugins = new plugin($this);
+	}
+
+	public function getCoreConfs()
+	{
+		return $this->core_confs;
 	}
 }
 ?>

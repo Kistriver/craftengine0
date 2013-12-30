@@ -185,8 +185,11 @@ background-color:#cecece;
     <div class="row" style="max-width: 1200px; margin: auto;">
 
         <div class="col-md-3" style="/*background: #F0F0FA;*/">
-            {%for menu in MAIN.MENU%}
+            {# {%for menu in MAIN.MENU%}
                 {%include SYS.TPL ~ "widgets/" ~ menu ~ ".twig"%}
+            {%endfor%} #}
+            {%for W in SYS.WIDGETS%}
+                {%include SYS.WIDGET ~ W.0 ~ "/tpl/" ~ W.1 ~ ".twig"%}
             {%endfor%}
         </div>
 

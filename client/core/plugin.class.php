@@ -2,7 +2,7 @@
 namespace CRAFTEngine\client\core;
 class plugin
 {
-	public $list = array();
+	private $list = array();
 
 	private $rules = array();
 	
@@ -17,7 +17,7 @@ class plugin
 		{
 			foreach($pl as $p)
 			{
-				if(file_exists($this->core->core_confs['root'].'/plugins/'.$p))
+				if(file_exists($this->core->getCoreConfs()['root'].'/plugins/'.$p))
 				{
 					$pag = (array)$this->core->conf->get('../plugins/'.$p.'/confs/pages');
 					$this->list[$p] = array('pages'=>$pag);
@@ -35,7 +35,7 @@ class plugin
 			{
 				if(!empty($p['loadClass']))
 				{
-					require_once($this->core->core_confs['root'].'plugins/'.$f.'/core/'.$p['loadClass'].'.class.php');
+					require_once($this->core->getCoreConfs()['root'].'plugins/'.$f.'/core/'.$p['loadClass'].'.class.php');
 
 					$class = '\CRAFTEngine\client\plugins\\'.$f.'\\'.$p['loadClass'];
 
@@ -53,6 +53,7 @@ class plugin
 	{
 		foreach($this->list as $plug=>$inf)
 		{
+			//if(empty($inf['loadClass']))continue;
 			$cl = '\CRAFTEngine\client\plugins\\'.$plug.'\\'.$inf['loadClass'];
 			$class = new $cl($this->core);
 			if(method_exists($class,'registerPluginEvent'))
@@ -65,7 +66,7 @@ class plugin
 	public function pluginsList()
 	{
 		$plugins = array();
-		$root = $this->core->core_confs['root'].'plugins/';
+		$root = $this->core->getCoreConfs()['root'].'plugins/';
 		$dir = opendir($root);
 		while($folders = readdir($dir))
 		{
@@ -109,6 +110,11 @@ class plugin
 		return $this->rules;
 	}
 
+	public function getList()
+	{
+		return $this->list;
+	}
+
 	public function coreLib($lib)
 	{
 		require_once(dirname(__FILE__).'/libs/'.$lib.'.php');
@@ -116,6 +122,6 @@ class plugin
 
 	public function lib($lib)
 	{
-		require_once($this->core->core_confs['root'].'/libs/'.$lib.'.php');
+		require_once($this->core->getCoreConfs()['root'].'/libs/'.$lib.'.php');
 	}
 }

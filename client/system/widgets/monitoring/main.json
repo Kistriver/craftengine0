@@ -2,5 +2,6 @@
     "author":"Kachalov",
     "web":"http://vk.com/craftengine",
     "title":"Мониторинг",
-    "description":"Мониторигн серверов Minecraft"
+    "loadClass":"load",
+    "description":"Мониторинг серверов Minecraft"
 }

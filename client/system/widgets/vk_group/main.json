@@ -2,5 +2,6 @@
     "author":"Kachalov",
     "web":"http://vk.com/craftengine",
     "title":"VK",
+    "loadClass":"load",
     "description":"Отображение группы VK"
 }

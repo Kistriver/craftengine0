@@ -25,6 +25,8 @@ if(sizeof($_POST)!=0)
 			$core->widgets->down($widget);
 			break;
 	}
+
+	header('Location: '.$core->render['MAIN']['ROOT'].'admin/client/widgets');
 }
 
 $core->render['widgets'] = $core->widgets->list;

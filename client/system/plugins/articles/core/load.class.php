@@ -31,6 +31,10 @@ class load
 					$info[0] = false;
 				}
 				break;
+
+			case 'render_widget_menu':
+					$info[] = array('Новости','articles');
+				break;
 		}
 		return $info;
 	}

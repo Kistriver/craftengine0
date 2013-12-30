@@ -4,7 +4,7 @@ if(!defined('CE_HUB'))die('403');
 
 if(isset($_GET['act']))
 {
-	$LC = '\CRAFTEngine\client\plugins\users\\'.$core->plugins->list['users']['loadClass'];
+	$LC = '\CRAFTEngine\client\plugins\users\\'.$core->plugins->getList()['users']['loadClass'];
 	$LC = new $LC($core);
 
 	$act = $_GET['act'];
