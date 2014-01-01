@@ -19,7 +19,6 @@
 <h3>TPL</h3>
 Кэшировать страницы: <input type="checkbox" name="tpl[cache]" {%if config.core.twig.cache==true%}checked{%endif%} class="form-control" /><br />
 Перегружать кэшированные страницы: <input type="checkbox" name="tpl[cacheReload]" {%if config.core.twig.reload==true%}checked{%endif%} class="form-control" /><br />
-Оформление: <input type="text" name="tpl[theme]" value="{{config.core.tpl.theme}}" class="form-control" /><br />
 Заголовок: <input type="text" name="tpl[clientName]" value="{{config.core.tpl.client_name}}" class="form-control" /><br />
 Корень сайта: <input type="text" name="tpl[root]" value="{{config.core.tpl.root}}" class="form-control" /><br />
 Ключевые слова: <input type="text" name="tpl[keywords]" value="{{config.core.tpl.client_keywords}}" class="form-control" /><br />

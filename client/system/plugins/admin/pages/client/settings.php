@@ -14,7 +14,6 @@ if(sizeof($_POST)!=0)
 
 	$cc->twig->cache = empty($_POST['tpl']['cache'])?false:($_POST['tpl']['cache']=='on'?true:false);
 	$cc->twig->reload = empty($_POST['tpl']['cacheReload'])?false:($_POST['tpl']['cacheReload']=='on'?true:false);
-	$cc->tpl->theme = $_POST['tpl']['theme'];
 	$cc->tpl->client_name = $_POST['tpl']['clientName'];
 	$cc->tpl->root = $cc->tpl->root_http = $_POST['tpl']['root'];
 	$cc->tpl->client_keywords = $_POST['tpl']['keywords'];

@@ -36,12 +36,20 @@ class load
 	public function access()
 	{
 		$cc = $this->core->conf->get('core');
-		$access = false;
+		//$access = false;
 		$page = preg_replace("'^admin(/|)(.*?)$'i",'$2',$this->core->uri);
 
-		if(in_array($_SERVER['REMOTE_ADDR'],$cc->core->admin_ip))$access = true;
+		//if(in_array($_SERVER['REMOTE_ADDR'],$cc->core->admin_ip))$access = true;
+		$access = null;
 
 		list($access,) = $this->core->plugins->makeEvent('admin_access','admin',array($access,$page));
+
+		if($access===null)
+		{
+			if(in_array($_SERVER['REMOTE_ADDR'],$cc->core->admin_ip))$access = true;
+			else $access = false;
+		}
+
 
 		return $access;
 	}

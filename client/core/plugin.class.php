@@ -24,7 +24,19 @@ class plugin
 				}
 			}
 		}*/
-		$this->list = $this->pluginsList();
+
+		$pl = $this->pluginsList();
+		if(sizeof($pl)!=0)
+		{
+			foreach($pl as $k=>$p)
+			{
+				if($p['active']==true)
+				{
+					$this->list[$k] = $p;
+				}
+			}
+		}
+		//$this->list = $this->pluginsList();
 	}
 
 	public function construct()

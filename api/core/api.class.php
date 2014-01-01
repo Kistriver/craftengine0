@@ -185,7 +185,7 @@ class api
 			if(!isset($this->data[$arg]))
 			{
 				$this->core->error->error('api',5);
-				echo ($args);
+				echo $this->json($args);
 				exit;
 			}
 		}

@@ -167,24 +167,6 @@ foreach($core->plugins->getRules() as $r)
 				include_once(dirname(__FILE__).'/system/pages/'.$file);
 				exit();
 			}
-			//Страницы плагинов
-			elseif(sizeof($core->plugins->getList())!=0)
-			{
-				//Проходимся по списку плагинов
-				foreach ($core->plugins->getList() as $pl => $pags)
-				{
-					//И по их страницам
-					foreach($pags['pages'] as $pag)
-					{
-						if($pag==$file)
-						{
-							//include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/system/include.php');
-							include_once(dirname(__FILE__).'/system/plugins/'.$pl.'/pages/'.$file);
-							exit();
-						}
-					}
-				}
-			}
 			//Выдаём 404 ошибку
 			else
 			{

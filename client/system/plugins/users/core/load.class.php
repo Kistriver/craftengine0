@@ -86,6 +86,7 @@ class load
 				break;
 
 			case 'admin_access_admin':
+				if($info[0]===null)$info[0] = true;
 				if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]) && $_SESSION['rank_main']<1)
 				{
 					$info[0] = false;
