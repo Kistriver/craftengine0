@@ -1,5 +1,6 @@
 [
     "article",
     "captcha",
-    "user"
+    "user",
+    "comments"
 ]

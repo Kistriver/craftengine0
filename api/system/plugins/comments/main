@@ -1,0 +1,23 @@
+{
+	"author":"Kachalov",
+	"version":"1.0.0_alpha",
+	"web":"http://vk.com/craftengine",
+	"name":"comments",
+	"since":"0.2.5a1_alpha",
+	"title":"Комментарии",
+	"loadClass":"load",
+	"description":"Модуль комментариев",
+	"confs":
+	{
+        "types":["self"],
+        "api":["self"]
+	},
+	"api":
+	[
+
+	],
+	"requires":
+	[
+		
+	]
+}

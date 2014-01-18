@@ -57,6 +57,7 @@ class mysql
 		else
 		{
 			$mysqli->set_charset("utf8");
+			//$mysqli->query("SET timezone = '+0:00'");
 			$this->db[$name] = $mysqli;
 			$this->core->timer->mark('Подключение к БД');
 			return true;
@@ -149,7 +150,7 @@ class mysql
 
 		return $this->result;
 		}
-		catch(exception $e)
+		catch(\exception $e)
 		{
 			$tr = $e->getTrace();
 

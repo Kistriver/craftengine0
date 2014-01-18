@@ -43,7 +43,7 @@ if($core->mysql->rows($r)==1)
 	if(file_put_contents(dirname(__FILE__).'/../files/'.$name.'.'.$format,$con))
 	{
 		$core->mysql->query("DELETE FROM uploads WHERE hash='$hash' AND ip='$ip' AND time='$time_was'");
-		$core->plugin->makeEvent('upload_complete','core',array('type'=>$type,'name'=>$name,'format'=>$format));
+		$core->plugin->makeEvent('upload_complete','core',array('type'=>$type,'name'=>$name,'format'=>$format,'params'=>$params));
 		die(json_encode(array(true,$name.'.'.$format,$core->error->error)));
 	}
 }

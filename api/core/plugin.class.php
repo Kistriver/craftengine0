@@ -16,10 +16,10 @@ class plugin
 					$pluginsExist				= array(),
 					$pluginsIncluded			= array(),
 					$pluginsLoaded				= array(),
-					$pluginsDenied				= array('libs','system','core','plugin','plugins','api');
+					$pluginsDenied				= array('libs','system','core','plugin','plugins','api','utilities');
 	
 	protected 		$core;
-	
+
 	public function __construct($core)
 	{
 		$this->core = &$core;

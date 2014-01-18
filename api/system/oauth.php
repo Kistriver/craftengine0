@@ -1,7 +1,8 @@
 <?php
 namespace CRAFTEngine;
-exit('Haven\'t done yet!');
+//exit('Haven\'t done yet!');
 $start = microtime(true);
+header('Access-Control-Allow-Origin: *');
 
 include_once(dirname(__FILE__)."/include.php");
 if(!isset($core_confs))
@@ -11,8 +12,7 @@ if(!isset($core_confs))
 	);
 $core_confs['start_time'] = $start;
 
-$core = new core($core_confs);
-
+$core = new core\core($core_confs);
 
 $dsn      = 'mysql:dbname='.$core->conf->system->core->db['craftengine']['db'].';host='.preg_replace("'^p:(.*?)$'",'$1',$core->conf->system->core->db['craftengine']['host']);
 $username = $core->conf->system->core->db['craftengine']['user'];

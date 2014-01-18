@@ -19,7 +19,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0b1_alpha';
+	const CORE_VER = '0.3.0b2_alpha';
+	const MIN_CORE_VER = '0.3.0a_alpha';
 
 	public $core_confs;
 	public $api;
@@ -126,7 +127,14 @@ class core
 			exit();
 		}*/
 
-		//FIXME: VERY LARGE TIME OF RUN
+		if($this->functions->versionCompare(self::MIN_CORE_VER,$this->conf->system->core->version)===1)
+		{
+			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
+			echo json_encode($j);
+			exit();
+		}
+
+		/*//FIXME: VERY LARGE TIME OF RUN
 		$ver['req'] = $this->functions->versionParse($this->conf->system->core->version);
 		$ver['cur'] = $this->functions->versionParse(self::CORE_VER);
 		if(
@@ -151,7 +159,7 @@ class core
 			$j = array('error'=>'Core conf file doesn\'t compatible(core version: '.self::CORE_VER.', conf version: '.$this->conf->system->core->version.')');
 			echo json_encode($j);
 			exit();
-		}
+		}*/
 
 		$this->core->timer->mark('Сравнение версий');
 
@@ -160,6 +168,18 @@ class core
 
 		//Отправка накопленной почты
 		$this->mail();
+
+		if(!empty($this->core_confs['update']))
+		{
+			require_once(dirname(__FILE__).'/utilities/update.class.php');
+			require_once(dirname(__FILE__).'/utilities/migrate.class.php');
+
+			$this->utilities = new \stdClass();
+			$this->utilities->update = new utilities\update($this);
+			$this->utilities->migrate = new utilities\migrate($this);
+
+			$this->utilities->migrate->update('system');
+		}
 
 		//Подключение API(если это требуется)
 		if(isset($this->core_confs['api']['module'],$this->core_confs['api']['method']))
@@ -283,9 +303,10 @@ class core
 		if($time<time()-$updatetime && (int)$ft<time()-60)
 		{
 			file_put_contents($fsl,time());
-			$answer = $this->functions->sysScript('stat.php',1);
+			$answer = $this->functions->sysScript('stat.php',10);
+			$ans=fread($answer,2048);
 
-			if($answer)$this->stat = true;
+			if($ans)$this->stat = true;
 			else $this->stat = false;
 		}
 		else
@@ -294,7 +315,8 @@ class core
 		}
 
 		//$this->timer->mark('core.class.php/stat');
-		$this->core->timer->mark('Сбор статистики');
+		//$this->core->timer->mark((time() - 60 - $ft));
+		$this->core->timer->mark('Сбор статистики('. (time() - $updatetime - $time) .'sec)');
 	}
 
 	/**
@@ -464,7 +486,7 @@ class core
 	 * @param $cycle=0
 	 * @return string
 	 */
-	public function sanString($var, $san='all',$cycle=0)
+	public function sanString($var, $san='mysql',$cycle=0)
 	{
 		if(is_array($var))
 		{

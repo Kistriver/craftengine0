@@ -172,6 +172,7 @@ class api
 								$marks,
 								$this->core->timer->display('other'),
 								),
+			'memory'=>memory_get_usage(),
 		);
 		$this->returned = $this->core->json_encode_ru($r_a);
 		return $this->returned;

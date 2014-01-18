@@ -15,11 +15,7 @@ $module = empty($_GET['module'])?null:$_GET['module'];
 $method = empty($_GET['method'])?null:$_GET['method'];
 
 include_once(dirname(__FILE__)."/system/include.php");
-if(!isset($core_confs))
-	$core_confs = array
-	(
-		'root'=>dirname(__FILE__).'/system/',
-	);
+if(!isset($core_confs))$core_confs = array();
 
 $core_confs['api'] = array('plugin'=>$plugin,'module'=>$module,'method'=>$method,'type'=>$post,'code'=>$code);
 $core_confs['start_time'] = $start;

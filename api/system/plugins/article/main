@@ -14,7 +14,8 @@
 	},
 	"api":
 	[
-		"article"
+		"article",
+		"comment"
 	],
 	"requires":
 	[
