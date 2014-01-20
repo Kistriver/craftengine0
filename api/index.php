@@ -1,39 +1,4 @@
-<?php
-/*namespace CRAFTEngine;
-if(isset($_GET['method']))
-{
-	$start = microtime(true);
-	header('Access-Control-Allow-Origin: *');
-	header('Content-type: application/json; charset=utf-8');
-
-	$m_f = $_GET['method'];
-	$post = empty($_GET['post'])?$_SERVER['REQUEST_METHOD']:$_GET['post'];
-	$code = empty($_GET['status_code'])?null:$_GET['status_code'];
-	if(!preg_match('/^([a-zA-Z0-9-]*)\.([a-z_-]{1,25})\.(.*?)$/',$m_f))
-	{
-		$j = array('error'=>'Method error: doesn\'t exists');
-		echo json_encode($j);
-		exit();
-	}
-	$m_f = explode('.',$m_f);
-
-	include_once(dirname(__FILE__)."/system/include.php");
-	if(!isset($core_confs))
-	$core_confs = array
-	(
-		'root'=>dirname(__FILE__).'/system/',
-	);
-
-	$core_confs['api'] = array('plugin'=>$m_f[0],'module'=>$m_f[1],'method'=>$m_f[2],'type'=>$post,'code'=>$code);
-	$core_confs['start_time'] = $start;
-
-	$core = new core\core($core_confs);
-	$api = $core->api;
-}
-else
-{
-	//header('Content-type: text/html; charset=utf-8');
-	*/?><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -83,6 +48,4 @@ z-index: -1;
 	Вы будете автоматически перенаправлены через <span id="time">30</span> секунд.</p>
 </div>
 </body>
-</html><?php
-//}
-?>
+</html>

@@ -1,10 +1,12 @@
 {
     "active": [
         "menu",
-        "vk_group"
+        "vk_group",
+        "news"
     ],
     "order": [
         "menu",
-        "vk_group"
+        "vk_group",
+        "news"
     ]
 }

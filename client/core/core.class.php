@@ -27,7 +27,7 @@ class core
 			die("Missed core parameter 'root'");
 		}
 
-		$ver = 'v3.0';
+		$ver = 'v3.1';
 		if(!empty($_GET['getinfo']))
 		{
 		//header('Content-type: text/plain; charset=utf-8;');
@@ -151,7 +151,7 @@ class core
 			$this->core->f->quit(500,'can\'t load Twig');
 		}
 
-		if($this->core->conf->conf->core->core->tech==true)$this->core->f->quit(403,'Technical works');
+		//if($this->core->conf->conf->core->core->tech==true)$this->core->f->quit(403,'Technical works');
 		
 		//$this->plugins = new plugin($this);
 	}

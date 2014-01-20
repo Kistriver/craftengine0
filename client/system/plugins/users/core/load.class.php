@@ -70,6 +70,7 @@ class load
 		$this->core->plugins->newRule(array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','page'=>'$1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/confirm$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>array('^users/confirm/page-([0-9]*)$','^admin/other/users/confirm/page-([0-9]*)$'),'page'=>'users.php','get'=>array('act'=>'confirm','page'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^admin/other/users/import','page'=>'import.php','get'=>array(),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 
 		$this->core->plugins->newRule(array('preg'=>'^profile(|\/)$','page'=>'profile.php','get'=>array('type'=>'main'),'plugin'=>'users'));
@@ -82,18 +83,23 @@ class load
 		{
 			case 'admin_menu_render_admin':
 				if(in_array($_SESSION['rank_main'],array(1,2,3)))$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+				if(in_array($_SESSION['rank_main'],array(1)))$info['other']['users_import'] = array('icon'=>'arrow-right','value'=>'Импортирование БД',/*'href'=>'users/import'*/);
 				if($_SESSION['rank_main']<1)unset($info['api'],$info['client']);
 				break;
 
 			case 'admin_access_admin':
-				if($info[0]===null)$info[0] = true;
-				if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]) && $_SESSION['rank_main']<1)
+				if($info[0]===null)$info[0] = false;
+				if(preg_match("'^other/users/import$'i",$info[1]) && in_array($_SESSION['rank_main'],array(1)))
 				{
-					$info[0] = false;
+					$info[0] = true;
 				}
-				if($info[1]=='' && $_SESSION['rank_main']<1)
+				if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]) && in_array($_SESSION['rank_main'],array(1,2,3)))
 				{
-					$info[0] = false;
+					$info[0] = true;
+				}
+				if($info[1]=='' && in_array($_SESSION['rank_main'],array(1,2,3)))
+				{
+					$info[0] = true;
 				}
 				break;
 

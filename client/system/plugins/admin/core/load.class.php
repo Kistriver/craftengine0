@@ -26,18 +26,20 @@ class load
 		{
 			case 'render_widget_menu':
 				//FIXME: After logout(plugins users) it stays in menu until get this page
-				if($this->access()!==false)
+				if($this->access('')!==false)
 				$info[] = array('Админка','admin');
 				break;
 		}
 		return $info;
 	}
 
-	public function access()
+	public function access($admin_uri=null)
 	{
 		$cc = $this->core->conf->get('core');
 		//$access = false;
+		if($admin_uri===null)
 		$page = preg_replace("'^admin(/|)(.*?)$'i",'$2',$this->core->uri);
+		else $page = $admin_uri;
 
 		//if(in_array($_SERVER['REMOTE_ADDR'],$cc->core->admin_ip))$access = true;
 		$access = null;

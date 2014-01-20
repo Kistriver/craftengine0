@@ -14,13 +14,13 @@
             "api": true,
             "client": true
         },
-        "GMT":"+0400",
+        "GMT": "+0400",
         "detailed_req": false
     },
     "twig": {
-        "cache": false,
+        "cache": true,
         "reload": true,
-        "escape": false
+        "escape": true
     },
     "tpl": {
         "theme": "default",

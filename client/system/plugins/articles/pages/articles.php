@@ -2,12 +2,25 @@
 namespace CRAFTEngine\client\plugins\articles;
 if(!defined('CE_HUB'))die('403');
 
+//$core->f->msg('error','test');
+
 if(!empty($_GET['act']))
 {
 	$act = $_GET['act'];
+
+	if(sizeof($_POST)!=0)
+	{
+		if(!empty($_POST['msg']) && $_SESSION['loggedin'])
+		{
+			$data = $core->api->get('article/comment/new',array('article'=>$_GET['post_id'],'value'=>$_POST['msg']));
+		}
+	}
 	
 	if($act=='post' AND !empty($_GET['user_id']) AND !empty($_GET['post_id']))
 	{
+		$core->render['SYS']['NOHEADER'] = true;
+		$core->render['SYS']['NOMAINBORDER'] = true;
+
 		$core->api->get('article/article/post',array('post_id'=>$_GET['post_id'],'user_id'=>$_GET['user_id']));
 		$data = $core->api->answer_decode;
 		
@@ -18,7 +31,7 @@ if(!empty($_GET['act']))
 		if($data['data']['status']!='publish')
 		$core->f->quit(403);
 		
-		$post = $data['data'];
+		$post = $core->f->sanString($data['data']);
 		//$post['tags'] = implode(', ',$post['tags']);	
 		//$post['post_time'] = date('d-m-Y H:i',$post['post_time']);
 		$post['article'] = str_replace("\n",'<br /> ',$post['article']);
@@ -32,11 +45,28 @@ if(!empty($_GET['act']))
 		$post['article'] = preg_replace("'^(.*)\[craftcut(|=(.*))\](.*)$'is","$1$4",$post['article']);
 
 		$core->render['post'] = $post;
+
+
+
+		$data = $core->api->get('article/comment/get',array('article'=>$_GET['post_id']));
+
+		if(isset($data['data'][0]))
+		if($data['data'][0]!==false)
+		foreach($data['data'] as $d)
+		{
+			$d = $core->f->sanString($d);
+			$d['value'] = str_replace("\n",'<br />',$d['value']);
+			$core->render['comments'][] = $d;
+		}
+
 		
 		$core->f->show('articles/post','articles');
 	}
 	elseif($act=='posts')
 	{
+		$core->render['SYS']['NOHEADER'] = true;
+		$core->render['SYS']['NOMAINBORDER'] = true;
+
 		$core->api->get('article/article/posts',array('page'=>$_GET['page']));
 		
 		$data = $core->api->answer_decode;
@@ -51,7 +81,7 @@ if(!empty($_GET['act']))
 		for($i=0;$i<sizeof($data['data']['posts']);$i++)
 		{
 			//$template = $twig->loadTemplate('articles/main');
-			$post = $data['data']['posts'][$i];
+			$post = $core->f->sanString($data['data']['posts'][$i]);
 			$post['article'] = str_replace("\n",'<br /> ',$post['article']);
 			$post['article'] = str_replace('<br /> ',"<br />\r\n",$post['article']);
 			$desc = mb_substr($post['article'], 0, 150, 'UTF-8');

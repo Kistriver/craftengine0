@@ -4,15 +4,135 @@
 {%block header%}<li><a href="{{MAIN.ROOT_HTTP}}articles">Новости</a></li><li class="active">{{post.title}}</li>{%endblock%}
 
 {%block content%}
+    <div class="panel panel-default">
+    <div class="panel-heading">
+    <h1 class="panel-title">{{post.title}}</h1></div>
+        <div class="panel-body">
+{% autoescape false %}
 <div>
 <div style='word-wrap: break-word; max-width: 860px;'>{{post.article}}</div>
-<font color='#AAA' style='float: left;'>{{post.post_time|date("d-m-Y H:i")}}&nbsp;&nbsp;&nbsp;&nbsp;
-Просмотров: {{post.post_views}}&nbsp;&nbsp;&nbsp;&nbsp;
-</font>
-<font style='float: right;font-family: Flamme-LET;font-size: 16px;'><a href='{{MAIN.ROOT_HTTP}}users/{{post.author_login}}'>
-<img alt='' src='/files/uploads/avatars/{{post.author_login}}.png' style='border-radius: 2px; margin-bottom: -3px' width='16px' height='16px' />
-{{post.author_login}}</a></font><br />
-Теги: <font style="word-wrap: break-word;">{{post.tags|join(', ')}}</font>
-<hr size='1' style="color: #DDD" />
+
 </div>
+</div>
+<div class="panel-footer">
+
+    <div class="row">
+        <div class="col-md-2">
+            <span style="color:#AAA;">{{post.post_time|date("d-m-Y H:i")}}</span>
+        </div>
+        <div class="col-md-2">
+            <span style="color:#AAA;">Просмотров: {{post.post_views}}</span>
+        </div>
+        <div class="col-md-4">
+           <font style="color:#AAA;word-wrap: break-word;"> Теги: {{post.tags|join(', ')}}</font>
+        </div>
+        <div class="col-md-4" style="text-align: right;">
+            <a href='{{MAIN.ROOT_HTTP}}users/{{post.author_login}}'>{{post.author_login}}</a>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+    {% for c in comments %}
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="padding: 1px;">
+                        <div class="panel-title">
+                            <img src="http://test.kcraft.su/client/style/img/index/3.png" style="max-width: 100%;" />
+                            </div>
+                        </div>
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            {{ c.user }}
+                        </div>
+                    </div>
+                    <div class="panel-body__">
+
+                    </div>
+                </div>
+               {# <div style="background-color: #dadada; height: 120px; text-align: center; border-radius: 4px;">
+        <span style="position: relative; top: 30%; font-size: 36px;">
+            #{{ c.id }}
+        </span>
+                </div>
+                <div style="text-align: center;">
+                {{ c.time|date("d-m-Y в H:i") }}
+                    </div>
+            </div>
+            <div class="col-md-8">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ c.value }}
+            </div>
+            <div class="panel-footer">
+                {{ c.time|date("d-m-Y в H:i") }}
+            </div>
+        </div>#}
+
+            </div>
+        <div class="col-md-8">
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ c.value }}
+            </div>
+            <div class="panel-footer">
+                {{ c.time|date("d-m-Y в H:i") }}
+            </div>
+        </div>
+        </div>
+        </div>
+
+    {% endfor %}
+    {% if SYS.LOGGEDIN %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">Комментарий</div></div>
+                    <div class="panel-body">
+
+
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-md-12">
+
+
+                                    <textarea style="resize: vertical; min-height: 46px;" class="form-control" name="msg" rows="6"
+                                              placeholder=""
+                                            >{{_POST.msg}}</textarea>
+
+                                </div>
+                            </div>
+
+                            <!--<div class="row">
+<div class="col-md-10 col-md-offset-1">
+<div class="input-group">
+<span class="input-group-addon">
+<img src="{{cap_src}}" />
+</span>
+<input style="height: 68px;" maxlength="6" name="captcha" type="text" class="form-control" placeholder="ABCDEF">
+</div>
+</div>
+</div>-->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input type="submit" style="width: 100%;" class="btn btn-success" value="Опубликовать" />
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endif %}
+{% endautoescape %}
 {%endblock%}

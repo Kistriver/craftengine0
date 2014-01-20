@@ -26,9 +26,10 @@ class load
 				break;
 
 			case 'admin_access_admin':
-				if(preg_match("'^other/artilces/confirm/'i",$info[1]) && $_SESSION['rank_main']<5)
+				if($info[0]===null)$info[0] = false;
+				if(preg_match("'^other/artilces/confirm/'i",$info[1]) && in_array($_SESSION['rank_main'],array(1,2,3)))
 				{
-					$info[0] = false;
+					$info[0] = true;
 				}
 				break;
 

@@ -1,4 +1,4 @@
-<?php //will be later(it's index.php)
+<?php
 namespace CRAFTEngine;
 
 $start = microtime(true);
@@ -14,8 +14,7 @@ $plugin = empty($_GET['plugin'])?null:$_GET['plugin'];
 $module = empty($_GET['module'])?null:$_GET['module'];
 $method = empty($_GET['method'])?null:$_GET['method'];
 
-include_once(dirname(__FILE__)."/system/include.php");
-if(!isset($core_confs))$core_confs = array();
+require_once(dirname(__FILE__)."/system/edition/include.php");
 
 $core_confs['api'] = array('plugin'=>$plugin,'module'=>$module,'method'=>$method,'type'=>$post,'code'=>$code);
 $core_confs['start_time'] = $start;

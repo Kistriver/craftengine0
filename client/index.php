@@ -12,56 +12,9 @@ $core_confs = array(
 session_start();
 $core = new core($core_confs);
 
-////========================REWRITE RULES ZONE========================////
-$core->plugins->newRule(array(
-	'preg'=>array('^index$','^$'),
-	'preg_flags'=>'',
-	'flags'=>'',
-	'get'=>array(),
-	'page'=>'index.php',
-	'plugin'=>null,
-));
-
 $uri = &$core->uri;
 
-/*$core->plugins->newRule(array('preg'=>'^admin$','page'=>'admin/index.php'));
-
-$core->plugins->newRule(array('preg'=>'^admin/api/plugins$','page'=>'admin/api/plugins_list.php'));
-$core->plugins->newRule(array('preg'=>'^admin/api/plugins/edit/(.*)$','page'=>'admin/api/plugins_config.php','get'=>array('plugin'=>'$1')));
-
-$core->plugins->newRule(array('preg'=>'^admin/client/pages$','page'=>'admin/client/pages.php'));
-$core->plugins->newRule(array('preg'=>'^admin/client/settings$','page'=>'admin/client/settings.php'));
-$core->plugins->newRule(array('preg'=>'^admin/client/themes$','page'=>'admin/client/themes.php'));*/
-////========================REWRITE RULES ZONE========================////
-
-
-
-/*$uri = isset($_GET['uri'])?$_GET['uri']:null;
-$hr = $core->conf->conf->core->tpl->root_http;
-if(substr($uri, 0, strlen($hr))==$hr)$uri = substr($uri, strlen($hr));
-
-if(preg_match("'\.\.'", $uri))$core->f->quit(403, 'Hack attempt');
-elseif(preg_match("'^((system)/)'", $uri))
-{
-	$core->f->quit(403);
-}*/
-
-/*elseif(preg_match("'^((files|other|api)/)'", $uri))
-{
-	if(file_exists(dirname(__FILE__).'/'.$uri))
-	{
-		header('Content-type: '.$core->f->mime_content_type(dirname(__FILE__).'/'.$uri).';');
-
-		echo file_get_contents(dirname(__FILE__).'/'.$uri);
-	}
-	else
-	{
-		$core->f->quit(404);
-	}
-
-	exit();
-}*/
-/*else*/if(preg_match("'^style/([^/].*?)/package.png$'", $uri))
+if(preg_match("'^style/([^/].*?)/package.png$'", $uri))
 {
 	$cur_uri = preg_replace("'^style/([^/].*?)/package.png$'",'$1', $uri);
 	$file = dirname(__FILE__).'/system/themes/'.$cur_uri.'/package.png';
@@ -111,6 +64,17 @@ if(sizeof($core->plugins->getList())!=0)
 	}
 
 $core->widgets->construct_man();
+
+if($core->conf->conf->core->core->tech==true)$core->f->quit(403,'Technical works');
+
+$core->plugins->newRule(array(
+	'preg'=>array('^index$','^$'),
+	'preg_flags'=>'',
+	'flags'=>'',
+	'get'=>array(),
+	'page'=>'index.php',
+	'plugin'=>null,
+));
 
 header('Content-type: text/html; charset=utf-8;');
 //Берём правила реврайта
