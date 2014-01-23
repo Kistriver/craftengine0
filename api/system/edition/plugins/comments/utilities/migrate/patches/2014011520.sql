@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `type` tinytext NOT NULL,
   `value` text NOT NULL,
   `params` text NOT NULL,
+  `mode` INT(4) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

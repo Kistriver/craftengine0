@@ -11,7 +11,8 @@ class user
 
 		require_once(dirname(__FILE__)."/user.interface.php");
 
-		$this->initProperties();
+		$st = $this->initProperties();
+		if($st===false)die('cannot load constuct class in users plugin');
 	}
 
 	protected  function initProperties()
@@ -38,6 +39,14 @@ class user
 			}
 		}
 		closedir($dir);
+
+		foreach($this->properties as $pr)
+		{
+			if(method_exists($this->$pr,'construct'))
+			if($this->$pr->construct($this)===false)return false;
+		}
+
+		return true;
 	}
 
 	public function getPropertiesList()

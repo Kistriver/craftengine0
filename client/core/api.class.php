@@ -118,14 +118,14 @@ class api
 					if($prec>35)$color = '#FF4000';
 					if($prec>40)$color = '#FF0000';
 
-					$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'$t[0]': ". $t[1]*1000 ."ms<!-- ($prec%)-->"
+					$times[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'".$this->core->f->sanString($t[0])."': ". $this->core->f->sanString($t[1])*1000 ."ms<!-- ($prec%)-->"
 						.'<div style="float:right; background-color: '.$color.'; min-width:'.$prec*4 .'px">&nbsp;</div>
 						<!--<div style="float:right; background-color:grey; width:'.(100-$prec)*4 .'px;">&nbsp;</div>-->
 						<div style="float:right;">'.$prec.'%</div>';
 				}
 
-				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->answer_decode['runtime'][0]*1000 .'ms: <br />'."<div style=\"max-height: 200px;overflow: scroll;\">". implode("<br />", $times) .'</div>'
-					.'<br />Request:<pre style="max-height: 200px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 200px;overflow: scroll;">'."\r\n".$this->answer.'</pre>');
+				$this->core->render['MAIN']['INFO'][] = ($method.': '.$this->core->f->sanString($this->answer_decode['runtime'][0])*1000 .'ms: <br />'."<div style=\"max-height: 200px;overflow: scroll;\">". implode("<br />", $times) .'</div>'
+					.'<br />Request:<pre style="max-height: 200px;overflow: scroll;">'.$url."\r\n".$post.'</pre>'.'Answer:<pre style="max-height: 200px;overflow: scroll;">'."\r\n".$this->core->f->sanString($this->answer).'</pre>');
 			}
 		}
 		

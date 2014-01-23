@@ -21,22 +21,30 @@
 {%block title%}{{user.login}}{{parent()}}{%endblock%}
 
 {%block content%}
-<table width="100%">
-<tr valign="top">
-<td style="border-right: solid 1px #DDD;">
-<div style="width: 200px; height: 200px; background: #ddd; border-radius: 3px;">
-<img style="margin: 0 0 -4px 0; border-radius: 3px; width: 200px;" alt="" src="{{ icon_src }}" />
-</div>
-<div style="text-align: center; font-size: 17px;">
-{{user.appointment}}
-</div>
-</td>
-<td width="100%">
-ID: {{user.id}}<br />
-Пол: {%if user.sex==1%}Мужской{%else%}Женский{%endif%}<br />
-Должности: {{user.rank|join(', ')}}<br />
-Родился: {{user.bd.0}}/{{user.bd.1}}/****<br />
-</td>
-</tr>
-</table>
+    <div class="row">
+    <div class="col-sm-3">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 1px;">
+                <div class="panel-title" style="height: 160px; background: url({{ avatar_src }}) no-repeat center #cecece; background-size: cover;">
+
+                </div>
+            </div>
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <div style="text-align: center; color: {% if user.rank.0=='main_admin' %}red{% elseif user.rank.0=='admin' %}orange{% elseif user.rank.0=='moderator' %}green{% elseif user.rank.0=='developer' %}#aa00aa{% endif %};">
+                    {{ user.appointment }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title">{{user.login}}</h1></div>
+            <div class="panel-body">
+                {{ user.name }} {{ user.surname }}
+            </div>
+        </div>
+    </div>
 {%endblock%}

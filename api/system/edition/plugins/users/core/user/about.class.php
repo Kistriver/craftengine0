@@ -1,6 +1,6 @@
 <?php
 namespace CRAFTEngine\plugins\users;
-class password_salt implements userInterface
+class about implements userInterface
 {
 	public function __construct($core)
 	{
@@ -11,18 +11,18 @@ class password_salt implements userInterface
 	public function install()
 	{
 		if($this->core->mysql->rows(
-			$this->core->mysql->query("SHOW COLUMNS FROM users LIKE 'password_salt'")
+			$this->core->mysql->query("SHOW COLUMNS FROM users LIKE 'about'")
 		)==0)
 		{
-			$qr = $this->core->mysql->query("ALTER TABLE users ADD password_salt VARCHAR(255)");
+			$qr = $this->core->mysql->query("ALTER TABLE users ADD about VARCHAR(5000)");
 			if(!$qr)return false;
 		}
 
 		if($this->core->mysql->rows(
-			$this->core->mysql->query("SHOW COLUMNS FROM users_signup LIKE 'password_salt'")
+			$this->core->mysql->query("SHOW COLUMNS FROM users_signup LIKE 'about'")
 		)==0)
 		{
-			$qr = $this->core->mysql->query("ALTER TABLE users_signup ADD password_salt VARCHAR(255)");
+			$qr = $this->core->mysql->query("ALTER TABLE users_signup ADD about VARCHAR(5000)");
 			if(!$qr)return false;
 		}
 
@@ -32,13 +32,13 @@ class password_salt implements userInterface
 	public function getProperty($id)
 	{
 		$id = intval($id);
-		$qr = $this->core->mysql->query("SELECT password_salt FROM users WHERE id='$id'");
+		$qr = $this->core->mysql->query("SELECT about FROM users WHERE id='$id'");
 
 		if($this->core->mysql->rows($qr)==0)return false;
 
 		$fr = $this->core->mysql->fetch();
 
-		return $fr['password_salt'];
+		return $fr['about'];
 	}
 
 	public function getPropertyByValue($value)
@@ -50,9 +50,8 @@ class password_salt implements userInterface
 	{
 		$id = intval($id);
 		$value = trim($value);
-		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
-		$qr = $this->core->mysql->query("UPDATE users SET password_salt='$value' WHERE id='$id'");
+		$qr = $this->core->mysql->query("UPDATE users SET about='$value' WHERE id='$id'");
 
 		if($qr)return true;
 		else return false;
@@ -60,7 +59,6 @@ class password_salt implements userInterface
 
 	public function validateProperty($value,$id=null)
 	{
-		$value = $this->core->sanString($value);
 		return true;
 	}
 
@@ -82,9 +80,8 @@ class password_salt implements userInterface
 	public function signup($id,$value)
 	{
 		$id = intval($id);
-		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
-		$qr = $this->core->mysql->query("UPDATE users_signup SET password_salt='$value' WHERE id='$id'");
+		$qr = $this->core->mysql->query("UPDATE users_signup SET about='$value' WHERE id='$id'");
 
 		if($qr)return true;
 		else return false;
@@ -93,11 +90,10 @@ class password_salt implements userInterface
 	public function register($id,$idnew)
 	{
 		$id = intval($id);
-		$qr = $this->core->mysql->query("SELECT password_salt FROM users_signup WHERE id='$id'");
+		$qr = $this->core->mysql->query("SELECT about FROM users_signup WHERE id='$id'");
 		$fr = $this->core->mysql->fetch($qr);
-		$value = $fr['password_salt'];
-		$value = $this->core->sanString($value);
-		$qr = $this->core->mysql->query("UPDATE users SET password_salt='$value' WHERE id='$idnew'");
+		$value = $this->core->sanString($fr['about']);
+		$qr = $this->core->mysql->query("UPDATE users SET about='$value' WHERE id='$idnew'");
 
 		if($qr)return true;
 		else return false;

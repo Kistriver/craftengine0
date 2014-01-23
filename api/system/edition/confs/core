@@ -4,7 +4,7 @@
 	"name":"Minecraft Edition",
 	"debug":true,
 	"send_mail_report":true,
-	"mail":["kcraft.su","\"KachalovCRAFT NET\" <kachalov92@yandex.ru>"],
+	"mail":["test.kcraft.su/client","\"KachalovCRAFT NET\" <kachalov92@yandex.ru>"],
 	"upload_file_max_size":"5MB",
 	"GMT":"+0400",
 	"tech":false,

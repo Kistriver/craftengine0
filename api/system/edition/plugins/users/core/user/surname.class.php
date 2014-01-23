@@ -5,6 +5,7 @@ class surname implements userInterface
 	public function __construct($core)
 	{
 		$this->core = &$core;
+		$this->confs = &$this->core->conf->plugins->users;
 	}
 
 	public function install()
@@ -30,6 +31,7 @@ class surname implements userInterface
 
 	public function getProperty($id)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT surname FROM users WHERE id='$id'");
 
 		if($this->core->mysql->rows($qr)==0)return false;
@@ -39,8 +41,15 @@ class surname implements userInterface
 		return $fr['surname'];
 	}
 
+	public function getPropertyByValue($value)
+	{
+		return false;
+	}
+
 	public function setProperty($id,$value)
 	{
+		$id = intval($id);
+		$value = trim($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET surname='$value' WHERE id='$id'");
 
@@ -48,7 +57,7 @@ class surname implements userInterface
 		else return false;
 	}
 
-	public function validateProperty($id,$value)
+	public function validateProperty($value,$id=null)
 	{
 		$value = $this->core->sanString($value);
 		return true;
@@ -56,16 +65,39 @@ class surname implements userInterface
 
 	public function canGetProperty($id,$idfrom)
 	{
-		return true;
+		if($id==$idfrom)
+			return true;
+		else return false;
+	}
+
+	public function canSetProperty($id,$idfrom)
+	{
+		if($id==$idfrom)return true;
+		else return false;
 	}
 
 	public function canSignup($value)
 	{
+		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
+
+		if(mb_strlen($value,'UTF-8')>$this->confs->modules->surname['length']['max'])
+		{
+			$this->core->error->error('plugin_users_module_surname',1);
+			return false;
+		}
+		if(mb_strlen($value,'UTF-8')<$this->confs->modules->surname['length']['min'])
+		{
+			$this->core->error->error('plugin_users_module_surname',1);
+			return false;
+		}
+
 		return true;
 	}
 
 	public function signup($id,$value)
 	{
+		$id = intval($id);
+		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users_signup SET surname='$value' WHERE id='$id'");
 
@@ -75,6 +107,7 @@ class surname implements userInterface
 
 	public function register($id,$idnew)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT surname FROM users_signup WHERE id='$id'");
 		$fr = $this->core->mysql->fetch($qr);
 		$value = $this->core->sanString($fr['surname']);

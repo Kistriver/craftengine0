@@ -14,7 +14,7 @@ class captcha extends \CRAFTEngine\core\api
 		$c = $this->core->plugin->initPl('captcha','captcha');
 
 		$c->generate($this->data['type']);
-		
+
 		return (array(true));
 	}
 }

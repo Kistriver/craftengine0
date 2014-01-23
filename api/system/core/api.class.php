@@ -195,6 +195,12 @@ class api
 	//Затычка для ещё неосуществлённого функционала
 	protected function wip()
 	{
+		$this->core->error->error('api',7);
+		return (array(false));
+	}
+
+	protected function niy()
+	{
 		$this->core->error->error('api',2);
 		return (array(false));
 	}

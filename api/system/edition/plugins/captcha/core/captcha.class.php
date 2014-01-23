@@ -38,7 +38,11 @@ class captcha
 	{
 		$was = &$_SESSION['captcha'][$type]['was'];
 		$new = &$_SESSION['captcha'][$type]['new'];
-		
+
+		$value = mb_convert_case($value, MB_CASE_UPPER, 'UTF-8');
+		$was = mb_convert_case($was, MB_CASE_UPPER, 'UTF-8');
+		$new = mb_convert_case($new, MB_CASE_UPPER, 'UTF-8');
+
 		if($was==$new or $new=='')
 		{
 			return false;

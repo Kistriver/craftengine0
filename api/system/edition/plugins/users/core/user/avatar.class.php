@@ -31,24 +31,38 @@ class avatar implements userInterface
 		return $fr['avatar'];
 	}
 
+	public function getPropertyByValue($value)
+	{
+		return false;
+	}
+
 	public function setProperty($id,$value)
 	{
+		return false;
+		/*$id = intval($id);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET avatar='$value' WHERE id='$id'");
 
 		if($qr)return true;
-		else return false;
+		else return false;*/
 	}
 
-	public function validateProperty($id,$value)
+	public function validateProperty($value,$id=null)
 	{
-		$value = $this->core->sanString($value);
+		$id = intval($id);
+		//$value = $this->core->sanString($value);
 		return true;
 	}
 
 	public function canGetProperty($id,$idfrom)
 	{
 		return true;
+	}
+
+	public function canSetProperty($id,$idfrom)
+	{
+		if($id==$idfrom)return true;
+		else return false;
 	}
 
 	public function canSignup($value)

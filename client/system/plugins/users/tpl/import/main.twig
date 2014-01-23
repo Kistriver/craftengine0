@@ -7,7 +7,18 @@
 {%endblock%}
 
 {%block content%}
-    <form method="post">
+    <div class="alert alert-danger">
+        <div class="row">
+            <div class="col-md-1">
+                <span class="glyphicon glyphicon-warning-sign" style="color: while; font-size: 38px; cursor: default;"></span>
+            </div>
+            <div class="col-md-11">
+                Дамп должен содержать данные ТОЛЬКО для воостановления пользователей. Присутствие других данных в дампе может привести к ПОВРЕЖДЕНИЮ
+                и даже ПОЛНОЙ УТЕРИ ДАННЫХ.
+            </div>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-7 col-md-offset-1">
             <div class="input-group">
@@ -23,8 +34,21 @@
             </div>
         </div>
         <div class="col-md-3">
-            <input type="submit" style="width: 100%;" class="btn btn-success" value="Импортировать" />
+            Движок и его версия
         </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 col-md-offset-1">
+                <input class="form-control" type="file" name="dump" />
+            </div>
+            <div class="col-md-3">
+                Дамп базы ввиде sql запросов(*.sql)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 col-md-offset-1">
+                <input type="submit" style="width: 100%;" class="btn btn-success" value="Импортировать" />
+            </div>
         </div>
         </form>
 {%endblock%}

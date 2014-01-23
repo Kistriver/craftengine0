@@ -5,6 +5,7 @@ $start = microtime(true);
 
 $script = isset($_GET['script'])?$_GET['script']:null;
 $module = isset($_GET['module'])?$_GET['module']:null;
+$sid = isset($_GET['sid'])?$_GET['sid']:null;
 
 if(empty($script) || empty($module))
 {
@@ -16,6 +17,7 @@ require_once(dirname(__FILE__)."/system/edition/include.php");
 
 $core_confs['start_time'] = $start;
 $core_confs['utilities']['system']['script'] = null;
+if(!empty($sid))$core_confs['sid'] = $sid;
 
 $core = new core\core($core_confs);
 

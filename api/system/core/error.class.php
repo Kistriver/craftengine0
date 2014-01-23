@@ -132,7 +132,7 @@ class error
 	//Создание ошибки
 	public function errorMake($err_mod,$err_no)
 	{
-		if(!preg_match("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-]*)$'is", $err_mod))
+		if(!preg_match("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-_]*)$'is", $err_mod))
 		{
 			if(!isset($this->core->conf->system->errors->$err_mod))
 			return array('engine',1,'Error in creating error');
@@ -145,8 +145,11 @@ class error
 		}
 		else
 		{
-			list($pl, $mod) = explode(':',preg_replace("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-]*)$'is",'$1:$2', $err_mod));
-			
+			//list($pl, $mod) = explode(':',preg_replace("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-_]*)$'is",'$1:$2', $err_mod));
+			preg_match("'^plugin_([a-zA-Z0-9-]*)_([a-zA-Z0-9-_]*)$'is", $err_mod, $matched);
+			$pl = $matched[1];
+			$mod = $matched[2];
+
 			if(!isset($this->core->conf->plugins->{$pl}))
 			return $this->errorMake('engine',1);
 			

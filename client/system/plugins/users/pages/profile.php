@@ -2,7 +2,7 @@
 namespace CRAFTEngine\client\plugins\users;
 if(!defined('CE_HUB'))die('403');
 
-if(!$_SESSION['loggedin'])$core->f->quit(403);
+if(!(new load($core))->loggedin())$core->f->quit(403);
 
 $type = 'main';
 if(!empty($_GET['type']))
@@ -13,13 +13,13 @@ $_GET['type'] = $type;
 
 if($type=='main')
 {
-	$core->render['icon_src'] = $core->conf->conf->core->api->files.'users/avatars/id'.$_SESSION['id'].'.'.$_SESSION['avatar_format'];
+	$core->render['icon_src'] = $core->conf->conf->core->api->files.$_SESSION['users']['avatar'];
 
 	if(!empty($_POST['nickname']))
 	{
 		$nick = $_POST['nickname'];
 
-		$core->api->get('user/profile/change',array('type'=>'nickname','value'=>$nick));
+		$core->api->get('users/profile/change',array('type'=>'nickname','value'=>$nick));
 		$ans = $core->api->answer_decode['data'][0];
 		if($ans===true)
 		{
@@ -34,7 +34,7 @@ if($type=='main')
 		$name_orig = explode('.',$_FILES['icon']['name']);
 		$format = strtolower(array_pop($name_orig));
 		
-		$core->api->get('user/profile/change',array('type'=>'icon','value'=>'icon','format'=>$format));
+		$core->api->get('users/profile/change',array('type'=>'icon','value'=>'icon','format'=>$format));
 		if(!empty($core->api->answer_decode['data'][0]))
 		$ans = $core->api->answer_decode['data'][0];
 		else
@@ -79,7 +79,7 @@ elseif($type=='security')
 			$pass = $_POST['password'];
 			$pass_old = $_POST['password_old'];
 
-			$core->api->get('user/profile/change',array('type'=>'pass','value'=>$pass, 'value_old'=>$pass_old));
+			$core->api->get('users/profile/change',array('type'=>'pass','value'=>$pass, 'value_old'=>$pass_old));
 			$ans = $core->api->answer_decode['data'][0];
 			if($ans===true)
 			{

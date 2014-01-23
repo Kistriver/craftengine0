@@ -7,12 +7,28 @@
 
 {%block content%}
 {%for user in users%}
-<div>
-<div style="width: 20px; float: left;">
-<img style="border-radius: 1px; width: 16px;" alt="" src="/files/uploads/avatars/{{user.login}}.png" />
-</div>
-<a href="{{MAIN.ROOT_HTTP}}users/{{user.login}}">{{user.nickname}}</a><sup>({{user.login}})</sup> - {%if true==false%}{%if user.sex==1%}Мужчина{%else%}Женщина{%endif%} -
-{{user.bd.0}}/{{user.bd.1}}/{{user.bd.2}} - {%endif%}{{user.appointment}}
-</div>
+    <div class="row">
+    <div class="col-sm-2">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 1px;">
+                <div class="panel-title" style="height: 90px; background: url({{ user.avatar }}) no-repeat center #cecece; background-size: cover;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1 class="panel-title"><a href="{{ MAIN.ROOT }}users/{{ user.login }}" style="text-decoration-line: underline;">{{user.login}}</a></h1></div>
+            <div class="panel-body">
+                {% if user.sex==1 %}Мужской, {% elseif user.sex==null %}{% else %}Женский, {% endif %}
+                <span style="color: {% if user.rank.0=='main_admin' %}red{% elseif user.rank.0=='admin' %}orange{% elseif user.rank.0=='moderator' %}green{% elseif user.rank.0=='developer' %}#aa00aa{% endif %};">
+                    {{ user.appointment }}
+                </span>
+            </div>
+        </div>
+    </div>
+    </div>
 {%endfor%}
 {%endblock%}

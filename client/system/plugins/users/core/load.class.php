@@ -9,7 +9,22 @@ class load
 
 	public function construct()
 	{
-		$this->core->api->get('user/user/loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
+		if($this->loggedin())
+		{
+			$this->core->render['SYS']['USERS']['ID'] = $_SESSION['users']['id'];
+			$this->core->render['SYS']['USERS']['LOGIN'] = $_SESSION['users']['login'];
+			$this->core->render['SYS']['USERS']['RANK'] = $_SESSION['users']['rank'];
+		}
+		else
+		{
+			$this->core->render['SYS']['USERS']['ID'] = $_SESSION['users']['id'] = 0;
+			$this->core->render['SYS']['USERS']['LOGIN'] = $_SESSION['users']['login'] = null;
+			$this->core->render['SYS']['USERS']['RANK'] = $_SESSION['users']['rank'] = array();
+		}
+
+		$this->core->render['SYS']['LOGGEDIN'] = $this->loggedin();
+
+		/*$this->core->api->get('user/user/loggedin',array('auth'=>!empty($_COOKIE['authed'])?$_COOKIE['authed']:''));
 		$loggedin = $this->core->api->answer_decode;
 		if(isset($loggedin['errors']))
 		{
@@ -51,30 +66,35 @@ class load
 				$_SESSION['rank_main'] = '';
 				$_SESSION['avatar_format'] = '';
 			}
-		}
+		}*/
 	}
 
 	public function rules()
 	{
 		$this->core->plugins->newRule(array('preg'=>'^signup$','page'=>'signup.php','plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^signup/activate/([0-9]*)-([0-9a-z]*)$','page'=>'signup.php','get'=>array('id'=>'$1','code'=>'$2','act'=>'activate'),'plugin'=>'users'));
 
+		$this->core->plugins->newRule(array('preg'=>'^login$','page'=>'login.php','get'=>array('act'=>'login'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^logout$','page'=>'login.php','get'=>array('act'=>'logout'),'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^login$','page'=>'login.php'/*,'get'=>array('act'=>'login')*/,'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^login/restore/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'restore','code'=>'$1'),'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^login/confirm$','page'=>'login.php','get'=>array('act'=>'confirm'),'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^login/confirm/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'confirm','code'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users'));
 
+		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users'));
+
+		$this->core->plugins->newRule(array('preg'=>'^admin/other/users/import','page'=>'import.php','get'=>array(),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));
+
+		/*
 		$this->core->plugins->newRule(array('preg'=>'^users$','page'=>'users.php','get'=>array('act'=>'all','page'=>'1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','page'=>'$1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/confirm$','page'=>'users.php','get'=>array('act'=>'confirm','page'=>'1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>array('^users/confirm/page-([0-9]*)$','^admin/other/users/confirm/page-([0-9]*)$'),'page'=>'users.php','get'=>array('act'=>'confirm','page'=>'$1'),'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^admin/other/users/import','page'=>'import.php','get'=>array(),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 
 		$this->core->plugins->newRule(array('preg'=>'^profile(|\/)$','page'=>'profile.php','get'=>array('type'=>'main'),'plugin'=>'users'));
-		$this->core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));*/
 	}
 
 	public function RegisterPluginEvent($id,$plugin,$info)
@@ -82,12 +102,17 @@ class load
 		switch($id.'_'.$plugin)
 		{
 			case 'admin_menu_render_admin':
-				if(in_array($_SESSION['rank_main'],array(1,2,3)))$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
-				if(in_array($_SESSION['rank_main'],array(1)))$info['other']['users_import'] = array('icon'=>'arrow-right','value'=>'Импортирование БД',/*'href'=>'users/import'*/);
-				if($_SESSION['rank_main']<1)unset($info['api'],$info['client']);
+				foreach($_SESSION['users']['rank'] as $r)
+				{
+					if(in_array($r,array('main_admin')))
+						$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
+
+					if(in_array($r,array('main_admin')))
+						$info['other']['users_import'] = array('icon'=>'arrow-right','value'=>'Импортирование БД','href'=>'users/import');
+				}
 				break;
 
-			case 'admin_access_admin':
+			/*case 'admin_access_admin':
 				if($info[0]===null)$info[0] = false;
 				if(preg_match("'^other/users/import$'i",$info[1]) && in_array($_SESSION['rank_main'],array(1)))
 				{
@@ -102,17 +127,17 @@ class load
 					$info[0] = true;
 				}
 				break;
-
+*/
 			case 'render_widget_menu':
-				if($_SESSION['loggedin'])
+				if($this->loggedin())
 				{
-					$info[] = array('Пользователи','users');
-					$info[] = array('Настройки','profile');
+					$info[] = array('Пользователи','users/page-1');
+					$info[] = array('Настройки','profile/main');
 					$info[] = array('Выход','logout');
 				}
 				else
 				{
-					$info[] = array('Пользователи','users');
+					$info[] = array('Пользователи','users/page-1');
 					$info[] = array('Регистрация','signup');
 					$info[] = array('Вход','login');
 				}
@@ -124,16 +149,27 @@ class load
 	public function appointment($rank)
 	{
 		$appointments = array(
-			'1'=>'Гл. Администратор',
-			'2'=>'Администратор',
-			'3'=>'Модератор',
-			'4'=>'Инспектор',
-			'5'=>'Дизайнер',
-			'6'=>'Журналист',
-			'7'=>'Пользователь',
-			'8'=>'Посетитель',
+			'main_admin'=>'Гл. Администратор',
+			'admin'=>'Администратор',
+			'moderator'=>'Модератор',
+			'developer'=>'Разработчик',
+			'user'=>'Пользователь',
+			'guest'=>'Посетитель',
 		);
 
-		return isset($appointments[$rank]) ? $appointments[$rank]:false;
+		return isset($appointments[$rank]) ? $appointments[$rank]:$rank;
+	}
+
+	public function loggedin()
+	{
+		if($this->currentUser()===0)return false;
+		else return true;
+	}
+
+	public function currentUser($id=null)
+	{
+		if($id!==null)$_SESSION['users']['id'] = $id;
+
+		return isset($_SESSION['users']['id'])?$_SESSION['users']['id']:0;
 	}
 }

@@ -5,6 +5,7 @@ class login implements userInterface
 	public function __construct($core)
 	{
 		$this->core = &$core;
+		$this->confs = &$this->core->conf->plugins->users;
 	}
 
 	public function install()
@@ -39,8 +40,22 @@ class login implements userInterface
 		return $fr['login'];
 	}
 
+	public function getPropertyByValue($value)
+	{
+		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
+		$value = $this->core->sanString($value);
+		$qr = $this->core->mysql->query("SELECT id FROM users WHERE login='$value'");
+
+		if($this->core->mysql->rows($qr)!=1)return false;
+
+		$fr = $this->core->mysql->fetch();
+
+		return $fr['id'];
+	}
+
 	public function setProperty($id,$value)
 	{
+		$value = trim($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET login='$value' WHERE id='$id'");
 
@@ -48,7 +63,7 @@ class login implements userInterface
 		else return false;
 	}
 
-	public function validateProperty($id,$value)
+	public function validateProperty($value,$id=null)
 	{
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("SELECT login FROM users WHERE login='$value'");
@@ -62,19 +77,42 @@ class login implements userInterface
 		return true;
 	}
 
+	public function canSetProperty($id,$idfrom)
+	{
+		return false;
+	}
+
 	public function canSignup($value)
 	{
+		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
+
+		if(mb_strlen($value,'UTF-8')>$this->confs->modules->login['length']['max'])
+		{
+			$this->core->error->error('plugin_users_module_login',1);
+			return false;
+		}
+		if(mb_strlen($value,'UTF-8')<$this->confs->modules->login['length']['min'])
+		{
+			$this->core->error->error('plugin_users_module_login',1);
+			return false;
+		}
+
 		$value = $this->core->sanString($value);
 
 		$qr = $this->core->mysql->query("SELECT login FROM users WHERE login='$value'");
 		$qr2 = $this->core->mysql->query("SELECT login FROM users_signup WHERE login='$value'");
 
-		if($this->core->mysql->rows($qr)!=0 || $this->core->mysql->rows($qr2)!=0)return false;
+		if($this->core->mysql->rows($qr)!=0 || $this->core->mysql->rows($qr2)!=0)
+		{
+			$this->core->error->error('plugin_users_module_login',0);
+			return false;
+		}
 		else return true;
 	}
 
 	public function signup($id,$value)
 	{
+		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users_signup SET login='$value' WHERE id='$id'");
 

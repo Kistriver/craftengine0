@@ -5,6 +5,25 @@ class password implements userInterface
 	public function __construct($core)
 	{
 		$this->core = &$core;
+		$this->confs = &$this->core->conf->plugins->users;
+	}
+
+	protected function generatePass($value)
+	{
+		$str = sha1('CRAFTEngine'.$value);
+		return $str;
+	}
+
+	public function comparePass($id,$value)
+	{
+		if($this->getProperty($id)==trim($this->generatePass($value)))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public function install()
@@ -30,6 +49,7 @@ class password implements userInterface
 
 	public function getProperty($id)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT password FROM users WHERE id='$id'");
 
 		if($this->core->mysql->rows($qr)==0)return false;
@@ -39,8 +59,16 @@ class password implements userInterface
 		return $fr['password'];
 	}
 
+	public function getPropertyByValue($value)
+	{
+		return false;
+	}
+
 	public function setProperty($id,$value)
 	{
+		$id = intval($id);
+		$value = trim($value);
+		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET password='$value' WHERE id='$id'");
 
@@ -48,7 +76,7 @@ class password implements userInterface
 		else return false;
 	}
 
-	public function validateProperty($id,$value)
+	public function validateProperty($value,$id=null)
 	{
 		$value = $this->core->sanString($value);
 		return true;
@@ -59,13 +87,32 @@ class password implements userInterface
 		return false;
 	}
 
+	public function canSetProperty($id,$idfrom)
+	{
+		if($id==$idfrom)return true;
+		else return false;
+	}
+
 	public function canSignup($value)
 	{
+		if(mb_strlen($value,'UTF-8')>$this->confs->modules->password['length']['max'])
+		{
+			$this->core->error->error('plugin_users_module_password',1);
+			return false;
+		}
+		if(mb_strlen($value,'UTF-8')<$this->confs->modules->password['length']['min'])
+		{
+			$this->core->error->error('plugin_users_module_password',1);
+			return false;
+		}
+
 		return true;
 	}
 
 	public function signup($id,$value)
 	{
+		$id = intval($id);
+		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users_signup SET password='$value' WHERE id='$id'");
 
@@ -75,9 +122,11 @@ class password implements userInterface
 
 	public function register($id,$idnew)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT password FROM users_signup WHERE id='$id'");
 		$fr = $this->core->mysql->fetch($qr);
-		$value = $this->core->sanString($fr['password']);
+		$value = $fr['password'];
+		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET password='$value' WHERE id='$idnew'");
 
 		if($qr)return true;

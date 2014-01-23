@@ -27,7 +27,7 @@ class core
 			die("Missed core parameter 'root'");
 		}
 
-		$ver = 'v3.1';
+		$ver = 'v3.2';
 		if(!empty($_GET['getinfo']))
 		{
 		//header('Content-type: text/plain; charset=utf-8;');

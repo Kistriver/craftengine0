@@ -20,6 +20,14 @@ interface userInterface
 	public function getProperty($id);
 
 	/**
+	 * Get id of user by ID
+	 *
+	 * @param $value
+	 * @return boolean|string|int
+	 */
+	public function getPropertyByValue($value);
+
+	/**
 	 * Set value of property with ID
 	 *
 	 * @param $id
@@ -35,7 +43,7 @@ interface userInterface
 	 * @param $value
 	 * @return boolean
 	 */
-	public function validateProperty($id,$value);
+	public function validateProperty($value,$id=null);
 
 	/**
 	 * Can user idfrom get value of property
@@ -49,10 +57,11 @@ interface userInterface
 	/**
 	 * Can user idfrom set value of property
 	 *
-	 * @param $value
+	 * @param $id
+	 * @param $idfrom
 	 * @return boolean
 	 */
-	//public function canSetProperty($id,$idfrom);
+	public function canSetProperty($id,$idfrom);
 
 	/**
 	 * Can user signup with this value of property
@@ -75,6 +84,7 @@ interface userInterface
 	 * Register new user
 	 *
 	 * @param $id
+	 * @param $idnew
 	 * @return boolean
 	 */
 	public function register($id,$idnew);

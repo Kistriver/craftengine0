@@ -11,22 +11,22 @@
 </p>
 <form method="post">
 
-<div class="row">
+{#<div class="row">
 <div class="col-md-7 col-md-offset-1">
 <div class="input-group">
 <span class="input-group-addon">
 Логин пригласившего
 </span>
-<input name="invite" type="text" class="form-control"
+<input name="invited" type="text" class="form-control"
 {%if _GET.invited is defined %}disabled="disabled"{%endif%}
-value="{%if _POST.invite is defined %}{{_POST.invite}}{%else%}{{_GET.invited}}{%endif%}" 
+value="{%if _POST.invited is defined %}{{_POST.invited}}{%else%}{{_GET.invited}}{%endif%}"
 maxlength="30" placeholder="Этот пользователь должен быть зарегистрирован" />
 </div>
 </div>
 <div class="col-md-3">
 (От 4 до 30 символов : a-z, A-Z, 0-9, _)
 </div>
-</div>
+</div>#}
 
 
 <div class="row">
@@ -148,8 +148,8 @@ maxlength="100" placeholder="admin@kcraft.su" />
 Пол
 </span>
 <select name="sex" class="form-control">
-<option value="male">Мужской</option>
-<option value="female">Женский</option>
+<option value="1">Мужской</option>
+<option value="0">Женский</option>
 <option disabled>Кафельный</option>
 </select>
 </div>
@@ -165,17 +165,53 @@ maxlength="100" placeholder="admin@kcraft.su" />
 <span class="input-group-addon">
 День рождения
 </span>
-<input name="birthday" type="text" class="form-control" 
-value="{{_POST.birthday}}" 
-maxlength="10" placeholder="31/12/1990" />
+    <select name="birthday[day]" class="form-control">
+        {% for i in 1..31 %}
+            <option value="{{ i }}">{{ i }}</option>
+        {% endfor %}
+    </select>
 </div>
 </div>
 <div class="col-md-3">
-(В формате ДД/ММ/ГГГГ)
+(День)
 </div>
+</div>
+<div class="row">
+    <div class="col-md-7 col-md-offset-1">
+        <div class="input-group">
+<span class="input-group-addon">
+День рождения
+</span>
+            <select name="birthday[month]" class="form-control">
+                {% for i in 1..12 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        (Месяц)
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-7 col-md-offset-1">
+        <div class="input-group">
+<span class="input-group-addon">
+День рождения
+</span>
+            <select name="birthday[year]" class="form-control">
+                {% for i in 1960..2010 %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        (Год)
+    </div>
 </div>
 
-<div class="row">
+{#<div class="row">
 <div class="col-md-7 col-md-offset-1">
 <div class="input-group">
 <span class="input-group-addon">
@@ -192,7 +228,7 @@ placeholder="
 <div class="col-md-3">
 
 </div>
-</div>
+</div>#}
 
 <div class="row">
 <div class="col-md-7 col-md-offset-1">

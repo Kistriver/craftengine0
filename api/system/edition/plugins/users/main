@@ -15,6 +15,10 @@
 	},
 	"api":
 	[
-
+        "signup",
+        "login",
+        "user",
+        "import",
+        "profile"
 	]
 }

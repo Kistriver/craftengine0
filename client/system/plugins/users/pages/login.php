@@ -5,13 +5,46 @@ if(!defined('CE_HUB'))die('403');
 if(!empty($_GET['act']))
 {
 	$act = $_GET['act'];
-	if($act=='logout')
+	if($act=='login')
 	{
-		if($_SESSION['loggedin'])
+		if((new load($core))->loggedin())$core->f->quit(403);
+
+		if(!empty($_POST['email']) and !empty($_POST['password']))
 		{
-		$core->api->get('user/login/logout',array('sid'=>$_SESSION['sid']));
+			$core->api->get('users/login/login',array('email'=>$_POST['email'], 'password'=>$_POST['password']));
+			$data = $core->api->answer_decode;
+
+			if($data['data'][0]!==false)
+			{
+				$core->api->get('users/user/get',array('id'=>$data['data'][1]));
+				//(new load($core))->currentUser($data['data'][1]);
+				$loggedin = $core->api->answer_decode;
+
+				if(isset($loggedin['data'][0]))
+					if($loggedin['data'][0]===false)
+					{
+						$core->f->show('login/main','users');
+						exit;
+					}
+
+				foreach($loggedin['data'] as $k=>$v)
+				{
+					$_SESSION['users'][$k] = $v;
+				}
+
+				//setcookie("authed", $loggedin['data']['id'].':'.$loggedin['data']['auth'], time()+36000,'/');
+				header('Location: users/'.$loggedin['data']['login']);
+			}
+		}
+	}
+	elseif($act=='logout')
+	{
+		if((new load($core))->loggedin())
+		{
+		$core->api->get('users/login/logout');
 		setcookie("authed", "", 0,'/');
 		//session_destroy();
+		(new load($core))->currentUser(0);
 		header('Location: index');
 		}
 		else
@@ -21,13 +54,13 @@ if(!empty($_GET['act']))
 	}
 	elseif($act=='restore')
 	{
-		if($_SESSION['loggedin'])$core->f->quit(403);
+		if((new load($core))->loggedin())$core->f->quit(403);
 
 		if(isset($_GET['code']))
 		{
 			if(!empty($_GET['code']))
 			{
-				$core->api->get('user/login/restore',array(
+				$core->api->get('users/login/restore',array(
 					'step'=>'2',
 					'code'=>$_GET['code'],
 				));
@@ -63,11 +96,10 @@ if(!empty($_GET['act']))
 			
 			if($err==0)
 			{
-				$core->api->get('user/login/restore',array(
+				$core->api->get('users/login/restore',array(
 				'step'=>'1',
 				'captcha'=>$_POST['captcha'],
 				'email'=>$_POST['email'],
-				'sid'=>$_SESSION['sid'],
 				));
 				if(isset($core->api->answer_decode['data'][0]))
 					if($core->api->answer_decode['data'][0]==true)
@@ -81,46 +113,16 @@ if(!empty($_GET['act']))
 			}
 		}
 		
-		$core->api->get('captcha/captcha/set',array('type'=>'user_pass_restore'));
-		$core->render['cap_src'] = $core->conf->conf->core->api->url."system-scripts/captcha.php?type=user_pass_restore&sid=".$_SESSION['sid'];
+		$core->api->get('captcha/captcha/set',array('type'=>'users_pass_restore'));
+		$core->render['cap_src'] = $core->conf->conf->core->api->url."script.php?module=captcha&script=captcha&type=users_pass_restore&sid=".$_SESSION['sid'];
 		
 		$core->f->show('login/restore','users');
 		die;
 	}
-	elseif($act=='confirm')
-	{
-		if(!empty($_GET['code']) OR !empty($_POST['code']))
-		{
-			$code = !empty($_POST['code'])?$_POST['code']:$_GET['code'];
-			$core->api->get('user/login/activate',array('code'=>$code));
-			if($core->api->answer_decode['data'][0]===true)
-			{
-				$core->render['MAIN']['SUCCESS'][] = 'Код активации принят';
-			}
-			elseif($core->api->answer_decode['data'][0]===false)
-			{
-				$core->error->error('Код активации не принят');
-			}
-		}
-	}
 }
 else
 {
-	if($_SESSION['loggedin'])$core->f->quit(403);
-	
-	if(!empty($_POST['email']) and !empty($_POST['password']))
-	{
-		$core->api->get('user/login/login',array('email'=>$_POST['email'], 'password'=>$_POST['password'],'sid'=>$_SESSION['sid']));
-		$data = $core->api->answer_decode;
-		
-		if(sizeof($data['errors'])==0)
-		{
-			$core->api->get('user/user/loggedin',array('sid'=>$_SESSION['sid']));
-			$loggedin = $core->api->answer_decode;
-			setcookie("authed", $loggedin['data']['id'].':'.$loggedin['data']['auth'], time()+36000,'/');
-			header('Location: users/'.$loggedin['data']['login']);
-		}
-	}
+	$core->f->quit(404);
 }
 
 $core->f->show('login/main','users');

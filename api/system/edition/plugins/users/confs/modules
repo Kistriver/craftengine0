@@ -15,7 +15,7 @@
     {
         "length":{"min":6,"max":100}
     },
-	"mail":
+	"email":
 	{
 	    "length":{"min":6,"max":100},
         "list":
@@ -24,16 +24,37 @@
             "whitelist":true,
             "list":
             [
-                "mail\\.ru",
-                "gmail\\.com",
-                "yandex\\.ru",
-                "bk\\.ru",
-                "inbox\\.ru",
-                "list\\.ru",
-                "live\\.ru",
-                "hotmail\\.com",
-                "yahoo\\.com"
+                "mail.ru",
+                "gmail.com",
+                "yandex.ru",
+                "bk.ru",
+                "inbox.ru",
+                "list.ru",
+                "live.ru",
+                "hotmail.com",
+                "yahoo.com",
+                "kcraft.su"
             ]
+        }
+	},
+	"invited":
+	{
+
+	},
+	"rank":
+	{
+        "list":
+        [
+            "main_admin",
+            "admin",
+            "developer",
+            "moderator",
+            "user"
+        ],
+        "access":
+        {
+            "signup_admin":["main_admin","admin","moderator"],
+            "set_rank":["main_admin"]
         }
 	}
 }

@@ -22,6 +22,7 @@ class skin implements userInterface
 
 	public function getProperty($id)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT skin FROM users WHERE id='$id'");
 
 		if($this->core->mysql->rows($qr)==0)return false;
@@ -31,8 +32,14 @@ class skin implements userInterface
 		return $fr['skin'];
 	}
 
+	public function getPropertyByValue($value)
+	{
+		return false;
+	}
+
 	public function setProperty($id,$value)
 	{
+		$id = intval($id);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET skin='$value' WHERE id='$id'");
 
@@ -40,7 +47,7 @@ class skin implements userInterface
 		else return false;
 	}
 
-	public function validateProperty($id,$value)
+	public function validateProperty($value,$id=null)
 	{
 		$value = $this->core->sanString($value);
 		return true;
@@ -49,6 +56,12 @@ class skin implements userInterface
 	public function canGetProperty($id,$idfrom)
 	{
 		return true;
+	}
+
+	public function canSetProperty($id,$idfrom)
+	{
+		if($id==$idfrom)return true;
+		else return false;
 	}
 
 	public function canSignup($value)

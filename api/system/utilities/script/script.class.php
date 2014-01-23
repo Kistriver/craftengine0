@@ -24,7 +24,7 @@ class script
 		switch($module)
 		{
 			case 'system':
-				$file = dirname(__FILE__)."/../../scripts/$script.class.php";
+				$file = dirname(__FILE__)."/scripts/$script.class.php";
 				if(!is_readable($file))return false;
 				require_once($file);
 				$name = '\CRAFTEngine\core\scripts\\'.$script;
@@ -34,7 +34,7 @@ class script
 				break;
 
 			default:
-				$file = $this->core->getParams()['root']."plugins/$module/scripts/$script.class.php";
+				$file = $this->core->getParams()['root']."plugins/$module/utilities/script/scripts/$script.class.php";
 				if(!is_readable($file))return false;
 				require_once($file);
 				$name = '\CRAFTEngine\plugins\\'.$module.'\scripts\\'.$script;

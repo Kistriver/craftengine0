@@ -10,13 +10,15 @@ class load
 		//var_dump($u->getAllProperties('2'));
 		//var_dump($u->getProperties('2','3'));
 
-		//$uc=$this->core->plugin->initPl('users','core');
-		/*var_dump($uc->signup(
+		/*$uc=$this->core->plugin->initPl('users','core');
+		var_dump($uc->signup(
 			array(
 				'name'=>'Alexey',
 				'surname'=>'Kachalov',
-				'login'=>'Kachalov27',
-				'email'=>'alex-kachalov@mail.ru',
+				'login'=>'Kachalov12',
+				'invited'=>'6',
+				'birthday'=>'01051998',
+				'email'=>'alex-kachalov2@mail.ru',
 				'password_salt'=>12345,
 				'password'=>'qwerty',
 			)

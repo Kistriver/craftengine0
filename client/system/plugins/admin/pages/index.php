@@ -7,7 +7,6 @@ $list = array('api'=>array(),'client'=>array(),'other'=>array());
 
 $list['api']['default_plugins'] = array('icon'=>'list','value'=>'Плагины','href'=>'plugins');
 $list['api']['default_settings'] = array('icon'=>'wrench','value'=>'Настройки ядра',/*'href'=>'settings'*/);
-$list['api']['default_import'] = array('icon'=>'arrow-right','value'=>'Импорт БД','href'=>'import');
 $list['api']['default_stat'] = array('icon'=>'tasks','value'=>'Статистика запросов');
 
 $list['client']['default_pages'] = array('icon'=>'pencil','value'=>'Редактирование страниц'/*,'href'=>'pages'*/);

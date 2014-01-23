@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0b3_alpha';
+	const CORE_VER = '0.3.0b4_alpha';
 	const MIN_CORE_VER = '0.3.0a_alpha';
 
 	private $core_confs;
@@ -245,13 +245,6 @@ class core
 	final function stat()
 	{
 		$this->about();
-
-		if(rand(0,100)<75)
-		{
-			$this->stat = false;
-			return;
-		}
-
 		$updatetime = 60 * 60 * 12;
 		/*$file = empty($this->core->core_confs['cache']['root'])?
 			dirname(__FILE__).'/cache/Stat':
