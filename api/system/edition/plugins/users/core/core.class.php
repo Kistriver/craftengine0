@@ -564,4 +564,17 @@ class core
 			}
 		}
 	}
+
+	public function makeEvent($id,$module,$addInfo)
+	{
+		static $u = null;
+		if($u===null)$u = $this->core->plugin->initPl('users','user');
+		foreach($u->getPropertiesList() as $mod)
+		{
+			if(method_exists($u->$mod,'registerEvent'))
+				$addInfo = $u->$mod->registerEvent($id,$module,$addInfo);
+		}
+
+		return $addInfo;
+	}
 }

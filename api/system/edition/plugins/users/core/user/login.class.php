@@ -97,6 +97,12 @@ class login implements userInterface
 			return false;
 		}
 
+		if(!preg_match("'^([a-zA-Z0-9_]*)$'",$value))
+		{
+			$this->core->error->error('plugin_users_module_login',1);
+			return false;
+		}
+
 		$value = $this->core->sanString($value);
 
 		$qr = $this->core->mysql->query("SELECT login FROM users WHERE login='$value'");

@@ -8,6 +8,11 @@ class password implements userInterface
 		$this->confs = &$this->core->conf->plugins->users;
 	}
 
+	public function construct($user_core)
+	{
+		$this->user_core = &$user_core;
+	}
+
 	protected function generatePass($value)
 	{
 		$str = sha1('CRAFTEngine'.$value);
@@ -16,6 +21,9 @@ class password implements userInterface
 
 	public function comparePass($id,$value)
 	{
+		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('set','password',array($id,$value,true));
+		if(!$success)return false;
+
 		if($this->getProperty($id)==trim($this->generatePass($value)))
 		{
 			return true;
@@ -68,6 +76,8 @@ class password implements userInterface
 	{
 		$id = intval($id);
 		$value = trim($value);
+		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('set','password',array($id,$value,true));
+		if(!$success)return false;
 		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET password='$value' WHERE id='$id'");
@@ -112,6 +122,8 @@ class password implements userInterface
 	public function signup($id,$value)
 	{
 		$id = intval($id);
+		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('signup','password',array($id,$value,true));
+		if(!$success)return false;
 		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users_signup SET password='$value' WHERE id='$id'");

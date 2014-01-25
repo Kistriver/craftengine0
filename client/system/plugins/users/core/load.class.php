@@ -79,8 +79,9 @@ class load
 		$this->core->plugins->newRule(array('preg'=>'^login/restore/([a-z0-9]*)$','page'=>'login.php','get'=>array('act'=>'restore','code'=>'$1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^login/restore$','page'=>'login.php','get'=>array('act'=>'restore'),'plugin'=>'users'));
 
-		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^users/page-([0-9]*)$','page'=>'users.php','get'=>array('act'=>'all','page'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^users/id([0-9]*)$','page'=>'users.php','get'=>array('act'=>'user','id'=>'$1'),'plugin'=>'users'));
+		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 
 		$this->core->plugins->newRule(array('preg'=>'^admin/other/users/import','page'=>'import.php','get'=>array(),'plugin'=>'users'));
 		$this->core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));
@@ -104,7 +105,7 @@ class load
 			case 'admin_menu_render_admin':
 				foreach($_SESSION['users']['rank'] as $r)
 				{
-					if(in_array($r,array('main_admin')))
+					if(in_array($r,array('main_admin','admin')))
 						$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
 
 					if(in_array($r,array('main_admin')))
@@ -112,22 +113,34 @@ class load
 				}
 				break;
 
-			/*case 'admin_access_admin':
+			case 'admin_access_admin':
 				if($info[0]===null)$info[0] = false;
-				if(preg_match("'^other/users/import$'i",$info[1]) && in_array($_SESSION['rank_main'],array(1)))
+				if(preg_match("'^other/users/import$'i",$info[1]))
 				{
-					$info[0] = true;
+					foreach($_SESSION['users']['rank'] as $r)
+					{
+						if(in_array($r,array('main_admin')))
+							$info[0] = true;
+					}
 				}
-				if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]) && in_array($_SESSION['rank_main'],array(1,2,3)))
+				if(preg_match("'^((client|api)/)|(other/(users/confirm)/)'i",$info[1]))
 				{
-					$info[0] = true;
+					foreach($_SESSION['users']['rank'] as $r)
+					{
+						if(in_array($r,array('main_admin','admin','moderator')))
+							$info[0] = true;
+					}
 				}
-				if($info[1]=='' && in_array($_SESSION['rank_main'],array(1,2,3)))
+				if($info[1]=='')
 				{
-					$info[0] = true;
+					foreach($_SESSION['users']['rank'] as $r)
+					{
+						if(in_array($r,array('main_admin','admin','moderator')))
+							$info[0] = true;
+					}
 				}
 				break;
-*/
+
 			case 'render_widget_menu':
 				if($this->loggedin())
 				{
