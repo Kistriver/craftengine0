@@ -651,14 +651,22 @@ class plugin
 	 * @param $addInfo
 	 * @return mixed
 	 */
-	public function makeEvent($id,$plugin,$addInfo)
+	public function makeEvent($id,$plugin,$addInfo,$staticInfo=null)
 	{
+		static $plLoaded = array();
+
 		foreach($this->pluginsIncluded as $f=>$c)
 		{
-			$pl = $this->initPl($c->name,$c->loadClass);
+			if(!in_array($c->loadClass,$plLoaded[$c->name]))
+			{
+				$pl = $this->initPl($c->name,$c->loadClass);
+				$plLoaded[$c->name][$c->loadClass] = $pl;
+			}
+
+			$pl = $plLoaded[$c->name][$c->loadClass];
 
 			if(method_exists($pl,'registerPluginEvent'))
-				$addInfo = $pl->registerPluginEvent($id,$plugin,$addInfo);
+				$addInfo = $pl->registerPluginEvent($id,$plugin,$addInfo,$staticInfo);
 		}
 
 		return $addInfo;

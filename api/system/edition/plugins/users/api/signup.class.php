@@ -2,7 +2,7 @@
 namespace CRAFTEngine\api\users;
 class signup extends \CRAFTEngine\core\api
 {
-	private $user_core;
+	private $users_core;
 
 	public function init()
 	{
@@ -11,12 +11,12 @@ class signup extends \CRAFTEngine\core\api
 		$this->functions['check']='check';
 		$this->functions['activate']='activate';
 
-		$this->user_core = $this->core->plugin->initPl('users','core');
+		$this->users_core = $this->core->plugin->initPl('users','core');
 	}
 	
 	protected function signup()
 	{
-		$status = $this->user_core->signup($this->data);
+		$status = $this->users_core->signup->signup($this->data);
 
 		if($status)return array(true);
 		else return array(false);
@@ -24,7 +24,7 @@ class signup extends \CRAFTEngine\core\api
 
 	protected function check()
 	{
-		$status = $this->user_core->signupValuesCheck($this->data);
+		$status = $this->users_core->signup->signupValuesCheck($this->data);
 
 		if($status)return array(true);
 		else return array(false);
@@ -37,27 +37,29 @@ class signup extends \CRAFTEngine\core\api
 		$data = array();
 		$data['id'] = $this->data['id'];
 
+		$ucs = &$this->users_core->signup;
+
 		switch($this->data['type'])
 		{
 			case 'admin':
-				$data['add_mode'] = \CRAFTEngine\plugins\users\SIGNUP_ADMIN;
+				$data['add_mode'] = $ucs::SIGNUP_ADMIN;
 				break;
 
 			case 'mail':
 				$this->input('code');
-				$data['add_mode'] = \CRAFTEngine\plugins\users\SIGNUP_MAIL;
+				$data['add_mode'] = $ucs::SIGNUP_MAIL;
 				$data['code'] = $this->data['code'];
 				break;
 
 			case 'invite':
-				$data['add_mode'] = \CRAFTEngine\plugins\users\SIGNUP_INVITE;
+				$data['add_mode'] = $ucs::SIGNUP_INVITE;
 				break;
 
 			default:
 				return array(false);
 				break;
 		}
-		$status = $this->user_core->signupActivate($data);
+		$status = $this->users_core->signup->signupActivate($data);
 
 		if($status)return array(true);
 		else return array(false);

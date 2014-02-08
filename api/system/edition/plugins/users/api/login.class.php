@@ -2,7 +2,7 @@
 namespace CRAFTEngine\api\users;
 class login extends \CRAFTEngine\core\api
 {
-	private $user_core;
+	private $users_core;
 
 	public function init()
 	{
@@ -11,44 +11,44 @@ class login extends \CRAFTEngine\core\api
 		$this->functions['logout']='logout';
 		$this->functions['restore']='restore';
 
-		$this->user_core = $this->core->plugin->initPl('users','core');
+		$this->users_core = $this->core->plugin->initPl('users','core');
 	}
 	
 	protected function login()
 	{
-		if($this->user_core->currentUser()!=0)
+		if($this->users_core->user->currentUser()!=0)
 		{
 			$this->core->error->error('server',403);
 			return array(false);
 		}
 
-		$status = $this->user_core->login($this->data);
+		$status = $this->users_core->login->login($this->data);
 
-		if($status)return array(true,$this->user_core->currentUser());
+		if($status)return array(true,$this->users_core->user->currentUser());
 		else return array(false);
 	}
 
 	protected function logout()
 	{
-		if($this->user_core->currentUser()==0)
+		if($this->users_core->user->currentUser()==0)
 		{
 			$this->core->error->error('server',403);
 			return array(false);
 		}
 
-		$this->user_core->currentUser(0);
+		$this->users_core->user->currentUser(0);
 		return array(true);
 	}
 
 	protected function restore()
 	{
-		if($this->user_core->currentUser()!=0)
+		if($this->users_core->user->currentUser()!=0)
 		{
 			$this->core->error->error('server',403);
 			return array(false);
 		}
 
-		$status = $this->user_core->restorePassword($this->data);
+		$status = $this->users_core->login->restorePassword($this->data);
 
 		if($status!==true && $status!==false)return array(true,$status);
 		elseif($status===true)return array(true);

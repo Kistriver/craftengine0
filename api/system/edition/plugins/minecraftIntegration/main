@@ -1,0 +1,23 @@
+{
+	"author":"Kachalov",
+	"version":"1.0",
+	"web":"http://vk.com/craftengine",
+	"name":"minecraftIntegration",
+	"since":"0.3.0b5_alpha",
+	"title":"Интеграция \"Minecraft\"",
+	"loadClass":"load",
+	"description":"Интегрирует плагин users с лаунчером xLauncher.",
+	"confs":
+	{
+        "errors":["self"],
+        "settings":["self"]
+	},
+	"api":
+	[
+
+	],
+    "requires":
+    [
+         "users"
+    ]
+}

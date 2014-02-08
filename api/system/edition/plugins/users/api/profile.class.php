@@ -2,17 +2,19 @@
 namespace CRAFTEngine\api\users;
 class profile extends \CRAFTEngine\core\api
 {
+	private $users_core;
+
 	public function init()
 	{
 		#$this->functions['act']='function';
 		$this->functions['change']='change_name';
 
-		$this->user_core = $this->core->plugin->initPl('users','core');
+		$this->users_core = $this->core->plugin->initPl('users','core');
 	}
 
 	protected function change_name()
 	{
-		if($this->user_core->currentUser()==0)
+		if($this->users_core->user->currentUser()==0)
 		{
 			$this->core->error->error('server',403);
 			return array(false);
@@ -35,7 +37,7 @@ class profile extends \CRAFTEngine\core\api
 
 				$nick = $this->core->sanString($this->data['value']);
 
-				$u = $this->core->plugin->initPl('users','user');
+				$u = &$this->users_core->user;
 
 				$s = $u->nickname->setProperty($this->user_core->currentUser(),$nick);
 
@@ -55,9 +57,9 @@ class profile extends \CRAFTEngine\core\api
 				$pass = $this->core->sanString($this->data['value']);
 				$pass_old = $this->core->sanString($this->data['value_old']);
 
-				$u = $this->core->plugin->initPl('users','user');
+				$u = &$this->users_core->user;
 
-				$s = $u->password->comparePass($this->user_core->currentUser(),$pass_old);
+				$s = $u->password->comparePass($u->currentUser(),$pass_old);
 
 				if($s!==true)
 				{
@@ -65,7 +67,7 @@ class profile extends \CRAFTEngine\core\api
 				}
 				else
 				{
-					if($u->password->setProperty($this->user_core->currentUser(),$pass))
+					if($u->password->setProperty($u->currentUser(),$pass))
 					return array(true);
 					else
 					return array(false);

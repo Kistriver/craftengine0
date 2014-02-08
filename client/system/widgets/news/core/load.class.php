@@ -11,7 +11,7 @@ class load
 	{
 		$this->core->render['SYS']['WIDGETS'][] = array('news','main');
 
-		$this->core->api->get('article/article/posts',array('page'=>1));
+		$this->core->api->get('articles/article/posts',array('page'=>1));
 
 		$data = $this->core->api->answer_decode;
 
@@ -21,11 +21,14 @@ class load
 
 		$posts = array();
 
-		if(sizeof($data['errors'])==0)
-			for($i=0;$i<sizeof($data['data']['posts']);$i++)
+		if($data['data'][0]===true && sizeof($data['data'][1])!=0)
+			for($i=0;$i<sizeof($data['data'][1]);$i++)
 			{
-				//$template = $twig->loadTemplate('articles/main');
-				$post = $this->core->f->sanString($data['data']['posts'][$i]);
+				$post = $this->core->f->sanString($data['data'][1][$i]);
+
+				if(!isset($post['article']))$post['article']='';
+				if(!isset($post['tags']))$post['tags']=array();
+
 				$post['article'] = str_replace("\n",'<br /> ',$post['article']);
 				$post['article'] = str_replace('<br /> ',"<br />\r\n",$post['article']);
 				$desc = mb_substr($post['article'], 0, 150, 'UTF-8');
@@ -42,7 +45,6 @@ class load
 
 				$posts[] = $post;
 			}
-
 		$this->core->render['WIDGETS']['news'] = $posts;
 	}
 

@@ -140,38 +140,6 @@ class functions
 		if($f['fix']<$s['fix'])return -1;
 
 		return 0;
-
-		/*$preg = "'^([0-9]).([0-9])(.([0-9]*)|)(_(alpha|beta|release|)|)$'i";
-		preg_match($preg,$first,$first);
-		preg_match($preg,$sec,$sec);
-
-		$vers = array('alpha'=>0,'beta'=>1,'release'=>2,
-					  'a'=>0,'b'=>1,'r'=>2);
-
-		$first[6] = (!empty($first[6]) && in_array($first[6],$vers))?$vers[$first[6]]:$vers['r'];
-		$sec[6] = (!empty($sec[6]) && in_array($sec[6],$vers))?$vers[$sec[6]]:$vers['r'];
-
-		$first[4] = empty($first[4])?0:$first[4];
-		$sec[4] = empty($sec[4])?0:$sec[4];
-
-		if($first[6]>$sec[6])return 1;
-		if($first[6]<$sec[6])return -1;
-		if($first[6]==$sec[6])
-		{
-			if($first[1]>$sec[1])return 1;
-			if($first[1]<$sec[1])return -1;
-			if($first[1]==$sec[1])
-			{
-				if($first[2]>$sec[2])return 1;
-				if($first[2]<$sec[2])return -1;
-				if($first[2]==$sec[2])
-				{
-					if($first[4]>$sec[4])return 1;
-					if($first[4]==$sec[4])return 0;
-					if($first[4]<$sec[4])return -1;
-				}
-			}
-		}*/
 	}
 
 	public function versionParse($version)
@@ -201,7 +169,10 @@ class functions
 
 		$ver['fix'] = empty($version[6][2])?0:$version[6][2];
 
-		if(isset($vers[$version[8]]))$ver['product'] = $vers[$version[8]];
+		if(isset($version[8]))
+		{
+			if(isset($vers[$version[8]]))$ver['product'] = $vers[$version[8]];
+		}
 		else $ver['product'] = $vers['release'];
 
 		return $ver;
@@ -265,7 +236,9 @@ class functions
 		$req = "GET {$root}script.php?module=$module&script=$file HTTP/1.0\r\n";
 		$req .= "User-agent: CraftEngine(".$this->core->conf->system->core->version.")\r\n";
 		$req .= "Host: ".$host."\r\n";
+		if(isset($params['http']))foreach($params['http'] as $key=>$value)$req .= $key.":".$value."\r\n";
 		$req .= "Connection: Close\r\n\r\n";
+		fwrite($answer, $req);
 		fwrite($answer, $req);
 		return $answer;
 		//fread($answer, 1024);

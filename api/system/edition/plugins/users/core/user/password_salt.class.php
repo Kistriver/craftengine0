@@ -13,20 +13,8 @@ class password_salt implements userInterface
 		switch("{$id}_{$module}")
 		{
 			case 'signup_password':
-				$symbols = array(
-					'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-					'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-					'0','1','2','3','4','5','6','7','8','9',
-				);
-				shuffle($symbols);
-				$sal = array_rand($symbols, 10);
-				$salt = '';
-				foreach((array)$sal as $c)
-				{
-					$salt .= $symbols[$c];
-				}
-				$uid = intval($info[0]);
-				$qr = $this->core->mysql->query("UPDATE users_signup SET password_salt='$salt' WHERE id='$uid'");
+				$salt = $this->makeSalt();
+				$qr = $this->core->mysql->query("UPDATE users_signup SET password_salt='$salt' WHERE id='{$info[0]}'");
 
 				if(!$qr)
 				{
@@ -52,6 +40,24 @@ class password_salt implements userInterface
 		}
 
 		return $info;
+	}
+
+	public function makeSalt()
+	{
+		$symbols = array(
+			'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+			'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+			'0','1','2','3','4','5','6','7','8','9',
+		);
+		shuffle($symbols);
+		$sal = array_rand($symbols, 10);
+		$salt = '';
+		foreach((array)$sal as $c)
+		{
+			$salt .= $symbols[$c];
+		}
+
+		return $salt;
 	}
 
 	public function install()
@@ -96,7 +102,6 @@ class password_salt implements userInterface
 	{
 		$id = intval($id);
 		$value = trim($value);
-		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET password_salt='$value' WHERE id='$id'");
 

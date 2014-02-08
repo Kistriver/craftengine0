@@ -114,7 +114,7 @@ class load
 				break;
 
 			case 'admin_access_admin':
-				if($info[0]===null)$info[0] = false;
+				//if($info[0]===null)$info[0] = false;
 				if(preg_match("'^other/users/import$'i",$info[1]))
 				{
 					foreach($_SESSION['users']['rank'] as $r)

@@ -1,0 +1,24 @@
+{
+	"author":"Kachalov",
+	"version":"1.0.0_alpha",
+	"web":"http://vk.com/craftengine",
+	"name":"users_old",
+	"since":"0.3.0b3_alpha",
+	"title":"Пользователи",
+	"loadClass":"load",
+	"description":"Модуль пользователей",
+	"confs":
+	{
+        "errors":["self"],
+        "modules":["self"],
+        "user":["self"]
+	},
+	"api":
+	[
+        "signup",
+        "login",
+        "user",
+        "import",
+        "profile"
+	]
+}

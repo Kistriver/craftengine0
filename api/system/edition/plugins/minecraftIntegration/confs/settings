@@ -1,0 +1,22 @@
+{
+    "users":
+    {
+
+    },
+    "launcher":
+    {
+        "xLauncher":
+        {
+            "launcher-version":"1.0.0",
+            "client-version":"1.0",
+            "client-bin":"check/bin",
+            "session-key":"CRAFTEngine",
+            "check-dir":"check/",
+            "servers":
+            [
+                ["kcraft.su","25565"],
+                ["kcraft.su","25555"]
+            ]
+        }
+    }
+}

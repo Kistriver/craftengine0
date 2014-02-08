@@ -6,7 +6,7 @@ $core_confs = array
 	'utilities'=>array(
 		'system'=>array(
 			'migrate'=>array(
-				'modules'=>array('system','article','comments','users'),
+				'modules'=>array('system','articles','comments','users'),
 			),
 		),
 	),

@@ -36,21 +36,40 @@ class error
 		$err = $this->errorMake($err_mod,$err_no);
 		if($err)$this->error[] = $err;
 	}
+
+	public function pathReplacer($path)
+	{
+		$path = str_replace('\\','/',$path);
+
+		$before = array(
+			dirname(__FILE__).'/',
+			$this->core->functions->pathBuilder($this->core->getParams()['root'].'/'),
+			$this->core->functions->pathBuilder(dirname(__FILE__).'/../'),
+		);
+
+		$after = array(
+			'{{CORE_ROOT}}/',
+			'{{EDITION_ROOT}}/',
+			'{{SYSTEM_ROOT}}/',
+		);
+
+		return str_replace($before,$after,$path);
+	}
 	
 	//Добавление ошибки PHP
 	public function errorPhp($code,$msg,$file,$line)
 	{
-		$file = str_replace('\\','/',$file);
-		//FIXME: might replace other system/core and it will be epic fail
-		$file_fr = str_replace('/system/core','',dirname(__FILE__));
-		$file = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$file);
+		$file = $this->pathReplacer($file);
 
-		if(!@$this->core->conf->system->core->debug)$this->error[] = $this->errorMake('engine',3);
+		$mr = isset($this->core->conf->system->core->debug['mail-report'])?$this->core->conf->system->core->debug['mail-report']:true;
+		$debug = isset($this->core->conf->system->core->debug['errors'])?$this->core->conf->system->core->debug['errors']:true;
+
+		if(!$debug)$this->error[] = $this->errorMake('engine',3);
 		else $this->error[] = array('engine',3,array($code,$msg,$file,$line));
 
 		$mysql = $this->core->mysql;
 		//if(isset($this->core->mysql,$this->core->mail))
-		if(@$this->core->conf->system->core->send_mail_report && $this->core->mysql->isConnect($mysql::DB_NAME))
+		if($mr && $this->core->mysql->isConnect($mysql::DB_NAME))
 		$this->core->mail->addWaitingList(
 		$this->core->conf->system->core->admin_mail, 
 		'001', 
@@ -76,8 +95,8 @@ class error
 	//Отлов завершения работы скрипта
 	public function fatalErrorPhp()
 	{
-		$debug = isset($this->core->conf->system->core->debug)?$this->core->conf->system->core->debug:true;
-		$mr = isset($this->core->conf->system->core->send_mail_report)?$this->core->conf->system->core->send_mail_report:true;
+		$debug = isset($this->core->conf->system->core->debug['errors'])?$this->core->conf->system->core->debug['errors']:true;
+		$mr = isset($this->core->conf->system->core->debug['mail-report'])?$this->core->conf->system->core->debug['mail-report']:true;
 
 		$error = error_get_last();
 		if (isset($error))//Если фатальная ошибка, то обработка этой ошибки
@@ -91,9 +110,7 @@ class error
 				if(empty($this->core->getParams()['api']['code']))header('HTTP/1.0 500');
 				else header('HTTP/1.0 '.$this->core->getParams()['api']['code']);
 
-				$error['file'] = str_replace('\\','/',$error['file']);
-				$file_fr = str_replace('/system/core','',dirname(__FILE__));
-				$error['file'] = str_replace($file_fr,'{{FRAMEWORK_ROOT}}',$error['file']);
+				$error['file'] = $this->pathReplacer($error['file']);
 
 				$mysql = $this->core->mysql;
 
@@ -101,8 +118,7 @@ class error
 				array('error'=>'Unfortunately, there is an error there. But our team is working on elimination of this problem.');
 				else $errA = array('error'=>"[$error[type]][$error[file]:$error[line]] $error[message]\r\n");
 				echo json_encode($errA);
-				if($this->core->conf->system->core->send_mail_report &&
-				isset($this->core->mail))
+				if($mr && isset($this->core->mail))
 				if($this->core->mysql->isConnect($mysql::DB_NAME))
 				$this->core->mail->addWaitingList(
 				$this->core->conf->system->core->admin_mail, 

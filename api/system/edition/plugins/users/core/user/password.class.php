@@ -8,9 +8,9 @@ class password implements userInterface
 		$this->confs = &$this->core->conf->plugins->users;
 	}
 
-	public function construct($user_core)
+	public function construct($users_core)
 	{
-		$this->user_core = &$user_core;
+		$this->users_core = &$users_core;
 	}
 
 	protected function generatePass($value)
@@ -21,7 +21,7 @@ class password implements userInterface
 
 	public function comparePass($id,$value)
 	{
-		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('set','password',array($id,$value,true));
+		list(,$value,$success) = $this->users_core->makeEvent('set','password',array($id,$value,true));
 		if(!$success)return false;
 
 		if($this->getProperty($id)==trim($this->generatePass($value)))
@@ -76,7 +76,7 @@ class password implements userInterface
 	{
 		$id = intval($id);
 		$value = trim($value);
-		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('set','password',array($id,$value,true));
+		list(,$value,$success) = $this->users_core->makeEvent('set','password',array($id,$value,true));
 		if(!$success)return false;
 		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);
@@ -122,7 +122,7 @@ class password implements userInterface
 	public function signup($id,$value)
 	{
 		$id = intval($id);
-		list(,$value,$success) = $this->core->plugin->initPl('users','core')->makeEvent('signup','password',array($id,$value,true));
+		list(,$value,$success) = $this->users_core->makeEvent('signup','password',array($id,$value,true));
 		if(!$success)return false;
 		$value = $this->generatePass($value);
 		$value = $this->core->sanString($value);

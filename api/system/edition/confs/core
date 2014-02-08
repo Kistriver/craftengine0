@@ -1,9 +1,16 @@
 {
-	"version":"0.3.0b1_alpha",
+	"version":"0.3.0b5_alpha",
 	"admin_mail":"alex-kachalov@mail.ru",
 	"name":"Minecraft Edition",
-	"debug":true,
-	"send_mail_report":true,
+	"non-anonymous-stat":true,
+	"debug":
+	{
+	    "mail-report":true,
+	    "log":true,
+	    "api":true,
+	    "errors":true
+	},
+	"exploit-search":true,
 	"mail":["test.kcraft.su/client","\"KachalovCRAFT NET\" <kachalov92@yandex.ru>"],
 	"upload_file_max_size":"5MB",
 	"GMT":"+0400",

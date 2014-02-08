@@ -2,14 +2,14 @@
 namespace CRAFTEngine\api\users;
 class import extends \CRAFTEngine\core\api
 {
-	private $user_core;
+	private $users_core;
 
 	public function init()
 	{
 	   #$this->functions['act']='function';
 		$this->functions['do']='doImport';
 
-		$this->user_core = $this->core->plugin->initPl('users','core');
+		$this->users_core = $this->core->plugin->initPl('users','core');
 	}
 	
 	protected function doImport()
@@ -59,12 +59,14 @@ class import extends \CRAFTEngine\core\api
 						$qrM = $this->core->mysql->query("SELECT * FROM system_tmp_users");
 						if(!$qrM)return array(false);
 
-						$u = $this->core->plugin->initPl('users','user');
+						$u = &$this->users_core->user;
 						$prop = $u->getPropertiesList();
 
 						$id_replace = array();
 						for($i=0;$i<$this->core->mysql->rows($qrM);$i++)
 						{
+							$commit = true;
+							$this->core->mysql->query("START TRANSACTION");
 							$qr = $this->core->mysql->query("INSERT INTO users(id) VALUE(NULL)");
 							if(!$qr)return array(false);
 
@@ -102,7 +104,10 @@ class import extends \CRAFTEngine\core\api
 										break;
 
 									case 'password':
-										continue;
+										if(in_array('password_salt',$prop))
+										{
+											$u->password_salt->setProperty($id,$u->password_salt->makeSalt());
+										}
 										break;
 
 									case 'salt':
@@ -138,6 +143,10 @@ class import extends \CRAFTEngine\core\api
 											{
 												$u->login->setProperty($id,$el);
 											}
+											else
+											{
+												$commit = false;
+											}
 										}
 										break;
 
@@ -147,6 +156,10 @@ class import extends \CRAFTEngine\core\api
 											if(!$u->email->getPropertyByValue($el))
 											{
 												$u->email->setProperty($id,$el);
+											}
+											else
+											{
+												$commit = false;
 											}
 										}
 										break;
@@ -160,6 +173,15 @@ class import extends \CRAFTEngine\core\api
 										}
 										break;
 								}
+							}
+
+							if($commit)
+							{
+								$this->core->mysql->query("COMMIT");
+							}
+							else
+							{
+								$this->core->mysql->query("ROLLBACK");
 							}
 						}
 

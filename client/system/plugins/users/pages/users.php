@@ -61,7 +61,7 @@ if(isset($_GET['act']))
 			}
 
 			$user['appointment'] = $user['rank_name'][0];
-			$user['avatar'] = $core->conf->conf->core->api->files.$user['avatar'];
+			$user['avatar'] = isset($user['avatar'])?$core->conf->conf->core->api->files.$user['avatar']:null;
 		}
 		$core->render['users'] = $data['data'];
 	}

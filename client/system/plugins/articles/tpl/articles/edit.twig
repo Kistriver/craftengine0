@@ -1,166 +1,197 @@
 {%extends SYS.BASE~SYS.BASE_TPL%}
 
-{%block title%}Редактрирование Статьи {{parent()}}{%endblock%}
-{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}articles">Новости</a></li><li class="active">Редактрирование Статьи</li>{%endblock%}
+{%block title%}Редактирование {{parent()}}{%endblock%}
+{%block header%}<li><a href="{{MAIN.ROOT_HTTP}}articles">Новости</a></li><li class="active">Редактирование статьи</li>{%endblock%}
 
 {%block content%}
-<p style="color: red; font-weight: bold;">Внимание! Возможно, у Вас нет прав на редактирование статьи.</p>
-<center>
-<form method="post">
-<input type="text" value="{{post.title}}" style="width: 98%;" class="textfield" name="title" maxlength="64" placeholder="Заголовок" />
-<textarea class="" style="width: 98%; height: 300px;" name="article" placeholder="Сама статья.">{{post.article}}</textarea>
-<input type="text" value="{{post.tags|join(', ')}}" style="width: 98%;" class="textfield" name="tags" maxlength="128" placeholder="Теги" />
-<input type="submit" style="width: 98%;" class="btn btn-success" value="Редактировать!" />
-</form>
-</center>
+    <p style="color: red; font-weight: bold;">Внимание! Возможно, у Вас нет прав на редактирование статьи.</p>
+    <p>
+        Вы можете использовать BB коды в статье, также размер заголовка не должен превышать
+        64 символов, а статья - 5000. Также, в случае указания тегов, нужно указывать только те теги, которые
+        относятся непосредственно к теме статьи.<!-- И ещё кое-что: не надо спрашивать, когда будет опубликована статья.-->
+    </p>
+    <form method="post">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <input type="text" class="form-control" value="{{ post.title }}" name="title" maxlength="64" placeholder="Заголовок" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <textarea style="resize: vertical; min-height: 46px;" class="form-control" name="article" rows="6"
+                          placeholder="Статья">{{ post.article }}</textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <input type="text" class="form-control" value="{{ post.tags|join(", ") }}" name="tags" maxlength="128" placeholder="Теги" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <input type="submit" style="width: 100%;" class="btn btn-success" value="На первую полосу!" />
+            </div>
+        </div>
+    </form>
 
-<table style="width: 100%;">
-<tbody>
+    <div class="row">
+        <div class="col-md-1">
+            BB-тег
+        </div>
+        <div class="col-md-4">
+            Описание
+        </div>
+        <div class="col-md-4">
+            Пример
+        </div>
+        <div class="col-md-3">
+            Пример
+        </div>
+    </div>
 
-<tr>
-<th>
-BB-тег
-</th>
-<th>
-Описание
-</th>
-<th colspan="2">
-Пример
-</th>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [b][/b]
+        </div>
+        <div class="col-md-4">
+            Делает текст жирным
+        </div>
+        <div class="col-md-4">
+            [b]Это жирный текст[/b]
+        </div>
+        <div class="col-md-3">
+            <strong>Это жирный текст</strong>
+        </div>
+    </div>
 
-<tr>
-<td>
-[b][/b]
-</td>
-<td>
-Делает текст жирным
-</td>
-<td>
-[b]Это жирный текст[/b]
-</td>
-<td>
-<strong>Это жирный текст</strong>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [i][/i]
+        </div>
+        <div class="col-md-4">
+            Делает текст курсивным
+        </div>
+        <div class="col-md-4">
+            [i]Это курсивный текст[/i]
+        </div>
+        <div class="col-md-3">
+            <em>Это курсивный текст</em>
+        </div>
+    </div>
 
-<tr>
-<td>
-[i][/i]
-</td>
-<td>
-Делает текст курсивным
-</td>
-<td>
-[i]Это курсивный текст[/i]
-</td>
-<td>
-<em>Это курсивный текст</em>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [u][/u]
+        </div>
+        <div class="col-md-4">
+            Делает текст подчёркнутым
+        </div>
+        <div class="col-md-4">
+            [u]Это подчёркнутый текст[/u]
+        </div>
+        <div class="col-md-3">
+            <u>Это подчёркнутый текст</u>
+        </div>
+    </div>
 
-<tr>
-<td>
-[u][/u]
-</td>
-<td>
-Делает текст подчёркнутым
-</td>
-<td>
-[u]Это подчёркнутый текст[/u]
-</td>
-<td>
-<u>Это подчёркнутый текст</u>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [s][/s]
+        </div>
+        <div class="col-md-4">
+            Делает текст зачёркнутым
+        </div>
+        <div class="col-md-4">
+            [s]Это зачёркнутый текст[/s]
+        </div>
+        <div class="col-md-3">
+            <strike>Это зачёркнутый текст</strike>
+        </div>
+    </div>
 
-<tr>
-<td>
-[s][/s]
-</td>
-<td>
-Делает текст зачёркнутым
-</td>
-<td>
-[s]Это зачёркнутый текст[/s]
-</td>
-<td>
-<strike>Это зачёркнутый текст</strike>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [sup][/sup]
+        </div>
+        <div class="col-md-4">
+            Делает текст надстрочным
+        </div>
+        <div class="col-md-4">
+            [sup]Это надстрочный текст[/sup]
+        </div>
+        <div class="col-md-3">
+            <sup>Это надстрочный текст</sup>
+        </div>
+    </div>
 
-<tr>
-<td>
-[sup][/sup]
-</td>
-<td>
-Делает текст надстрочным
-</td>
-<td>
-[sup]Это надстрочный текст[/sup]
-</td>
-<td>
-<sup>Это надстрочный текст</sup>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [sub][/sub]
+        </div>
+        <div class="col-md-4">
+            Делает текст подстрочным
+        </div>
+        <div class="col-md-4">
+            [sub]Это подстрочный текст[/sub]
+        </div>
+        <div class="col-md-3">
+            <sub>Это подстрочный текст</sub>
+        </div>
+    </div>
 
-<tr>
-<td>
-[sub][/sub]
-</td>
-<td>
-Делает текст подстрочным
-</td>
-<td>
-[sub]Это подстрочный текст[/sub]
-</td>
-<td>
-<sub>Это подстрочный текст</sub>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            [url][/url]<br />
+            [url=][/url]
+        </div>
+        <div class="col-md-4">
+            Создаёт гипперссылку
+        </div>
+        <div class="col-md-4">
+            [url]http://vk.com/kachalovcraft[/url]<br />
+            [url=http://yandex.ru]Яндекс[/url]
+        </div>
+        <div class="col-md-3">
+            <a href="http://vk.com/kcraft">http://vk.com/kcraft</a><br />
+            <a href="http://yandex.ru">Яндекс</a>
+        </div>
+    </div>
 
-<tr>
-<td>
-[url][/url]<br />
-[url=][/url]
-</td>
-<td>
-Создаёт гипперссылку
-</td>
-<td>
-[url]http://vk.com/kachalovcraft[/url]<br />
-[url=http://yandex.ru]Яндекс[/url]
-</td>
-<td>
-<a href="http://vk.com/kachalovcraft">http://vk.com/kachalovcraft</a><br />
-<a href="http://yandex.ru">Яндекс</a>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
+            @
+        </div>
+        <div class="col-md-4">
+            Позволяет "позвать" пользователя
+        </div>
+        <div class="col-md-4">
+            @Kachalov
+        </div>
+        <div class="col-md-3">
+            <a href="{{MAIN.ROOT_HTTP}}users/Kachalov">@Kachalov</a>
+        </div>
+    </div>
 
-<tr>
-<td>
-@
-</td>
-<td>
-Позволяет "позвать" пользователя
-</td>
-<td>
-@Kachalov
-</td>
-<td>
-<a href="{{MAIN.ROOT_HTTP}}users/Kachalov">@Kachalov</a>
-</td>
-</tr>
+    <div class="row">
+        <div class="col-md-1">
 
-<tr>
-<td colspan="4">
-<hr />
-<center>
-Подробнее о BB-Code <a href="{{MAIN.ROOT_HTTP}}help">здесь</a>
-</center>
-</td>
-</tr>
+        </div>
+        <div class="col-md-4">
+            Обрезает превью версию статьи
+        </div>
+        <div class="col-md-4">
+            [craftcut]<br />
+            [craftcut=Подробнее под катом]
+        </div>
+        <div class="col-md-3">
 
-</tbody>
-</table>
+        </div>
+    </div>
+
+
+
+    <hr />
+    <center>
+        Подробнее о BB-Code <a target="_blank" href="http://ru.wikipedia.org/wiki/BbCode">здесь</a>
+    </center>
 {%endblock%}

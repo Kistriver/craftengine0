@@ -157,22 +157,17 @@ class api
 	public function json($data=array())
 	{
 		$this->core->timer->stop();
-		
-		if($this->core->conf->system->core->debug)
-		$marks = $this->core->timer->display('marks');
-		else
-		$marks = array();
-		
+
 		$r_a = array(
 				'data'=>$data,
 				'sid'=>$this->sid,
 				'errors'=>$this->core->error->error,
 				'runtime'=>array(
 								$this->core->timer->display('all'),
-								$marks,
+								$this->core->conf->system->core->debug['api']?$this->core->timer->display('marks'):array(),
 								$this->core->timer->display('other'),
 								),
-			'memory'=>memory_get_usage(),
+			'memory'=>$this->core->conf->system->core->debug['api']?memory_get_usage():0,
 		);
 		$this->returned = $this->core->json_encode_ru($r_a);
 		return $this->returned;

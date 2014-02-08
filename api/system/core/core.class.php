@@ -18,8 +18,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0b4_alpha';
-	const MIN_CORE_VER = '0.3.0a_alpha';
+	const CORE_VER = '0.3.0b5_alpha';
+	const MIN_CORE_VER = '0.3.0a5_alpha';
 
 	private $core_confs;
 	public $api;
@@ -103,7 +103,6 @@ class core
 			require_once(dirname(__FILE__)."/". $inc .".class.php");
 
 			//Вызов модулей
-			//$this->$inc = new $inc($this);
 			$name = '\CRAFTEngine\core\\'.$inc;
 			$this->$inc = new $name($this);
 		}
@@ -134,18 +133,6 @@ class core
 		//Отправка накопленной почты
 		$this->mail();
 
-		/*if(!empty($this->core_confs['update']))
-		{
-			require_once(dirname(__FILE__).'/utilities/update.class.php');
-			require_once(dirname(__FILE__).'/utilities/migrate.class.php');
-
-			$this->utilities = new \stdClass();
-			$this->utilities->update = new utilities\update($this);
-			$this->utilities->migrate = new utilities\migrate($this);
-
-			$this->utilities->migrate->update('system');
-		}*/
-
 		//Подключение API(если это требуется)
 		if(isset($this->core_confs['api']['module'],$this->core_confs['api']['method']))
 		{
@@ -170,9 +157,6 @@ class core
 	final function statCache($type=null, $value=null, $set=true)
 	{
 		//Путь до файла
-		/*$stat_file_name = empty($this->core->core_confs['cache']['root'])?
-						dirname(__FILE__).'/cache/Stat':
-						$this->core->core_confs['cache']['root'].'Stat';*/
 		$stat_file_name = $this->core->core_confs['root'].'cache/Stat';
 
 		if($set===true)
@@ -246,9 +230,6 @@ class core
 	{
 		$this->about();
 		$updatetime = 60 * 60 * 12;
-		/*$file = empty($this->core->core_confs['cache']['root'])?
-			dirname(__FILE__).'/cache/Stat':
-			$this->core->core_confs['cache']['root'].'Stat';*/
 		$file = $this->core->core_confs['root'].'cache/Stat';
 
 		if(file_exists($file))
@@ -261,12 +242,7 @@ class core
 			$this->statCache('clear',$time,true);
 		}
 
-
-		/*$fsl = empty($this->core->core_confs['cache']['root'])?
-			dirname(__FILE__).'/cache/StatLock':
-			$this->core->core_confs['cache']['root'].'StatLock';*/
 		$fsl = $this->core->core_confs['root'].'cache/StatLock';
-
 
 		$ft = file_exists($fsl)?file_get_contents($fsl):0;
 
@@ -274,7 +250,7 @@ class core
 		{
 			file_put_contents($fsl,time());
 			$answer = $this->functions->sysScript('system','stat',10);
-			$ans=fread($answer,2048);
+			$ans=fread($answer,1024);
 
 			if($ans)$this->stat = true;
 			else $this->stat = false;
@@ -284,9 +260,7 @@ class core
 			$this->stat = false;
 		}
 
-		//$this->timer->mark('core.class.php/stat');
-		//$this->core->timer->mark((time() - 60 - $ft));
-		$this->core->timer->mark('Сбор статистики('. (time() - $updatetime - $time) .'sec)');
+		$this->core->timer->mark('Сбор статистики('. ($updatetime - (time() - $time)) .'sec)');
 	}
 
 	/**
@@ -324,77 +298,53 @@ class core
 	 */
 	public function issetFatalError()
 	{
+		$enable = isset($this->core->conf->system->core->{'exploit-search'})?$this->core->conf->system->core->{'exploit-search'}:true;
+		if(!$enable)return;
+
 		$updatetime = 60 * 10;
-		/*$file = empty($this->core->core_confs['cache']['root'])?
-			dirname(__FILE__).'/cache/LastExploitRequest':
-			$this->core->core_confs['cache']['root'].'LastExploitRequest';*/
-		$file = $this->core->core_confs['root'].'cache/LastExploitRequest';
+		$file = $this->core->core_confs['root'].'cache/Exploit';
 		
 		if(file_exists($file))
 		{
 			$f = file_get_contents($file);
-			$fe = explode("\r\n",$f);
-			
-			if(sizeof($fe)<2)
-			{
-				$fe[0] = empty($fe[0])?'':$fe[0];
-				$fe[1] = empty($fe[1])?'':$fe[1];
-			}
-			
-			list($time,$status) = $fe;
-		}
-		else
-		{
-			$time = null;
-		}
+			$j = json_decode($f,true);
 
-		$time = trim($time);
-		
-		if(!empty($time))
-		{
-			$time = $this->cacheDataDecode($time);
-			$time = (int)$time;
-			
-			$status = $this->cacheDataDecode($status);
+			if($j===false)
+			{
+				$time = time() - $updatetime - 10;
+				$status = array('status'=>true);
+			}
+			else
+			{
+				$time = isset($j['time'])?$j['time']:(time() - $updatetime - 10);
+				$status = isset($j['status'])?$j['status']:array('status'=>true);
+			}
 		}
 		else
 		{
 			$time = time() - $updatetime - 10;
-			$status = 'NO';
+			$status = array('status'=>true);
 		}
 		
-		$expm = '{"error":"This framework has some exploits, so it\'s been blocked until cover exploits. Last update: '.(time() - $time).'sec ago."}';
-		
+		$expm = '{"error":"This version of framework has some exploits, so it\'s been blocked until cover exploits. Last update: '.(time() - $time).'sec ago."}';
+
 		if($time<time()-$updatetime)
 		{
-			$answer = $this->functions->sysScript('system','exploit',10,array('host'=>'stat.kcraft.su','path'=>'/'));
-			$ans = fread($answer, 1024);
-			$ans = explode("\r\n", $ans);
-			
-			$data = $this->cacheDataEncode(time());
-			$st = $this->cacheDataEncode($ans[sizeof($ans)-1]);
-			$data = implode("\r\n",array($data,$st));
-			file_put_contents($file, $data);
-			
-			if($ans[sizeof($ans)-1]=='YES')
-			{
-				die($expm);
-			}
+			$answer = $this->functions->sysScript('system','exploit',10);
+			$ans=fread($answer,2048);
 		}
-		
-		if($status=='YES')
+
+		if($status['status']===false)
 		{
+			if(!empty($status['msg']))die(json_encode(array('error'=>$status['msg'])));
 			die($expm);
 		}
-		//$this->timer->mark('core.class.php/exploitPrevent');
+
 		$this->core->timer->mark('Проверка на наличие эксплоитов');
 	}
 
 	public function mail()
 	{
-		/*$fml = empty($this->core->core_confs['cache']['root'])?
-			dirname(__FILE__).'/cache/MailLock':
-			$this->core->core_confs['cache']['root'].'MailLock';*/
 		$fml = $this->core->core_confs['root'].'cache/MailLock';
 
 		$mt = file_exists($fml)?file_get_contents($fml):0;
@@ -406,7 +356,6 @@ class core
 			fread($answer, 1024);
 		}
 		
-		//$this->timer->mark('core.class.php/mail');
 		$this->core->timer->mark('Отправка почты ('. (60-(time()-$mt)) .'sec)');
 	}
 	

@@ -31,6 +31,7 @@ class login implements userInterface
 
 	public function getProperty($id)
 	{
+		$id = intval($id);
 		$qr = $this->core->mysql->query("SELECT login FROM users WHERE id='$id'");
 
 		if($this->core->mysql->rows($qr)==0)return false;
@@ -55,6 +56,7 @@ class login implements userInterface
 
 	public function setProperty($id,$value)
 	{
+		$id = intval($id);
 		$value = trim($value);
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("UPDATE users SET login='$value' WHERE id='$id'");
@@ -65,25 +67,7 @@ class login implements userInterface
 
 	public function validateProperty($value,$id=null)
 	{
-		$value = $this->core->sanString($value);
-		$qr = $this->core->mysql->query("SELECT login FROM users WHERE login='$value'");
-
-		if($this->core->mysql->rows($qr)==0)return true;
-		else return false;
-	}
-
-	public function canGetProperty($id,$idfrom)
-	{
-		return true;
-	}
-
-	public function canSetProperty($id,$idfrom)
-	{
-		return false;
-	}
-
-	public function canSignup($value)
-	{
+		$id = intval($id);
 		$value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
 
 		if(mb_strlen($value,'UTF-8')>$this->confs->modules->login['length']['max'])
@@ -103,8 +87,6 @@ class login implements userInterface
 			return false;
 		}
 
-		$value = $this->core->sanString($value);
-
 		$qr = $this->core->mysql->query("SELECT login FROM users WHERE login='$value'");
 		$qr2 = $this->core->mysql->query("SELECT login FROM users_signup WHERE login='$value'");
 
@@ -114,6 +96,21 @@ class login implements userInterface
 			return false;
 		}
 		else return true;
+	}
+
+	public function canGetProperty($id,$idfrom)
+	{
+		return true;
+	}
+
+	public function canSetProperty($id,$idfrom)
+	{
+		return false;
+	}
+
+	public function canSignup($value)
+	{
+		return $this->validateProperty($value);
 	}
 
 	public function signup($id,$value)
@@ -131,7 +128,7 @@ class login implements userInterface
 		$qr = $this->core->mysql->query("SELECT login FROM users_signup WHERE id='$id'");
 		$fr = $this->core->mysql->fetch($qr);
 		$value = $this->core->sanString($fr['login']);
-		$qr = $this->core->mysql->query("UPDATE users SET login='$value' WHERE id='$idnew'");
+		$qr = $this->setProperty($idnew,$value);
 
 		if($qr)return true;
 		else return false;

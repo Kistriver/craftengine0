@@ -36,6 +36,19 @@ class script
 			default:
 				$file = $this->core->getParams()['root']."plugins/$module/utilities/script/scripts/$script.class.php";
 				if(!is_readable($file))return false;
+
+				$loaded = false;
+				foreach($this->core->plugin->pluginsLoaded as $pl)
+				{
+					if($module==$pl->name)
+					{
+						$loaded = true;
+						break;
+					}
+				}
+
+				if(!$loaded)return false;
+
 				require_once($file);
 				$name = '\CRAFTEngine\plugins\\'.$module.'\scripts\\'.$script;
 				$result = new $name($this->core);

@@ -1,5 +1,8 @@
 <?php
 namespace CRAFTEngine\core\scripts;
+
+header('Content-type: application/json; charset=utf-8');
+
 set_time_limit(0);
 ignore_user_abort(1);
 
@@ -7,20 +10,19 @@ class stat
 {
 	public function __construct($core)
 	{
-		$stat['stat_ver'] = 'v1.1';
-		$sid = 'CRAFTENGINE';//= 'CRAFTEngine-'.str_replace('.','-',$_SERVER['SERVER_ADDR']);
 		$stat['value'] = file_get_contents($core->getParams()['root'].'cache/Stat');
 
-		$stat['server'] = array('ip'=>$_SERVER['SERVER_ADDR'],
-			'host'=>$_SERVER['SERVER_NAME'],
-			'port'=>$_SERVER['SERVER_PORT'],
+		$stat['server'] = array(
+			'ip'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$_SERVER['SERVER_ADDR'],
+			'host'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$_SERVER['SERVER_NAME'],
+			'port'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$_SERVER['SERVER_PORT'],
 			'version'=>$core::CORE_VER,
-			'admin_mail'=>$core->conf->system->core->admin_mail
+			'admin_mail'=>!$core->conf->system->core->debug['non-anonymous-stat']?'anonymous':$core->conf->system->core->admin_mail,
 		);
 
 		$stat = $core->json_encode_ru($stat);
 
-		$url = 'http://stat.kcraft.su:80/index.php?method=stat.set&sid='.$sid;
+		$url = 'http://stat.kcraft.su/api/v5/stat/stat/set/craftengine/';
 
 		$data = http_build_query
 		(
@@ -38,7 +40,7 @@ class stat
 				(
 					'method' => 'POST',
 					'header' => 'Content-Type: application/x-www-form-urlencoded'.PHP_EOL.
-						'User-agent: CraftEngine('.$core->conf->system->core->version.')',
+					'User-agent: CraftEngine('.$core->conf->system->core->version.')',
 					'content' => $data,
 				)
 			)
@@ -60,6 +62,6 @@ class stat
 			}
 		}
 
-		file_put_contents(dirname(__FILE__).'/../system/cache/StatLock',time());
+		file_put_contents($core->getParams()['root'].'cache/StatLock',time());
 	}
 }

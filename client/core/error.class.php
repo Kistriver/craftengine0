@@ -23,15 +23,15 @@ class error
 		
 		if(!is_array($er))
 		{
-			$this->errors[] = $er;
+			$this->errors[] = array('value'=>$er,'module'=>'local','id'=>0);
 		}
 		elseif(is_array($er[2]))
 		{
-			$this->errors[] = "[".$er[2][2].":".$er[2][3]."] ".$er[2][1]." #".$er[2][0]."";
+			$this->errors[] = array('value'=>$er[2],'module'=>$er[0],'id'=>$er[1]);
 		}
 		else
 		{
-			$this->errors[] = $er[2]." #".$er[0]."-".$er[1];
+			$this->errors[] = array('value'=>$er[2],'module'=>$er[0],'id'=>$er[1]);
 		}
 	}
 

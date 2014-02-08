@@ -2,20 +2,31 @@
 namespace CRAFTEngine\plugins\users;
 class user
 {
-	protected $denied = array('core','system','denied','properties','mode');
+	protected $denied = array('core','system','denied','properties','mode','id','user');
 	protected $properties = array();
 
 	public function __construct($core)
 	{
 		$this->core = &$core;
 
-		require_once(dirname(__FILE__)."/user.interface.php");
-
-		$st = $this->initProperties();
-		if($st===false)die('cannot load constuct class in users plugin');
+		require_once(dirname(__FILE__)."/interfaces/signupUser.interface.php");
+		require_once(dirname(__FILE__)."/interfaces/user.interface.php");
 	}
 
-	protected  function initProperties()
+	public function construct($users_core)
+	{
+		$this->users_core = &$users_core;
+
+		$st = $this->initProperties();
+		if($st===false)
+		{
+			$this->core->error->error('plugin_users_core',1);
+			unset($this);
+			return false;
+		}
+	}
+
+	protected function initProperties()
 	{
 		$root = dirname(__FILE__)."/user/";
 
@@ -43,7 +54,7 @@ class user
 		foreach($this->properties as $pr)
 		{
 			if(method_exists($this->$pr,'construct'))
-			if($this->$pr->construct($this)===false)return false;
+			if($this->$pr->construct($this->users_core)===false)return false;
 		}
 
 		return true;
@@ -63,6 +74,8 @@ class user
 			if($prop!==false)$properties[$p] = $prop;
 		}
 
+		if(sizeof($properties)!=0)$properties['id'] = intval($id);
+
 		return $properties;
 	}
 
@@ -79,6 +92,48 @@ class user
 			}
 		}
 
+		if(sizeof($properties)!=0)$properties['id'] = intval($id);
+
 		return $properties;
+	}
+
+	/**
+	 * Get or set current user id
+	 *
+	 * @param null $id
+	 * @return int
+	 */
+	public function currentUser($id=null)
+	{
+		if($id!==null)$_SESSION['users']['id'] = $id;
+
+		return isset($_SESSION['users']['id'])?$_SESSION['users']['id']:0;
+	}
+
+	/**
+	 * Dynamicly add property
+	 *
+	 * @param $path
+	 * @param $name
+	 * @return bool
+	 */
+	public function addProperty($path,$name)
+	{
+		require_once("{$path}{$name}.class.php");
+		$cl_name = 'CRAFTEngine\plugins\users\\'.$name;
+
+		if(in_array($name,$this->denied))return false;
+
+		if(class_exists($cl_name))
+		{
+			$this->$name = new $cl_name($this->core);
+			$this->properties[] = $name;
+		}
+
+		if(method_exists($this->$name,'construct'))
+			if($this->$name->construct($this->users_core)===false)
+				return false;
+
+		return true;
 	}
 }

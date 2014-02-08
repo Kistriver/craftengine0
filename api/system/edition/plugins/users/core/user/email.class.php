@@ -43,6 +43,7 @@ class email implements userInterface
 
 	public function getPropertyByValue($value)
 	{
+		$value = mb_convert_case($value, MB_CASE_LOWER, 'UTF-8');
 		$value = $this->core->sanString($value);
 		$qr = $this->core->mysql->query("SELECT id FROM users WHERE email='$value'");
 

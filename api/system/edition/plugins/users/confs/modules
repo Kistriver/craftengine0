@@ -20,7 +20,7 @@
 	    "length":{"min":6,"max":100},
         "list":
         {
-            "enabled":true,
+            "enabled":false,
             "whitelist":true,
             "list":
             [

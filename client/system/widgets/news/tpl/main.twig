@@ -4,12 +4,16 @@
 
 {%block content%}
 {% autoescape false %}
+{% if WIDGETS.news|length!=0 %}
 {% for post in WIDGETS.news %}
 <h2 style="word-wrap: break-word;">{{post.title}}</h2>
 <div style='word-wrap: break-word; max-height: 140px; overflow: hidden;'>{{post.article}}</div>
 <span style='float: left;color:#AAA;'>{{post.post_time|date("d-m-Y H:i")}}</span>
-<a style="float: right;" href="{{MAIN.ROOT}}articles/{{post.author_id}}/{{post.post_id}}">Подробнее</a>
+<a style="float: right;" href="{{MAIN.ROOT}}articles/{{post.id}}">Подробнее</a>
 <hr />
 {% endfor%}
+    {% else %}
+<div style="color: #aaa; text-align: center;">Новостей нет</div>
+        {% endif %}
 {% endautoescape %}
 {%endblock%}

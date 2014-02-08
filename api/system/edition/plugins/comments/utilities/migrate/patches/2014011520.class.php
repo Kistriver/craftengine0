@@ -31,7 +31,7 @@ class patch_2014011520
 		if(!$result)
 		return false;
 
-		if(!$this->core->utilities->system->migrate->markAsInstalled('user',self::VER))
+		if(!$this->core->utilities->system->migrate->markAsInstalled('comments',self::VER))
 		return false;
 
 		return true;

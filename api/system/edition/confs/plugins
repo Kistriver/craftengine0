@@ -1,4 +1,7 @@
 [
     "captcha",
-    "users"
+    "comments",
+    "minecraftIntegration",
+    "users",
+    "articles"
 ]

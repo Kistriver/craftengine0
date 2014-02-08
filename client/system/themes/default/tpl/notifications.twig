@@ -1,0 +1,17 @@
+{% autoescape false %}
+{%for error in MAIN.ERRORS%}
+    <div class="alert alert-danger">
+        {% if error.value.2 is defined %}[{{error.value.2}}:{{error.value.3}}] {{error.value.1}}{% else %}{{error.value}}{% endif %} <b style="opacity: 0.7;">#{{ error.module }}-{{ error.id }}</b>
+    </div>
+{%endfor%}
+{%for success in MAIN.SUCCESS%}
+    <div class="alert alert-success">
+        {{success}}
+    </div>
+{%endfor%}
+{%for info in MAIN.INFO%}
+    <div class="alert alert-info">
+        {{info}}
+    </div>
+{%endfor%}
+{% endautoescape %}

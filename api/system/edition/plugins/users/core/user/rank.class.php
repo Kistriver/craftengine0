@@ -102,8 +102,7 @@ class rank implements userInterface
 
 	public function register($id,$idnew)
 	{
-		$id = intval($id);
-		$qr = $this->core->mysql->query("UPDATE users SET rank='user' WHERE id='$idnew'");
+		$qr = $this->setProperty($idnew,array('user'));
 
 		if($qr)return true;
 		else return false;
