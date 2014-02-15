@@ -109,7 +109,7 @@ class load
 						$info['other']['users_confirm'] = array('icon'=>'plus','value'=>'Подтверждение новых пользователей','href'=>'users/confirm/page-1');
 
 					if(in_array($r,array('main_admin')))
-						$info['other']['users_import'] = array('icon'=>'arrow-right','value'=>'Импортирование БД','href'=>'users/import');
+						$info['other']['users_import'] = array('icon'=>'arrow-right','value'=>'Импортирование пользователей','href'=>'users/import');
 				}
 				break;
 

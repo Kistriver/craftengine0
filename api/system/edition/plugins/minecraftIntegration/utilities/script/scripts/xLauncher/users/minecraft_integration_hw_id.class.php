@@ -11,7 +11,7 @@ class minecraft_integration_hw_id implements userInterface
 	public function install()
 	{
 		if($this->core->mysql->rows(
-			$this->core->mysql->query("SHOW COLUMNS FROM users LIKE 'minecraft_integration_server_id'")
+			$this->core->mysql->query("SHOW COLUMNS FROM users LIKE 'minecraft_integration_hw_id'")
 		)==0)
 		{
 			$qr = $this->core->mysql->query("ALTER TABLE users ADD minecraft_integration_hw_id VARCHAR(255)");

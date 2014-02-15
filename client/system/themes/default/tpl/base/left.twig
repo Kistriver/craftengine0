@@ -23,7 +23,7 @@
     <script src="{{MAIN.ROOT}}style/jquery.js"></script>
     <script src="{{MAIN.ROOT}}style/bootstrap/js/bootstrap.js"></script>
 
-    <script type="text/javascript">
+    {#<script type="text/javascript">
         $(document).ready(function() {
             $("#hide_all").css("display", "table");
             $("#hide_all").delay(330).fadeOut(450);
@@ -34,7 +34,7 @@
             function redirectPage() {
                 window.location = linkLocation;
             } });
-    </script>
+    </script>#}
 
 
     <!-- Yandex.Metrika counter -->
@@ -79,12 +79,12 @@ background: url({{MAIN.ROOT}}style/img/main/bg.jpg);
         *background-size: cover;
 *background-color:#cecece;
         ">
-<div id="hide_all" style="display: table; position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 999999; background-color: white;">
+{#<div id="hide_all" style="display: table; position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 999999; background-color: white;">
     <div style="vertical-align: middle; text-align: center; display: table-cell;padding: 0;margin: 0;font-size: 4.5em;font-weight: 700;">
     <span class="glyphicon glyphicon-refresh"></span> Loading...
     </div>
 </div>
-<div style="min-height: 100%; margin: 0px; padding: 0px;">
+<div style="min-height: 100%; margin: 0px; padding: 0px;">#}
 
 <!--NAVBAR-->
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">

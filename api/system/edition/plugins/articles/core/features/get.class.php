@@ -17,7 +17,7 @@ class get implements \CRAFTEngine\plugins\articles\featureInterface
 		if(!isset($p['page']))return false;
 		$page = intval($p['page']);
 
-		$qr = $this->core->mysql->query("SELECT id FROM articles");
+		$qr = $this->core->mysql->query("SELECT id FROM articles ORDER BY id DESC");
 
 		if(!$qr)return false;
 

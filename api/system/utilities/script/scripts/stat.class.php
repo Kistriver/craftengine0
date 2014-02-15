@@ -17,7 +17,7 @@ class stat
 			'host'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$_SERVER['SERVER_NAME'],
 			'port'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$_SERVER['SERVER_PORT'],
 			'version'=>$core::CORE_VER,
-			'admin_mail'=>!$core->conf->system->core->debug['non-anonymous-stat']?'anonymous':$core->conf->system->core->admin_mail,
+			'admin_mail'=>!$core->conf->system->core->{'non-anonymous-stat'}?'anonymous':$core->conf->system->core->admin_mail,
 		);
 
 		$stat = $core->json_encode_ru($stat);

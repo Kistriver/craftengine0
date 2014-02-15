@@ -68,16 +68,10 @@ class body implements articleInterface
 
 	public function canSetProperty($id,$uid)
 	{
-		$uc = $this->articles_core;
+		$uc = $this->articles_core->users_core;
 		$art = $this->articles_core->article;
 
-		$pr = $art->getProperties($id,$uid);
-		if(sizeof($pr)==0)
-		{
-			return false;
-		}
-
-		$r = $uc->canDo('articles_edit',$uid,array());
+		$r = $uc->permission->canDo('articles_edit',$uid,array('id'=>$id,'property'=>'body'));
 		return $r;
 	}
 

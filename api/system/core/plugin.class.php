@@ -649,24 +649,29 @@ class plugin
 	 * @param $id
 	 * @param $plugin
 	 * @param $addInfo
+	 * @param null $staticInfo
+	 *
 	 * @return mixed
 	 */
 	public function makeEvent($id,$plugin,$addInfo,$staticInfo=null)
 	{
 		static $plLoaded = array();
 
-		foreach($this->pluginsIncluded as $f=>$c)
+		foreach($this->pluginsLoaded as $f=>$c)
 		{
-			if(!in_array($c->loadClass,$plLoaded[$c->name]))
+			if(!empty($c->loadClass))
 			{
-				$pl = $this->initPl($c->name,$c->loadClass);
-				$plLoaded[$c->name][$c->loadClass] = $pl;
+				if(!in_array($c->name,$plLoaded))
+				{
+					$pl = $this->initPl($c->name,$c->loadClass);
+					$plLoaded[$c->name][$c->loadClass] = $pl;
+				}
+
+				$pl = $plLoaded[$c->name][$c->loadClass];
+
+				if(method_exists($pl,'registerPluginEvent'))
+					$addInfo = $pl->registerPluginEvent($id,$plugin,$addInfo,$staticInfo);
 			}
-
-			$pl = $plLoaded[$c->name][$c->loadClass];
-
-			if(method_exists($pl,'registerPluginEvent'))
-				$addInfo = $pl->registerPluginEvent($id,$plugin,$addInfo,$staticInfo);
 		}
 
 		return $addInfo;

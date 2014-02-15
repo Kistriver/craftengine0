@@ -11,27 +11,20 @@
 	    "errors":true
 	},
 	"exploit-search":true,
-	"mail":["test.kcraft.su/client","\"KachalovCRAFT NET\" <kachalov92@yandex.ru>"],
+	"mail":["kcraft.su/client","\"KachalovCRAFT NET\" <login@yandex.ru>"],
 	"upload_file_max_size":"5MB",
 	"GMT":"+0400",
 	"tech":false,
 	"admin_ip":["192.168.1.1"],
 	"db":
 	{
-		"craftengine_t":
-        {
-            "host":"p:127.0.0.1",
-            "db":"test_craftengine",
-            "user":"test",
-            "pass":"pass12345"
-        },
 		"craftengine":
 		{
 			"host":"p:127.0.0.1",
-			"db":"kcraft_test",
-			"user":"kcraft_test",
-			"pass":"kcraft_test12345"
+			"db":"",
+			"user":"",
+			"pass":""
 		}
 	},
-	"system_scripts":["test.kcraft.su",80,"/api/"]
+	"system_scripts":["kcraft.su",80,"/api/"]
 }

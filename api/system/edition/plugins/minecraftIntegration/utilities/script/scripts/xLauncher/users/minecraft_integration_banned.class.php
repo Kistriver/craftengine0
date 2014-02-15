@@ -29,7 +29,7 @@ class minecraft_integration_banned implements userInterface
 
 		$fr = $this->core->mysql->fetch();
 
-		return $fr['minecraft_integration_banned_id'];
+		return $fr['minecraft_integration_banned'];
 	}
 
 	public function getPropertyByValue($value)

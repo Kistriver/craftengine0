@@ -1,5 +1,5 @@
 <?php
-namespace CRAFTEngine\plugins\users\scripts;
+namespace CRAFTEngine\plugins\articles\scripts;
 class import
 {
 	public function __construct($core)

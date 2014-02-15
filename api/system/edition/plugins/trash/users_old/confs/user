@@ -1,6 +1,0 @@
-{
-	"signup_mode":[],
-	"admin_ip":false,
-	"login_mode":["email"],
-	"get_user_mode":["login","id"]
-}

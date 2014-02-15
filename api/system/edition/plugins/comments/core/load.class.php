@@ -17,7 +17,7 @@ class load
 
 	}
 
-	public function registerPluginEvent($id,$plugin,$addInfo)
+	public function registerPluginEvent($id,$plugin,$addInfo,$staticInfo=null)
 	{
 		switch($id.'_'.$plugin)
 		{

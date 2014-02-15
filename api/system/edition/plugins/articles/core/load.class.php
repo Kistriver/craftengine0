@@ -26,11 +26,39 @@ class load
 
 	}
 
-	public function registerPluginEvent($id,$plugin,$addInfo)
+	public function registerPluginEvent($id,$plugin,$addInfo,$staticInfo=null)
 	{
 		switch($id.'_'.$plugin)
 		{
+			case 'canDo_users':
+				if(isset($staticInfo['act']))
+				switch($staticInfo['act'])
+				{
+					case 'articles_edit':
+						if(isset($staticInfo['property']))
+						switch($staticInfo['property'])
+						{
+							case 'author':
+								$addInfo = false;
+								break;
 
+							case 'publish_time':
+								$addInfo = false;
+								break;
+
+							case 'body':
+							case 'tags':
+							case 'title':
+								$addInfo = true;
+								break;
+
+							case 'views':
+								$addInfo = false;
+								break;
+						}
+						break;
+				}
+				break;
 		}
 
 		return $addInfo;

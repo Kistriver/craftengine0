@@ -1,5 +1,5 @@
 <?php
-namespace CRAFTEngine\client\plugins\users;
+namespace CRAFTEngine\client\plugins\articles;
 if(!defined('CE_HUB'))die('403');
 require_once(dirname(__FILE__) . '/../../admin/core/includeAdmin.php');
 
@@ -33,12 +33,12 @@ if(sizeof($_POST)!=0)
 					));
 					$context = stream_context_create($params);
 
-					if($remote = @fopen($core->conf->conf->core->api->url."script.php?module=users&script=import&engine=$engine&version=$version", 'rb', false, $context)){
+					if($remote = @fopen($core->conf->conf->core->api->url."script.php?module=articles&script=import&engine=$engine&version=$version", 'rb', false, $context)){
 						$response = @stream_get_contents($remote);
 					}
 					//$a = json_decode($response,true);
 
-					$core->api->get('users/import/do',array('engine'=>$engine,'version'=>$version));
+					$core->api->get('articles/import/do',array('engine'=>$engine,'version'=>$version));
 					if(!empty($core->api->answer_decode['data'][0]))
 						$ans = $core->api->answer_decode['data'][0];
 					else
@@ -72,4 +72,4 @@ if(sizeof($_POST)!=0)
 
 
 $core->render['supported'] = $supported;
-$core->f->show('import/main','users');
+$core->f->show('import/main','articles');

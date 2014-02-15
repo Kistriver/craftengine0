@@ -5,7 +5,6 @@ class xLauncher
 	public function __construct($core)
 	{
 		$this->core = &$core;
-		header('Content-type: application/json; charset=utf-8');
 		$this->config = $this->core->conf->plugins->minecraftIntegration->settings->launcher['xLauncher'];
 
 		$this->users_core = $this->core->plugin->initPl('users','core');
@@ -15,22 +14,36 @@ class xLauncher
 		$this->users_core->user->addProperty(dirname(__FILE__)."/xLauncher/users/","minecraft_integration_banned");
 
 		$file = isset($_GET['file'])?$_GET['file']:null;
+		$rep = isset($_GET['rep'])?$_GET['rep']:null;
+		if($rep!==null)
+		{
+			if(preg_match("'^\?([^=]*?)=(.*?)$'i",$rep,$rep_m))
+			{
+				$_GET[$rep_m[1]] = $rep_m[2];
+			}
+		}
+
 		$act = isset($_GET['action'])?$_GET['action']:null;
+
 		switch($file)
 		{
-			case 'joinserver':
+			case 'joinserver.php':
 				$this->joinserver();
 				break;
 
-			case 'checkserver':
+			case 'checkserver.php':
 				$this->checkserver();
 				break;
 
-			case 'monitor':
+			case 'monitor.txt':
 				$this->show($this->getMon());
 				break;
+				
+			case 'news.html':
+				$this->news();
+				break;
 
-			case 'mainfile':
+			case 'mainfile.php':
 				switch($act)
 				{
 					case 'auth':
@@ -51,7 +64,7 @@ class xLauncher
 				}
 				break;
 
-			case 'maininfo':
+			case 'maininfo.php':
 				switch($act)
 				{
 					case 'launcher':
@@ -81,6 +94,65 @@ class xLauncher
 				$this->quit("Undefined file type");
 				break;
 		}
+	}
+
+	public function news()
+	{
+		$art_core = $this->core->plugin->initPl('articles','core');
+		if($art_core!==false)
+		{
+			$art = $art_core->get->posts(array('page'=>1));
+			$news = '';
+			foreach($art as $a)
+			{
+				$news .=
+'<div class="newsall">
+<div class="zagn">
+'.(isset($a['title'])?$this->core->sanString($a['title'],'html'):'').'
+</div>
+
+<div class="txtn">
+'.(isset($a['body'])?$this->core->sanString($a['body'],'html'):'').'
+</div>
+</div>
+';
+			}
+		}
+		else
+		{
+			$news =
+'<div class="newsall">
+<div class="zagn">
+Новостей нет
+</div>
+
+<div class="txtn">
+Нет ни одной новости
+</div>
+</div>
+';
+		}
+
+		$tpl = <<<TPL
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Новости</title>
+
+        <style type="text/css">
+		.newsall{padding-bottom:10px;}
+.zagn{color:#000000;font:bold 10px arial;}
+		.txtn{color:#ffffff;font:normal 8px arial;}
+			</style>
+		</head>
+		<body>
+{{MAINCONTENT}}
+</body>
+</html>
+TPL;
+
+		$this->show(str_replace('{{MAINCONTENT}}',$news,$tpl));
 	}
 
 	public function joinserver()
@@ -136,20 +208,19 @@ class xLauncher
 	public function launcher()
 	{
 		$file = $this->config['launcher-version'];
-		$count = trim(count($file));
+		$count = trim($file);
 		return $count;
 	}
 
 	public function version()
 	{
 		$file = $this->config['client-version'];
-		$count = trim(count($file));
+		$count = trim($file);
 		return $count;
 	}
 
 	public function online()
-	{
-		set_time_limit(0);
+	{//$this->core->file->writeFromString('cache/minecraftIntegrationXlauncherMonitoring','42:-1:');die;
 		$string = '';
 		foreach($this->config['servers'] as $server)
 		{
@@ -168,7 +239,9 @@ class xLauncher
 
 	public function getRes($address,$port)
 	{
-		$socket=@fsockopen($address,$port,$errno,$errstr);
+		set_time_limit(15);
+		$socket=@fsockopen($address,$port);
+		stream_set_timeout($socket, 0, 90 * 1000);
 		if($socket===false)
 		$res['online']='-1';
 		else
@@ -211,11 +284,13 @@ class xLauncher
 		$dirname = isset($_GET['dir'])?str_replace(array('..','\\'),array('',''),$_GET['dir']):null;
 
 		$type = isset($_GET['type'])?$_GET['type']:null;
-		$root = $this->config['check-dir'];
+		$root = dirname(__FILE__).'/xLauncher/data/check';
 
 		if($dirname===null)return;
 
 		$dir = opendir($root.$dirname);
+		if($dir===null)return;
+		
 		while(($file=readdir($dir))!==false)
 		{
 			if($file != "." && $file != "..")
@@ -312,7 +387,7 @@ class xLauncher
 		if(isset($_GET['user']) && isset($_GET['password']) && isset($_GET['version']))
 		{
 			$ver=$_GET['version'];
-			if(launcher()!==$ver)$this->quit("oldLauncher");
+			if($this->launcher()!==$ver)$this->quit("oldLauncher");
 
 			$postPass = $this->core->sanString($_GET['password']);
 			$login = $this->core->sanString($_GET['user']);
@@ -336,7 +411,7 @@ class xLauncher
 	public function getClientSize()
 	{
 		$sizefromclient = $_REQUEST['size'];
-		$dirname = $this->config['client-bin'];
+		$dirname = dirname(__FILE__).'/xLauncher/data/check/bin';
 		$size = "";
 		$dir = opendir($dirname);
 		while (($file = readdir($dir)) !== false)
@@ -369,7 +444,7 @@ class xLauncher
 
 		$sessionid = $this->users_core->user->minecraft_integration_session_id->getProperty($id);
 
-		$sessid = strtoint(xorencode($sessionid,$this->config['session-key']));
+		$sessid = $this->strtoint($this->xorencode($sessionid,$this->config['session-key']));
 		$this->show("4:".$sessid);
 	}
 

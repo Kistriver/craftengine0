@@ -11,11 +11,21 @@ class modify implements \CRAFTEngine\plugins\articles\featureInterface
 
 	private function modifyEditPost($p=array())
 	{
-		$art = $this->core->plugin->initPl('articles','article');
+		$art = $this->articles_core->article;
 		$prop = $art->getPropertiesList();
+		$uid = $this->articles_core->users_core->user->currentUser();
 
 		if(!isset($p['id']))return false;
 		$id = intval($p['id']);
+
+		$return = false;
+		foreach($prop as $pr)
+		{
+			if(!isset($p[$pr]))continue;
+			$value = $art->$pr->canSetProperty($id,$uid);
+			if($value===false)$return = true;
+		}
+		if($return)return false;
 
 		$return = false;
 		foreach($prop as $pr)
@@ -44,8 +54,14 @@ class modify implements \CRAFTEngine\plugins\articles\featureInterface
 	{
 		$this->core->mysql->query("START TRANSACTION");
 		$st = $this->modifyEditPost($p);
-		if($st!==false)$this->core->mysql->query("COMMIT");
-		else $this->core->mysql->query("ROLLBACK");
+		if($st!==false)
+		{
+			$this->core->mysql->query("COMMIT");
+		}
+		else
+		{
+			$this->core->mysql->query("ROLLBACK");
+		}
 
 		return $st;
 	}

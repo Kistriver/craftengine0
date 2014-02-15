@@ -41,6 +41,24 @@ if(!empty($_GET['act']))
 
 		$post['body'] = preg_replace("'^(.*)\[craftcut(|=(.*))\](.*)$'is","$1$4",$post['body']);
 
+		$user_array = array();
+		if(isset($post['author']))
+		{
+			if(!empty($post['author']))
+			if(!isset($users_array[$post['author']]))
+			{
+				$core->api->get('users/user/get',array('id'=>$post['author']));
+				if(isset($core->api->answer_decode['data']['login']))
+				{
+					$users_array[$post['author']] = $post['author'] = $core->api->answer_decode['data']['login'];
+				}
+			}
+			else
+			{
+				$post['author'] = $users_array[$post['author']];
+			}
+		}
+
 		$core->render['post'] = $post;
 
 
@@ -53,6 +71,24 @@ if(!empty($_GET['act']))
 		{
 			$d = $core->f->sanString($d);
 			$d['value'] = str_replace("\n",'<br />',$d['value']);
+
+			if(isset($d['uid']))
+			{
+				if(!empty($d['uid']))
+				if(!isset($users_array[$d['uid']]))
+				{
+					$core->api->get('users/user/get',array('id'=>$d['uid']));
+					if(isset($core->api->answer_decode['data']['login']))
+					{
+						$users_array[$d['uid']] = $d['uid'] = $core->api->answer_decode['data']['login'];
+					}
+				}
+				else
+				{
+					$d['uid'] = $users_array[$d['uid']];
+				}
+			}
+
 			$core->render['comments'][] = $d;
 		}
 
@@ -73,6 +109,7 @@ if(!empty($_GET['act']))
 		$desc = '';
 		
 		$posts = array();
+		$users_array = array();
 		
 		if($data['data'][0]!==false)
 		for($i=0;$i<sizeof($data['data'][1]);$i++)
@@ -97,6 +134,23 @@ if(!empty($_GET['act']))
 			$post['body'] = str_replace($b,$a,$post['body']);
 
 			$post['body'] = preg_replace("'^(.*)\[craftcut(|=(.*))\](.*)$'is","$1$3",$post['body']);
+
+			if(isset($post['author']))
+			{
+				if(!empty($post['author']))
+				if(!isset($users_array[$post['author']]))
+				{
+					$core->api->get('users/user/get',array('id'=>$post['author']));
+					if(isset($core->api->answer_decode['data']['login']))
+					{
+						$users_array[$post['author']] = $post['author'] = $core->api->answer_decode['data']['login'];
+					}
+				}
+				else
+				{
+					$post['author'] = $users_array[$post['author']];
+				}
+			}
 
 			$posts[] = $post;
 		}
@@ -127,24 +181,17 @@ if(!empty($_GET['act']))
 		if(!(new \CRAFTEngine\client\plugins\users\load($core))->loggedin())$core->f->quit(404);
 		
 		$err_up = false;
-		if(!empty($_POST['title']) AND !empty($_POST['article']))
+		if(sizeof($_POST)!=0)
 		{
-			if(empty($_POST['tags']))$_POST['tags'] = '';
-
-			$tags = explode(',',$_POST['tags']);
-			foreach($tags as &$t)$t = trim($t);
-			$tags = implode(',',$tags);
-			
-			$core->api->get('articles/article/edit',array('id'=>$_GET['id'],'title'=>$_POST['title'],'article'=>$_POST['article'],'tags'=>$tags));
+			$_POST['id'] = $_GET['id'];
+			$core->api->get('articles/article/edit',$_POST);
 			$data = $core->api->answer_decode;
 			
 			if(isset($data['data'][0]))
 			if($data['data'][0]==false)
 			$err_up = true;
-			
-			$post['title'] = $_POST['title'];
-			$post['article'] = $_POST['article'];
-			$post['tags'] = $_POST['tags'];
+
+			$core->render['post'] = $_POST;
 		}
 		
 		if($err_up==false)
@@ -156,11 +203,9 @@ if(!empty($_GET['act']))
 			if($data['data'][0]==false)
 			$core->f->quit(404);
 			
-			$post = $data['data'];
-			
-			$core->render['post'] = $post;
+			$core->render['post'] = $data['data'][1];
 		}
-		
+
 		$core->f->show('articles/edit','articles');
 	}
 	else

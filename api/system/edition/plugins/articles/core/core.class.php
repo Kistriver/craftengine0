@@ -2,7 +2,7 @@
 namespace CRAFTEngine\plugins\articles;
 class core
 {
-	private $denied = array('denied','system','plugins','core','confs','article');
+	private $denied = array('denied','system','plugins','core','confs','article','users_core');
 	private $features = array();
 
 
@@ -21,6 +21,7 @@ class core
 			return false;
 		}
 
+		$this->users_core = $this->core->plugin->initPl('users','core');
 		$this->article = $this->core->plugin->initPl('articles','article');
 		$this->article->construct($this);
 	}

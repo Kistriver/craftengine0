@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0b5_alpha';
+	const CORE_VER = '0.3.0b6_alpha';
 	const MIN_CORE_VER = '0.3.0a5_alpha';
 
 	private $core_confs;

@@ -1,0 +1,53 @@
+{%extends SYS.BASE~SYS.BASE_TPL%}
+
+{%block title%}Импорт БД {{parent()}}{%endblock%}
+{%block header%}
+    <li><a href="{{MAIN.ROOT_HTTP}}admin">Админ панель</a></li>
+    <li>Другое</li><li class="active">Импорт БД</li>
+{%endblock%}
+
+{%block content%}
+    <div class="alert alert-danger">
+        <div class="row">
+            <div class="col-md-1">
+                <span class="glyphicon glyphicon-warning-sign" style="color: while; font-size: 38px; cursor: default;"></span>
+            </div>
+            <div class="col-md-11">
+                Дамп должен содержать данные ТОЛЬКО для воостановления статей. Присутствие других данных в дампе может привести к ПОВРЕЖДЕНИЮ
+                и даже ПОЛНОЙ УТЕРИ ДАННЫХ.
+            </div>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-7 col-md-offset-1">
+            <div class="input-group">
+<span class="input-group-addon">
+Движок
+</span>
+                <select name="engine" class="form-control">
+                    {% for value,name in supported %}
+                        <option value="{{ value }}">{{ name }}</option>
+                        {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            Движок и его версия
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 col-md-offset-1">
+                <input class="form-control" type="file" name="dump" />
+            </div>
+            <div class="col-md-3">
+                Дамп базы ввиде sql запросов(*.sql)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7 col-md-offset-1">
+                <input type="submit" style="width: 100%;" class="btn btn-success" value="Импортировать" />
+            </div>
+        </div>
+        </form>
+{%endblock%}
