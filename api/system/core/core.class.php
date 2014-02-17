@@ -18,8 +18,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0b6_alpha';
-	const MIN_CORE_VER = '0.3.0a5_alpha';
+	const CORE_VER = '0.3.0r_alpha';
+	const MIN_CORE_VER = '0.3.0r_alpha';
 
 	private $core_confs;
 	public $api;
@@ -248,9 +248,10 @@ class core
 
 		if($time<time()-$updatetime && (int)$ft<time()-60)
 		{
-			file_put_contents($fsl,time());
+			file_put_contents($this->core->getParams()['root'].'cache/StatLock',time());
+			$this->statCache('time',time(),true);
 			$answer = $this->functions->sysScript('system','stat',10);
-			$ans=fread($answer,1024);
+			$ans=fread($answer,2048);
 
 			if($ans)$this->stat = true;
 			else $this->stat = false;
@@ -301,9 +302,9 @@ class core
 		$enable = isset($this->core->conf->system->core->{'exploit-search'})?$this->core->conf->system->core->{'exploit-search'}:true;
 		if(!$enable)return;
 
-		$updatetime = 60 * 10;
+		$updatetime = 60 * 10/6000;
 		$file = $this->core->core_confs['root'].'cache/Exploit';
-		
+
 		if(file_exists($file))
 		{
 			$f = file_get_contents($file);
@@ -313,31 +314,67 @@ class core
 			{
 				$time = time() - $updatetime - 10;
 				$status = array('status'=>true);
+				$msg = null;
 			}
 			else
 			{
 				$time = isset($j['time'])?$j['time']:(time() - $updatetime - 10);
-				$status = isset($j['status'])?$j['status']:array('status'=>true);
+				$status = isset($j['status'])?$j['status']:true;
+				$msg = isset($j['msg'])?$j['msg']:null;
 			}
 		}
 		else
 		{
 			$time = time() - $updatetime - 10;
-			$status = array('status'=>true);
+			$status = true;
+			$msg = null;
 		}
-		
-		$expm = '{"error":"This version of framework has some exploits, so it\'s been blocked until cover exploits. Last update: '.(time() - $time).'sec ago."}';
+
+		$expm = 'This version of framework has some exploits, so it\'s been blocked until cover exploits. Last update: '.(time() - $time).'sec ago.';
+		$msg = $msg===null?$expm:$msg;
 
 		if($time<time()-$updatetime)
 		{
-			$answer = $this->functions->sysScript('system','exploit',10);
-			$ans=fread($answer,2048);
+			$j['time'] = time();
+			file_put_contents($file,json_encode($j));
+
+			$version = self::CORE_VER;
+			$url = 'http://stat.kcraft.su/api/v5/stat/exploit/get/craftengine/{"product":"CRAFTEngine","version":"'.$version.'"}';
+			$context = stream_context_create
+			(
+				array
+				(
+					'http' => array
+					(
+						'method' => 'GET',
+						'header' => 'Content-Type: application/x-www-form-urlencoded'.PHP_EOL.
+							'User-agent: CraftEngine('.$this->conf->system->core->version.')',
+					)
+				)
+			);
+
+			$answer = @file_get_contents($url,false,$context);
+
+			$answer_decode = json_decode($answer, true);
+			if(!$answer_decode)
+			{
+
+			}
+			else
+			{
+				if(sizeof($answer_decode['errors'])==0)
+				{
+					$answer_decode['data']['time'] = time();
+					file_put_contents($this->getParams()['root'].'cache/Exploit',json_encode($answer_decode['data']));
+				}
+			}
+
+			$this->issetFatalError();
 		}
 
-		if($status['status']===false)
+		if($status===false)
 		{
-			if(!empty($status['msg']))die(json_encode(array('error'=>$status['msg'])));
-			die($expm);
+			die(json_encode(array('error'=>$msg),JSON_UNESCAPED_UNICODE));
 		}
 
 		$this->core->timer->mark('Проверка на наличие эксплоитов');
@@ -437,3 +474,4 @@ class core
 		return $this->functions->json($str);
 	}
 }
+

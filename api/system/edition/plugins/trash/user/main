@@ -1,0 +1,34 @@
+{
+	"author":"Kachalov",
+	"version":"1.0.0_alpha",
+	"web":"http://vk.com/craftengine",
+	"name":"user",
+	"since":"0.2.5a1_alpha",
+	"title":"Пользователи",
+	"loadClass":"load",
+	"description":"Этот модуль предназначен для добавления пользователей на сайт",
+	"confs":
+	{
+		"user":["self"],
+		"rank":["self"],
+		"errors":["self"]
+	},
+	"api":
+	[
+		"profile",
+		"user",
+		"login",
+		"signup"
+	],
+	"requires":
+	[
+		"captcha"
+	],
+	"permissions":
+	[
+		"plugins",
+		"core",
+		"unshutable",
+		"db"
+	]
+}

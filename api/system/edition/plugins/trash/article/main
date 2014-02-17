@@ -1,0 +1,30 @@
+{
+	"author":"Kachalov",
+	"version":"1.0_alpha",
+	"web":"http://vk.com/craftengine",
+	"id":"2",
+	"name":"article",
+	"since":"0.2.5a1_alpha",
+	"title":"Статьи",
+	"loadClass":"",
+	"description":"Этот модуль позволяет писать и публиковать статьи",
+	"confs":
+	{
+		"errors":["self"]
+	},
+	"api":
+	[
+		"article",
+		"comment"
+	],
+	"requires":
+	[
+		"user"
+	],
+	"permissions":
+	[
+		"plugins",
+		"core",
+		"db"
+	]
+}

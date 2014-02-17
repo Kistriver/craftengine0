@@ -1,5 +1,5 @@
 {
-	"version":"0.3.0b5_alpha",
+	"version":"0.3.0r_alpha",
 	"admin_mail":"alex-kachalov@mail.ru",
 	"name":"Minecraft Edition",
 	"non-anonymous-stat":true,
@@ -11,7 +11,7 @@
 	    "errors":true
 	},
 	"exploit-search":true,
-	"mail":["kcraft.su/client","\"KachalovCRAFT NET\" <login@yandex.ru>"],
+	"mail":["test.kcraft.su/client","\"KachalovCRAFT NET\" <kachalov92@yandex.ru>"],
 	"upload_file_max_size":"5MB",
 	"GMT":"+0400",
 	"tech":false,
@@ -21,10 +21,10 @@
 		"craftengine":
 		{
 			"host":"p:127.0.0.1",
-			"db":"",
-			"user":"",
-			"pass":""
+			"db":"kcraft_test",
+			"user":"kcraft_test",
+			"pass":"kcraft_test12345"
 		}
 	},
-	"system_scripts":["kcraft.su",80,"/api/"]
+	"system_scripts":["test.kcraft.su",80,"/api/"]
 }

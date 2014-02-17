@@ -43,7 +43,7 @@ class article extends \CRAFTEngine\core\api
 
 	//Редактирование статьи в основной таблице
 	protected function editPost()
-	{
+	{return $this->wip();
 		$art = $this->core->plugin->initPl('articles','core');
 		$st = $art->modify->editPost($this->data);
 		return array($st);
