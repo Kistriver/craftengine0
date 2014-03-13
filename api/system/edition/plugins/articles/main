@@ -9,7 +9,8 @@
 	"description":"Этот модуль позволяет писать и публиковать статьи",
 	"confs":
 	{
-		"errors":["self"]
+		"errors":["self"],
+		"ranks":["self"]
 	},
 	"api":
 	[

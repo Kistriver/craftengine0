@@ -1,6 +1,6 @@
 <?php
 namespace CRAFTEngine\plugins\users;
-interface userInterface extends signupUserInterface
+interface userInterface extends signupUserInterface,loginUserInterface
 {
 	public function __construct($core);
 

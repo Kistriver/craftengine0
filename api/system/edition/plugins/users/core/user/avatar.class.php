@@ -79,4 +79,9 @@ class avatar implements userInterface
 	{
 		return true;
 	}
+
+	public function canLogin($id)
+	{
+		return true;
+	}
 }

@@ -1,0 +1,6 @@
+{
+    "access":
+    {
+        "articles_edit":["main_admin","admin","moderator"]
+    }
+}

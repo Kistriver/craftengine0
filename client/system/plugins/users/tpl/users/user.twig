@@ -41,9 +41,23 @@
     <div class="col-sm-9">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h1 class="panel-title">{{user.login}}</h1></div>
+                <h1 class="panel-title">{{user.login}}{% if user.isBanned==true %} (Забанен){% endif %}</h1></div>
             <div class="panel-body">
-                {{ user.name }} {{ user.surname }}
+                {{ user.name }} {{ user.surname }}<br />
+                {% if user.canBan==true %}
+                    {% if user.isBanned==true %}
+                        <form method="post">
+                            <input type="hidden" name="unban_uid" value="{{ user.id }}" />
+                            <input type="submit" class="btn btn-success" value="Разбанить" />
+                        </form>
+                        {% else %}
+                    <form method="post">
+                    <input type="hidden" name="ban_uid" value="{{ user.id }}" />
+                    <input type="text" class="form-control" name="time" placeholder="Время бана в секундах" />
+                    <input type="submit" class="btn btn-danger" value="Забанить" />
+                    </form>
+                        {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>

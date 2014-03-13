@@ -34,7 +34,32 @@ if(isset($_GET['act']))
 		}
 
 		$data['data']['appointment'] = $data['data']['rank_name'][0];
-		
+
+		$data['data']['isBanned'] = false;
+		if(isset($data['data']['ban']))
+		foreach($data['data']['ban'] as $ban)
+		{
+			if(strtotime($ban['time_unban'])>strtotime(gmdate("M d Y H:i:s")) && $ban['active']!=0)
+			{
+				$data['data']['isBanned'] = true;
+				break;
+			}
+		}
+
+		$data['data']['canBan'] = false;
+		foreach($_SESSION['users']['rank'] as $r)
+			if(in_array($r,array('main_admin','admin','moderator')))
+				$data['data']['canBan'] = true;
+
+		if(isset($_POST['ban_uid'],$_POST['time']))
+		{
+			$core->api->get('users/ban/ban',array('uid'=>$_POST['ban_uid'],'time'=>$_POST['time'],'delta'=>true));
+		}
+		if(isset($_POST['unban_uid']))
+		{
+			$core->api->get('users/ban/unban',array('uid'=>$_POST['unban_uid']));
+		}
+
 		$core->render['user'] = $data['data'];
 		$core->render['avatar_src'] = $core->conf->conf->core->api->files.$data['data']['avatar'];
 	}
@@ -58,6 +83,17 @@ if(isset($_GET['act']))
 			foreach($user['rank'] as $r)
 			{
 				$user['rank_name'][] = $LC->appointment($r)!==$r?$LC->appointment($r):'Undefined';
+			}
+
+			$user['isBanned'] = false;
+			if(isset($user['ban']))
+			foreach($user['ban'] as $ban)
+			{
+				if(strtotime($ban['time_unban'])>strtotime(gmdate("M d Y H:i:s")) && $ban['active']!=0)
+				{
+					$user['isBanned'] = true;
+					break;
+				}
 			}
 
 			$user['appointment'] = $user['rank_name'][0];

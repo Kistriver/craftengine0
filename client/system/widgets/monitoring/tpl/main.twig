@@ -3,5 +3,251 @@
 {%block header%}Мониторинг{%endblock%}
 
 {%block content%}
-    Делся куда-то)
+    {% if WIDGETS.monitoring.type=='other' %}
+        {# СЮДА МОЖНО ЗАФИГАЧИТЬ СВОЙ МОНИТОРИНГ #}
+
+        Здесь другой мониторинг. Чтобы он заработал как надо, положите его в папку other, а после впишите его код сюда
+        вместо этого текста.
+
+        {# /СЮДА МОЖНО ЗАФИГАЧИТЬ СВОЙ МОНИТОРИНГ #}
+    {% elseif WIDGETS.monitoring.type=='radial1' %}
+        <div style="text-align: center;">
+            {% for mon,param in WIDGETS.monitoring.list %}
+                <div style="width: 100%; margin: 0 0 48px">
+                    <img src="{{ MAIN.ROOT }}other/moni/index.php?get={{ mon }}" width="49%" /><br />
+                    {{ param.name }}
+                </div>
+            {% endfor %}
+        </div>
+    {% elseif WIDGETS.monitoring.type=='linear1' %}
+        <div style="text-align: center;">
+            {% set i=0 %}
+            {% for mon,param in WIDGETS.monitoring.list %}
+                {% set i=i+1 %}
+                <div id="monitoring_{{ i }}" style="padding: 4px; margin: 1px; text-align: center; background-color: #cecece;">
+                    {{ param.name }}
+                </div>
+                <script>
+                    $.getJSON( "{{ MAIN.ROOT }}other/moni/index.php?info={{ mon }}", function( json ) {
+                        if(json.slots=='' || json.slots==0 || json.slots==undefined)
+                        {
+                            $("#monitoring_{{ i }}").append(" - Offline");
+                        }
+                        else
+                        {
+                            $("#monitoring_{{ i }}").append(" - "+json.cur+"/"+json.slots);
+                        }
+                        console.log("succes"+" "+json.cur+"/"+json.slots);
+                    });
+                </script>
+            {% endfor %}
+        </div>
+    {% elseif WIDGETS.monitoring.type=='linear2' %}
+        <style>
+                /* Настройка прогресс бара - Оранжевый */
+
+            div .orangebar
+            {
+                border: 1px solid #914a00;
+                background-color: #efefef;
+                width: 100px;
+                border-radius: 4px;
+                -o-border-radius: 4px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+            }
+            div .orangebar  div{  background: url('/themes/dirt/images/widgets/monitor/bg.gif') 0px 0px repeat; }
+
+                /* Настройка прогресс бара - Зеленый */
+
+            div .greenbar
+            {
+                border: 1px solid #426a10;
+                background-color: #adadad;
+                width: 100px;
+                border-radius: 4px;
+                -o-border-radius: 4px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+            }
+            div .greenbar  div{  background: url('/themes/dirt/images/widgets/monitor/bg_green.gif') 0px 0px repeat; }
+
+                /* Настройка прогресс бара - Красный */
+
+            div .redbar
+            {
+                border: 1px solid #9d2104;
+                background-color: #646464;
+                width: 100px;
+                border-radius: 4px;
+                -o-border-radius: 4px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+            }
+
+            div .redbar div{  background: url('/themes/dirt/images/widgets/monitor/bg_red.gif') 0px 0px repeat; }
+
+                /* Настройка прогресс бара - Синий */
+
+            div .bluebar {
+                border: 1px solid #326193;
+                background-color: #efefef;
+                width: 100px;
+                border-radius: 4px;
+                -o-border-radius: 4px;
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+            }
+            div .bluebar div{  background: url('/themes/dirt/images/widgets/monitor/bg_blue.gif') 0px 0px repeat; }
+
+                /* Настройка прогресс бара - Основная настройка - родитель */
+
+            div .progressbar_meter
+            {
+                height: 20px;
+                text-align: center;
+                font-size: 11px;
+                font-weight: bold;
+                color: #fff;
+                line-height: 20px;
+                text-shadow: 0px 0px 3px #000;
+                text-indent: 2px;
+                white-space: nowrap;
+                -o-text-shadow: 0px 0px 3px #000;
+                -moz-text-shadow: 0px 0px 3px #000;
+                -webkit-text-shadow: 0px 0px 3px #000;
+
+                border-radius: 3px;
+                -o-border-radius: 3px;
+                -moz-border-radius: 3px;
+                -webkit-border-radius: 3px;
+            }
+
+                /* Статичная подпись - центр прогресс бара */
+
+            div .progressbar_overlay
+            {
+                text-align: center;
+                font-size: 11px;
+                font-weight: bold;
+                color: #fff;
+                line-height: 20px;
+                text-shadow: 0px 0px 3px #000;
+                margin-top: 1px;
+                float:left;
+                display: block;
+                text-align:center;
+                width: 100%;
+            }
+
+                /* Статичная подпись сверху */
+
+            div .progressbar_overlay_top {
+                background: #373737;
+                display:inline-block;
+
+                font: 12px Calibri;
+
+                border-top: 2px solid #484848;
+                border-left: 2px solid #484848;
+                border-right: 2px solid #484848;
+
+                -o-text-shadow: 0px 0px 3px #000;
+                -moz-text-shadow: 0px 0px 3px #000;
+                -webkit-text-shadow: 0px 0px 3px #000;
+
+                border-radius: 3px 3px 0px 0px;
+                -o-border-radius: 3px 3px 0px 0px;
+                -moz-border-radius: 3px 3px 0px 0px;
+                -webkit-border-radius: 3px 3px 0px 0px;
+
+                min-height: 15px;
+                text-align: center;
+                font-size: 11px;
+                font-weight: bold;
+                color: #fff;
+
+                padding: 4px;
+            }
+
+                /* Площадка - Информация о сервере */
+
+            .server-info-holder {
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                text-align: center;
+                padding : 5px;
+                border: 1px dashed #bfbfbf;
+                background-color: #787878;
+
+                /* Расположение - друг за другом  */
+
+                display: block;
+                float:left;
+                margin-right: 15px;
+            }
+
+            .server-info-name
+            {
+                margin: 0 auto;
+                font-size: 12px;
+                width : 110px;
+                margin-bottom: 3px;
+                border-bottom: 1px dashed #a8a8a8;
+                color : #d9d9d9;
+            }
+
+            .server-info-state  {
+                width : 100px;
+                margin: 0 auto;
+            }
+        </style>
+
+            {% set i=0 %}
+            {% for mon,param in WIDGETS.monitoring.list %}
+                {% set i=i+1 %}
+                <div class="server-info-holder" style="width:100%; padding: 20px;background-size: 100%;">
+                    <div id="monitoring_{{ i }}" class="server-info-name">
+                        {{ param.name }}
+                        <br />
+                        {# ip:port loaded by js #}
+                    </div>
+                    <div class="server-info-state">
+                        <div id="monitoring_{{ i }}_slots" class="progressbar_overlay"></div>
+
+                        <div class="greenbar">
+                            <div id="monitoring_{{ i }}_meter" style="background-color: #008000;" class="progressbar_meter"></div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $.getJSON( "{{ MAIN.ROOT }}other/moni/index.php?info={{ mon }}", function( json ) {
+                        if(json.host==undefined || json.port==undefined)
+                        {
+                            $("#monitoring_{{ i }}").append("-");
+                        }
+                        else
+                        {
+                            $("#monitoring_{{ i }}").append(json.host+":"+json.port);
+                        }
+
+                        if(json.slots=='' || json.slots==0 || json.slots==undefined)
+                        {
+                            $("#monitoring_{{ i }}_slots").append("Offline");
+                            $("#monitoring_{{ i }}_meter").css("width","0%");
+                        }
+                        else
+                        {
+                            $("#monitoring_{{ i }}_slots").append(json.cur+"/"+json.slots);
+                            $("#monitoring_{{ i }}_meter").css("width",json.cur/json.slots*100+"%");
+                        }
+                    });
+                </script>
+            {% endfor %}
+    {% else %}
+        Undefined monitoring type. Use other type.
+    {% endif %}
 {%endblock%}

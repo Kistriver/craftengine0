@@ -54,7 +54,9 @@
         "access":
         {
             "signup_admin":["main_admin","admin","moderator"],
-            "set_rank":["main_admin"]
+            "set_rank":["main_admin"],
+            "ban_ban":["main_admin","admin","moderator"],
+            "ban_unban":["main_admin","admin","moderator"]
         }
 	}
 }

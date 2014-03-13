@@ -84,6 +84,7 @@ class load
 		$this->core->plugins->newRule(array('preg'=>'^users/([A-Za-z0-9_]*)$','page'=>'users.php','get'=>array('act'=>'user','login'=>'$1'),'plugin'=>'users'));
 
 		$this->core->plugins->newRule(array('preg'=>'^admin/other/users/import','page'=>'import.php','get'=>array(),'plugin'=>'users'));
+
 		$this->core->plugins->newRule(array('preg'=>'^profile/([A-Za-z_]*)$','page'=>'profile.php','get'=>array('type'=>'$1'),'plugin'=>'users'));
 
 		/*

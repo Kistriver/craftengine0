@@ -18,7 +18,7 @@ error_reporting(E_ALL ^ E_NOTICE);
 class core
 {
 	const PHP_MIN = '5.4.0';
-	const CORE_VER = '0.3.0r_alpha';
+	const CORE_VER = '0.3.0r2_alpha';
 	const MIN_CORE_VER = '0.3.0r_alpha';
 
 	private $core_confs;
@@ -302,7 +302,7 @@ class core
 		$enable = isset($this->core->conf->system->core->{'exploit-search'})?$this->core->conf->system->core->{'exploit-search'}:true;
 		if(!$enable)return;
 
-		$updatetime = 60 * 10/6000;
+		$updatetime = 60 * 10;
 		$file = $this->core->core_confs['root'].'cache/Exploit';
 
 		if(file_exists($file))
@@ -474,4 +474,3 @@ class core
 		return $this->functions->json($str);
 	}
 }
-

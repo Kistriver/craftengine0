@@ -116,4 +116,9 @@ class invited implements userInterface
 		if($st)return true;
 		else return false;
 	}
+
+	public function canLogin($id)
+	{
+		return true;
+	}
 }

@@ -10,6 +10,7 @@ class user
 		$this->core = &$core;
 
 		require_once(dirname(__FILE__)."/interfaces/signupUser.interface.php");
+		require_once(dirname(__FILE__)."/interfaces/loginUser.interface.php");
 		require_once(dirname(__FILE__)."/interfaces/user.interface.php");
 	}
 

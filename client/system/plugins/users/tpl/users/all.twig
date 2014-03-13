@@ -26,6 +26,11 @@
                 <span style="color: {% if user.rank.0=='main_admin' %}red{% elseif user.rank.0=='admin' %}orange{% elseif user.rank.0=='moderator' %}green{% elseif user.rank.0=='developer' %}#aa00aa{% endif %};">
                     {{ user.appointment }}
                 </span>
+                    {% if user.isBanned==true %}
+                        <span style="color: red; font-weight: bold;">
+                        (Забанен)
+                </span>
+                    {% endif %}
             </div>
         </div>
     </div>

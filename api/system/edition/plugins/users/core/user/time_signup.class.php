@@ -94,4 +94,9 @@ class time_signup implements userInterface
 		if($qr)return true;
 		else return false;
 	}
+
+	public function canLogin($id)
+	{
+		return true;
+	}
 }

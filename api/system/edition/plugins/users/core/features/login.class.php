@@ -59,16 +59,23 @@ class login implements \CRAFTEngine\plugins\users\featureInterface
 			return false;
 		}
 
-		if($u->password->comparePass($id,$password))
-		{
-			$u->currentUser($id);
-			return true;
-		}
-		else
+		if(!$u->password->comparePass($id,$password))
 		{
 			$this->core->error->error('plugin_users_login',0);
 			return false;
 		}
+
+		$prop = $u->getPropertiesList();
+		$return = false;
+		foreach($prop as $pr)
+		{
+			$value = $u->$pr->canLogin($id);
+			if($value===false)$return = true;
+		}
+		if($return)return false;
+
+		$u->currentUser($id);
+		return true;
 	}
 
 	/**

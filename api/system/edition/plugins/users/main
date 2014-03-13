@@ -19,6 +19,7 @@
         "login",
         "user",
         "import",
-        "profile"
+        "profile",
+        "ban"
 	]
 }

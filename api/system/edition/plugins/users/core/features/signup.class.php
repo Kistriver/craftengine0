@@ -37,7 +37,7 @@ class signup implements \CRAFTEngine\plugins\users\featureInterface
 				break;
 
 			case self::SIGNUP_ADMIN:
-				if($this->users_core->permission->canDo('users','signup_admin_confirm',null,array()))
+				if($this->users_core->permission->canDo('users_signup_admin_confirm',null,array()))
 				{
 					return true;
 				}

@@ -2,6 +2,6 @@
     "articles",
     "captcha",
     "comments",
-    "users",
-    "minecraftIntegration"
+    "minecraftIntegration",
+    "users"
 ]
